@@ -69,7 +69,7 @@ const TopBanner: FC<Props> = ({ popularItems, popularType }) => {
       <div className="my-12">
         <Slider {...settings} className="border rounded-t-lg bg-[#ddd]">
           {popularItems.map((item) => (
-            <div key={item.id} className="px-4 pt-10 pb-5">
+            <div key={item.id} className="px-10 pt-10 pb-5">
               <Image
                 src={`${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500/${item.poster_path}`}
                 alt={`${item?.title || item?.name} poster`}
