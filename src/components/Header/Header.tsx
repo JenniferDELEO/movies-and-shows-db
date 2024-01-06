@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const Header = () => {
   return (
-    <header className="py-10 px-4 container mx-auto text-xl flex flex-wrap md:flex-nowrap items-center justify-between border-b-2 border-b-white mb-10">
+    <header className="p-10 w-[80%] mx-auto text-xl flex flex-wrap md:flex-nowrap items-center justify-between border-b-2 border-b-white mb-10">
       <div className="flex items-center w-full md:w-2/3">
         <Link href="/">Accueil</Link>
       </div>
@@ -14,7 +14,10 @@ const Header = () => {
           <Link href="/tvshows">Séries TV</Link>
         </li>
         <li className="hover:-translate-y-2 duration-500 transition-all">
-          <Link href="/profil">Mon profil</Link>
+          <Link href="/connexion">Connexion</Link>
+        </li>
+        <li className="hover:-translate-y-2 duration-500 transition-all">
+          <Link href="/connexion">Inscription</Link>
         </li>
       </ul>
     </header>

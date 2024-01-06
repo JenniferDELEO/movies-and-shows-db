@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import Header from "@/components/Header/Header";
+import { Providers } from "./providers";
+
 import { Poppins } from "next/font/google";
+
 import "./globals.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Header from "@/components/Header/Header";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -13,7 +16,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Movies And TV Shows Data Base App",
+  title: "Films - Séries TV Database",
   description:
     "View all movies and TV shows and create your own lists to manage the ones you own or want to see.",
 };
@@ -24,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <link
           rel="stylesheet"
@@ -35,10 +38,12 @@ export default function RootLayout({
       <body
         className={`${poppins.className} bg-[url('https://images.unsplash.com/photo-1509564324749-471bd272e1ff?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bW92aWVzJTIwc2hvd3MlMjBwb3N0ZXJzfGVufDB8MHwwfHx8MA%3D%3D')] bg-no-repeat bg-cover text-white`}
       >
-        <Header />
-        <div className="bg-primary opacity-90 h-full w-full md:w-4/5 mx-auto">
-          {children}
-        </div>
+        <Providers>
+          <Header />
+          <div className="bg-primary opacity-90 md:w-4/5 mx-auto -mb-28">
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );

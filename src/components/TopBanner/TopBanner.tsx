@@ -1,14 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Image from "next/image";
-import { FC } from "react";
+import { FC, Key } from "react";
 import Slider from "react-slick";
+import dayjs from "dayjs";
+import { HiDotsCircleHorizontal } from "react-icons/hi";
+import { FaListUl } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa6";
+import { FaBookmark } from "react-icons/fa6";
+import { FaStar } from "react-icons/fa6";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from "@nextui-org/react";
 
 type Props = {
   popularItems: {
     id: number;
     poster_path: string;
+    release_date?: string;
+    first_air_date?: string;
     title?: string;
     name?: string;
   }[];
@@ -16,73 +29,103 @@ type Props = {
 };
 
 const TopBanner: FC<Props> = ({ popularItems, popularType }) => {
-  const [windowSize, setWindowSize] = useState([
-    window.innerWidth,
-    window.innerHeight,
-  ]);
-
-  useEffect(() => {
-    const handleWindowResize = () => {
-      setWindowSize([window.innerWidth, window.innerHeight]);
-    };
-
-    window.addEventListener("resize", handleWindowResize);
-
-    return () => {
-      window.removeEventListener("resize", handleWindowResize);
-    };
-  }, []);
-
-  const numberOfSlides =
-    windowSize[0] >= 1270
-      ? 5
-      : windowSize[0] >= 768
-      ? 3
-      : windowSize[0] >= 432
-      ? 2
-      : 1;
-
   const settings = {
     dots: true,
-    arrows: windowSize[0] >= 768 ? true : false,
+    arrows: true,
     autoplay: false,
-    slidesToShow: numberOfSlides,
-    slidesToScroll: numberOfSlides,
-    appendDots: (dots: any) => (
-      <div
-        style={{
-          backgroundColor: "#ddd",
-          borderRadius: "8px",
-          padding: "12px",
-        }}
-      >
-        <ul style={{ margin: "0px" }}> {dots} </ul>
-      </div>
-    ),
+    slidesToShow: 5,
+    slidesToScroll: 5,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          dots: true,
+          arrows: true,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          dots: true,
+          arrows: false,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          arrows: false,
+          dots: false,
+        },
+      },
+    ],
   };
 
   if (!popularItems) return <div>Chargement...</div>;
 
+  const handleClick = (item: Key) => {
+    console.log(item);
+  };
+
   return (
-    <div className="w-full mx-auto mb-48">
+    <div className="w-full h-full md:w-4/5 mx-auto mb-20 pb-16">
       <h1 className="text-3xl pl-10 tracking-wide">Top 20 des {popularType}</h1>
-      <div className="my-12">
-        <Slider {...settings} className="border rounded-t-lg bg-[#ddd]">
-          {popularItems.map((item) => (
-            <div key={item.id} className="px-10 pt-10 pb-5">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500/${item.poster_path}`}
-                alt={`${item?.title || item?.name} poster`}
-                width={342}
-                height={513}
-              />
-              <p className="text-center mt-4 text-gray-800">
-                {item?.title || item?.name}
-              </p>
+      <Slider {...settings}>
+        {popularItems.map((item) => (
+          <div
+            key={item.id}
+            className="relative pl-14 sm:pl-4 mx-auto pt-10 pb-5"
+          >
+            <Image
+              src={`${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w342/${item.poster_path}`}
+              alt={`${item?.title || item?.name} poster`}
+              width={342}
+              height={513}
+              className="rounded-xl"
+            />
+            <p className="mt-4 font-bold">{item?.title || item?.name}</p>
+            <p className="text-gray-400 mt-2">
+              {dayjs(item?.release_date).format("DD/MM/YYYY") ||
+                dayjs(item?.first_air_date).format("DD/MM/YYYY")}
+            </p>
+            <div className="absolute top-14 right-2 z-10">
+              <Dropdown classNames={{ content: "bg-primary border-primary" }}>
+                <DropdownTrigger>
+                  <button>
+                    <HiDotsCircleHorizontal className="text-2xl cursor-pointer" />
+                  </button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  variant="faded"
+                  aria-label="Dropdown menu with icons"
+                  onAction={(item) => handleClick(item)}
+                >
+                  <DropdownItem
+                    key={`addToList-${item.id}`}
+                    startContent={<FaListUl />}
+                  >
+                    Ajouter à une liste
+                  </DropdownItem>
+                  <DropdownItem key="favorite" startContent={<FaHeart />}>
+                    Favoris
+                  </DropdownItem>
+                  <DropdownItem key="followed" startContent={<FaBookmark />}>
+                    Liste de suivi
+                  </DropdownItem>
+                  <DropdownItem key="note" startContent={<FaStar />}>
+                    Votre note
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
             </div>
-          ))}
-        </Slider>
-      </div>
+          </div>
+        ))}
+      </Slider>
     </div>
   );
 };

@@ -9,7 +9,7 @@ export default async function Home() {
   );
 
   return (
-    <div>
+    <div className="w-full h-full">
       <TopBanner popularItems={popularMovies} popularType="Films" />
       <TopBanner popularItems={popularTvShows} popularType="Séries TV" />
     </div>
