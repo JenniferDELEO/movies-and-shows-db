@@ -17,7 +17,7 @@ import {
 } from "@nextui-org/react";
 
 type Props = {
-  popularItems: {
+  items: {
     id: number;
     poster_path: string;
     release_date?: string;
@@ -25,10 +25,11 @@ type Props = {
     title?: string;
     name?: string;
   }[];
-  popularType: "Films" | "Séries TV";
+  type: "Films" | "Séries TV";
+  filter: "plus populaires" | "mieux notés" | "mieux notées";
 };
 
-const TopBanner: FC<Props> = ({ popularItems, popularType }) => {
+const HomeBanner: FC<Props> = ({ items, type, filter }) => {
   const settings = {
     dots: true,
     arrows: true,
@@ -66,7 +67,7 @@ const TopBanner: FC<Props> = ({ popularItems, popularType }) => {
     ],
   };
 
-  if (!popularItems) return <div>Chargement...</div>;
+  if (!items) return <div>Chargement...</div>;
 
   const handleClick = (item: Key) => {
     console.log(item);
@@ -74,9 +75,11 @@ const TopBanner: FC<Props> = ({ popularItems, popularType }) => {
 
   return (
     <div className="w-full h-full md:w-4/5 mx-auto mb-20 pb-16">
-      <h1 className="text-3xl pl-10 tracking-wide">Top 20 des {popularType}</h1>
+      <h1 className="text-3xl pl-5 tracking-wide">
+        Les 20 {type} les {filter}
+      </h1>
       <Slider {...settings}>
-        {popularItems.map((item) => (
+        {items.map((item) => (
           <div
             key={item.id}
             className="relative pl-14 sm:pl-4 mx-auto pt-10 pb-5"
@@ -90,8 +93,8 @@ const TopBanner: FC<Props> = ({ popularItems, popularType }) => {
             />
             <p className="mt-4 font-bold">{item?.title || item?.name}</p>
             <p className="text-gray-400 mt-2">
-              {dayjs(item?.release_date).format("DD/MM/YYYY") ||
-                dayjs(item?.first_air_date).format("DD/MM/YYYY")}
+              {dayjs(item?.release_date).format("DD MMM. YYYY") ||
+                dayjs(item?.first_air_date).format("DD MMM. YYYY")}
             </p>
             <div className="absolute top-14 right-2 z-10">
               <Dropdown classNames={{ content: "bg-primary border-primary" }}>
@@ -130,4 +133,4 @@ const TopBanner: FC<Props> = ({ popularItems, popularType }) => {
   );
 };
 
-export default TopBanner;
+export default HomeBanner;

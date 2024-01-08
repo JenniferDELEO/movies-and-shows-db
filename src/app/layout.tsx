@@ -7,6 +7,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import UserProvider from "@/components/UserProvider/UserProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -39,10 +40,12 @@ export default function RootLayout({
         className={`${poppins.className} bg-[url('https://images.unsplash.com/photo-1509564324749-471bd272e1ff?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bW92aWVzJTIwc2hvd3MlMjBwb3N0ZXJzfGVufDB8MHwwfHx8MA%3D%3D')] bg-no-repeat bg-cover text-white`}
       >
         <Providers>
-          <Header />
-          <div className="bg-primary opacity-90 md:w-4/5 mx-auto -mb-28">
-            {children}
-          </div>
+          <UserProvider>
+            <Header />
+            <div className="bg-primary opacity-90 md:w-4/5 mx-auto -mb-28">
+              {children}
+            </div>
+          </UserProvider>
         </Providers>
       </body>
     </html>
