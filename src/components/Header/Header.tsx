@@ -9,10 +9,24 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  NavbarMenuToggle,
+  NavbarMenu,
+  NavbarMenuItem,
+} from "@nextui-org/react";
+import { FaSearch } from "react-icons/fa";
+import { RxCross1 } from "react-icons/rx";
+import SearchBar from "../SearchBar/SearchBar";
 
 const Header = () => {
   const router = useRouter();
   const [requestToken, setRequestToken] = useState<string | null>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const {
     user: { username, accountId, sessionId },
@@ -22,7 +36,7 @@ const Header = () => {
   const handleConnexion = async () => {
     const responseToken = await getRequestToken();
     router.push(
-      `https://www.themoviedb.org/authenticate/${responseToken.request_token}?redirect_to=http://localhost:3000/`
+      `${process.env.NEXT_PUBLIC_TMDB_AUTHENTICATE}${responseToken.request_token}?redirect_to=${process.env.NEXT_PUBLIC_URL}`
     );
   };
 
@@ -42,28 +56,89 @@ const Header = () => {
   }, [accountId, requestToken, router, sessionId, setUser, username]);
 
   return (
-    <header className="p-10 w-[80%] mx-auto text-xl flex flex-wrap md:flex-nowrap items-center justify-between border-b-2 border-b-white mb-10">
-      <div className="flex items-center w-full md:w-2/3">
-        <Link href="/">Accueil</Link>
-      </div>
-      <ul className="flex items-center justify-between w-full md:w-1/3 mt-4">
-        <li className="hover:-translate-y-2 duration-500 transition-all">
+    <Navbar
+      onMenuOpenChange={setIsMenuOpen}
+      classNames={{
+        base: "bg-primary mb-10 justify-between",
+        wrapper: "max-w-[80%] mx-auto",
+        item: "sm:text-xl",
+      }}
+    >
+      {isSearchOpen ? (
+        <NavbarContent>
+          <SearchBar
+            styleBase="w-full"
+            styleContainer=""
+            setIsSearchOpen={setIsSearchOpen}
+            isHeader={true}
+          />
+          <button type="button" onClick={() => setIsSearchOpen(false)}>
+            <RxCross1 size={18} className="text-xl font-bold" />
+          </button>
+        </NavbarContent>
+      ) : (
+        <>
+          <NavbarContent>
+            <NavbarMenuToggle
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              className="sm:hidden"
+            />
+            <NavbarBrand>
+              <Link
+                href="/"
+                className="hover:-translate-y-2 duration-500 transition-all sm:text-xl"
+              >
+                Accueil
+              </Link>
+            </NavbarBrand>
+          </NavbarContent>
+          <NavbarContent
+            className="hidden sm:flex gap-4 md:gap-10"
+            justify="center"
+          >
+            <NavbarItem className="hover:-translate-y-2 duration-500 transition-all">
+              <Link href="/movies">Films</Link>
+            </NavbarItem>
+            <NavbarItem className="hover:-translate-y-2 duration-500 transition-all">
+              <Link href="/tvshows">Séries TV</Link>
+            </NavbarItem>
+            {!username && !accountId && !sessionId ? (
+              <NavbarItem className="hover:-translate-y-2 duration-500 transition-all cursor-pointer">
+                <div onClick={handleConnexion}>Connexion/Inscription</div>
+              </NavbarItem>
+            ) : (
+              <NavbarItem className="hover:-translate-y-2 duration-500 transition-all">
+                <Link href="/profil">Mon Profil</Link>
+              </NavbarItem>
+            )}
+            <NavbarItem
+              className="cursor-pointer"
+              onClick={() => setIsSearchOpen(true)}
+            >
+              <FaSearch size={18} />
+            </NavbarItem>
+          </NavbarContent>
+        </>
+      )}
+
+      <NavbarMenu>
+        <NavbarMenuItem>
           <Link href="/movies">Films</Link>
-        </li>
-        <li className="hover:-translate-y-2 duration-500 transition-all">
+        </NavbarMenuItem>
+        <NavbarMenuItem>
           <Link href="/tvshows">Séries TV</Link>
-        </li>
+        </NavbarMenuItem>
         {!username && !accountId && !sessionId ? (
-          <li className="hover:-translate-y-2 duration-500 transition-all cursor-pointer">
+          <NavbarMenuItem className="hover:-translate-y-2 duration-500 transition-all cursor-pointer">
             <div onClick={handleConnexion}>Connexion/Inscription</div>
-          </li>
+          </NavbarMenuItem>
         ) : (
-          <li className="hover:-translate-y-2 duration-500 transition-all">
+          <NavbarMenuItem>
             <Link href="/profil">Mon Profil</Link>
-          </li>
+          </NavbarMenuItem>
         )}
-      </ul>
-    </header>
+      </NavbarMenu>
+    </Navbar>
   );
 };
 

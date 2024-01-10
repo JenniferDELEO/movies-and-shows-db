@@ -21,7 +21,7 @@ const config: Config = {
     extend: {
       colors: {
         primary: "#060D1D",
-        secondary: "#E4E4E8",
+        secondary: "#488DBD",
       },
       fontFamily: {
         poppins: ["var(--font-poppins)", ...fontFamily.sans],

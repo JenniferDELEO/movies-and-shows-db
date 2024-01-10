@@ -1,4 +1,5 @@
 import HomeBanner from "@/components/HomeBanner/HomeBanner";
+import SearchBar from "@/components/SearchBar/SearchBar";
 import {
   getPopularMovies,
   getTopRatedMovies,
@@ -15,6 +16,10 @@ export default async function Home() {
 
   return (
     <div className="w-full h-full">
+      <SearchBar
+        styleBase="w-full md:w-2/3 ml-2 md:mx-auto mb-20"
+        styleContainer="grid grid-cols-12 gap-4"
+      />
       <HomeBanner items={popularMovies} type="Films" filter="plus populaires" />
       <HomeBanner items={topRatedMovies} type="Films" filter="mieux notés" />
       <HomeBanner

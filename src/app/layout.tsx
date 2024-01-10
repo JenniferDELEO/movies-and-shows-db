@@ -36,14 +36,14 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body
-        className={`${poppins.className} bg-[url('https://images.unsplash.com/photo-1509564324749-471bd272e1ff?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bW92aWVzJTIwc2hvd3MlMjBwb3N0ZXJzfGVufDB8MHwwfHx8MA%3D%3D')] bg-no-repeat bg-cover text-white`}
-      >
+      <body className={`${poppins.className} text-white`}>
         <Providers>
           <UserProvider>
-            <Header />
-            <div className="bg-primary opacity-90 md:w-4/5 mx-auto -mb-28">
-              {children}
+            <div className="bg-[url('https://images.unsplash.com/photo-1642095902135-f48745dd3df5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTA2fHxtb3ZpZSUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D')] bg-fixed bg-no-repeat bg-cover">
+              <div className="bg-primary opacity-90 h-full md:w-4/5 mx-auto -mb-20">
+                <Header />
+                {children}
+              </div>
             </div>
           </UserProvider>
         </Providers>
