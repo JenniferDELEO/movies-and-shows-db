@@ -1,8 +1,6 @@
-import { Movie } from "@/models/movies";
-import { TvShow } from "@/models/tvShows";
 import { AccountDetail } from "@/models/user";
 
-const optionsGET = {
+export const optionsGET = {
   method: "GET",
   headers: {
     accept: "application/json",
@@ -71,78 +69,6 @@ export async function getAccountDetails(
     localStorage.setItem("account_id", responseJsonAccount.id);
     localStorage.setItem("account_username", responseJsonAccount.username);
     return responseJsonAccount;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
-
-export async function getPopularMovies(): Promise<{
-  page: number;
-  results: Movie[];
-  total_pages: number;
-  total_results: number;
-}> {
-  try {
-    const result = await fetch(
-      `${process.env.NEXT_PUBLIC_TMDB_API_URL}/movie/popular?language=fr-FR&page=1`,
-      optionsGET
-    );
-    return result.json();
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
-
-export async function getTopRatedMovies(): Promise<{
-  page: number;
-  results: Movie[];
-  total_pages: number;
-  total_results: number;
-}> {
-  try {
-    const result = await fetch(
-      `${process.env.NEXT_PUBLIC_TMDB_API_URL}/movie/top_rated?language=fr-FR&page=1`,
-      optionsGET
-    );
-    return result.json();
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
-
-export async function getPopularTvShows(): Promise<{
-  page: number;
-  results: TvShow[];
-  total_pages: number;
-  total_results: number;
-}> {
-  try {
-    const result = await fetch(
-      `${process.env.NEXT_PUBLIC_TMDB_API_URL}/tv/popular?language=fr-FR&page=1`,
-      optionsGET
-    );
-    return result.json();
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
-
-export async function getTopRatedTvShows(): Promise<{
-  page: number;
-  results: TvShow[];
-  total_pages: number;
-  total_results: number;
-}> {
-  try {
-    const result = await fetch(
-      `${process.env.NEXT_PUBLIC_TMDB_API_URL}/tv/top_rated?language=fr-FR&page=1`,
-      optionsGET
-    );
-    return result.json();
   } catch (error) {
     console.log(error);
     throw error;

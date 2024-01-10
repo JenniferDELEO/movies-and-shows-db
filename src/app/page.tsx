@@ -1,11 +1,7 @@
 import HomeBanner from "@/components/HomeBanner/HomeBanner";
 import SearchBar from "@/components/SearchBar/SearchBar";
-import {
-  getPopularMovies,
-  getTopRatedMovies,
-  getPopularTvShows,
-  getTopRatedTvShows,
-} from "@/libs/apis";
+import { getPopularMovies, getTopRatedMovies } from "@/libs/api/movies";
+import { getPopularTvShows, getTopRatedTvShows } from "@/libs/api/tvshows";
 
 export default async function Home() {
   const { results: popularMovies } = await getPopularMovies();

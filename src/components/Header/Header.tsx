@@ -5,7 +5,7 @@ import {
   getAccountDetails,
   getRequestToken,
   getUserSessionId,
-} from "@/libs/apis";
+} from "@/libs/api/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
