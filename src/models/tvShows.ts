@@ -13,3 +13,10 @@ export type TvShow = {
   vote_average: number;
   vote_count: number;
 };
+
+export type ApiResultTvShows = {
+  page: number;
+  results: TvShow[];
+  total_pages: number;
+  total_results: number;
+};

@@ -20,7 +20,11 @@ import {
 } from "@nextui-org/react";
 import { FaSearch } from "react-icons/fa";
 import { RxCross1 } from "react-icons/rx";
-import SearchBar from "../SearchBar/SearchBar";
+import { MdLocalMovies } from "react-icons/md";
+import { PiTelevisionSimpleFill } from "react-icons/pi";
+import { IoPersonSharp } from "react-icons/io5";
+import { TiHome } from "react-icons/ti";
+import SearchBar from "../Search/SearchBar";
 
 const Header = () => {
   const router = useRouter();
@@ -59,7 +63,7 @@ const Header = () => {
     <Navbar
       onMenuOpenChange={setIsMenuOpen}
       classNames={{
-        base: "bg-primary mb-10 justify-between",
+        base: "bg-primary bg-opacity-90 justify-between",
         wrapper: "max-w-[80%] mx-auto",
         item: "sm:text-xl",
       }}
@@ -81,34 +85,41 @@ const Header = () => {
           <NavbarContent>
             <NavbarMenuToggle
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-              className="sm:hidden"
+              className="md:hidden"
             />
             <NavbarBrand>
               <Link
                 href="/"
-                className="hover:-translate-y-2 duration-500 transition-all sm:text-xl"
+                className="hover:-translate-y-2 duration-500 transition-all sm:text-xl flex flex-row items-center"
               >
-                Accueil
+                <TiHome />
+                <span className="ml-2">Accueil</span>
               </Link>
             </NavbarBrand>
           </NavbarContent>
-          <NavbarContent
-            className="hidden sm:flex gap-4 md:gap-10"
-            justify="center"
-          >
-            <NavbarItem className="hover:-translate-y-2 duration-500 transition-all">
-              <Link href="/movies">Films</Link>
+          <NavbarContent className="flex gap-4 md:gap-10" justify="end">
+            <NavbarItem className="hidden md:block hover:-translate-y-2 duration-500 transition-all">
+              <Link href="/movies" className="flex flex-row items-center">
+                <MdLocalMovies />
+                <span className="ml-2">Films</span>
+              </Link>
             </NavbarItem>
-            <NavbarItem className="hover:-translate-y-2 duration-500 transition-all">
-              <Link href="/tvshows">Séries TV</Link>
+            <NavbarItem className="hidden md:block hover:-translate-y-2 duration-500 transition-all">
+              <Link href="/tvshows" className="flex flex-row items-center">
+                <PiTelevisionSimpleFill />
+                <span className="ml-2">Séries TV</span>
+              </Link>
             </NavbarItem>
             {!username && !accountId && !sessionId ? (
-              <NavbarItem className="hover:-translate-y-2 duration-500 transition-all cursor-pointer">
+              <NavbarItem className="hidden md:block hover:-translate-y-2 duration-500 transition-all cursor-pointer">
                 <div onClick={handleConnexion}>Connexion/Inscription</div>
               </NavbarItem>
             ) : (
-              <NavbarItem className="hover:-translate-y-2 duration-500 transition-all">
-                <Link href="/profil">Mon Profil</Link>
+              <NavbarItem className="hidden md:block hover:-translate-y-2 duration-500 transition-all">
+                <Link href="/profil" className="flex flex-row items-center">
+                  <IoPersonSharp />
+                  <span className="ml-2">Profil</span>
+                </Link>
               </NavbarItem>
             )}
             <NavbarItem
@@ -123,10 +134,16 @@ const Header = () => {
 
       <NavbarMenu>
         <NavbarMenuItem>
-          <Link href="/movies">Films</Link>
+          <Link href="/movies" className="flex flex-row items-center">
+            <MdLocalMovies />
+            <span className="ml-2">Films</span>
+          </Link>
         </NavbarMenuItem>
         <NavbarMenuItem>
-          <Link href="/tvshows">Séries TV</Link>
+          <Link href="/tvshows" className="flex flex-row items-center">
+            <PiTelevisionSimpleFill />
+            <span className="ml-2">Séries TV</span>
+          </Link>
         </NavbarMenuItem>
         {!username && !accountId && !sessionId ? (
           <NavbarMenuItem className="hover:-translate-y-2 duration-500 transition-all cursor-pointer">
@@ -134,7 +151,10 @@ const Header = () => {
           </NavbarMenuItem>
         ) : (
           <NavbarMenuItem>
-            <Link href="/profil">Mon Profil</Link>
+            <Link href="/profil" className="flex flex-row items-center">
+              <IoPersonSharp />
+              <span className="ml-2">Profil</span>
+            </Link>
           </NavbarMenuItem>
         )}
       </NavbarMenu>

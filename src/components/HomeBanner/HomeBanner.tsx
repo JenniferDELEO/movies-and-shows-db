@@ -34,14 +34,23 @@ const HomeBanner: FC<Props> = ({ items, type, filter }) => {
     dots: true,
     arrows: true,
     autoplay: false,
-    slidesToShow: 5,
-    slidesToScroll: 5,
+    slidesToShow: 4,
+    slidesToScroll: 4,
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 1280,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
+          dots: true,
+          arrows: true,
+        },
+      },
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
           dots: true,
           arrows: true,
         },
@@ -75,7 +84,7 @@ const HomeBanner: FC<Props> = ({ items, type, filter }) => {
 
   return (
     <div className="w-full h-full md:w-4/5 mx-auto mb-20 pb-16">
-      <h1 className="text-xl sm:text-3xl pl-5 tracking-wide">
+      <h1 className="text-xl sm:text-2xl md:text-3xl pl-5 tracking-wide">
         Les 20 {type} les {filter}
       </h1>
       <Slider {...settings}>
@@ -85,11 +94,18 @@ const HomeBanner: FC<Props> = ({ items, type, filter }) => {
               <Image
                 src={`${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w342${item.poster_path}`}
                 alt={`${item?.title || item?.name} poster`}
-                width={342}
-                height={513}
-                className="rounded-xl mx-auto"
+                width={0}
+                height={0}
+                style={{
+                  width: 342,
+                  minHeight: "auto",
+                  height: 513,
+                  borderRadius: 5,
+                }}
+                className="mx-auto"
+                sizes="100vw"
               />
-              <div className="absolute top-2 right-12 sm:right-2 z-10">
+              <div className="absolute top-4 right-16 md:top-2 sm:right-2 z-10">
                 <Dropdown classNames={{ content: "bg-primary border-primary" }}>
                   <DropdownTrigger>
                     <button>
@@ -120,12 +136,13 @@ const HomeBanner: FC<Props> = ({ items, type, filter }) => {
                 </Dropdown>
               </div>
             </div>
-
-            <p className="mt-4 font-bold">{item?.title || item?.name}</p>
-            <p className="text-gray-400 mt-2">
-              {dayjs(item?.release_date).format("DD MMM. YYYY") ||
-                dayjs(item?.first_air_date).format("DD MMM. YYYY")}
-            </p>
+            <div className="pl-14 sm:pl-0">
+              <p className="mt-4 font-bold">{item?.title || item?.name}</p>
+              <p className="text-gray-400 mt-2">
+                {dayjs(item?.release_date).format("DD MMM. YYYY") ||
+                  dayjs(item?.first_air_date).format("DD MMM. YYYY")}
+              </p>
+            </div>
           </div>
         ))}
       </Slider>

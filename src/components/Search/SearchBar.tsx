@@ -3,7 +3,7 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { TiDelete } from "react-icons/ti";
 import { FaSearch } from "react-icons/fa";
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { Dispatch, FC, KeyboardEvent, SetStateAction, useState } from "react";
 
 type Props = {
   styleBase: string;
@@ -27,6 +27,7 @@ const SearchBar: FC<Props> = (props) => {
 
   const handleSearchClick = () => {
     params.set("page", "1");
+    params.set("type", "movie");
 
     if (searchValue.length > 0) {
       params.set("query", searchValue);
@@ -48,6 +49,11 @@ const SearchBar: FC<Props> = (props) => {
             type="search"
             value={searchValue}
             onChange={(e) => handleSearch(e.target.value)}
+            onKeyDown={(event: KeyboardEvent) => {
+              if (event?.key === "Enter") {
+                handleSearchClick();
+              }
+            }}
           />
           <button
             className="absolute right-0 top-0 z-10 bg-secondary p-2 rounded-md font-bold text-sm md:text-base"

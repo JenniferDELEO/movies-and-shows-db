@@ -40,8 +40,8 @@ export default function RootLayout({
         <Providers>
           <UserProvider>
             <div className="bg-[url('https://images.unsplash.com/photo-1642095902135-f48745dd3df5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTA2fHxtb3ZpZSUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D')] bg-fixed bg-no-repeat bg-cover">
-              <div className="bg-primary opacity-90 h-full md:w-4/5 mx-auto -mb-20">
-                <Header />
+              <Header />
+              <div className="bg-primary opacity-90 h-full w-full pt-10 mx-auto -mb-20">
                 {children}
               </div>
             </div>

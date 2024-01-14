@@ -1,5 +1,5 @@
 import HomeBanner from "@/components/HomeBanner/HomeBanner";
-import SearchBar from "@/components/SearchBar/SearchBar";
+import SearchBar from "@/components/Search/SearchBar";
 import { getPopularMovies, getTopRatedMovies } from "@/libs/api/movies";
 import { getPopularTvShows, getTopRatedTvShows } from "@/libs/api/tvshows";
 
