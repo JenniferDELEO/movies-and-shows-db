@@ -14,3 +14,10 @@ export type AccountDetail = {
   include_adult: boolean;
   username: string;
 };
+
+export type User = {
+  username: string | null;
+  accountIdV3: number | null;
+  accountIdV4: string | null;
+  sessionId: string | null;
+};

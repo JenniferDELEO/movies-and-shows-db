@@ -5,7 +5,7 @@ export async function getPopularMovies(): Promise<ApiResultMovies> {
   try {
     const result = await fetch(
       `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/popular?language=fr-FR&page=1`,
-      optionsGET
+      optionsGET,
     );
     return result.json();
   } catch (error) {
@@ -18,7 +18,7 @@ export async function getTopRatedMovies(): Promise<ApiResultMovies> {
   try {
     const result = await fetch(
       `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/top_rated?language=fr-FR&page=1`,
-      optionsGET
+      optionsGET,
     );
     return result.json();
   } catch (error) {
@@ -33,7 +33,7 @@ export async function getGenresMovies(): Promise<{
   try {
     const result = await fetch(
       `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/genre/movie/list?language=fr`,
-      optionsGET
+      optionsGET,
     );
     return result.json();
   } catch (error) {
@@ -44,14 +44,116 @@ export async function getGenresMovies(): Promise<{
 
 export async function getSearchMovies(
   query: string,
-  page: number
+  page: number,
 ): Promise<ApiResultMovies> {
   try {
     const result = await fetch(
       `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/search/movie?language=fr-FR&include_adult=false&region=fr&page=${page}&query=${query}`,
-      optionsGET
+      optionsGET,
     );
     return result.json();
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getUserFavoriteMovies(
+  accountIdV4: string,
+): Promise<ApiResultMovies> {
+  try {
+    const result = await fetch(
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/account/${accountIdV4}/movie/favorites?page=1&language=fr-FR`,
+      optionsGET,
+    );
+    const json = await result.json();
+
+    if (json.total_pages > 1) {
+      const promises = [];
+      for (let i = 2; i <= json.total_pages; i++) {
+        promises.push(
+          fetch(
+            `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/account/${accountIdV4}/movie/favorites?page=${i}&language=fr-FR`,
+            optionsGET,
+          ),
+        );
+      }
+      const responses = await Promise.all(promises);
+      const jsons = await Promise.all(
+        responses.map((response) => response.json()),
+      );
+      json.results = json.results.concat(...jsons.map((json) => json.results));
+    }
+
+    return json;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getUserRatedMovies(
+  accountIdV4: string,
+): Promise<ApiResultMovies> {
+  try {
+    const result = await fetch(
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/account/${accountIdV4}/movie/rated?page=1&language=fr-FR`,
+      optionsGET,
+    );
+    const json = await result.json();
+
+    if (json.total_pages > 1) {
+      const promises = [];
+      for (let i = 2; i <= json.total_pages; i++) {
+        promises.push(
+          fetch(
+            `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/account/${accountIdV4}/movie/rated?page=${i}&language=fr-FR`,
+            optionsGET,
+          ),
+        );
+      }
+      const responses = await Promise.all(promises);
+      const jsons = await Promise.all(
+        responses.map((response) => response.json()),
+      );
+      json.results = json.results.concat(...jsons.map((json) => json.results));
+    }
+
+    return json;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getUserWatchListMovies(
+  accountIdV4: string,
+): Promise<ApiResultMovies> {
+  try {
+    const result = await fetch(
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/account/${accountIdV4}/movie/watchlist?page=1&language=fr-FR`,
+      optionsGET,
+    );
+    const json = await result.json();
+
+    if (json.total_pages > 1) {
+      const promises = [];
+      for (let i = 2; i <= json.total_pages; i++) {
+        promises.push(
+          fetch(
+            `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/account/${accountIdV4}/movie/watchlist?page=${i}&language=fr-FR`,
+            optionsGET,
+          ),
+        );
+      }
+      const responses = await Promise.all(promises);
+      const jsons = await Promise.all(
+        responses.map((response) => response.json()),
+      );
+      json.results = json.results.concat(...jsons.map((json) => json.results));
+    }
+
+    return json;
   } catch (error) {
     console.log(error);
     throw error;

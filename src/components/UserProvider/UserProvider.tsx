@@ -10,7 +10,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
       : null;
   const localAccountIdV3 =
     typeof localStorage !== "undefined"
-      ? localStorage.getItem("account_id_v3")
+      ? Number(localStorage.getItem("account_id_v3"))
       : null;
   const localAccountIdV4 =
     typeof localStorage !== "undefined"
