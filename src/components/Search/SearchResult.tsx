@@ -22,12 +22,12 @@ const SearchResult = async (props: Props) => {
   return (
     <div className="md:col-span-3">
       {!searchResults ? (
-        <div className="text-lg md:text-xl text-center">Chargement...</div>
+        <div className="text-center text-lg md:text-xl">Chargement...</div>
       ) : searchResults.length === 0 ? (
-        <div className="text-lg md:text-xl text-center">Aucun résultat</div>
+        <div className="text-center text-lg md:text-xl">Aucun résultat</div>
       ) : (
         <div className="lg:grid lg:grid-cols-2 lg:gap-4">
-          <h3 className="absolute -top-10 2xl:top-0 left-0 lg:left-4 2xl:left-1 text-lg md:text-xl">
+          <h3 className="absolute -top-10 left-0 text-lg md:text-xl lg:left-4 2xl:left-1 2xl:top-0">
             Résultats de votre recherche ({totalSearchResults})
           </h3>
           {searchResults.map((item) => (

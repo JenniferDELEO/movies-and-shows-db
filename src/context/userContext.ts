@@ -3,13 +3,15 @@ import { Dispatch, SetStateAction, createContext } from "react";
 type UserContextType = {
   user: {
     username: string | null;
-    accountId: string | null;
+    accountIdV3: number | null;
+    accountIdV4: string | null;
     sessionId: string | null;
   };
   setUser: Dispatch<
     SetStateAction<{
       username: string | null;
-      accountId: string | null;
+      accountIdV3: number | null;
+      accountIdV4: string | null;
       sessionId: string | null;
     }>
   >;
@@ -18,7 +20,8 @@ type UserContextType = {
 export const UserContext = createContext<UserContextType>({
   user: {
     username: null,
-    accountId: null,
+    accountIdV3: null,
+    accountIdV4: null,
     sessionId: null,
   },
   setUser: () => null,

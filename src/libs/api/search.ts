@@ -11,7 +11,7 @@ export async function getSearchResults(
 }> {
   try {
     const result = await fetch(
-      `${process.env.NEXT_PUBLIC_TMDB_API_URL}/search/multi?query=${query}&include_adult=false&language=fr-FR&page=${page}`,
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/search/multi?query=${query}&include_adult=false&language=fr-FR&page=${page}`,
       optionsGET
     );
 

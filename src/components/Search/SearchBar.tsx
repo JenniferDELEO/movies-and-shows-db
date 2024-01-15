@@ -17,7 +17,7 @@ const SearchBar: FC<Props> = (props) => {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const [searchValue, setSearchValue] = useState<string>(
-    searchParams.get("query")?.toString() || ""
+    searchParams.get("query")?.toString() || "",
   );
   const params = new URLSearchParams(searchParams);
 
@@ -44,7 +44,7 @@ const SearchBar: FC<Props> = (props) => {
         <div className="relative col-span-11">
           <FaSearch size={18} className="absolute left-3 top-3 text-gray-500" />
           <input
-            className="peer block w-full rounded-lg border border-gray-200 py-[9px] pl-12 text-xs md:text-sm placeholder:text-gray-500 text-gray-800 focus:outline-none focus:border-gray-500"
+            className="peer block w-full rounded-lg border border-gray-200 py-[9px] pl-12 text-xs text-gray-800 placeholder:text-gray-500 focus:border-gray-500 focus:outline-none md:text-sm"
             placeholder="Rechercher un film, une série TV..."
             type="search"
             value={searchValue}
@@ -56,7 +56,7 @@ const SearchBar: FC<Props> = (props) => {
             }}
           />
           <button
-            className="absolute right-0 top-0 z-10 bg-primary bg-opacity-70 px-4 py-2 rounded-md font-bold text-sm md:text-base"
+            className="absolute right-0 top-0 z-10 rounded-md bg-primary/70 px-4 py-2 text-sm font-bold md:text-base"
             type="button"
             onClick={handleSearchClick}
           >

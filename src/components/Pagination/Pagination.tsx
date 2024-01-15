@@ -17,7 +17,7 @@ const Pagination: FC<Props> = ({ total }) => {
 
   const params = new URLSearchParams(searchParams);
   const [currentPage, setCurrentPage] = useState(
-    Number(params.get("page")) || 1
+    Number(params.get("page")) || 1,
   );
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const Pagination: FC<Props> = ({ total }) => {
   }, [currentPage]);
 
   return (
-    <div className="col-span-2 flex flex-row mx-auto">
+    <div className="col-span-2 mx-auto flex flex-row">
       <Button
         size="sm"
         variant="flat"
