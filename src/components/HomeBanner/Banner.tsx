@@ -67,6 +67,8 @@ const Banner: FC<Props> = ({
         fetchUserDatas={fetchUserDatas}
         favoriteMoviesIds={favoriteMoviesIds}
         watchlistMoviesIds={watchlistMoviesIds}
+        favoriteTvShowsIds={favoriteTvShowsIds}
+        watchlistTvShowsIds={watchlistTvShowsIds}
       />
       <HomeBanner
         items={topRatedMovies}
@@ -76,6 +78,8 @@ const Banner: FC<Props> = ({
         fetchUserDatas={fetchUserDatas}
         favoriteMoviesIds={favoriteMoviesIds}
         watchlistMoviesIds={watchlistMoviesIds}
+        favoriteTvShowsIds={favoriteTvShowsIds}
+        watchlistTvShowsIds={watchlistTvShowsIds}
       />
       <HomeBanner
         items={popularTvShows}
@@ -85,6 +89,8 @@ const Banner: FC<Props> = ({
         fetchUserDatas={fetchUserDatas}
         favoriteTvShowsIds={favoriteTvShowsIds}
         watchlistTvShowsIds={watchlistTvShowsIds}
+        favoriteMoviesIds={favoriteMoviesIds}
+        watchlistMoviesIds={watchlistMoviesIds}
       />
       <HomeBanner
         items={topRatedTvShows}
@@ -94,6 +100,8 @@ const Banner: FC<Props> = ({
         fetchUserDatas={fetchUserDatas}
         favoriteTvShowsIds={favoriteTvShowsIds}
         watchlistTvShowsIds={watchlistTvShowsIds}
+        favoriteMoviesIds={favoriteMoviesIds}
+        watchlistMoviesIds={watchlistMoviesIds}
       />
     </div>
   );
