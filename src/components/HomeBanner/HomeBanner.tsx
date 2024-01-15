@@ -36,10 +36,10 @@ type Props = {
   filter: "plus populaires" | "mieux notés" | "mieux notées";
   user: User;
   fetchUserDatas: () => Promise<void>;
-  favoriteMoviesIds?: number[];
-  favoriteTvShowsIds?: number[];
-  watchlistMoviesIds?: number[];
-  watchlistTvShowsIds?: number[];
+  favoriteMoviesIds: number[];
+  favoriteTvShowsIds: number[];
+  watchlistMoviesIds: number[];
+  watchlistTvShowsIds: number[];
 };
 
 const HomeBanner: FC<Props> = ({
