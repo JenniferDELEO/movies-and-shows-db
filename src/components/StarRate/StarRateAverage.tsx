@@ -23,7 +23,7 @@ const StarRateAverage: FC<Props> = ({ averageRate, countRate, className }) => {
               &#9733;
             </span>
           ))}
-          <span className="text-gray-500 text-xs ml-1">
+          <span className="ml-1 text-xs text-gray-500">
             ({countRate} vote{countRate > 1 ? "s" : ""})
           </span>
         </div>
@@ -34,7 +34,7 @@ const StarRateAverage: FC<Props> = ({ averageRate, countRate, className }) => {
               &#9734;
             </span>
           ))}
-          <span className="text-gray-500 text-xs ml-1">({countRate} vote)</span>
+          <span className="ml-1 text-xs text-gray-500">({countRate} vote)</span>
         </div>
       )}
     </div>

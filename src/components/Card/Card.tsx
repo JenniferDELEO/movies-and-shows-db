@@ -37,17 +37,17 @@ const Card: FC<Props> = async ({ item, filterType }) => {
             sizes="100vw"
           />
           <div className="ml-4">
-            <h3 className="text-base md:text-xl pb-2">{item.title}</h3>
-            <p className="text-xs md:text-sm text-gray-400 pb-2">
+            <h3 className="pb-2 text-base md:text-xl">{item.title}</h3>
+            <p className="pb-2 text-xs text-gray-400 md:text-sm">
               {item.genre_ids.map((genreId: number) => {
                 const genre = genresMovies.find(
-                  (genre) => genre.id === genreId
+                  (genre) => genre.id === genreId,
                 );
                 return <span key={genreId}>{genre?.name} </span>;
               })}
             </p>
             <div className="flex flex-row items-center pb-2">
-              <p className="text-xs md:text-sm text-gray-400">
+              <p className="text-xs text-gray-400 md:text-sm">
                 {item.release_date.length
                   ? dayjs(item.release_date).format("DD MMM. YYYY")
                   : ""}
@@ -58,7 +58,7 @@ const Card: FC<Props> = async ({ item, filterType }) => {
                 className={`${item.release_date.length ? "ml-4" : ""}`}
               />
             </div>
-            <p className="text-xs xl:text-sm text-justify">
+            <p className="text-justify text-xs xl:text-sm">
               {overviewShow}
               {overviewRest.length ? "..." : ""}
             </p>
@@ -82,17 +82,17 @@ const Card: FC<Props> = async ({ item, filterType }) => {
             sizes="100vw"
           />
           <div className="ml-4">
-            <h3 className="text-base md:text-xl pb-2">{item.name}</h3>
-            <p className="text-xs md:text-sm text-gray-400 pb-2">
+            <h3 className="pb-2 text-base md:text-xl">{item.name}</h3>
+            <p className="pb-2 text-xs text-gray-400 md:text-sm">
               {item.genre_ids.map((genreId: number) => {
                 const genre = genresTvShows.find(
-                  (genre) => genre.id === genreId
+                  (genre) => genre.id === genreId,
                 );
                 return <span key={genreId}>{genre?.name} </span>;
               })}
             </p>
             <div className="flex flex-row items-center pb-2">
-              <p className="text-xs md:text-sm text-gray-400">
+              <p className="text-xs text-gray-400 md:text-sm">
                 {dayjs(item?.first_air_date).format("DD MMM. YYYY")}
               </p>
               <StarRateAverage

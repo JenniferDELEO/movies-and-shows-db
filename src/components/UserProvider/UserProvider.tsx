@@ -8,9 +8,13 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     typeof localStorage !== "undefined"
       ? localStorage.getItem("account_username")
       : null;
-  const localAccountId =
+  const localAccountIdV3 =
     typeof localStorage !== "undefined"
-      ? localStorage.getItem("account_id")
+      ? localStorage.getItem("account_id_v3")
+      : null;
+  const localAccountIdV4 =
+    typeof localStorage !== "undefined"
+      ? localStorage.getItem("account_id_v4")
       : null;
   const localSessionId =
     typeof localStorage !== "undefined"
@@ -20,7 +24,8 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [renderComponent, setRenderComponent] = useState<boolean>(false);
   const [user, setUser] = useState({
     username: localUsername,
-    accountId: localAccountId,
+    accountIdV3: localAccountIdV3,
+    accountIdV4: localAccountIdV4,
     sessionId: localSessionId,
   });
 

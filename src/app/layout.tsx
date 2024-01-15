@@ -8,6 +8,7 @@ import "./globals.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import UserProvider from "@/components/UserProvider/UserProvider";
+import Toast from "@/components/Toast/Toast";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -39,12 +40,13 @@ export default function RootLayout({
       <body className={`${poppins.className} text-white`}>
         <Providers>
           <UserProvider>
-            <div className="bg-[url('https://images.unsplash.com/photo-1642095902135-f48745dd3df5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTA2fHxtb3ZpZSUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D')] bg-fixed bg-no-repeat bg-cover">
+            <Toast />
+            <main className="bg-[url('https://images.unsplash.com/photo-1642095902135-f48745dd3df5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTA2fHxtb3ZpZSUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D')] bg-cover bg-fixed bg-no-repeat">
               <Header />
-              <div className="bg-primary opacity-90 h-full w-full pt-10 mx-auto -mb-20">
+              <div className="mx-auto -mb-20 size-full bg-primary pt-10 opacity-90">
                 {children}
               </div>
-            </div>
+            </main>
           </UserProvider>
         </Providers>
       </body>

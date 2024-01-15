@@ -28,7 +28,7 @@ const SearchFilters = () => {
 
   return (
     <div>
-      <div className="2xl:hidden lg:px-4 mb-4">
+      <div className="mb-4 lg:px-4 2xl:hidden">
         <Button
           className={`${filterType === "movie" ? "bg-secondary" : ""} mr-4`}
           onPress={() => handleChangeFilterType("movie")}

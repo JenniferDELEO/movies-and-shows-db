@@ -19,7 +19,7 @@ const Movies = () => {
       <Dropdown placement="top">
         <DropdownTrigger>
           <button>
-            <HiDotsCircleHorizontal className="text-2xl cursor-pointer" />
+            <HiDotsCircleHorizontal className="cursor-pointer text-2xl" />
           </button>
         </DropdownTrigger>
         <DropdownMenu variant="faded" aria-label="Dropdown menu with icons">

@@ -17,7 +17,7 @@ const SearchPage = ({
         styleBase="w-full sm:w-2/3 mx-auto mb-20"
         styleContainer="grid grid-cols-12 gap-4"
       />
-      <div className="md:grid grid-cols-2 2xl:grid-cols-4 relative ml-4">
+      <div className="relative ml-4 grid-cols-2 md:grid 2xl:grid-cols-4">
         <SearchFilters />
         <SearchResult
           query={query}

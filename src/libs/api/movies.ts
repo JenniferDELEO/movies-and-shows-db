@@ -4,7 +4,7 @@ import { optionsGET } from "./auth";
 export async function getPopularMovies(): Promise<ApiResultMovies> {
   try {
     const result = await fetch(
-      `${process.env.NEXT_PUBLIC_TMDB_API_URL}/movie/popular?language=fr-FR&page=1`,
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/popular?language=fr-FR&page=1`,
       optionsGET
     );
     return result.json();
@@ -17,7 +17,7 @@ export async function getPopularMovies(): Promise<ApiResultMovies> {
 export async function getTopRatedMovies(): Promise<ApiResultMovies> {
   try {
     const result = await fetch(
-      `${process.env.NEXT_PUBLIC_TMDB_API_URL}/movie/top_rated?language=fr-FR&page=1`,
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/top_rated?language=fr-FR&page=1`,
       optionsGET
     );
     return result.json();
@@ -32,7 +32,7 @@ export async function getGenresMovies(): Promise<{
 }> {
   try {
     const result = await fetch(
-      `${process.env.NEXT_PUBLIC_TMDB_API_URL}/genre/movie/list?language=fr`,
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/genre/movie/list?language=fr`,
       optionsGET
     );
     return result.json();
@@ -48,7 +48,7 @@ export async function getSearchMovies(
 ): Promise<ApiResultMovies> {
   try {
     const result = await fetch(
-      `${process.env.NEXT_PUBLIC_TMDB_API_URL}/search/movie?language=fr-FR&include_adult=false&region=fr&page=${page}&query=${query}`,
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/search/movie?language=fr-FR&include_adult=false&region=fr&page=${page}&query=${query}`,
       optionsGET
     );
     return result.json();

@@ -11,7 +11,7 @@ export default async function Home() {
   const { results: topRatedTvShows } = await getTopRatedTvShows();
 
   return (
-    <div className="w-full h-full">
+    <div className="size-full">
       <SearchBar
         styleBase="w-full md:w-2/3 ml-2 md:mx-auto mb-20"
         styleContainer="grid grid-cols-12 gap-4"

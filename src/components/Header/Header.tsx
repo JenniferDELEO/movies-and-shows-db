@@ -4,7 +4,8 @@ import { UserContext } from "@/context/userContext";
 import {
   getAccountDetails,
   getRequestToken,
-  getUserSessionId,
+  getAccessToken,
+  createSessionFromV4,
 } from "@/libs/api/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -33,14 +34,14 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const {
-    user: { username, accountId, sessionId },
+    user: { username, accountIdV3, accountIdV4, sessionId },
     setUser,
   } = useContext(UserContext);
 
   const handleConnexion = async () => {
     const responseToken = await getRequestToken();
     router.push(
-      `${process.env.NEXT_PUBLIC_TMDB_AUTHENTICATE}${responseToken.request_token}?redirect_to=${process.env.NEXT_PUBLIC_URL}`
+      `${process.env.NEXT_PUBLIC_TMDB_AUTHENTICATE}${responseToken.request_token}`,
     );
   };
 
@@ -49,15 +50,33 @@ const Header = () => {
 
     async function getUserAccount() {
       if (!requestToken) return;
-      const responseJsonSession = await getUserSessionId(requestToken);
+      const responseJsonSession = await getAccessToken(requestToken);
 
-      await getAccountDetails(responseJsonSession.session_id);
+      const responseJsonCreateSession = await createSessionFromV4(
+        responseJsonSession.access_token,
+      );
+
+      await getAccountDetails(responseJsonCreateSession.session_id);
       window.location.reload();
     }
-    if (requestToken && !username && !accountId && !sessionId) {
+    if (
+      requestToken &&
+      !username &&
+      !accountIdV3 &&
+      !accountIdV4 &&
+      !sessionId
+    ) {
       getUserAccount();
     }
-  }, [accountId, requestToken, router, sessionId, setUser, username]);
+  }, [
+    accountIdV3,
+    accountIdV4,
+    requestToken,
+    router,
+    sessionId,
+    setUser,
+    username,
+  ]);
 
   return (
     <Navbar
@@ -90,7 +109,7 @@ const Header = () => {
             <NavbarBrand>
               <Link
                 href="/"
-                className="hover:-translate-y-2 duration-500 transition-all sm:text-xl flex flex-row items-center"
+                className="flex flex-row items-center transition-all duration-500 hover:-translate-y-2 sm:text-xl"
               >
                 <TiHome />
                 <span className="ml-2">Accueil</span>
@@ -98,24 +117,24 @@ const Header = () => {
             </NavbarBrand>
           </NavbarContent>
           <NavbarContent className="flex gap-4 md:gap-10" justify="end">
-            <NavbarItem className="hidden md:block hover:-translate-y-2 duration-500 transition-all">
+            <NavbarItem className="hidden transition-all duration-500 hover:-translate-y-2 md:block">
               <Link href="/movies" className="flex flex-row items-center">
                 <MdLocalMovies />
                 <span className="ml-2">Films</span>
               </Link>
             </NavbarItem>
-            <NavbarItem className="hidden md:block hover:-translate-y-2 duration-500 transition-all">
+            <NavbarItem className="hidden transition-all duration-500 hover:-translate-y-2 md:block">
               <Link href="/tvshows" className="flex flex-row items-center">
                 <PiTelevisionSimpleFill />
                 <span className="ml-2">Séries TV</span>
               </Link>
             </NavbarItem>
-            {!username && !accountId && !sessionId ? (
-              <NavbarItem className="hidden md:block hover:-translate-y-2 duration-500 transition-all cursor-pointer">
+            {!username && !accountIdV3 && !sessionId ? (
+              <NavbarItem className="hidden cursor-pointer transition-all duration-500 hover:-translate-y-2 md:block">
                 <div onClick={handleConnexion}>Connexion/Inscription</div>
               </NavbarItem>
             ) : (
-              <NavbarItem className="hidden md:block hover:-translate-y-2 duration-500 transition-all">
+              <NavbarItem className="hidden transition-all duration-500 hover:-translate-y-2 md:block">
                 <Link href="/profil" className="flex flex-row items-center">
                   <IoPersonSharp />
                   <span className="ml-2">Profil</span>
@@ -145,8 +164,8 @@ const Header = () => {
             <span className="ml-2">Séries TV</span>
           </Link>
         </NavbarMenuItem>
-        {!username && !accountId && !sessionId ? (
-          <NavbarMenuItem className="hover:-translate-y-2 duration-500 transition-all cursor-pointer">
+        {!username && !accountIdV3 && !sessionId ? (
+          <NavbarMenuItem className="cursor-pointer transition-all duration-500 hover:-translate-y-2">
             <div onClick={handleConnexion}>Connexion/Inscription</div>
           </NavbarMenuItem>
         ) : (
