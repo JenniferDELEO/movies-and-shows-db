@@ -112,7 +112,7 @@ const HomeBanner: FC<Props> = ({
   if (!items) return <div>Chargement...</div>;
 
   return (
-    <div className="mx-auto mb-20 size-full pb-16 md:w-4/5">
+    <div className="mx-auto mb-20 size-full pb-16">
       <AddToListModal
         modalIsOpen={modalAddToListIsOpen}
         setModalIsOpen={setModalAddToListIsOpen}
@@ -151,7 +151,7 @@ const HomeBanner: FC<Props> = ({
                 sizes="100vw"
               />
               {user && user.username && (
-                <div className="absolute right-16 top-4 z-10 sm:right-2 md:top-2 2xl:right-4">
+                <div className="absolute right-10 top-5 z-10 sm:right-2 md:right-14 md:top-2 lg:right-2 2xl:right-4">
                   <Dropdown
                     classNames={{ content: "bg-primary border-primary" }}
                   >
