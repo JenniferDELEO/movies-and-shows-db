@@ -64,13 +64,13 @@ const HomeBanner: FC<Props> = ({
     const id = item.toString().split("-")[1];
     setSelectedItemId(parseInt(id));
 
-    if (category === "addToList") {
-      const name = item.toString().split("-")[2];
-      setModalTitle(`Ajouter ${name} à une liste`);
-      setModalAddToListIsOpen(true);
-    }
-
     if (user) {
+      if (category === "addToList") {
+        const name = item.toString().split("-")[2];
+        setModalTitle(`Ajouter ${name} à une liste`);
+        setModalAddToListIsOpen(true);
+      }
+
       if (category === "favorite" && favoriteMoviesIds && favoriteTvShowsIds) {
         await toggleUserDatas(
           category,
@@ -83,6 +83,7 @@ const HomeBanner: FC<Props> = ({
           fetchUserDatas,
         );
       }
+
       if (
         category === "watchlist" &&
         watchlistMoviesIds &&

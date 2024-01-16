@@ -159,3 +159,49 @@ export async function getUserWatchlistTvShows(
     throw error;
   }
 }
+
+export async function addRateTvShow(
+  tvShowId: number,
+  rate: number,
+): Promise<{ success: boolean; status_code: number; status_message: string }> {
+  try {
+    const result = await fetch(
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/${tvShowId}/rating`,
+      {
+        ...optionsGET,
+        method: "POST",
+        headers: {
+          ...optionsGET.headers,
+          "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({ value: rate }),
+      },
+    );
+    return result.json();
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function deleteRateTvShow(
+  tvShowId: number,
+): Promise<{ success: boolean; status_code: number; status_message: string }> {
+  try {
+    const result = await fetch(
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/${tvShowId}/rating`,
+      {
+        ...optionsGET,
+        method: "DELETE",
+        headers: {
+          ...optionsGET.headers,
+          "Content-Type": "application/json;charset=utf-8",
+        },
+      },
+    );
+    return result.json();
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
