@@ -1,5 +1,6 @@
 import { ApiResultTvShows, TvShow } from "@/models/tvShows";
 import { optionsGET } from "./auth";
+import { Watcher } from "@/models/watchers";
 
 export async function getPopularTvShows(): Promise<ApiResultTvShows> {
   try {
@@ -154,6 +155,21 @@ export async function getUserWatchlistTvShows(
     }
 
     return json;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getTvShowsProviders(): Promise<{
+  results: Watcher[];
+}> {
+  try {
+    const result = await fetch(
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/watch/providers/tv?language=fr-FR&watch_region=fr`,
+      optionsGET,
+    );
+    return result.json();
   } catch (error) {
     console.log(error);
     throw error;

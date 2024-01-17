@@ -63,7 +63,6 @@ const AddToListModal: FC<Props> = ({
 
   const fetchItemStatus = async () => {
     const res = await checkItemStatus(Number(selectedList), itemId, itemType);
-    console.log(res);
     if (!res?.success) setItemStatus(false);
     else {
       setItemStatus(true);
@@ -108,7 +107,6 @@ const AddToListModal: FC<Props> = ({
   return (
     <ModalComponent
       modalIsOpen={modalIsOpen}
-      itemId={itemId}
       title={title}
       onValidate={onValidate}
       onClose={onClose}

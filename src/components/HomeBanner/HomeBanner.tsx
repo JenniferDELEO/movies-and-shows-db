@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import { HiDotsCircleHorizontal } from "react-icons/hi";
 import { FaListUl } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
-import { FaBookmark } from "react-icons/fa6";
+import { MdCheckBoxOutlineBlank, MdCheckBox } from "react-icons/md";
 import { FaStar } from "react-icons/fa6";
 import {
   Dropdown,
@@ -184,12 +184,22 @@ const HomeBanner: FC<Props> = ({
                       <DropdownItem
                         key={`watchlist-${item.id}`}
                         startContent={
-                          <FaBookmark
-                            className={`${(item?.release_date && watchlistMoviesIds?.includes(item.id)) || (item?.first_air_date && watchlistTvShowsIds?.includes(item.id)) ? "text-secondary" : ""}`}
-                          />
+                          (item?.release_date &&
+                            watchlistMoviesIds?.includes(item.id)) ||
+                          (item?.first_air_date &&
+                            watchlistTvShowsIds?.includes(item.id)) ? (
+                            <MdCheckBox />
+                          ) : (
+                            <MdCheckBoxOutlineBlank />
+                          )
                         }
                       >
-                        Liste de suivi
+                        {(item?.release_date &&
+                          watchlistMoviesIds?.includes(item.id)) ||
+                        (item?.first_air_date &&
+                          watchlistTvShowsIds?.includes(item.id))
+                          ? "Vu"
+                          : "Non vu"}
                       </DropdownItem>
                       <DropdownItem
                         key={`note-${item.id}-${item.title || item.name}`}

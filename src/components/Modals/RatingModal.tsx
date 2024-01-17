@@ -118,7 +118,6 @@ const RatingModal: FC<Props> = ({
   return (
     <ModalComponent
       modalIsOpen={modalIsOpen}
-      itemId={itemId}
       title={title}
       onValidate={onValidate}
       onClose={onClose}
