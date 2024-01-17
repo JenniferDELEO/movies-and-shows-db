@@ -36,7 +36,7 @@ export async function toggleUserDatas(
       if (responseToggle.success) {
         fetchDataFunction();
         toast.success(
-          `Film supprimé ${category === "favorite" ? "des favoris" : "de la watchlist"} avec succès`,
+          `Film ${category === "favorite" ? "supprimé des favoris" : "marqué comme non vu"} avec succès`,
         );
       }
     } else if (tvShowsIds.includes(parseInt(id))) {
@@ -50,7 +50,7 @@ export async function toggleUserDatas(
       if (responseToggle.success) {
         fetchDataFunction();
         toast.success(
-          `Série TV supprimée ${category === "favorite" ? "des favoris" : "de la watchlist"} avec succès`,
+          `Série TV ${category === "favorite" ? "supprimée des favoris" : "marquée comme non vu"} avec succès`,
         );
       }
     } else {
@@ -64,7 +64,7 @@ export async function toggleUserDatas(
       if (responseToggle.success) {
         fetchDataFunction();
         toast.success(
-          `${type === "Films" ? "Film" : "Série TV"} ajouté${type === "Films" ? "" : "e"} ${category === "favorite" ? "aux favoris" : "à la watchlist"} avec succès`,
+          `${type === "Films" ? "Film" : "Série TV"} ${category === "favorite" ? `ajouté${type === "Films" ? "" : "e"} aux favoris` : `marqué${type === "Films" ? "" : "e"} comme vu`} avec succès`,
         );
       }
     }

@@ -1,5 +1,6 @@
 import { ApiResultMovies } from "@/models/movies";
 import { optionsGET } from "./auth";
+import { Watcher } from "@/models/watchers";
 
 export async function getPopularMovies(): Promise<ApiResultMovies> {
   try {
@@ -154,6 +155,67 @@ export async function getUserWatchListMovies(
     }
 
     return json;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getMoviesProviders(): Promise<{
+  results: Watcher[];
+}> {
+  try {
+    const result = await fetch(
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/watch/providers/movie?language=fr-FR&watch_region=fr`,
+      optionsGET,
+    );
+    return result.json();
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function addRateMovie(
+  movieId: number,
+  rate: number,
+): Promise<{ success: boolean; status_code: number; status_message: string }> {
+  try {
+    const result = await fetch(
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/${movieId}/rating`,
+      {
+        ...optionsGET,
+        method: "POST",
+        headers: {
+          ...optionsGET.headers,
+          "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({ value: rate }),
+      },
+    );
+    return result.json();
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function deleteRateMovie(
+  movieId: number,
+): Promise<{ success: boolean; status_code: number; status_message: string }> {
+  try {
+    const result = await fetch(
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/${movieId}/rating`,
+      {
+        ...optionsGET,
+        method: "DELETE",
+        headers: {
+          ...optionsGET.headers,
+          "Content-Type": "application/json;charset=utf-8",
+        },
+      },
+    );
+    return result.json();
   } catch (error) {
     console.log(error);
     throw error;

@@ -26,7 +26,7 @@ const Pagination: FC<Props> = ({ total }) => {
   }, [currentPage]);
 
   return (
-    <div className="col-span-2 mx-auto flex flex-row">
+    <div className="col-span-2 mx-auto flex w-fit flex-row">
       <Button
         size="sm"
         variant="flat"

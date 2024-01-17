@@ -12,6 +12,10 @@ export type TvShow = {
   poster_path: string;
   vote_average: number;
   vote_count: number;
+  account_rating: {
+    created_at: string;
+    value: number;
+  };
 };
 
 export type ApiResultTvShows = {

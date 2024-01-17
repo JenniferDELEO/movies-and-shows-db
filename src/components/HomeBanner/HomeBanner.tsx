@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import { HiDotsCircleHorizontal } from "react-icons/hi";
 import { FaListUl } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
-import { FaBookmark } from "react-icons/fa6";
+import { MdCheckBoxOutlineBlank, MdCheckBox } from "react-icons/md";
 import { FaStar } from "react-icons/fa6";
 import {
   Dropdown,
@@ -64,13 +64,13 @@ const HomeBanner: FC<Props> = ({
     const id = item.toString().split("-")[1];
     setSelectedItemId(parseInt(id));
 
-    if (category === "addToList") {
-      const name = item.toString().split("-")[2];
-      setModalTitle(`Ajouter ${name} à une liste`);
-      setModalAddToListIsOpen(true);
-    }
-
     if (user) {
+      if (category === "addToList") {
+        const name = item.toString().split("-")[2];
+        setModalTitle(`Ajouter ${name} à une liste`);
+        setModalAddToListIsOpen(true);
+      }
+
       if (category === "favorite" && favoriteMoviesIds && favoriteTvShowsIds) {
         await toggleUserDatas(
           category,
@@ -83,6 +83,7 @@ const HomeBanner: FC<Props> = ({
           fetchUserDatas,
         );
       }
+
       if (
         category === "watchlist" &&
         watchlistMoviesIds &&
@@ -111,7 +112,7 @@ const HomeBanner: FC<Props> = ({
   if (!items) return <div>Chargement...</div>;
 
   return (
-    <div className="mx-auto mb-20 size-full pb-16 md:w-4/5">
+    <div className="mx-auto mb-20 size-full pb-16">
       <AddToListModal
         modalIsOpen={modalAddToListIsOpen}
         setModalIsOpen={setModalAddToListIsOpen}
@@ -150,7 +151,7 @@ const HomeBanner: FC<Props> = ({
                 sizes="100vw"
               />
               {user && user.username && (
-                <div className="absolute right-16 top-4 z-10 sm:right-2 md:top-2 2xl:right-4">
+                <div className="absolute right-10 top-5 z-10 sm:right-2 md:right-14 md:top-2 lg:right-2 2xl:right-4">
                   <Dropdown
                     classNames={{ content: "bg-primary border-primary" }}
                   >
@@ -183,12 +184,22 @@ const HomeBanner: FC<Props> = ({
                       <DropdownItem
                         key={`watchlist-${item.id}`}
                         startContent={
-                          <FaBookmark
-                            className={`${(item?.release_date && watchlistMoviesIds?.includes(item.id)) || (item?.first_air_date && watchlistTvShowsIds?.includes(item.id)) ? "text-secondary" : ""}`}
-                          />
+                          (item?.release_date &&
+                            watchlistMoviesIds?.includes(item.id)) ||
+                          (item?.first_air_date &&
+                            watchlistTvShowsIds?.includes(item.id)) ? (
+                            <MdCheckBox />
+                          ) : (
+                            <MdCheckBoxOutlineBlank />
+                          )
                         }
                       >
-                        Liste de suivi
+                        {(item?.release_date &&
+                          watchlistMoviesIds?.includes(item.id)) ||
+                        (item?.first_air_date &&
+                          watchlistTvShowsIds?.includes(item.id))
+                          ? "Vu"
+                          : "Non vu"}
                       </DropdownItem>
                       <DropdownItem
                         key={`note-${item.id}-${item.title || item.name}`}

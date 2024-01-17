@@ -13,8 +13,8 @@ export default async function Home() {
   return (
     <div className="size-full">
       <SearchBar
-        styleBase="w-full md:w-2/3 ml-2 md:mx-auto mb-20"
-        styleContainer="grid grid-cols-12 gap-4"
+        styleBase="w-full md:w-[90%] ml-2 md:mx-auto mb-20"
+        styleContainer="flex flex-row items-center justify-start md:justify-center"
       />
       <Banner
         popularMovies={popularMovies}

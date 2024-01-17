@@ -10,7 +10,6 @@ import { FC } from "react";
 
 type Props = {
   modalIsOpen: boolean;
-  itemId: number;
   title: string;
   children: React.ReactNode;
   onValidate: () => Promise<void>;
@@ -26,7 +25,11 @@ const ModalComponent: FC<Props> = ({
 }) => {
   return (
     <>
-      <Modal isOpen={modalIsOpen} hideCloseButton={true}>
+      <Modal
+        isOpen={modalIsOpen}
+        hideCloseButton={true}
+        classNames={{ base: "absolute top-0" }}
+      >
         <ModalContent>
           <>
             <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>

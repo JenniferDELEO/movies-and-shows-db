@@ -1,6 +1,6 @@
-import Card from "@/components/Card/Card";
-import { getSearchMovies } from "@/libs/api/movies";
-import { getSearchTvShows } from "@/libs/api/tvshows";
+import Card from "@/components/Cards/Card";
+import { getGenresMovies, getSearchMovies } from "@/libs/api/movies";
+import { getGenresTvShows, getSearchTvShows } from "@/libs/api/tvshows";
 import Pagination from "../Pagination/Pagination";
 
 type Props = {
@@ -19,20 +19,34 @@ const SearchResult = async (props: Props) => {
     ? await getSearchMovies(query, currentPage)
     : await getSearchTvShows(query, currentPage);
 
+  const { genres: genresMovies } = await getGenresMovies();
+  const { genres: genresTvShows } = await getGenresTvShows();
+
   return (
     <div className="md:col-span-3">
-      {!searchResults ? (
+      {!searchResults || !genresMovies || !genresTvShows ? (
         <div className="text-center text-lg md:text-xl">Chargement...</div>
       ) : searchResults.length === 0 ? (
         <div className="text-center text-lg md:text-xl">Aucun résultat</div>
       ) : (
-        <div className="lg:grid lg:grid-cols-2 lg:gap-4">
-          <h3 className="absolute -top-10 left-0 text-lg md:text-xl lg:left-4 2xl:left-1 2xl:top-0">
-            Résultats de votre recherche ({totalSearchResults})
+        <div>
+          <h3 className="mb-4 text-center text-lg md:text-xl">
+            Résultats de votre recherche{" "}
+            <span className="text-xs font-bold md:text-lg">
+              ({totalSearchResults})
+            </span>
           </h3>
-          {searchResults.map((item) => (
-            <Card key={item.id} item={item} filterType={filterType} />
-          ))}
+          <div className="2xl:grid 2xl:grid-cols-2 2xl:gap-4">
+            {searchResults.map((item) => (
+              <Card
+                key={item.id}
+                item={item}
+                filterType={filterType}
+                genres={filterType === "movie" ? genresMovies : genresTvShows}
+              />
+            ))}
+          </div>
+
           <Pagination total={totalSearchPages} />
         </div>
       )}

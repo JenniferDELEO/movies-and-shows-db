@@ -1,24 +1,25 @@
-import { getGenresMovies } from "@/libs/api/movies";
-import { getGenresTvShows } from "@/libs/api/tvshows";
+"use client";
+
 import dayjs from "dayjs";
 import Image from "next/image";
-import React, { FC } from "react";
+import { FC } from "react";
 import StarRateAverage from "../StarRate/StarRateAverage";
 
 type Props = {
   item: any;
   filterType: string;
+  genres: {
+    id: number;
+    name: string;
+  }[];
 };
 
-const Card: FC<Props> = async ({ item, filterType }) => {
-  const { genres: genresTvShows } = await getGenresTvShows();
-  const { genres: genresMovies } = await getGenresMovies();
-
+const Card: FC<Props> = ({ item, filterType, genres }) => {
   const overviewRest = item?.overview?.split(" ")?.filter(Boolean);
   const overviewShow = overviewRest?.splice(0, 30)?.join(" ");
 
   const styleContainer =
-    "mb-4 lg:mb-0 flex max-h-[278px] mx-auto lg:mx-4 pr-4 bg-gray-900 rounded-md";
+    "mb-4 2xl:mb-0 flex max-h-[278px] mx-auto lg:mx-4 pr-4 bg-gray-900 rounded-md";
 
   switch (filterType) {
     case "movie": {
@@ -37,12 +38,10 @@ const Card: FC<Props> = async ({ item, filterType }) => {
             sizes="100vw"
           />
           <div className="ml-4">
-            <h3 className="pb-2 text-base md:text-xl">{item.title}</h3>
-            <p className="pb-2 text-xs text-gray-400 md:text-sm">
+            <h3 className="pb-2 pt-4 text-base md:text-xl">{item.title}</h3>
+            <p className="text-xs text-gray-400 md:text-sm">
               {item.genre_ids.map((genreId: number) => {
-                const genre = genresMovies.find(
-                  (genre) => genre.id === genreId,
-                );
+                const genre = genres.find((genre) => genre.id === genreId);
                 return <span key={genreId}>{genre?.name} </span>;
               })}
             </p>
@@ -58,7 +57,7 @@ const Card: FC<Props> = async ({ item, filterType }) => {
                 className={`${item.release_date.length ? "ml-4" : ""}`}
               />
             </div>
-            <p className="text-justify text-xs xl:text-sm">
+            <p className="text-justify text-xs md:text-sm">
               {overviewShow}
               {overviewRest.length ? "..." : ""}
             </p>
@@ -83,16 +82,14 @@ const Card: FC<Props> = async ({ item, filterType }) => {
           />
           <div className="ml-4">
             <h3 className="pb-2 text-base md:text-xl">{item.name}</h3>
-            <p className="pb-2 text-xs text-gray-400 md:text-sm">
+            <p className="text-xs text-gray-400 md:text-sm">
               {item.genre_ids.map((genreId: number) => {
-                const genre = genresTvShows.find(
-                  (genre) => genre.id === genreId,
-                );
+                const genre = genres.find((genre) => genre.id === genreId);
                 return <span key={genreId}>{genre?.name} </span>;
               })}
             </p>
-            <div className="flex flex-row items-center pb-2">
-              <p className="text-xs text-gray-400 md:text-sm">
+            <div className="flex flex-row items-center">
+              <p className="text-nowrap text-xs text-gray-400 md:text-sm">
                 {dayjs(item?.first_air_date).format("DD MMM. YYYY")}
               </p>
               <StarRateAverage
@@ -101,7 +98,7 @@ const Card: FC<Props> = async ({ item, filterType }) => {
                 className={`${item.first_air_date.length ? "ml-4" : ""}`}
               />
             </div>
-            <p>
+            <p className="text-justify text-xs md:text-sm">
               {overviewShow}
               {overviewRest.length ? "..." : ""}
             </p>

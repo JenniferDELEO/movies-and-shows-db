@@ -41,7 +41,7 @@ const SearchBar: FC<Props> = (props) => {
   return (
     <div className={styleBase}>
       <div className={styleContainer}>
-        <div className="relative col-span-11">
+        <div className="relative mr-4 w-[90%]">
           <FaSearch size={18} className="absolute left-3 top-3 text-gray-500" />
           <input
             className="peer block w-full rounded-lg border border-gray-200 py-[9px] pl-12 text-xs text-gray-800 placeholder:text-gray-500 focus:border-gray-500 focus:outline-none md:text-sm"

@@ -12,12 +12,12 @@ const SearchPage = ({
   const filterType = searchParams?.type || "movie";
 
   return (
-    <div className="min-h-screen w-full">
+    <div className="mx-auto min-h-screen w-full">
       <SearchBar
-        styleBase="w-full sm:w-2/3 mx-auto mb-20"
-        styleContainer="grid grid-cols-12 gap-4"
+        styleBase="w-full md:w-[90%] ml-2 md:mx-auto mb-20"
+        styleContainer="flex flex-row items-center justify-start md:justify-center"
       />
-      <div className="relative ml-4 grid-cols-2 md:grid 2xl:grid-cols-4">
+      <div className=" mx-4 grid-cols-2">
         <SearchFilters />
         <SearchResult
           query={query}
