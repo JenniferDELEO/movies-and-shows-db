@@ -12,7 +12,7 @@ type Props = {
 const Cards: FC<Props> = ({ items, filterType, genres }) => {
   if (!items) return <div>Chargement...</div>;
   return (
-    <div className="w-full lg:w-[75%]">
+    <div className="w-full">
       <div className="2xl:grid 2xl:grid-cols-2 2xl:gap-2">
         {items.map((item) => (
           <Card

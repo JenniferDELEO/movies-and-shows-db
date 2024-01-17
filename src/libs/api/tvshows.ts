@@ -2,10 +2,12 @@ import { ApiResultTvShows, TvShow } from "@/models/tvShows";
 import { optionsGET } from "./auth";
 import { Watcher } from "@/models/watchers";
 
-export async function getPopularTvShows(): Promise<ApiResultTvShows> {
+export async function getPopularTvShows(
+  page: number,
+): Promise<ApiResultTvShows> {
   try {
     const result = await fetch(
-      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/popular?language=fr-FR&page=1`,
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/popular?language=fr-FR&page=${page}`,
       optionsGET,
     );
     return result.json();

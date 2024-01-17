@@ -47,7 +47,7 @@ const SearchResult = async (props: Props) => {
             ))}
           </div>
 
-          <Pagination total={totalSearchPages} />
+          <Pagination total={totalSearchPages} fromSearch={true} />
         </div>
       )}
     </div>

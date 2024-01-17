@@ -56,7 +56,7 @@ const Card: FC<Props> = ({ item, filterType, genres }) => {
             className={`${date.length ? "ml-4" : ""}`}
           />
         </div>
-        <p className="text-justify text-xs md:text-sm">
+        <p className="text-xs md:text-justify md:text-sm">
           {overviewShow}
           {overviewRest.length ? "..." : ""}
         </p>

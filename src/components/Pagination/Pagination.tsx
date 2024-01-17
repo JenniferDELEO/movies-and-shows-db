@@ -2,31 +2,45 @@
 "use client";
 
 import { Button, Pagination as PaginationNextUi } from "@nextui-org/react";
-import { FC, useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
 
 type Props = {
   total: number;
+  fromSearch?: boolean;
+  currentPage?: number;
+  setCurrentPage?: Dispatch<SetStateAction<number>>;
 };
 
-const Pagination: FC<Props> = ({ total }) => {
+const Pagination: FC<Props> = ({
+  total,
+  fromSearch,
+  currentPage: _currentPage,
+  setCurrentPage: _setCurrentPage,
+}) => {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const { replace } = useRouter();
 
   const params = new URLSearchParams(searchParams);
   const [currentPage, setCurrentPage] = useState(
-    Number(params.get("page")) || 1,
+    Number(params.get("page")) || _currentPage || 1,
   );
 
   useEffect(() => {
-    params.set("page", currentPage.toString());
-    replace(`/search?${params.toString()}`);
-  }, [currentPage]);
+    if (fromSearch) {
+      params.set("page", currentPage.toString());
+      replace(`/search?${params.toString()}`);
+    } else {
+      _setCurrentPage && _setCurrentPage(currentPage);
+      replace(`/${pathname.split("/")[1]}/${currentPage}`);
+    }
+  }, [fromSearch, currentPage]);
 
   return (
-    <div className="col-span-2 mx-auto flex w-fit flex-row">
+    <div className="col-span-2 mx-auto mt-4 flex w-fit flex-row">
       <Button
         size="sm"
         variant="flat"

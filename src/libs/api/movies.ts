@@ -2,10 +2,10 @@ import { ApiResultMovies } from "@/models/movies";
 import { optionsGET } from "./auth";
 import { Watcher } from "@/models/watchers";
 
-export async function getPopularMovies(): Promise<ApiResultMovies> {
+export async function getPopularMovies(page: number): Promise<ApiResultMovies> {
   try {
     const result = await fetch(
-      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/popular?language=fr-FR&page=1`,
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/popular?language=fr-FR&page=${page}`,
       optionsGET,
     );
     return result.json();
