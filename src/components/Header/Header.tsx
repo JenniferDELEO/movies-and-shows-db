@@ -8,7 +8,7 @@ import {
   createSessionFromV4,
 } from "@/libs/api/auth";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import {
   Navbar,
@@ -29,6 +29,7 @@ import SearchBar from "../Search/SearchBar";
 
 const Header = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const [requestToken, setRequestToken] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -81,10 +82,15 @@ const Header = () => {
   return (
     <Navbar
       onMenuOpenChange={setIsMenuOpen}
+      isMenuOpen={isMenuOpen}
       classNames={{
-        base: "bg-primary bg-opacity-90 justify-between",
-        wrapper: "max-w-[80%] mx-auto",
-        item: "sm:text-xl",
+        base: "bg-primary/90 justify-between",
+        wrapper: "md:max-w-[80%] mx-auto",
+        item: [
+          "sm:text-xl",
+          "data-[active=true]:text-secondary",
+          "data-[active=true]:font-normal",
+        ],
       }}
     >
       {isSearchOpen ? (
@@ -107,34 +113,40 @@ const Header = () => {
               className="md:hidden"
             />
             <NavbarBrand>
-              <Link
-                href="/"
-                className="flex flex-row items-center transition-all duration-500 hover:-translate-y-2 sm:text-xl"
-              >
+              <Link href="/" className="flex flex-row items-center sm:text-xl">
                 <TiHome />
                 <span className="ml-2">Accueil</span>
               </Link>
             </NavbarBrand>
           </NavbarContent>
           <NavbarContent className="flex gap-4 md:gap-10" justify="end">
-            <NavbarItem className="hidden transition-all duration-500 hover:-translate-y-2 md:block">
-              <Link href="/movies" className="flex flex-row items-center">
+            <NavbarItem
+              isActive={pathname.includes("/movies")}
+              className="hidden md:block"
+            >
+              <Link href="/movies/1" className="flex flex-row items-center">
                 <MdLocalMovies />
                 <span className="ml-2">Films</span>
               </Link>
             </NavbarItem>
-            <NavbarItem className="hidden transition-all duration-500 hover:-translate-y-2 md:block">
-              <Link href="/tvshows" className="flex flex-row items-center">
+            <NavbarItem
+              isActive={pathname.includes("/tvshows")}
+              className="hidden md:block"
+            >
+              <Link href="/tvshows/1" className="flex flex-row items-center">
                 <PiTelevisionSimpleFill />
                 <span className="ml-2">Séries TV</span>
               </Link>
             </NavbarItem>
             {!username && !accountIdV3 && !sessionId ? (
-              <NavbarItem className="hidden cursor-pointer transition-all duration-500 hover:-translate-y-2 md:block">
+              <NavbarItem className="hidden cursor-pointer md:block">
                 <div onClick={handleConnexion}>Connexion/Inscription</div>
               </NavbarItem>
             ) : (
-              <NavbarItem className="hidden transition-all duration-500 hover:-translate-y-2 md:block">
+              <NavbarItem
+                isActive={pathname === "/profil"}
+                className="hidden md:block"
+              >
                 <Link href="/profil" className="flex flex-row items-center">
                   <IoPersonSharp />
                   <span className="ml-2">Profil</span>
@@ -152,14 +164,22 @@ const Header = () => {
       )}
 
       <NavbarMenu>
-        <NavbarMenuItem>
-          <Link href="/movies" className="flex flex-row items-center">
+        <NavbarMenuItem isActive={pathname.includes("/movies")}>
+          <Link
+            href="/movies/1"
+            className="flex flex-row items-center"
+            onClick={() => setIsMenuOpen(false)}
+          >
             <MdLocalMovies />
             <span className="ml-2">Films</span>
           </Link>
         </NavbarMenuItem>
-        <NavbarMenuItem>
-          <Link href="/tvshows" className="flex flex-row items-center">
+        <NavbarMenuItem isActive={pathname.includes("/tvshows")}>
+          <Link
+            href="/tvshows/1"
+            className="flex flex-row items-center"
+            onClick={() => setIsMenuOpen(false)}
+          >
             <PiTelevisionSimpleFill />
             <span className="ml-2">Séries TV</span>
           </Link>
@@ -169,8 +189,12 @@ const Header = () => {
             <div onClick={handleConnexion}>Connexion/Inscription</div>
           </NavbarMenuItem>
         ) : (
-          <NavbarMenuItem>
-            <Link href="/profil" className="flex flex-row items-center">
+          <NavbarMenuItem isActive={pathname === "/profil"}>
+            <Link
+              href="/profil"
+              className="flex flex-row items-center"
+              onClick={() => setIsMenuOpen(false)}
+            >
               <IoPersonSharp />
               <span className="ml-2">Profil</span>
             </Link>

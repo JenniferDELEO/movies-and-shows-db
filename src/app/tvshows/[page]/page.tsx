@@ -1,4 +1,3 @@
-import OrderingSelect from "@/components/Filters/OrderingSelect";
 import TvShowsWrapper from "@/components/ListWrapper/TvShowsWrapper";
 import {
   getGenresTvShows,
@@ -8,7 +7,11 @@ import {
 
 const TvShows = async () => {
   const { genres: genresTvShows } = await getGenresTvShows();
-  const { results: popularTvShows } = await getPopularTvShows();
+  const {
+    results: popularTvShows,
+    total_pages: totalPagesPopularTvShows,
+    total_results: totalResultsPopularTvShows,
+  } = await getPopularTvShows(1);
   const { results: providersTvShows } = await getTvShowsProviders();
 
   return (
@@ -16,6 +19,8 @@ const TvShows = async () => {
       popularTvShows={popularTvShows}
       genresTvShows={genresTvShows}
       providersTvShows={providersTvShows}
+      totalPagesPopularTvShows={totalPagesPopularTvShows}
+      totalResultsPopularTvShows={totalResultsPopularTvShows}
     />
   );
 };
