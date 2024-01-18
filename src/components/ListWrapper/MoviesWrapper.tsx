@@ -11,8 +11,9 @@ import { Movie } from "@/models/movies";
 import OrderingSelect from "../Filters/OrderingSelect";
 import { Watcher } from "@/models/watchers";
 import FiltersModal from "../Modals/FiltersModal";
-import { getPopularMovies } from "@/libs/api/movies";
+import { getDiscoverMovies } from "@/libs/api/movies";
 import Pagination from "../Pagination/Pagination";
+import { defaultFilters } from "@/libs/helpers/filters";
 
 type Props = {
   movies: Movie[];
@@ -40,14 +41,17 @@ const MoviesWrapper: FC<Props> = (props) => {
     pathname.split("/")[2] ? parseInt(pathname.split("/")[2]) : 1,
   );
 
-  async function getPopularMoviesNextPages() {
-    const result = await getPopularMovies(currentPage);
+  async function getMoviesNextPages() {
+    const result = await getDiscoverMovies({
+      ...defaultFilters,
+      page: currentPage,
+    });
     setMoviesList(result.results);
   }
 
   useEffect(() => {
     if (currentPage > 1) {
-      getPopularMoviesNextPages();
+      getMoviesNextPages();
     }
   }, [currentPage]);
 

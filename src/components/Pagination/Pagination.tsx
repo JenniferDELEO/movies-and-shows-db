@@ -55,6 +55,7 @@ const Pagination: FC<Props> = ({
         color="secondary"
         page={currentPage}
         onChange={setCurrentPage}
+        classNames={{ item: "w-fit" }}
       />
       <Button
         size="sm"

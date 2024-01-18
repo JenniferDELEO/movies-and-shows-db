@@ -72,7 +72,14 @@ export async function getSearchMovies(
   try {
     const result = await axios.request({
       ...optionsGET,
-      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/search/movie?language=fr-FR&include_adult=false&region=fr&page=${page}&query=${query}`,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/search/movie`,
+      params: {
+        include_adult: "false",
+        language: "fr-FR",
+        region: "fr",
+        page,
+        query,
+      },
     });
     return result.data;
   } catch (error) {

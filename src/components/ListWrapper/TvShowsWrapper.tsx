@@ -11,7 +11,8 @@ import { Button } from "@nextui-org/react";
 import FiltersModal from "../Modals/FiltersModal";
 import Pagination from "../Pagination/Pagination";
 import { usePathname } from "next/navigation";
-import { getPopularTvShows } from "@/libs/api/tvshows";
+import { getDiscoverTvShows } from "@/libs/api/tvshows";
+import { defaultFilters } from "@/libs/helpers/filters";
 
 type Props = {
   tvShows: TvShow[];
@@ -39,14 +40,17 @@ const TvShowsWrapper: FC<Props> = (props) => {
     pathname.split("/")[2] ? parseInt(pathname.split("/")[2]) : 1,
   );
 
-  async function getPopularTvShowsNextPages() {
-    const result = await getPopularTvShows(currentPage);
+  async function getTvShowsNextPages() {
+    const result = await getDiscoverTvShows({
+      ...defaultFilters,
+      page: currentPage,
+    });
     setTvShowsList(result.results);
   }
 
   useEffect(() => {
     if (currentPage > 1) {
-      getPopularTvShowsNextPages();
+      getTvShowsNextPages();
     }
   }, [currentPage]);
 

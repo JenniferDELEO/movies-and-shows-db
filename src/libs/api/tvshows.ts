@@ -73,7 +73,14 @@ export async function getSearchTvShows(
   try {
     const result = await axios.request({
       ...optionsGET,
-      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/search/tv?language=fr-FR&include_adult=false&region=fr&page=${page}&query=${query}`,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/search/tv`,
+      params: {
+        include_adult: "false",
+        language: "fr-FR",
+        region: "fr",
+        page,
+        query,
+      },
     });
     return result.data;
   } catch (error) {
