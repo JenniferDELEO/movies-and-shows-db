@@ -21,7 +21,7 @@ import {
 } from "@nextui-org/react";
 import { FaSearch } from "react-icons/fa";
 import { RxCross1 } from "react-icons/rx";
-import { MdLocalMovies } from "react-icons/md";
+import { MdLocalMovies, MdPeople } from "react-icons/md";
 import { PiTelevisionSimpleFill } from "react-icons/pi";
 import { IoPersonSharp } from "react-icons/io5";
 import { TiHome } from "react-icons/ti";
@@ -138,6 +138,15 @@ const Header = () => {
                 <span className="ml-2">Séries TV</span>
               </Link>
             </NavbarItem>
+            <NavbarItem
+              isActive={pathname.includes("/people")}
+              className="hidden md:block"
+            >
+              <Link href="/people/1" className="flex flex-row items-center">
+                <MdPeople />
+                <span className="ml-2">Artistes</span>
+              </Link>
+            </NavbarItem>
             {!username && !accountIdV3 && !sessionId ? (
               <NavbarItem className="hidden cursor-pointer md:block">
                 <div onClick={handleConnexion}>Connexion/Inscription</div>
@@ -182,6 +191,16 @@ const Header = () => {
           >
             <PiTelevisionSimpleFill />
             <span className="ml-2">Séries TV</span>
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem isActive={pathname.includes("/people")}>
+          <Link
+            href="/people/1"
+            className="flex flex-row items-center"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <MdPeople />
+            <span className="ml-2">Artistes</span>
           </Link>
         </NavbarMenuItem>
         {!username && !accountIdV3 && !sessionId ? (

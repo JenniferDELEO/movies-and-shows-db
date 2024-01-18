@@ -1,8 +1,9 @@
+import axios from "axios";
 import { optionsGET } from "./auth";
 
 export async function getSearchResults(
   query: string,
-  page: number
+  page: number,
 ): Promise<{
   page: number;
   results: any[];
@@ -10,12 +11,11 @@ export async function getSearchResults(
   total_results: number;
 }> {
   try {
-    const result = await fetch(
-      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/search/multi?query=${query}&include_adult=false&language=fr-FR&page=${page}`,
-      optionsGET
-    );
-
-    return result.json();
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/search/multi?query=${query}&include_adult=false&language=fr-FR&page=${page}`,
+    });
+    return result.data;
   } catch (error) {
     console.log(error);
     throw error;

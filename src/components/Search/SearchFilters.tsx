@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@nextui-org/react";
-import { MdLocalMovies } from "react-icons/md";
+import { MdLocalMovies, MdPeople } from "react-icons/md";
 import { PiTelevisionSimpleFill } from "react-icons/pi";
 
 const SearchFilters = () => {
@@ -35,6 +35,13 @@ const SearchFilters = () => {
       >
         <PiTelevisionSimpleFill />
         Séries TV
+      </Button>
+      <Button
+        className={`${filterType === "people" ? "bg-secondary" : ""} mr-4`}
+        onPress={() => handleChangeFilterType("people")}
+      >
+        <MdPeople />
+        Artistes
       </Button>
     </div>
   );

@@ -12,6 +12,8 @@ const OrderingSelect = () => {
     { title: "Note moyenne - / +", value: "vote_average.asc" },
     { title: "Date de sortie + / -", value: "primary_release_date.desc" },
     { title: "Date de sortie - / +", value: "primary_release_date.asc" },
+    { title: "Titre (de A à Z)", value: "original_title.asc" },
+    { title: "Titre (de Z à A)", value: "original_title.desc" },
   ];
 
   const handleSelectionChange = (e: any) => {

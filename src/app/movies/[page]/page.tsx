@@ -1,26 +1,26 @@
 import MoviesWrapper from "@/components/ListWrapper/MoviesWrapper";
 import {
+  getDiscoverMovies,
   getGenresMovies,
   getMoviesProviders,
-  getPopularMovies,
 } from "@/libs/api/movies";
 
 const Movies = async () => {
   const { genres: genresMovies } = await getGenresMovies();
   const {
-    results: popularMovies,
-    total_pages: totalPagesPopularMovies,
-    total_results: totalResultsPopularMovies,
-  } = await getPopularMovies(1);
+    results: movies,
+    total_pages: totalPagesMovies,
+    total_results: totalResultsMovies,
+  } = await getDiscoverMovies();
   const { results: providersMovies } = await getMoviesProviders();
 
   return (
     <MoviesWrapper
-      popularMovies={popularMovies}
+      movies={movies}
       genresMovies={genresMovies}
       providersMovies={providersMovies}
-      totalPagesPopularMovies={totalPagesPopularMovies}
-      totalResultsPopularMovies={totalResultsPopularMovies}
+      totalPagesMovies={totalPagesMovies}
+      totalResultsMovies={totalResultsMovies}
     />
   );
 };

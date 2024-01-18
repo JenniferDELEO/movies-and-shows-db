@@ -11,46 +11,46 @@ import { Button } from "@nextui-org/react";
 import FiltersModal from "../Modals/FiltersModal";
 import Pagination from "../Pagination/Pagination";
 import { usePathname } from "next/navigation";
-import { getPopularTvShows } from "@/libs/api/tvshows";
+import { getDiscoverTvShows } from "@/libs/api/tvshows";
+import { defaultFilters } from "@/libs/helpers/filters";
 
 type Props = {
-  popularTvShows: TvShow[];
+  tvShows: TvShow[];
   genresTvShows: { id: number; name: string }[];
   providersTvShows: Watcher[];
-  totalPagesPopularTvShows: number;
-  totalResultsPopularTvShows: number;
+  totalPagesTvShows: number;
+  totalResultsTvShows: number;
 };
 
 const TvShowsWrapper: FC<Props> = (props) => {
   const {
-    popularTvShows,
+    tvShows,
     genresTvShows,
     providersTvShows,
-    totalPagesPopularTvShows,
-    totalResultsPopularTvShows,
+    totalPagesTvShows,
+    totalResultsTvShows,
   } = props;
   const pathname = usePathname();
-  const [tvShowsList, setTvShowsList] = useState<TvShow[]>(popularTvShows);
+  const [tvShowsList, setTvShowsList] = useState<TvShow[]>(tvShows);
   const [filters, setFilters] = useState<any[]>([]);
   const [openFilters, setOpenFilters] = useState<boolean>(false);
-  const [totalResults, setTotalResults] = useState<number>(
-    totalResultsPopularTvShows,
-  );
-  const [totalPages, setTotalPages] = useState<number>(
-    totalPagesPopularTvShows,
-  );
+  const [totalResults, setTotalResults] = useState<number>(totalResultsTvShows);
+  const [totalPages, setTotalPages] = useState<number>(totalPagesTvShows);
   const [currentPage, setCurrentPage] = useState(
     pathname.split("/")[2] ? parseInt(pathname.split("/")[2]) : 1,
   );
 
-  async function getPopularTvShowsNextPages() {
-    const result = await getPopularTvShows(currentPage);
+  async function getTvShowsNextPages() {
+    const result = await getDiscoverTvShows({
+      ...defaultFilters,
+      page: currentPage,
+    });
     setTvShowsList(result.results);
   }
 
   useEffect(() => {
     if (currentPage > 1) {
-      getPopularTvShowsNextPages();
+      getTvShowsNextPages();
     }
   }, [currentPage]);
 
