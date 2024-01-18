@@ -54,6 +54,8 @@ const Filters: FC<Props> = (props) => {
   const [myWatchProviders, setMyWatchProviders] = useState(false);
   const [selectedWatchers, setSelectedWatchers] = useState<Watcher[]>([]);
   const [selectedWatchList, setSelectedWatchList] = useState<string>("all");
+  const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
+  const [unselectedGenres, setUnselectedGenres] = useState<number[]>([]);
 
   return (
     <div className="lg:mr-4 lg:w-[25%] lg:min-w-[350px]">
@@ -79,8 +81,14 @@ const Filters: FC<Props> = (props) => {
                 color="secondary"
               >
                 <Radio value="all">Tous</Radio>
-                <Radio value="yes">Films que j&apos;ai déjà vu</Radio>
-                <Radio value="no">Vus</Radio>
+                <Radio value="yes">
+                  {filterType === "movie" ? "Films" : "Séries TV"} que j&apos;ai
+                  déjà vu
+                </Radio>
+                <Radio value="no">
+                  {filterType === "movie" ? "Films" : "Séries TV"} que je
+                  n&apos;ai pas vu
+                </Radio>
               </RadioGroup>
             </ListboxItem>
           </ListboxSection>
@@ -123,7 +131,26 @@ const Filters: FC<Props> = (props) => {
                 key={genre.id}
                 textValue={genre.name}
                 classNames={{
-                  base: "border rounded-xl m-2 px-3 py-2 max-w-fit",
+                  base: `${selectedGenres.includes(genre.id) ? "border-secondary text-secondary" : unselectedGenres.includes(genre.id) ? "border-danger text-danger" : ""} border rounded-xl m-2 px-3 py-2 max-w-fit`,
+                }}
+                onClick={() => {
+                  if (
+                    !selectedGenres.includes(genre.id) &&
+                    !unselectedGenres.includes(genre.id)
+                  ) {
+                    setSelectedGenres([...selectedGenres, genre.id]);
+                  }
+                  if (selectedGenres.includes(genre.id)) {
+                    setSelectedGenres(
+                      selectedGenres.filter((g) => g !== genre.id),
+                    );
+                    setUnselectedGenres([...unselectedGenres, genre.id]);
+                  }
+                  if (unselectedGenres.includes(genre.id)) {
+                    setUnselectedGenres(
+                      unselectedGenres.filter((g) => g !== genre.id),
+                    );
+                  }
                 }}
               >
                 {genre.name}

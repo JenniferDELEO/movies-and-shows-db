@@ -1,26 +1,26 @@
 import TvShowsWrapper from "@/components/ListWrapper/TvShowsWrapper";
 import {
+  getDiscoverTvShows,
   getGenresTvShows,
-  getPopularTvShows,
   getTvShowsProviders,
 } from "@/libs/api/tvshows";
 
 const TvShows = async () => {
   const { genres: genresTvShows } = await getGenresTvShows();
   const {
-    results: popularTvShows,
-    total_pages: totalPagesPopularTvShows,
-    total_results: totalResultsPopularTvShows,
-  } = await getPopularTvShows(1);
+    results: tvShows,
+    total_pages: totalPagesTvShows,
+    total_results: totalResultsTvShows,
+  } = await getDiscoverTvShows();
   const { results: providersTvShows } = await getTvShowsProviders();
 
   return (
     <TvShowsWrapper
-      popularTvShows={popularTvShows}
+      tvShows={tvShows}
       genresTvShows={genresTvShows}
       providersTvShows={providersTvShows}
-      totalPagesPopularTvShows={totalPagesPopularTvShows}
-      totalResultsPopularTvShows={totalResultsPopularTvShows}
+      totalPagesTvShows={totalPagesTvShows}
+      totalResultsTvShows={totalResultsTvShows}
     />
   );
 };

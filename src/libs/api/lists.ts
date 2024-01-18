@@ -1,13 +1,14 @@
+import axios from "axios";
 import { optionsGET } from "./auth";
 
 export async function getLists() {
   const accountIdV4 = localStorage.getItem("account_id_v4");
   try {
-    const result = await fetch(
-      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/account/${accountIdV4}/lists?page=1`,
-      optionsGET,
-    );
-    return result.json();
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/account/${accountIdV4}/lists?page=1`,
+    });
+    return result.data;
   } catch (error) {
     console.log(error);
     throw error;
@@ -20,12 +21,13 @@ export async function checkItemStatus(
   itemType: string,
 ) {
   try {
-    const result = await fetch(
-      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/list/${listId}/item_status?media_id=${itemId}&media_type=${itemType}`,
-      optionsGET,
-    );
-    return result.json();
-  } catch (error) {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/list/${listId}/item_status?media_id=${itemId}&media_type=${itemType}`,
+    });
+    return result.data;
+  } catch (error: any) {
+    if (error.response.status === 404) return { item_present: false };
     throw error;
   }
 }
@@ -36,22 +38,18 @@ export async function addItemsToList(
 ) {
   try {
     const writeAccessToken = localStorage.getItem("access_token");
-    const result = await fetch(
-      `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/list/${listId}/items`,
-      {
-        ...optionsGET,
-        method: "POST",
-        headers: {
-          ...optionsGET.headers,
-          Authorization: `Bearer ${writeAccessToken}`,
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          items,
-        }),
+    const result = await axios.request({
+      ...optionsGET,
+      method: "POST",
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/list/${listId}/items`,
+      headers: {
+        ...optionsGET.headers,
+        Authorization: `Bearer ${writeAccessToken}`,
+        "content-type": "application/json",
       },
-    );
-    return result.json();
+      data: { items },
+    });
+    return result.data;
   } catch (error) {
     console.log(error);
     throw error;

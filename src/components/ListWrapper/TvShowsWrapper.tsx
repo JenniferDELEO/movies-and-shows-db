@@ -14,31 +14,27 @@ import { usePathname } from "next/navigation";
 import { getPopularTvShows } from "@/libs/api/tvshows";
 
 type Props = {
-  popularTvShows: TvShow[];
+  tvShows: TvShow[];
   genresTvShows: { id: number; name: string }[];
   providersTvShows: Watcher[];
-  totalPagesPopularTvShows: number;
-  totalResultsPopularTvShows: number;
+  totalPagesTvShows: number;
+  totalResultsTvShows: number;
 };
 
 const TvShowsWrapper: FC<Props> = (props) => {
   const {
-    popularTvShows,
+    tvShows,
     genresTvShows,
     providersTvShows,
-    totalPagesPopularTvShows,
-    totalResultsPopularTvShows,
+    totalPagesTvShows,
+    totalResultsTvShows,
   } = props;
   const pathname = usePathname();
-  const [tvShowsList, setTvShowsList] = useState<TvShow[]>(popularTvShows);
+  const [tvShowsList, setTvShowsList] = useState<TvShow[]>(tvShows);
   const [filters, setFilters] = useState<any[]>([]);
   const [openFilters, setOpenFilters] = useState<boolean>(false);
-  const [totalResults, setTotalResults] = useState<number>(
-    totalResultsPopularTvShows,
-  );
-  const [totalPages, setTotalPages] = useState<number>(
-    totalPagesPopularTvShows,
-  );
+  const [totalResults, setTotalResults] = useState<number>(totalResultsTvShows);
+  const [totalPages, setTotalPages] = useState<number>(totalPagesTvShows);
   const [currentPage, setCurrentPage] = useState(
     pathname.split("/")[2] ? parseInt(pathname.split("/")[2]) : 1,
   );

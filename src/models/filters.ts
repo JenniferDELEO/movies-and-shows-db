@@ -1,0 +1,21 @@
+export type Filters = {
+  include_adult: boolean;
+  include_video: boolean;
+  language: string;
+  page: number;
+  "primary_release_date.gte": string | null;
+  "primary_release_date.lte": string | null;
+  sort_by: string;
+  "vote_average.gte": number | null;
+  "vote_average.lte": number | null;
+  "vote_count.gte": number | null;
+  "vote_count.lte": number | null;
+  watch_region: string | null;
+  with_genres: string | null;
+  with_origin_country: string | null;
+  with_people: string | null;
+  "with_runtime.gte": number | null;
+  "with_runtime.lte": number | null;
+  with_watch_providers: string | null;
+  without_genres: string | null;
+};

@@ -15,29 +15,27 @@ import { getPopularMovies } from "@/libs/api/movies";
 import Pagination from "../Pagination/Pagination";
 
 type Props = {
-  popularMovies: Movie[];
+  movies: Movie[];
   genresMovies: { id: number; name: string }[];
   providersMovies: Watcher[];
-  totalPagesPopularMovies: number;
-  totalResultsPopularMovies: number;
+  totalPagesMovies: number;
+  totalResultsMovies: number;
 };
 
 const MoviesWrapper: FC<Props> = (props) => {
   const {
-    popularMovies,
+    movies,
     genresMovies,
     providersMovies,
-    totalPagesPopularMovies,
-    totalResultsPopularMovies,
+    totalPagesMovies,
+    totalResultsMovies,
   } = props;
   const pathname = usePathname();
-  const [moviesList, setMoviesList] = useState<Movie[]>(popularMovies);
+  const [moviesList, setMoviesList] = useState<Movie[]>(movies);
   const [filters, setFilters] = useState<any[]>([]);
   const [openFilters, setOpenFilters] = useState<boolean>(false);
-  const [totalResults, setTotalResults] = useState<number>(
-    totalResultsPopularMovies,
-  );
-  const [totalPages, setTotalPages] = useState<number>(totalPagesPopularMovies);
+  const [totalResults, setTotalResults] = useState<number>(totalResultsMovies);
+  const [totalPages, setTotalPages] = useState<number>(totalPagesMovies);
   const [currentPage, setCurrentPage] = useState(
     pathname.split("/")[2] ? parseInt(pathname.split("/")[2]) : 1,
   );
