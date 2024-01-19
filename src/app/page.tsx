@@ -1,4 +1,4 @@
-import Banner from "@/components/HomeBanner/Banner";
+import BannerWrapper from "@/components/Banner/BannerWrapper";
 import SearchBar from "@/components/Search/SearchBar";
 import { getPopularMovies, getTopRatedMovies } from "@/libs/api/movies";
 import { getPopularTvShows, getTopRatedTvShows } from "@/libs/api/tvshows";
@@ -16,11 +16,13 @@ export default async function Home() {
         styleBase="w-full md:w-[90%] ml-2 md:mx-auto mb-20"
         styleContainer="flex flex-row items-center justify-start md:justify-center"
       />
-      <Banner
-        popularMovies={popularMovies}
-        popularTvShows={popularTvShows}
-        topRatedMovies={topRatedMovies}
-        topRatedTvShows={topRatedTvShows}
+      <BannerWrapper
+        homeProps={{
+          popularMovies,
+          popularTvShows,
+          topRatedMovies,
+          topRatedTvShows,
+        }}
       />
     </div>
   );

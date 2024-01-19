@@ -82,7 +82,7 @@ const SearchResult = async (props: Props) => {
               ))}
             </div>
           ) : (
-            <div className="md:grid md:grid-cols-2 md:gap-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 2xl:gap-4">
+            <div className="mx-auto grid grid-cols-2 gap-2 md:grid-cols-4 xl:grid-cols-5 xl:gap-4">
               {searchResultsPeople.map((item: People) => (
                 <PeopleCard key={item.id} item={item} />
               ))}

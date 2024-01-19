@@ -202,6 +202,24 @@ export async function getMoviesProviders(): Promise<{
   }
 }
 
+export async function getMovieDetail(id: string): Promise<any> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/${id}`,
+      params: {
+        append_to_response:
+          "account_states,credits,images,recommendations,release_dates,similar,videos",
+        language: "fr-FR",
+      },
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 export async function addRateMovie(
   movieId: number,
   rate: number,

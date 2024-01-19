@@ -56,7 +56,7 @@ const SearchBar: FC<Props> = (props) => {
             }}
           />
           <button
-            className="absolute right-0 top-0 z-10 rounded-md bg-primary/70 px-4 py-2 text-sm font-bold md:text-base"
+            className="absolute right-0 top-0 z-10 hidden rounded-md bg-primary/70 px-4 py-2 text-sm font-bold md:block md:text-base"
             type="button"
             onClick={handleSearchClick}
           >
