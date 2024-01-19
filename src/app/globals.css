@@ -15,3 +15,7 @@
 .slick-next:before {
   font-size: 30px !important;
 }
+
+.slick-slide.slick-active.slick-cloned {
+  display: none !important;
+}

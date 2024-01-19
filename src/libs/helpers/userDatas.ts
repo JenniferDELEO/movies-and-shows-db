@@ -34,7 +34,7 @@ export async function toggleUserDatas(
           : { ...item, watchlist: false },
       );
       if (responseToggle.success) {
-        fetchDataFunction();
+        await fetchDataFunction();
         toast.success(
           `Film ${category === "favorite" ? "supprimé des favoris" : "marqué comme non vu"} avec succès`,
         );
@@ -48,7 +48,7 @@ export async function toggleUserDatas(
           : { ...item, watchlist: false },
       );
       if (responseToggle.success) {
-        fetchDataFunction();
+        await fetchDataFunction();
         toast.success(
           `Série TV ${category === "favorite" ? "supprimée des favoris" : "marquée comme non vu"} avec succès`,
         );
@@ -62,7 +62,7 @@ export async function toggleUserDatas(
           : { ...item, watchlist: true },
       );
       if (responseToggle.success) {
-        fetchDataFunction();
+        await fetchDataFunction();
         toast.success(
           `${type === "Films" ? "Film" : "Série TV"} ${category === "favorite" ? `ajouté${type === "Films" ? "" : "e"} aux favoris` : `marqué${type === "Films" ? "" : "e"} comme vu`} avec succès`,
         );

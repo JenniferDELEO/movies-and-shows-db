@@ -85,7 +85,7 @@ const Header = () => {
       isMenuOpen={isMenuOpen}
       classNames={{
         base: "bg-primary/90 justify-between",
-        wrapper: "md:max-w-[80%] mx-auto",
+        wrapper: "lg:max-w-[80%] mx-auto",
         item: [
           "sm:text-xl",
           "data-[active=true]:text-secondary",

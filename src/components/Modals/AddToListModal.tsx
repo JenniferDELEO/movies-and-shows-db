@@ -7,9 +7,8 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 import ModalComponent from "./ModalComponent";
-import { addItemsToList, checkItemStatus, getLists } from "@/libs/api/lists";
+import { addItemsToList, checkItemStatus } from "@/libs/api/lists";
 import { List } from "@/models/lists";
-import { User } from "@/models/user";
 
 type Props = {
   modalIsOpen: boolean;
@@ -17,7 +16,7 @@ type Props = {
   itemId: number;
   itemType: "movie" | "tv";
   title: string;
-  user: User;
+  userLists: List[];
 };
 
 const AddToListModal: FC<Props> = ({
@@ -26,27 +25,12 @@ const AddToListModal: FC<Props> = ({
   itemId,
   itemType,
   title,
-  user,
+  userLists,
 }) => {
-  const [lists, setLists] = useState<List[]>([]);
   const [selectedList, setSelectedList] = useState<string>("1");
   const [itemStatus, setItemStatus] = useState<boolean>(false);
 
   const router = useRouter();
-
-  const fetchLists = async () => {
-    const res = await getLists();
-    const listsResponse = res.results;
-    listsResponse.unshift({
-      id: "1",
-      name: "Créer une nouvelle liste",
-    });
-    setLists(listsResponse);
-  };
-
-  useEffect(() => {
-    if (user.username) fetchLists();
-  }, [user]);
 
   useEffect(() => {
     if (selectedList !== "1") {
@@ -119,7 +103,7 @@ const AddToListModal: FC<Props> = ({
           onChange={handleSelectionChange}
           label="Liste sélectionnée"
         >
-          {lists.map((list) => (
+          {userLists.map((list) => (
             <SelectItem key={list.id} value={list.id}>
               {list.name}
             </SelectItem>
