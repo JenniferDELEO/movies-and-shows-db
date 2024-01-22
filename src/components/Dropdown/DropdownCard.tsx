@@ -143,7 +143,6 @@ const DropdownCard: FC<Props> = (props) => {
         itemId={selectedItemId}
         itemType={type === "Films" ? "movie" : "tv"}
         title={modalTitle}
-        user={user}
       />
       <div className={classNames.dropdownContainer}>
         <Dropdown classNames={{ content: "bg-primary border-primary" }}>

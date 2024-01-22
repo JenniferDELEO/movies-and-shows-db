@@ -5,16 +5,8 @@ import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 
 import ModalComponent from "./ModalComponent";
 import { User } from "@/models/user";
-import {
-  addRateMovie,
-  deleteRateMovie,
-  getUserRatedMovies,
-} from "@/libs/api/movies";
-import {
-  addRateTvShow,
-  deleteRateTvShow,
-  getUserRatedTvShows,
-} from "@/libs/api/tvshows";
+import { addRateMovie, deleteRateMovie } from "@/libs/api/movies";
+import { addRateTvShow, deleteRateTvShow } from "@/libs/api/tvshows";
 import StarRating from "../StarRate/StarRating";
 import { Movie } from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
@@ -31,7 +23,6 @@ type Props = {
   itemId: number;
   itemType: "movie" | "tv";
   title: string;
-  user: User;
 };
 
 const RatingModal: FC<Props> = ({
@@ -43,7 +34,6 @@ const RatingModal: FC<Props> = ({
   itemId,
   itemType,
   title,
-  user,
 }) => {
   const [userRate, setUserRate] = useState<number>(0);
 

@@ -1,8 +1,7 @@
 "use client";
 
 import { Select, SelectItem } from "@nextui-org/react";
-import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from "react";
-import { Filters as FiltersType } from "@/models/filters";
+import { ChangeEvent, FC } from "react";
 
 type Props = {
   filterType: string;
