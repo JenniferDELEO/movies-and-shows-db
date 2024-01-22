@@ -2,10 +2,8 @@
 
 import { FC, Key, useState } from "react";
 import { HiDotsCircleHorizontal } from "react-icons/hi";
-import { FaListUl } from "react-icons/fa";
-import { FaHeart } from "react-icons/fa6";
-import { MdCheckBoxOutlineBlank, MdCheckBox } from "react-icons/md";
-import { FaStar } from "react-icons/fa6";
+import { FaListUl, FaBookmark } from "react-icons/fa";
+import { FaHeart, FaStar } from "react-icons/fa6";
 import {
   Dropdown,
   DropdownTrigger,
@@ -19,6 +17,8 @@ import { toggleUserDatas } from "@/libs/helpers/userDatas";
 import RatingModal from "../Modals/RatingModal";
 import { User } from "@/models/user";
 import { List } from "@/models/lists";
+import { Movie } from "@/models/movies";
+import { TvShow } from "@/models/tvShows";
 
 type Props = {
   item: {
@@ -37,6 +37,10 @@ type Props = {
   favoriteTvShowsIds: number[];
   watchlistMoviesIds: number[];
   watchlistTvShowsIds: number[];
+  ratedMovies: Movie[];
+  ratedTvShows: TvShow[];
+  ratedMoviesIds: number[];
+  ratedTvShowsIds: number[];
   classNames: {
     container: string;
     title: string;
@@ -57,6 +61,10 @@ const DropdownCard: FC<Props> = (props) => {
     favoriteTvShowsIds,
     watchlistMoviesIds,
     watchlistTvShowsIds,
+    ratedMovies,
+    ratedTvShows,
+    ratedMoviesIds,
+    ratedTvShowsIds,
     classNames,
     userLists,
   } = props;
@@ -129,6 +137,9 @@ const DropdownCard: FC<Props> = (props) => {
       <RatingModal
         modalIsOpen={modalRateIsOpen}
         setModalIsOpen={setModalRateIsOpen}
+        ratedMovies={ratedMovies}
+        ratedTvShows={ratedTvShows}
+        fetchUserDatas={fetchUserDatas}
         itemId={selectedItemId}
         itemType={type === "Films" ? "movie" : "tv"}
         title={modalTitle}
@@ -165,23 +176,32 @@ const DropdownCard: FC<Props> = (props) => {
             <DropdownItem
               key={`watchlist-${item.id}`}
               startContent={
-                (item?.release_date && watchlistMoviesIds?.includes(item.id)) ||
-                (item?.first_air_date &&
-                  watchlistTvShowsIds?.includes(item.id)) ? (
-                  <MdCheckBox />
-                ) : (
-                  <MdCheckBoxOutlineBlank />
-                )
+                <FaBookmark
+                  className={`${
+                    (item?.release_date &&
+                      watchlistMoviesIds?.includes(item.id)) ||
+                    (item?.first_air_date &&
+                      watchlistTvShowsIds?.includes(item.id))
+                      ? "text-orange-600"
+                      : ""
+                  }`}
+                />
               }
             >
-              {(item?.release_date && watchlistMoviesIds?.includes(item.id)) ||
-              (item?.first_air_date && watchlistTvShowsIds?.includes(item.id))
-                ? "Vu"
-                : "Non vu"}
+              Liste de suivi
             </DropdownItem>
             <DropdownItem
               key={`note-${item.id}-${item.title || item.name}`}
-              startContent={<FaStar />}
+              startContent={
+                <FaStar
+                  className={`${
+                    (item?.release_date && ratedMoviesIds?.includes(item.id)) ||
+                    (item?.first_air_date && ratedTvShowsIds?.includes(item.id))
+                      ? "text-yellow-400"
+                      : ""
+                  }`}
+                />
+              }
             >
               Votre note
             </DropdownItem>

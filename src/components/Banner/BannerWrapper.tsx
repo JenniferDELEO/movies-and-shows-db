@@ -8,10 +8,12 @@ import { TvShow } from "@/models/tvShows";
 import { UserContext } from "@/context/userContext";
 import {
   getUserFavoriteMovies,
+  getUserRatedMovies,
   getUserWatchListMovies,
 } from "@/libs/api/movies";
 import {
   getUserFavoriteTvShows,
+  getUserRatedTvShows,
   getUserWatchlistTvShows,
 } from "@/libs/api/tvshows";
 import { List } from "@/models/lists";
@@ -39,6 +41,11 @@ const BannerWrapper: FC<Props> = ({ homeProps, personDetailProps }) => {
   const [watchlistMoviesIds, setWatchlistMoviesIds] = useState<number[]>([]);
   const [watchlistTvShowsIds, setWatchlistTvShowsIds] = useState<number[]>([]);
 
+  const [ratedMovies, setRatedMovies] = useState<Movie[]>([]);
+  const [ratedTvShows, setRatedTvShows] = useState<TvShow[]>([]);
+  const [ratedMoviesIds, setRatedMoviesIds] = useState<number[]>([]);
+  const [ratedTvShowsIds, setRatedTvShowsIds] = useState<number[]>([]);
+
   const [userLists, setUserLists] = useState<List[]>([]);
 
   const { user } = useContext(UserContext);
@@ -50,11 +57,17 @@ const BannerWrapper: FC<Props> = ({ homeProps, personDetailProps }) => {
         getUserFavoriteTvShows(user.accountIdV4),
         getUserWatchListMovies(user.accountIdV4),
         getUserWatchlistTvShows(user.accountIdV4),
+        getUserRatedMovies(user.accountIdV4),
+        getUserRatedTvShows(user.accountIdV4),
       ]);
       setFavoriteMoviesIds(responses[0].results.map((movie) => movie.id));
       setFavoriteTvShowsIds(responses[1].results.map((tv) => tv.id));
       setWatchlistMoviesIds(responses[2].results.map((movie) => movie.id));
       setWatchlistTvShowsIds(responses[3].results.map((tv) => tv.id));
+      setRatedMovies(responses[4].results);
+      setRatedTvShows(responses[5].results);
+      setRatedMoviesIds(responses[4].results.map((movie) => movie.id));
+      setRatedTvShowsIds(responses[5].results.map((tv) => tv.id));
     }
   }
 
@@ -97,6 +110,10 @@ const BannerWrapper: FC<Props> = ({ homeProps, personDetailProps }) => {
           watchlistMoviesIds={watchlistMoviesIds}
           favoriteTvShowsIds={favoriteTvShowsIds}
           watchlistTvShowsIds={watchlistTvShowsIds}
+          ratedMovies={ratedMovies}
+          ratedTvShows={ratedTvShows}
+          ratedMoviesIds={ratedMoviesIds}
+          ratedTvShowsIds={ratedTvShowsIds}
           classNames={classNames}
           title="Les 20 Films les plus populaires"
           userLists={userLists}
@@ -110,6 +127,10 @@ const BannerWrapper: FC<Props> = ({ homeProps, personDetailProps }) => {
           watchlistMoviesIds={watchlistMoviesIds}
           favoriteTvShowsIds={favoriteTvShowsIds}
           watchlistTvShowsIds={watchlistTvShowsIds}
+          ratedMovies={ratedMovies}
+          ratedTvShows={ratedTvShows}
+          ratedMoviesIds={ratedMoviesIds}
+          ratedTvShowsIds={ratedTvShowsIds}
           classNames={classNames}
           title="Les 20 Films les mieux notés"
           userLists={userLists}
@@ -123,6 +144,10 @@ const BannerWrapper: FC<Props> = ({ homeProps, personDetailProps }) => {
           watchlistTvShowsIds={watchlistTvShowsIds}
           favoriteMoviesIds={favoriteMoviesIds}
           watchlistMoviesIds={watchlistMoviesIds}
+          ratedMovies={ratedMovies}
+          ratedTvShows={ratedTvShows}
+          ratedMoviesIds={ratedMoviesIds}
+          ratedTvShowsIds={ratedTvShowsIds}
           classNames={classNames}
           title="Les 20 Séries TV les plus populaires"
           userLists={userLists}
@@ -136,6 +161,10 @@ const BannerWrapper: FC<Props> = ({ homeProps, personDetailProps }) => {
           watchlistTvShowsIds={watchlistTvShowsIds}
           favoriteMoviesIds={favoriteMoviesIds}
           watchlistMoviesIds={watchlistMoviesIds}
+          ratedMovies={ratedMovies}
+          ratedTvShows={ratedTvShows}
+          ratedMoviesIds={ratedMoviesIds}
+          ratedTvShowsIds={ratedTvShowsIds}
           classNames={classNames}
           title="Les 20 Séries TV les mieux notées"
           userLists={userLists}
@@ -157,6 +186,10 @@ const BannerWrapper: FC<Props> = ({ homeProps, personDetailProps }) => {
               watchlistMoviesIds={watchlistMoviesIds}
               favoriteTvShowsIds={favoriteTvShowsIds}
               watchlistTvShowsIds={watchlistTvShowsIds}
+              ratedMovies={ratedMovies}
+              ratedTvShows={ratedTvShows}
+              ratedMoviesIds={ratedMoviesIds}
+              ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNames}
               title={`Films (${personDetailProps.actingMovies.length})`}
               userLists={userLists}
@@ -174,6 +207,10 @@ const BannerWrapper: FC<Props> = ({ homeProps, personDetailProps }) => {
               watchlistMoviesIds={watchlistMoviesIds}
               favoriteTvShowsIds={favoriteTvShowsIds}
               watchlistTvShowsIds={watchlistTvShowsIds}
+              ratedMovies={ratedMovies}
+              ratedTvShows={ratedTvShows}
+              ratedMoviesIds={ratedMoviesIds}
+              ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNames}
               title={`Séries TV (${personDetailProps.actingTvShows.length})`}
               userLists={userLists}
@@ -191,6 +228,10 @@ const BannerWrapper: FC<Props> = ({ homeProps, personDetailProps }) => {
               watchlistTvShowsIds={watchlistTvShowsIds}
               favoriteMoviesIds={favoriteMoviesIds}
               watchlistMoviesIds={watchlistMoviesIds}
+              ratedMovies={ratedMovies}
+              ratedTvShows={ratedTvShows}
+              ratedMoviesIds={ratedMoviesIds}
+              ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNames}
               title={`Films réalisés (${personDetailProps.runningMovies.length})`}
               userLists={userLists}
@@ -208,6 +249,10 @@ const BannerWrapper: FC<Props> = ({ homeProps, personDetailProps }) => {
               watchlistTvShowsIds={watchlistTvShowsIds}
               favoriteMoviesIds={favoriteMoviesIds}
               watchlistMoviesIds={watchlistMoviesIds}
+              ratedMovies={ratedMovies}
+              ratedTvShows={ratedTvShows}
+              ratedMoviesIds={ratedMoviesIds}
+              ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNames}
               title={`Séries TV réalisées (${personDetailProps.runningTvShows.length})`}
               userLists={userLists}

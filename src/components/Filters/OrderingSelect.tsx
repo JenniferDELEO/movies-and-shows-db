@@ -1,10 +1,17 @@
 "use client";
 
 import { Select, SelectItem } from "@nextui-org/react";
-import { useState } from "react";
+import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from "react";
+import { Filters as FiltersType } from "@/models/filters";
 
-const OrderingSelect = () => {
-  const [filterType, setFilterType] = useState("popularity.desc");
+type Props = {
+  filterType: string;
+  handleSelectionChange: (e: ChangeEvent<HTMLSelectElement>) => Promise<void>;
+};
+
+const OrderingSelect: FC<Props> = (props) => {
+  const { filterType, handleSelectionChange } = props;
+
   const orderingOptions = [
     { title: "Popularité + / -", value: "popularity.desc" },
     { title: "Popularité - / +", value: "popularity.asc" },
@@ -15,10 +22,6 @@ const OrderingSelect = () => {
     { title: "Titre (de A à Z)", value: "original_title.asc" },
     { title: "Titre (de Z à A)", value: "original_title.desc" },
   ];
-
-  const handleSelectionChange = (e: any) => {
-    setFilterType(e.target.value);
-  };
 
   return (
     <Select

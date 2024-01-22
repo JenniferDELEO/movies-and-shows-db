@@ -3,7 +3,7 @@
 import dayjs from "dayjs";
 import Image from "next/image";
 import { FC } from "react";
-import StarRateAverage from "../StarRate/StarRateAverage";
+import StarRating from "../StarRate/StarRating";
 
 type Props = {
   item: any;
@@ -46,15 +46,22 @@ const Card: FC<Props> = ({ item, filterType, genres }) => {
             return <span key={genreId}>{genre?.name} </span>;
           })}
         </p>
-        <div className="flex flex-row items-center pb-2">
+        <div className="flex flex-row items-center justify-start pb-2">
           <p className="text-xs text-gray-400 md:text-sm">
             {date.length ? dayjs(date).format("DD MMM. YYYY") : ""}
           </p>
-          <StarRateAverage
-            averageRate={item.vote_average}
-            countRate={item.vote_count}
-            className={`${date.length ? "ml-4" : ""}`}
-          />
+          <div className={`flex items-center justify-between `}>
+            <StarRating
+              value={item.vote_average / 2}
+              count={5}
+              size={14}
+              isHalf={true}
+              edit={false}
+            />
+            <span className="ml-1 text-xs text-gray-500">
+              ({item.vote_count} vote{item.vote_count > 1 ? "s" : ""})
+            </span>
+          </div>
         </div>
         <p className="text-xs md:text-justify md:text-sm">
           {overviewShow}

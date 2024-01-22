@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import React, {
+  ChangeEvent,
   Dispatch,
   FC,
   SetStateAction,
@@ -12,50 +14,88 @@ import {
   ListboxItem,
   ListboxSection,
   Slider,
-  Checkbox,
   Accordion,
   AccordionItem,
   RadioGroup,
   Radio,
+  Select,
+  SelectSection,
+  SelectItem,
 } from "@nextui-org/react";
 import { BsCalendarDateFill } from "react-icons/bs";
+import { FaCheck } from "react-icons/fa";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Image from "next/image";
 import fr from "date-fns/locale/fr";
 registerLocale("fr", fr);
 
 import FiltersWrapper from "./FiltersWrapper";
-import { getGenresMovies } from "@/libs/api/movies";
-import Link from "next/link";
-import Image from "next/image";
 import { Watcher } from "@/models/watchers";
+import { Filters as FiltersType } from "@/models/filters";
+import dayjs from "dayjs";
 
 type Props = {
-  filterType: string;
-  filters: any[];
-  setFilters: Dispatch<SetStateAction<any[]>>;
+  filters: FiltersType;
+  setFilters: Dispatch<SetStateAction<FiltersType>>;
   genres: {
     id: number;
     name: string;
   }[];
   providers: Watcher[];
+  setIsFiltering: Dispatch<SetStateAction<boolean>>;
 };
 
 const Filters: FC<Props> = (props) => {
-  const { filterType, filters, setFilters, genres, providers } = props;
+  const { filters, setFilters, genres, providers, setIsFiltering } = props;
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     null,
     null,
   ]);
   const [startDate, endDate] = dateRange;
-  const [voteAverage, setVoteAverage] = useState([0, 10]);
-  const [voteCount, setVoteCount] = useState(0);
-  const [runtime, setRuntime] = useState([0, 390]);
-  const [myWatchProviders, setMyWatchProviders] = useState(false);
-  const [selectedWatchers, setSelectedWatchers] = useState<Watcher[]>([]);
-  const [selectedWatchList, setSelectedWatchList] = useState<string>("all");
+  const [voteAverage, setVoteAverage] = useState<number[]>([0, 10]);
+  const [voteCount, setVoteCount] = useState<number>(0);
+  const [runtime, setRuntime] = useState<number[]>([0, 400]);
+  const [selectedWatchers, setSelectedWatchers] = useState<number[]>([]);
+  const [selectedWatchList, setSelectedWatchList] = useState<string>("0");
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
   const [unselectedGenres, setUnselectedGenres] = useState<number[]>([]);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("all");
+
+  const handleSelectedLanguage = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedLanguage(e.target.value);
+    setFilters({ ...filters, with_original_language: e.target.value });
+  };
+  const handleSelectedWatchList = (e: ChangeEvent<HTMLInputElement>) => {
+    setSelectedWatchList(e.target.value);
+    setFilters({ ...filters, show_me: Number(e.target.value) });
+  };
+
+  useEffect(() => {
+    if (
+      startDate ||
+      endDate ||
+      voteCount !== 0 ||
+      selectedWatchers.length > 0 ||
+      selectedWatchList !== "0" ||
+      selectedGenres.length > 0 ||
+      unselectedGenres.length > 0 ||
+      selectedLanguage !== "all"
+    ) {
+      setIsFiltering(true);
+    } else {
+      setIsFiltering(false);
+    }
+  }, [
+    endDate,
+    selectedGenres.length,
+    selectedLanguage,
+    selectedWatchList,
+    selectedWatchers.length,
+    startDate,
+    unselectedGenres.length,
+    voteCount,
+  ]);
 
   return (
     <div className="lg:mr-4 lg:w-[25%] lg:min-w-[350px]">
@@ -77,19 +117,75 @@ const Filters: FC<Props> = (props) => {
               <RadioGroup
                 aria-label="Sélection watchlist"
                 value={selectedWatchList}
-                onValueChange={setSelectedWatchList}
+                onChange={handleSelectedWatchList}
                 color="secondary"
+                className="mx-2"
               >
-                <Radio value="all">Tous</Radio>
-                <Radio value="yes">
-                  {filterType === "movie" ? "Films" : "Séries TV"} que j&apos;ai
-                  déjà vu
-                </Radio>
-                <Radio value="no">
-                  {filterType === "movie" ? "Films" : "Séries TV"} que je
-                  n&apos;ai pas vu
-                </Radio>
+                <Radio value="0">Tous</Radio>
+                <Radio value="1">Non vu</Radio>
+                <Radio value="2">Déjà vu</Radio>
               </RadioGroup>
+            </ListboxItem>
+          </ListboxSection>
+          <ListboxSection
+            showDivider
+            title="Langues"
+            classNames={{
+              heading: "text-sm",
+            }}
+          >
+            <ListboxItem
+              key="with_original_language"
+              textValue="with_original_language"
+            >
+              <Select
+                aria-label="Langue"
+                variant="bordered"
+                placeholder="Sélectionner une langue"
+                selectedKeys={[selectedLanguage]}
+                onChange={handleSelectedLanguage}
+              >
+                <SelectSection showDivider>
+                  <SelectItem key="all" value="all">
+                    Toutes
+                  </SelectItem>
+                  <SelectItem key="fr" value="fr">
+                    Français
+                  </SelectItem>
+                  <SelectItem key="en" value="en">
+                    Anglais
+                  </SelectItem>
+                </SelectSection>
+                <SelectSection>
+                  <SelectItem key="de" value="de">
+                    Allemand
+                  </SelectItem>
+                  <SelectItem key="zh" value="zh">
+                    Chinois
+                  </SelectItem>
+                  <SelectItem key="ko" value="ko">
+                    Coréen
+                  </SelectItem>
+                  <SelectItem key="es" value="es">
+                    Espagnol
+                  </SelectItem>
+                  <SelectItem key="it" value="it">
+                    Italien
+                  </SelectItem>
+                  <SelectItem key="ja" value="ja">
+                    Japonais
+                  </SelectItem>
+                  <SelectItem key="no" value="no">
+                    Norvégien
+                  </SelectItem>
+                  <SelectItem key="pt" value="pt">
+                    Portugais
+                  </SelectItem>
+                  <SelectItem key="ru" value="ru">
+                    Russe
+                  </SelectItem>
+                </SelectSection>
+              </Select>
             </ListboxItem>
           </ListboxSection>
           <ListboxSection
@@ -113,7 +209,19 @@ const Filters: FC<Props> = (props) => {
                 startDate={startDate}
                 endDate={endDate}
                 openToDate={new Date()}
-                onChange={(update) => setDateRange(update)}
+                isClearable
+                onChange={(date: [Date | null, Date | null]) => {
+                  setDateRange(date);
+                  setFilters({
+                    ...filters,
+                    "primary_release_date.gte": date[0]
+                      ? `${dayjs(date[0]).format("YYYY-MM-DD")}`
+                      : null,
+                    "primary_release_date.lte": date[1]
+                      ? `${dayjs(date[1]).format("YYYY-MM-DD")}`
+                      : null,
+                  });
+                }}
                 className="max-w-[220px] rounded-lg bg-primary text-xs xl:text-base"
               />
             </ListboxItem>
@@ -139,50 +247,40 @@ const Filters: FC<Props> = (props) => {
                     !unselectedGenres.includes(genre.id)
                   ) {
                     setSelectedGenres([...selectedGenres, genre.id]);
+                    setFilters({
+                      ...filters,
+                      with_genres: [...selectedGenres, genre.id].join(","),
+                    });
                   }
                   if (selectedGenres.includes(genre.id)) {
                     setSelectedGenres(
                       selectedGenres.filter((g) => g !== genre.id),
                     );
                     setUnselectedGenres([...unselectedGenres, genre.id]);
+                    setFilters({
+                      ...filters,
+                      with_genres: selectedGenres
+                        .filter((g) => g !== genre.id)
+                        .join(","),
+                      without_genres: [...unselectedGenres, genre.id].join(","),
+                    });
                   }
                   if (unselectedGenres.includes(genre.id)) {
                     setUnselectedGenres(
                       unselectedGenres.filter((g) => g !== genre.id),
                     );
+                    setFilters({
+                      ...filters,
+                      without_genres: unselectedGenres
+                        .filter((g) => g !== genre.id)
+                        .join(","),
+                    });
                   }
                 }}
               >
                 {genre.name}
               </ListboxItem>
             ))}
-          </ListboxSection>
-          <ListboxSection
-            title="Plateformes de diffusion"
-            classNames={{
-              heading: "text-sm",
-            }}
-          >
-            <ListboxItem
-              key="check_watch_providers"
-              textValue="check_watch_providers"
-            >
-              <Checkbox
-                isSelected={myWatchProviders}
-                onValueChange={setMyWatchProviders}
-                classNames={{ label: "text-sm text-wrap" }}
-              >
-                Affiner la recherche aux plateformes de streaming souscrites
-              </Checkbox>
-            </ListboxItem>
-            <ListboxItem
-              key="my_watch_providers"
-              textValue="my_watch_providers"
-            >
-              <Link href="/" className="underline">
-                Gérer mes abonnements
-              </Link>
-            </ListboxItem>
           </ListboxSection>
           <ListboxSection showDivider>
             <ListboxItem key="watchers" textValue="watchers">
@@ -197,29 +295,55 @@ const Filters: FC<Props> = (props) => {
                   }}
                 >
                   {providers.map((provider) => (
-                    <Image
+                    <div
                       key={provider.provider_id}
-                      alt={provider.provider_name}
-                      src={`${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w45${provider.logo_path}`}
-                      width={0}
-                      height={0}
-                      style={{
-                        width: 45,
-                        height: 45,
-                        borderRadius: 5,
-                        margin: 4,
-                      }}
-                      sizes="100vw"
+                      className="relative m-1"
                       onClick={() => {
-                        !selectedWatchers.includes(provider)
-                          ? setSelectedWatchers([...selectedWatchers, provider])
-                          : setSelectedWatchers(
-                              selectedWatchers.filter(
-                                (watcher) => watcher !== provider,
-                              ),
-                            );
+                        if (!selectedWatchers.includes(provider.provider_id)) {
+                          setSelectedWatchers([
+                            ...selectedWatchers,
+                            provider.provider_id,
+                          ]);
+                          setFilters({
+                            ...filters,
+                            with_watch_providers: [
+                              ...selectedWatchers,
+                              provider.provider_id,
+                            ].join("|"),
+                          });
+                        } else {
+                          setSelectedWatchers(
+                            selectedWatchers.filter(
+                              (watcher) => watcher !== provider.provider_id,
+                            ),
+                          );
+                          setFilters({
+                            ...filters,
+                            with_watch_providers: selectedWatchers
+                              .filter((w) => w !== provider.provider_id)
+                              .join("|"),
+                          });
+                        }
                       }}
-                    />
+                    >
+                      <Image
+                        alt={provider.provider_name}
+                        src={`${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w45${provider.logo_path}`}
+                        width={0}
+                        height={0}
+                        style={{
+                          width: 45,
+                          height: 45,
+                          borderRadius: 5,
+                        }}
+                        sizes="100vw"
+                      />
+                      <div
+                        className={`absolute left-0 top-0 flex size-full items-center justify-center ${selectedWatchers.includes(provider.provider_id) ? "bg-secondary/70" : "hidden"}`}
+                      >
+                        <FaCheck className="text-white" size={20} />
+                      </div>
+                    </div>
                   ))}
                 </AccordionItem>
               </Accordion>
@@ -260,7 +384,18 @@ const Filters: FC<Props> = (props) => {
                   step: "data-[in-range=true]:bg-white/50",
                 }}
                 // @ts-ignore
-                onChange={setVoteAverage}
+                onChange={(e: number[]) => {
+                  setVoteAverage(e);
+                  setIsFiltering(true);
+                  setFilters({
+                    ...filters,
+                    "vote_average.gte": e[0],
+                    "vote_average.lte": e[1],
+                  });
+                  if (e[0] === 0 && e[1] === 10) {
+                    setIsFiltering(false);
+                  }
+                }}
               />
             </ListboxItem>
           </ListboxSection>
@@ -302,7 +437,14 @@ const Filters: FC<Props> = (props) => {
                   step: "data-[in-range=true]:bg-white/50",
                 }}
                 // @ts-ignore
-                onChange={setVoteCount}
+                onChange={(e: number) => {
+                  setVoteCount(e);
+                  setIsFiltering(true);
+                  setFilters({ ...filters, "vote_count.gte": e });
+                  if (e === 0) {
+                    setIsFiltering(false);
+                  }
+                }}
               />
             </ListboxItem>
           </ListboxSection>
@@ -328,7 +470,7 @@ const Filters: FC<Props> = (props) => {
                 ]}
                 step={15}
                 minValue={0}
-                maxValue={390}
+                maxValue={400}
                 value={runtime}
                 classNames={{
                   base: "max-w-md",
@@ -342,7 +484,18 @@ const Filters: FC<Props> = (props) => {
                   step: "data-[in-range=true]:bg-white/50",
                 }}
                 // @ts-ignore
-                onChange={setRuntime}
+                onChange={(e: number[]) => {
+                  setRuntime(e);
+                  setIsFiltering(true);
+                  setFilters({
+                    ...filters,
+                    "with_runtime.gte": e[0],
+                    "with_runtime.lte": e[1],
+                  });
+                  if (e[0] === 0 && e[1] === 400) {
+                    setIsFiltering(false);
+                  }
+                }}
               />
             </ListboxItem>
           </ListboxSection>

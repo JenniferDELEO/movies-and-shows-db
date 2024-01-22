@@ -1,15 +1,16 @@
 "use client";
 
-import React, { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 import ModalComponent from "./ModalComponent";
 import Filters from "../Filters/Filters";
 import { Watcher } from "@/models/watchers";
+import { Filters as FiltersType } from "@/models/filters";
 
 type Props = {
   modalIsOpen: boolean;
   setModalIsOpen: Dispatch<SetStateAction<boolean>>;
-  filters: any[];
-  setFilters: Dispatch<SetStateAction<any[]>>;
+  filters: FiltersType;
+  setFilters: Dispatch<SetStateAction<FiltersType>>;
   genres: { id: number; name: string }[];
   providers: Watcher[];
   filterType: "movie" | "tv";
@@ -25,6 +26,7 @@ const FiltersModal: FC<Props> = (props) => {
     providers,
     filterType,
   } = props;
+  const [isFiltering, setIsFiltering] = useState<boolean>(false);
 
   async function onValidate() {}
 
@@ -40,11 +42,11 @@ const FiltersModal: FC<Props> = (props) => {
       onClose={onClose}
     >
       <Filters
-        filterType={filterType}
         filters={filters}
         setFilters={setFilters}
         genres={genres}
         providers={providers}
+        setIsFiltering={setIsFiltering}
       />
     </ModalComponent>
   );
