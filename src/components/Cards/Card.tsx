@@ -48,7 +48,7 @@ const Card: FC<Props> = ({ item, filterType, genres }) => {
         </p>
         <div className="flex flex-row items-center justify-start pb-2">
           <p className="text-xs text-gray-400 md:text-sm">
-            {date.length ? dayjs(date).format("DD MMM. YYYY") : ""}
+            {date?.length ? dayjs(date).format("DD MMM. YYYY") : ""}
           </p>
           <div className={`flex items-center justify-between `}>
             <StarRating

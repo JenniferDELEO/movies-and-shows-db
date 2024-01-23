@@ -105,10 +105,8 @@ const StarRating: React.FC<RatingProps> = ({
   const stars = [];
 
   for (let i = 0; i < count; i++) {
-    console.log(isHalf, value, i);
     let star: React.ReactElement;
     if (isHalf && value - i > 0 && value - i < 1) {
-      console.log("is half");
       star = halfIcon;
     } else if (i < value) {
       star = fullIcon;

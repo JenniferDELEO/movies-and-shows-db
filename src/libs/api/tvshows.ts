@@ -2,8 +2,8 @@ import { ApiResultTvShows, TvShow } from "@/models/tvShows";
 import { optionsGET } from "./auth";
 import { Watcher } from "@/models/watchers";
 import axios from "axios";
-import { Filters } from "@/models/filters";
-import { defaultFilters } from "../helpers/filters";
+import { TvShowsFilters } from "@/models/filters";
+import { defaultTvShowsFilters } from "../helpers/filters";
 
 export async function getPopularTvShows(
   page: number,
@@ -34,10 +34,10 @@ export async function getTopRatedTvShows(): Promise<ApiResultTvShows> {
 }
 
 export async function getDiscoverTvShows(
-  filters?: Filters,
+  filters?: TvShowsFilters,
 ): Promise<ApiResultTvShows> {
-  let queryFilters: Filters = defaultFilters;
-  if (filters) queryFilters = { ...defaultFilters, ...filters };
+  let queryFilters: TvShowsFilters = defaultTvShowsFilters;
+  if (filters) queryFilters = { ...defaultTvShowsFilters, ...filters };
   try {
     const result = await axios.request({
       ...optionsGET,
