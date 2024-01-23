@@ -10,6 +10,8 @@ import { User } from "@/models/user";
 import DropdownCard from "../Dropdown/DropdownCard";
 import { List } from "@/models/lists";
 import { useRouter } from "next/navigation";
+import { Movie } from "@/models/movies";
+import { TvShow } from "@/models/tvShows";
 
 type Props = {
   items: {
@@ -28,6 +30,10 @@ type Props = {
   favoriteTvShowsIds: number[];
   watchlistMoviesIds: number[];
   watchlistTvShowsIds: number[];
+  ratedMovies: Movie[];
+  ratedTvShows: TvShow[];
+  ratedMoviesIds: number[];
+  ratedTvShowsIds: number[];
   classNames: {
     container: string;
     title: string;
@@ -48,9 +54,13 @@ const Banner: FC<Props> = ({
   favoriteTvShowsIds,
   watchlistMoviesIds,
   watchlistTvShowsIds,
+  ratedMoviesIds,
+  ratedTvShowsIds,
   classNames,
   title,
   userLists,
+  ratedMovies,
+  ratedTvShows,
 }) => {
   const router = useRouter();
 
@@ -90,6 +100,10 @@ const Banner: FC<Props> = ({
                   favoriteTvShowsIds={favoriteTvShowsIds}
                   watchlistMoviesIds={watchlistMoviesIds}
                   watchlistTvShowsIds={watchlistTvShowsIds}
+                  ratedMoviesIds={ratedMoviesIds}
+                  ratedTvShowsIds={ratedTvShowsIds}
+                  ratedMovies={ratedMovies}
+                  ratedTvShows={ratedTvShows}
                   classNames={classNames}
                   userLists={userLists}
                 />

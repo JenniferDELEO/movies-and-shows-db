@@ -45,7 +45,7 @@ const SearchBar: FC<Props> = (props) => {
           <FaSearch size={18} className="absolute left-3 top-3 text-gray-500" />
           <input
             className="peer block w-full rounded-lg border border-gray-200 py-[9px] pl-12 text-xs text-gray-800 placeholder:text-gray-500 focus:border-gray-500 focus:outline-none md:text-sm"
-            placeholder="Rechercher un film, une série TV..."
+            placeholder="Rechercher un film, une série TV, un artiste..."
             type="search"
             value={searchValue}
             onChange={(e) => handleSearch(e.target.value)}

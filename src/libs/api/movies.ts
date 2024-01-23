@@ -3,8 +3,8 @@ import axios from "axios";
 import { ApiResultMovies } from "@/models/movies";
 import { optionsGET } from "./auth";
 import { Watcher } from "@/models/watchers";
-import { Filters } from "@/models/filters";
-import { defaultFilters } from "../helpers/filters";
+import { MoviesFilters } from "@/models/filters";
+import { defaultMoviesFilters } from "../helpers/filters";
 
 export async function getPopularMovies(page: number): Promise<ApiResultMovies> {
   try {
@@ -33,10 +33,10 @@ export async function getTopRatedMovies(): Promise<ApiResultMovies> {
 }
 
 export async function getDiscoverMovies(
-  filters?: Filters,
+  filters?: MoviesFilters,
 ): Promise<ApiResultMovies> {
-  let queryFilters: Filters = defaultFilters;
-  if (filters) queryFilters = { ...defaultFilters, ...filters };
+  let queryFilters: MoviesFilters = defaultMoviesFilters;
+  if (filters) queryFilters = { ...defaultMoviesFilters, ...filters };
   try {
     const result = await axios.request({
       ...optionsGET,

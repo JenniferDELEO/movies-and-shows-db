@@ -1,32 +1,46 @@
 "use client";
 
-import React, { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 import ModalComponent from "./ModalComponent";
 import Filters from "../Filters/Filters";
 import { Watcher } from "@/models/watchers";
+import { MoviesFilters, TvShowsFilters } from "@/models/filters";
 
 type Props = {
   modalIsOpen: boolean;
   setModalIsOpen: Dispatch<SetStateAction<boolean>>;
-  filters: any[];
-  setFilters: Dispatch<SetStateAction<any[]>>;
+  moviesFilters?: MoviesFilters;
+  setMoviesFilters?: Dispatch<SetStateAction<MoviesFilters>>;
+  tvshowsFilters?: TvShowsFilters;
+  setTvShowsFilters?: Dispatch<SetStateAction<TvShowsFilters>>;
   genres: { id: number; name: string }[];
   providers: Watcher[];
-  filterType: "movie" | "tv";
+  setIsFiltering: Dispatch<SetStateAction<boolean>>;
+  handleFiltersSelection: () => Promise<void>;
+  isResetting: boolean;
+  setIsResetting: Dispatch<SetStateAction<boolean>>;
 };
 
 const FiltersModal: FC<Props> = (props) => {
   const {
     modalIsOpen,
     setModalIsOpen,
-    filters,
-    setFilters,
+    moviesFilters,
+    setMoviesFilters,
+    tvshowsFilters,
+    setTvShowsFilters,
     genres,
     providers,
-    filterType,
+    setIsFiltering,
+    handleFiltersSelection,
+    isResetting,
+    setIsResetting,
   } = props;
 
-  async function onValidate() {}
+  async function onValidate() {
+    await handleFiltersSelection();
+    setModalIsOpen(false);
+  }
 
   const onClose = () => {
     setModalIsOpen(false);
@@ -40,11 +54,15 @@ const FiltersModal: FC<Props> = (props) => {
       onClose={onClose}
     >
       <Filters
-        filterType={filterType}
-        filters={filters}
-        setFilters={setFilters}
+        moviesFilters={moviesFilters}
+        setMoviesFilters={setMoviesFilters}
+        tvshowsFilters={tvshowsFilters}
+        setTvShowsFilters={setTvShowsFilters}
         genres={genres}
         providers={providers}
+        setIsFiltering={setIsFiltering}
+        isResetting={isResetting}
+        setIsResetting={setIsResetting}
       />
     </ModalComponent>
   );

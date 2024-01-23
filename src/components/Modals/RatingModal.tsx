@@ -5,16 +5,8 @@ import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 
 import ModalComponent from "./ModalComponent";
 import { User } from "@/models/user";
-import {
-  addRateMovie,
-  deleteRateMovie,
-  getUserRatedMovies,
-} from "@/libs/api/movies";
-import {
-  addRateTvShow,
-  deleteRateTvShow,
-  getUserRatedTvShows,
-} from "@/libs/api/tvshows";
+import { addRateMovie, deleteRateMovie } from "@/libs/api/movies";
+import { addRateTvShow, deleteRateTvShow } from "@/libs/api/tvshows";
 import StarRating from "../StarRate/StarRating";
 import { Movie } from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
@@ -25,40 +17,25 @@ import toast from "react-hot-toast";
 type Props = {
   modalIsOpen: boolean;
   setModalIsOpen: Dispatch<SetStateAction<boolean>>;
+  ratedMovies: Movie[];
+  ratedTvShows: TvShow[];
+  fetchUserDatas: () => Promise<void>;
   itemId: number;
   itemType: "movie" | "tv";
   title: string;
-  user: User;
 };
 
 const RatingModal: FC<Props> = ({
   modalIsOpen,
   setModalIsOpen,
+  ratedMovies,
+  ratedTvShows,
+  fetchUserDatas,
   itemId,
   itemType,
   title,
-  user,
 }) => {
-  const [ratedMovies, setRatedMovies] = useState<Movie[]>([]);
-  const [ratedTvShows, setRatedTvShows] = useState<TvShow[]>([]);
   const [userRate, setUserRate] = useState<number>(0);
-
-  async function fetchUserDatas() {
-    if (user && user.accountIdV4) {
-      const responses = await Promise.all([
-        getUserRatedMovies(user.accountIdV4),
-        getUserRatedTvShows(user.accountIdV4),
-      ]);
-      setRatedMovies(responses[0].results);
-      setRatedTvShows(responses[1].results);
-    }
-  }
-
-  useEffect(() => {
-    if (user && user.accountIdV4 && modalIsOpen) {
-      fetchUserDatas();
-    }
-  }, [user, modalIsOpen]);
 
   useEffect(() => {
     if (itemType === "movie" && ratedMovies.length > 0) {
@@ -83,6 +60,7 @@ const RatingModal: FC<Props> = ({
     } else if (itemType === "tv" && userRate > 0) {
       const response = await addRateTvShow(itemId, userRate * 2);
       if (response.success) {
+        await fetchUserDatas();
         setModalIsOpen(false);
         setUserRate(0);
         toast.success("Note ajoutée avec succès !");
@@ -100,6 +78,7 @@ const RatingModal: FC<Props> = ({
         setUserRate(0);
         toast.success("Note supprimée avec succès !");
       } else toast.error("Une erreur est survenue");
+      await fetchUserDatas();
     }
     if (itemType === "tv") {
       const response = await deleteRateTvShow(itemId);
@@ -107,6 +86,7 @@ const RatingModal: FC<Props> = ({
         setUserRate(0);
         toast.success("Note supprimée avec succès !");
       } else toast.error("Une erreur est survenue");
+      await fetchUserDatas();
     }
   };
 
@@ -123,7 +103,11 @@ const RatingModal: FC<Props> = ({
       onClose={onClose}
     >
       <div className="flex flex-row justify-center">
-        <StarRating userRate={userRate} setUserRate={setUserRate} />
+        <StarRating
+          value={userRate}
+          onChange={(value) => setUserRate(value)}
+          count={5}
+        />
         <Tooltip content="Supprimer la note" placement="bottom">
           <Button
             isIconOnly
