@@ -3,7 +3,6 @@
 import { UserContext } from "@/context/userContext";
 import {
   getAccountDetails,
-  getRequestToken,
   getAccessToken,
   createSessionFromV4,
 } from "@/libs/api/auth";
@@ -38,13 +37,6 @@ const Header = () => {
     user: { username, accountIdV3, accountIdV4, sessionId },
     setUser,
   } = useContext(UserContext);
-
-  const handleConnexion = async () => {
-    const responseToken = await getRequestToken();
-    router.push(
-      `${process.env.NEXT_PUBLIC_TMDB_AUTHENTICATE}${responseToken.request_token}`,
-    );
-  };
 
   useEffect(() => {
     setRequestToken(localStorage.getItem("request_token"));
@@ -121,7 +113,9 @@ const Header = () => {
           </NavbarContent>
           <NavbarContent className="flex gap-4 md:gap-10" justify="end">
             <NavbarItem
-              isActive={pathname.includes("/movies")}
+              isActive={
+                pathname.includes("/movies") || pathname.includes("/movie")
+              }
               className="hidden md:block"
             >
               <Link href="/movies/1" className="flex flex-row items-center">
@@ -130,7 +124,9 @@ const Header = () => {
               </Link>
             </NavbarItem>
             <NavbarItem
-              isActive={pathname.includes("/tvshows")}
+              isActive={
+                pathname.includes("/tvshows") || pathname.includes("/tvshow")
+              }
               className="hidden md:block"
             >
               <Link href="/tvshows/1" className="flex flex-row items-center">
@@ -139,7 +135,9 @@ const Header = () => {
               </Link>
             </NavbarItem>
             <NavbarItem
-              isActive={pathname.includes("/people")}
+              isActive={
+                pathname.includes("/people") || pathname.includes("/person")
+              }
               className="hidden md:block"
             >
               <Link href="/people/1" className="flex flex-row items-center">
@@ -149,16 +147,22 @@ const Header = () => {
             </NavbarItem>
             {!username && !accountIdV3 && !sessionId ? (
               <NavbarItem className="hidden cursor-pointer md:block">
-                <div onClick={handleConnexion}>Connexion/Inscription</div>
+                <div
+                  onClick={() => router.replace("/profil/redirection-to-tmdb")}
+                >
+                  Connexion/Inscription
+                </div>
               </NavbarItem>
             ) : (
               <NavbarItem
-                isActive={pathname === "/profil"}
+                isActive={pathname.includes("/profil")}
                 className="hidden md:block"
               >
                 <Link href="/profil" className="flex flex-row items-center">
                   <IoPersonSharp />
-                  <span className="ml-2">Profil</span>
+                  <div className="ml-2">
+                    <p>{username}</p>
+                  </div>
                 </Link>
               </NavbarItem>
             )}
@@ -173,7 +177,9 @@ const Header = () => {
       )}
 
       <NavbarMenu>
-        <NavbarMenuItem isActive={pathname.includes("/movies")}>
+        <NavbarMenuItem
+          isActive={pathname.includes("/movies") || pathname.includes("/movie")}
+        >
           <Link
             href="/movies/1"
             className="flex flex-row items-center"
@@ -183,7 +189,11 @@ const Header = () => {
             <span className="ml-2">Films</span>
           </Link>
         </NavbarMenuItem>
-        <NavbarMenuItem isActive={pathname.includes("/tvshows")}>
+        <NavbarMenuItem
+          isActive={
+            pathname.includes("/tvshows") || pathname.includes("/tvshow")
+          }
+        >
           <Link
             href="/tvshows/1"
             className="flex flex-row items-center"
@@ -193,7 +203,11 @@ const Header = () => {
             <span className="ml-2">Séries TV</span>
           </Link>
         </NavbarMenuItem>
-        <NavbarMenuItem isActive={pathname.includes("/people")}>
+        <NavbarMenuItem
+          isActive={
+            pathname.includes("/people") || pathname.includes("/person")
+          }
+        >
           <Link
             href="/people/1"
             className="flex flex-row items-center"
@@ -205,17 +219,21 @@ const Header = () => {
         </NavbarMenuItem>
         {!username && !accountIdV3 && !sessionId ? (
           <NavbarMenuItem className="cursor-pointer transition-all duration-500 hover:-translate-y-2">
-            <div onClick={handleConnexion}>Connexion/Inscription</div>
+            <div onClick={() => router.replace("profil/redirection-to-tmdb")}>
+              Connexion/Inscription
+            </div>
           </NavbarMenuItem>
         ) : (
-          <NavbarMenuItem isActive={pathname === "/profil"}>
+          <NavbarMenuItem isActive={pathname.includes("/profil")}>
             <Link
               href="/profil"
               className="flex flex-row items-center"
               onClick={() => setIsMenuOpen(false)}
             >
               <IoPersonSharp />
-              <span className="ml-2">Profil</span>
+              <div className="ml-2">
+                <p>{username}</p>
+              </div>
             </Link>
           </NavbarMenuItem>
         )}
