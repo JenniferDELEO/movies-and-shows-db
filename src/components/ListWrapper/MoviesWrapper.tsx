@@ -125,7 +125,7 @@ const MoviesWrapper: FC<Props> = (props) => {
   };
 
   return (
-    <div className="w-full">
+    <div className="mx-auto w-full md:w-[95%] lg:w-[90%]">
       <div className="mx-4 mb-4 flex flex-row items-baseline justify-between">
         <h3 className="text-lg lg:text-xl">Liste des films ({totalResults})</h3>
         <div className="hidden lg:block">

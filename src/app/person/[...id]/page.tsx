@@ -15,7 +15,7 @@ const Person = async ({ params }: { params: { id: string[] } }) => {
   const runningTvShows: TvShow[] = data?.tv_credits?.crew;
 
   return (
-    <div>
+    <div className="mx-auto w-full md:w-[95%] lg:w-[90%]">
       <Infos data={data} />
       <BannerWrapper
         personDetailProps={{

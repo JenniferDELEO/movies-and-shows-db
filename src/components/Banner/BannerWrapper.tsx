@@ -2,6 +2,9 @@
 "use client";
 
 import React, { FC, useContext, useEffect, useState } from "react";
+import { Tooltip } from "@nextui-org/react";
+import { FaPlus } from "react-icons/fa";
+
 import Banner from "./Banner";
 import { Movie } from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
@@ -32,9 +35,18 @@ type Props = {
     actingTvShows: TvShow[];
     runningTvShows: TvShow[];
   };
+  movieDetailsProps?: {
+    movies: Movie[];
+    title: "Films similaires" | "Recommendations";
+    totalResults: number;
+  };
 };
 
-const BannerWrapper: FC<Props> = ({ homeProps, personDetailProps }) => {
+const BannerWrapper: FC<Props> = ({
+  homeProps,
+  personDetailProps,
+  movieDetailsProps,
+}) => {
   const [favoriteMoviesIds, setFavoriteMoviesIds] = useState<number[]>([]);
   const [favoriteTvShowsIds, setFavoriteTvShowsIds] = useState<number[]>([]);
 
@@ -90,12 +102,16 @@ const BannerWrapper: FC<Props> = ({ homeProps, personDetailProps }) => {
 
   const classNames = {
     container: "mx-auto w-full md:w-[80%] lg:w[90%] mb-20 pb-16",
-    title: "pl-5 text-xl tracking-wide sm:text-2xl md:text-3xl",
+    title: "pl-5 text-xl tracking-wide font-bold",
     items: "mx-auto pb-5 pt-10 sm:px-1 md:pl-4",
     image:
       "w-[185px] h-[278px] 2xl:w-[288px] min-h-auto 2xl:h-[400px] rounded-md mx-auto",
-    dropdownContainer:
-      "absolute right-4 top-1 z-10 sm:right-7 md:right-1 md:top-1",
+    dropdownContainer: "absolute right-2 top-2 z-10 ",
+  };
+
+  const classNamesMovieDetails = {
+    ...classNames,
+    container: "mx-auto w-full mb-20 pb-16",
   };
 
   if (homeProps) {
@@ -255,6 +271,46 @@ const BannerWrapper: FC<Props> = ({ homeProps, personDetailProps }) => {
               ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNames}
               title={`Séries TV réalisées (${personDetailProps.runningTvShows.length})`}
+              userLists={userLists}
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (movieDetailsProps) {
+    return (
+      <div>
+        {movieDetailsProps?.movies?.length > 0 && (
+          <div className="relative mt-4 size-full">
+            {movieDetailsProps.totalResults > 20 && (
+              <div className="absolute right-0 top-0">
+                <Tooltip
+                  content={`Plus de ${movieDetailsProps.title}`}
+                  placement="bottom"
+                >
+                  <button className="rounded-full bg-primary p-3">
+                    <FaPlus size={16} />
+                  </button>
+                </Tooltip>
+              </div>
+            )}
+
+            <Banner
+              items={movieDetailsProps.movies}
+              type="Films"
+              user={user}
+              fetchUserDatas={fetchUserDatas}
+              favoriteMoviesIds={favoriteMoviesIds}
+              watchlistMoviesIds={watchlistMoviesIds}
+              favoriteTvShowsIds={favoriteTvShowsIds}
+              watchlistTvShowsIds={watchlistTvShowsIds}
+              ratedMovies={ratedMovies}
+              ratedTvShows={ratedTvShows}
+              ratedMoviesIds={ratedMoviesIds}
+              ratedTvShowsIds={ratedTvShowsIds}
+              classNames={classNamesMovieDetails}
+              title={`${movieDetailsProps.title} (${movieDetailsProps.movies.length})`}
               userLists={userLists}
             />
           </div>

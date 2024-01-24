@@ -124,7 +124,7 @@ const TvShowsWrapper: FC<Props> = (props) => {
   };
 
   return (
-    <div>
+    <div className="mx-auto w-full md:w-[95%] lg:w-[90%]">
       <div className="mx-4 mb-4 flex flex-row items-baseline justify-between">
         <h3 className="text-lg lg:text-xl">
           Liste des séries TV ({totalResults})

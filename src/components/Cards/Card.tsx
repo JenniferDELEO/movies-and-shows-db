@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import Image from "next/image";
 import { FC } from "react";
 import StarRating from "../StarRate/StarRating";
+import { useRouter } from "next/navigation";
 
 type Props = {
   item: any;
@@ -15,6 +16,8 @@ type Props = {
 };
 
 const Card: FC<Props> = ({ item, filterType, genres }) => {
+  const router = useRouter();
+
   const overviewRest = item?.overview?.split(" ")?.filter(Boolean);
   const overviewShow = overviewRest?.splice(0, 30)?.join(" ");
 
@@ -22,10 +25,17 @@ const Card: FC<Props> = ({ item, filterType, genres }) => {
   const date = filterType === "movie" ? item.release_date : item.first_air_date;
 
   const styleContainer =
-    "mb-4 2xl:mb-0 flex max-h-[278px] mx-auto lg:mx-4 pr-4 bg-gray-900 rounded-md";
+    "mb-4 2xl:mb-0 flex max-h-[278px] mx-auto lg:mx-4 pr-4 bg-gray-900 rounded-md cursor-pointer";
 
   return (
-    <div className={styleContainer}>
+    <div
+      className={styleContainer}
+      onClick={() =>
+        router.push(
+          `/${filterType === "movie" ? "movie" : "tvshow"}/${item.id}-${(item?.title || item?.name)?.toLowerCase().replace(/[^a-zA-Z0-9]/g, "-")}`,
+        )
+      }
+    >
       <Image
         src={
           item.poster_path

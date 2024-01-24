@@ -19,7 +19,9 @@ const RightContent: FC<Props> = ({ data }) => {
           </p>
         ))
       ) : (
-        <p className="my-4 text-base text-gray-400 lg:text-lg">Non renseigné</p>
+        <p className="my-4 text-base text-gray-400 lg:text-lg">
+          Non renseignée
+        </p>
       )}
     </div>
   );

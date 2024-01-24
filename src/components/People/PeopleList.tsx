@@ -33,7 +33,7 @@ const PeopleList: FC<Props> = (props) => {
   }, [currentPage]);
 
   return (
-    <div>
+    <div className="mx-auto w-full md:w-[95%] lg:w-[90%]">
       {!people ? (
         <div className="text-center text-lg md:text-xl">Chargement...</div>
       ) : (

@@ -209,11 +209,16 @@ export async function getMovieDetail(id: string): Promise<any> {
       url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/${id}`,
       params: {
         append_to_response:
-          "account_states,credits,images,recommendations,release_dates,similar,videos",
+          "account_states,credits,recommendations,release_dates,similar,videos",
         language: "fr-FR",
       },
     });
-    return result.data;
+    const images = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/${id}/images`,
+    });
+    const data = result.data;
+    return { ...data, images: images.data };
   } catch (error) {
     console.log(error);
     throw error;
