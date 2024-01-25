@@ -12,7 +12,7 @@ const SearchPage = ({
   const filterType = searchParams?.type || "movie";
 
   return (
-    <div className="mx-auto min-h-screen w-full">
+    <div className="mx-auto min-h-screen w-full md:w-[95%] lg:w-[90%]">
       <SearchBar
         styleBase="w-full md:w-[90%] ml-2 md:mx-auto mb-20"
         styleContainer="flex flex-row items-center justify-start md:justify-center"

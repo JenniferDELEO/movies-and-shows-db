@@ -16,8 +16,8 @@ const PeopleCard: FC<Props> = ({ item, itemCastAndCrew }) => {
     ?.map((item) => item?.title || item?.name)
     .join(", ");
   const slug =
-    item?.name.toLowerCase().replace(/ /g, "-") ||
-    itemCastAndCrew?.name.toLowerCase().replace(/ /g, "-");
+    item?.name.toLowerCase().replace(/[\W_]+/g, "-") ||
+    itemCastAndCrew?.name.toLowerCase().replace(/[\W_]+/g, "-");
   const id = item?.id || itemCastAndCrew?.id;
   const profilePath = item?.profile_path || itemCastAndCrew?.profile_path;
   const name = item?.name || itemCastAndCrew?.name;

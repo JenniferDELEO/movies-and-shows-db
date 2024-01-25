@@ -23,6 +23,7 @@ type Props = {
   voteCount?: number;
   tagline?: string;
   overview?: string;
+  originalLanguage?: string;
 };
 
 const TopContent: FC<Props> = (props) => {
@@ -40,6 +41,7 @@ const TopContent: FC<Props> = (props) => {
     voteCount,
     tagline,
     overview,
+    originalLanguage,
   } = props;
 
   return (
@@ -107,6 +109,7 @@ const TopContent: FC<Props> = (props) => {
             voteCount={voteCount}
             tagline={tagline}
             overview={overview}
+            originalLanguage={originalLanguage}
           />
         </div>
       </div>
@@ -131,7 +134,7 @@ const TopContent: FC<Props> = (props) => {
               maxHeight: 650,
             }}
           >
-            <div className="mx-auto flex size-full flex-row items-start justify-between md:w-[95%] lg:w-[90%] 2xl:w-[80%]">
+            <div className="mx-auto flex size-full flex-row items-start justify-between md:w-[95%] lg:w-[90%] 2xl:w-[70%]">
               {posterPath && (
                 <div
                   style={{
@@ -172,6 +175,7 @@ const TopContent: FC<Props> = (props) => {
                 voteCount={voteCount}
                 tagline={tagline}
                 overview={overview}
+                originalLanguage={originalLanguage}
               />
             </div>
           </div>

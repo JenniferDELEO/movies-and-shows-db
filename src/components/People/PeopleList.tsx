@@ -33,11 +33,11 @@ const PeopleList: FC<Props> = (props) => {
   }, [currentPage]);
 
   return (
-    <div className="mx-auto w-full md:w-[95%] lg:w-[90%]">
+    <div className="mx-auto size-full md:w-[95%] lg:w-[90%]">
       {!people ? (
         <div className="text-center text-lg md:text-xl">Chargement...</div>
       ) : (
-        <div>
+        <div className="size-full">
           <h3 className="mx-4 my-6 text-lg lg:text-xl">
             Liste des artistes triés par popularité{" "}
             <span className="text-xs font-bold md:text-lg">

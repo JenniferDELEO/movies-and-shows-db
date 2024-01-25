@@ -32,7 +32,7 @@ const Card: FC<Props> = ({ item, filterType, genres }) => {
       className={styleContainer}
       onClick={() =>
         router.push(
-          `/${filterType === "movie" ? "movie" : "tvshow"}/${item.id}-${(item?.title || item?.name)?.toLowerCase().replace(/[^a-zA-Z0-9]/g, "-")}`,
+          `/${filterType === "movie" ? "movie" : "tvshow"}/${item.id}-${(item?.original_title || item?.original_name)?.toLowerCase().replace(/[\W_]+/g, "-")}`,
         )
       }
     >

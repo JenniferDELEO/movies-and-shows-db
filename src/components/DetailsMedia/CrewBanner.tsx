@@ -35,7 +35,7 @@ const CrewBanner: FC<Props> = (props) => {
           Distribution des rôles et équipe technique au complet
         </Link>
       </div>
-      <div className="mx-auto mb-10 mt-12 h-[2px] w-full bg-gray-400 md:w-[75%] lg:w-[85%]" />
+      <div className="mx-auto mb-0 mt-16 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
     </section>
   );
 };

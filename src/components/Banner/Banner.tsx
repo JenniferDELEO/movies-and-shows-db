@@ -20,7 +20,9 @@ type Props = {
     release_date?: string;
     first_air_date?: string;
     title?: string;
+    original_title?: string;
     name?: string;
+    original_name?: string;
     character?: string;
   }[];
   type: "Films" | "Séries TV";
@@ -95,7 +97,7 @@ const Banner: FC<Props> = ({
                 }}
                 onClick={() =>
                   router.push(
-                    `/${type === "Films" ? "movie" : "tvshow"}/${item.id}-${(item?.title || item?.name)?.toLowerCase().replace(/[^a-zA-Z0-9]/g, "-")}`,
+                    `/${type === "Films" ? "movie" : "tvshow"}/${item.id}-${(item?.original_title || item?.original_name)?.toLowerCase().replace(/[\W_]+/g, "-")}`,
                   )
                 }
               />
@@ -118,7 +120,7 @@ const Banner: FC<Props> = ({
                 />
               )}
             </div>
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center pb-4 text-sm md:text-base">
               <p className="mt-4 text-wrap text-center font-bold">
                 {item?.title || item?.name}
               </p>

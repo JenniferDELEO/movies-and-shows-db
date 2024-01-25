@@ -34,6 +34,7 @@ const MovieWrapper: FC<Props> = (props) => {
         voteCount={movieDetail?.vote_count}
         tagline={movieDetail?.tagline}
         overview={movieDetail?.overview}
+        originalLanguage={movieDetail?.original_language}
       />
       <CrewBanner cast={movieDetail?.credits?.cast} movieUrl={movieUrl} />
       {movieDetail?.belongs_to_collection && (
@@ -41,14 +42,18 @@ const MovieWrapper: FC<Props> = (props) => {
           belongsToCollection={movieDetail?.belongs_to_collection}
         />
       )}
-      <Similar
-        similars={movieDetail?.similar?.results}
-        totalResults={movieDetail?.similar?.total_results}
-      />
-      <Recommendations
-        recommendations={movieDetail?.recommendations.results}
-        totalResults={movieDetail?.recommendations?.total_results}
-      />
+      {movieDetail?.similar?.results.length > 0 && (
+        <Similar
+          similars={movieDetail?.similar?.results}
+          totalPages={movieDetail?.similar?.total_pages}
+        />
+      )}
+      {movieDetail?.recommendations?.results.length > 0 && (
+        <Recommendations
+          recommendations={movieDetail?.recommendations.results}
+          totalPages={movieDetail?.recommendations?.total_pages}
+        />
+      )}
     </div>
   );
 };

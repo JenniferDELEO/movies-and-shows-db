@@ -34,6 +34,7 @@ import FiltersWrapper from "./FiltersWrapper";
 import { Watcher } from "@/models/watchers";
 import { MoviesFilters, TvShowsFilters } from "@/models/filters";
 import dayjs from "dayjs";
+import { extraLanguages, topLanguages } from "@/libs/helpers/languages";
 
 type Props = {
   moviesFilters?: MoviesFilters;
@@ -279,44 +280,18 @@ const Filters: FC<Props> = (props) => {
                 onChange={handleSelectedLanguage}
               >
                 <SelectSection showDivider>
-                  <SelectItem key="all" value="all">
-                    Toutes
-                  </SelectItem>
-                  <SelectItem key="fr" value="fr">
-                    Français
-                  </SelectItem>
-                  <SelectItem key="en" value="en">
-                    Anglais
-                  </SelectItem>
+                  {topLanguages.map((language) => (
+                    <SelectItem key={language.code} value={language.code}>
+                      {language.name}
+                    </SelectItem>
+                  ))}
                 </SelectSection>
                 <SelectSection>
-                  <SelectItem key="de" value="de">
-                    Allemand
-                  </SelectItem>
-                  <SelectItem key="zh" value="zh">
-                    Chinois
-                  </SelectItem>
-                  <SelectItem key="ko" value="ko">
-                    Coréen
-                  </SelectItem>
-                  <SelectItem key="es" value="es">
-                    Espagnol
-                  </SelectItem>
-                  <SelectItem key="it" value="it">
-                    Italien
-                  </SelectItem>
-                  <SelectItem key="ja" value="ja">
-                    Japonais
-                  </SelectItem>
-                  <SelectItem key="no" value="no">
-                    Norvégien
-                  </SelectItem>
-                  <SelectItem key="pt" value="pt">
-                    Portugais
-                  </SelectItem>
-                  <SelectItem key="ru" value="ru">
-                    Russe
-                  </SelectItem>
+                  {extraLanguages.map((language) => (
+                    <SelectItem key={language.code} value={language.code}>
+                      {language.name}
+                    </SelectItem>
+                  ))}
                 </SelectSection>
               </Select>
             </ListboxItem>

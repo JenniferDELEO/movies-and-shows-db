@@ -11,6 +11,7 @@ import { Genre, Video } from "@/models/movies";
 import StarRating from "@/components/StarRate/StarRating";
 import YoutubeEmbed from "@/components/YoutubeEmbed/YoutubeEmbed";
 import { Credits } from "@/models/people";
+import { languages } from "@/libs/helpers/languages";
 
 type Props = {
   genres: Genre[];
@@ -27,6 +28,7 @@ type Props = {
   voteCount?: number;
   tagline?: string;
   overview?: string;
+  originalLanguage?: string;
 };
 
 const Infos: FC<Props> = (props) => {
@@ -42,6 +44,7 @@ const Infos: FC<Props> = (props) => {
     voteCount,
     tagline,
     overview,
+    originalLanguage,
   } = props;
   const [openTrailer, setOpenTrailer] = useState(false);
 
@@ -54,6 +57,10 @@ const Infos: FC<Props> = (props) => {
   const writers = credits?.crew
     ?.filter((crew) => crew.job === "Writer")
     .filter((crew) => crew.name !== directors?.[0]?.name);
+
+  const originalLanguageName = languages.find(
+    (language) => language.code === originalLanguage,
+  )?.name;
 
   return (
     <div className="md:flex md:size-full md:flex-col md:justify-center">
@@ -70,15 +77,22 @@ const Infos: FC<Props> = (props) => {
               : "(Non sortie)"}
           </span>
         </h1>
-        <p className="mt-2 hidden text-sm md:block">
-          {releaseDate ? dayjs(releaseDate).format("DD/MM/YYYY") : "Non sortie"}{" "}
-          (FR) - {runtimeHours} h {runtimeMinutes} min -{" "}
-          {genresMedia &&
-            genresMedia.map((g) => {
-              const genre = genres.find((genre) => genre.id === g.id);
-              return <span key={g.id}>{genre?.name} </span>;
-            })}
-        </p>
+        <div className="mt-2 hidden text-sm md:block">
+          <p>
+            {releaseDate
+              ? dayjs(releaseDate).format("DD/MM/YYYY")
+              : "Non sortie"}{" "}
+            (FR) - {runtimeHours} h {runtimeMinutes} min -{" "}
+            {genresMedia &&
+              genresMedia.map((g) => {
+                const genre = genres.find((genre) => genre.id === g.id);
+                return <span key={g.id}>{genre?.name} </span>;
+              })}
+          </p>
+          {originalLanguage && (
+            <p className="pt-2">Langue : {originalLanguageName}</p>
+          )}
+        </div>
       </div>
       <div className="m-4 ml-10 flex flex-row items-center justify-evenly md:justify-start">
         <div className="flex flex-col items-center justify-center md:mr-4 md:items-start">

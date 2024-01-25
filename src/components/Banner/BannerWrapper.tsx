@@ -38,7 +38,7 @@ type Props = {
   movieDetailsProps?: {
     movies: Movie[];
     title: "Films similaires" | "Recommendations";
-    totalResults: number;
+    totalPages: number;
   };
 };
 
@@ -116,7 +116,7 @@ const BannerWrapper: FC<Props> = ({
 
   if (homeProps) {
     return (
-      <div>
+      <div className="size-full">
         <Banner
           items={homeProps.popularMovies}
           type="Films"
@@ -280,10 +280,10 @@ const BannerWrapper: FC<Props> = ({
   }
   if (movieDetailsProps) {
     return (
-      <div>
+      <div className="mx-auto py-4 text-xl font-bold md:w-[90%]">
         {movieDetailsProps?.movies?.length > 0 && (
           <div className="relative mt-4 size-full">
-            {movieDetailsProps.totalResults > 20 && (
+            {movieDetailsProps.totalPages > 1 && (
               <div className="absolute right-0 top-0">
                 <Tooltip
                   content={`Plus de ${movieDetailsProps.title}`}
