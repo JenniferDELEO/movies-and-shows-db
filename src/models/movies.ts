@@ -56,9 +56,11 @@ export type SpokenLanguage = {
 export type AccountStates = {
   id: number;
   favorite: boolean;
-  rated: {
-    value: number;
-  };
+  rated:
+    | boolean
+    | {
+        value: number;
+      };
   watchlist: boolean;
 };
 

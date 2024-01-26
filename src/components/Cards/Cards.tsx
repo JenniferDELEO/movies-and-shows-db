@@ -6,12 +6,11 @@ import { TvShow } from "@/models/tvShows";
 
 type Props = {
   items: Movie[] | TvShow[];
-  filterType: "movie" | "tv";
+  filterType: "movie" | "tvshow";
   genres: { id: number; name: string }[];
 };
 
 const Cards: FC<Props> = ({ items, filterType, genres }) => {
-  if (!items) return <div>Chargement...</div>;
   return (
     <div className="w-full">
       <div className="2xl:grid 2xl:grid-cols-2 2xl:gap-2">

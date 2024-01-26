@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { FaPlay, FaListUl, FaBookmark } from "react-icons/fa";
 import { FaHeart, FaStar } from "react-icons/fa6";
@@ -11,10 +11,18 @@ import StarRating from "@/components/StarRate/StarRating";
 import YoutubeEmbed from "@/components/YoutubeEmbed/YoutubeEmbed";
 import { CreditsMovies, CreditsTvShows } from "@/models/people";
 import { languages } from "@/libs/helpers/languages";
+import IconsInteraction from "@/components/AccountInteraction/IconsInteraction";
+import { getMovieDetail } from "@/libs/api/movies";
+import AccountInteraction from "../AccountInteraction/AccountInteraction";
+import { UserContext } from "@/context/userContext";
+import { List } from "@/models/lists";
+import { getLists } from "@/libs/api/lists";
+import { getTvShowDetail } from "@/libs/api/tvshows";
 
 type Props = {
   accountStates: AccountStates;
   genresMedia: Genre[];
+  id: number;
   originalLanguage: string;
   overview: string;
   tagline: string;
@@ -41,6 +49,7 @@ const Infos: FC<Props> = (props) => {
   const {
     accountStates,
     genresMedia,
+    id,
     originalLanguage,
     overview,
     tagline,
@@ -60,7 +69,20 @@ const Infos: FC<Props> = (props) => {
     status,
   } = props;
 
+  const { user } = useContext(UserContext);
+
   const [openTrailer, setOpenTrailer] = useState(false);
+
+  const [userLists, setUserLists] = useState<List[]>([]);
+
+  const [isFavorite, setIsFavorite] = useState(accountStates.favorite);
+  const [isInWatchlist, setIsInWatchlist] = useState(accountStates.watchlist);
+  const [isRated, setIsRated] = useState(
+    typeof accountStates.rated === "boolean" ? false : true,
+  );
+  const [userRatingApi, setUserRatingApi] = useState<number>(
+    typeof accountStates.rated === "object" ? accountStates.rated.value : 0,
+  );
 
   const trailer = videos?.results?.find((video) => video.type === "Trailer");
 
@@ -80,8 +102,66 @@ const Infos: FC<Props> = (props) => {
     (language) => language.code === originalLanguage,
   )?.name;
 
+  useEffect(() => {
+    if (user && user.accountIdV4) {
+      getUserList();
+    }
+  }, [user]);
+
+  async function getUserList() {
+    const res = await getLists();
+    const listsResponse = res.results;
+    listsResponse.unshift({
+      id: "1",
+      name: "Créer une nouvelle liste",
+    });
+    setUserLists(listsResponse);
+  }
+
+  async function fetchUserAccountStates() {
+    if (type === "movie") {
+      const response = await getMovieDetail(id.toString());
+      setIsFavorite(response.account_states.favorite);
+      setIsInWatchlist(response.account_states.watchlist);
+      const userRating = response.account_states.rated;
+      if (typeof userRating === "object" && userRating?.value) {
+        setIsRated(true);
+        setUserRatingApi(userRating.value);
+      }
+      if (typeof userRating === "boolean") setIsRated(userRating);
+    }
+    if (type === "tvshow") {
+      const response = await getTvShowDetail(id.toString());
+      setIsFavorite(response.account_states.favorite);
+      setIsInWatchlist(response.account_states.watchlist);
+      const userRating = response.account_states.rated;
+      if (typeof userRating === "object" && userRating?.value) {
+        setIsRated(true);
+        setUserRatingApi(userRating.value);
+      }
+      if (typeof userRating === "boolean") setIsRated(userRating);
+    }
+  }
+
   return (
     <div className="md:flex md:size-full md:flex-col md:justify-center">
+      <div className="fixed bottom-0 left-0 z-10 w-full bg-primary md:hidden">
+        <div className="flex flex-row items-center justify-evenly">
+          <AccountInteraction
+            item={{ id: id, name: title, title: title }}
+            type={type}
+            user={user}
+            fetchUserDatas={fetchUserAccountStates}
+            mediaDetailsPageProps={{
+              isFavorite,
+              isInWatchlist,
+              isRated,
+              userRatingApi,
+            }}
+            userLists={userLists}
+          />
+        </div>
+      </div>
       {openTrailer && trailer && (
         <YoutubeEmbed embedId={trailer.key} setOpenTrailer={setOpenTrailer} />
       )}
@@ -204,26 +284,19 @@ const Infos: FC<Props> = (props) => {
           </p>
         </div>
         <div className="hidden flex-row items-center justify-evenly md:mx-10 md:flex">
-          <Tooltip content="Ajouter à une liste" placement="bottom">
-            <button className="mr-1 rounded-full bg-primary p-3 lg:mr-3">
-              <FaListUl size={16} />
-            </button>
-          </Tooltip>
-          <Tooltip content="Marquer comme favoris" placement="bottom">
-            <button className="mr-1 rounded-full bg-primary p-3 lg:mr-3">
-              <FaHeart size={16} />
-            </button>
-          </Tooltip>
-          <Tooltip content="Ajouter à la liste de suivi" placement="bottom">
-            <button className="mr-1 rounded-full bg-primary p-3 lg:mr-3">
-              <FaBookmark size={16} />
-            </button>
-          </Tooltip>
-          <Tooltip content="Donner une note" placement="bottom">
-            <button className="rounded-full bg-primary p-3">
-              <FaStar size={16} />
-            </button>
-          </Tooltip>
+          <AccountInteraction
+            item={{ id: id, name: title, title: title }}
+            type={type}
+            user={user}
+            fetchUserDatas={fetchUserAccountStates}
+            mediaDetailsPageProps={{
+              isFavorite,
+              isInWatchlist,
+              isRated,
+              userRatingApi,
+            }}
+            userLists={userLists}
+          />
         </div>
         <div className="flex flex-col items-center justify-center">
           <Button variant="light" onClick={() => setOpenTrailer(true)}>

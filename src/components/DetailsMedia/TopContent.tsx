@@ -11,6 +11,7 @@ type Props = {
   accountStates: AccountStates;
   backdropPath: string;
   genresMedia: Genre[];
+  id: number;
   originalLanguage: string;
   overview: string;
   posterPath: string;
@@ -39,6 +40,7 @@ const TopContent: FC<Props> = (props) => {
     accountStates,
     backdropPath,
     genresMedia,
+    id,
     originalLanguage,
     overview,
     posterPath,
@@ -122,6 +124,7 @@ const TopContent: FC<Props> = (props) => {
             creditsTvShows={creditsTvShows}
             episodeRunTime={episodeRunTime}
             genresMedia={genresMedia}
+            id={id}
             numberOfEpisodes={numberOfEpisodes}
             numberOfSeasons={numberOfSeasons}
             originalLanguage={originalLanguage}
@@ -198,6 +201,7 @@ const TopContent: FC<Props> = (props) => {
                 creditsTvShows={creditsTvShows}
                 episodeRunTime={episodeRunTime}
                 genresMedia={genresMedia}
+                id={id}
                 numberOfEpisodes={numberOfEpisodes}
                 numberOfSeasons={numberOfSeasons}
                 originalLanguage={originalLanguage}

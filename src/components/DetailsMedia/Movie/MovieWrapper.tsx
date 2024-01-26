@@ -22,6 +22,7 @@ const MovieWrapper: FC<Props> = (props) => {
         creditsMovies={movieDetail?.credits}
         backdropPath={movieDetail?.backdrop_path}
         genresMedia={movieDetail?.genres}
+        id={movieDetail?.id}
         originalLanguage={movieDetail?.original_language}
         overview={movieDetail?.overview}
         posterPath={movieDetail?.poster_path}

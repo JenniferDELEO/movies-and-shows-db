@@ -23,6 +23,7 @@ const TvShowWrapper: FC<Props> = (props) => {
         creditsTvShows={tvShowDetail?.aggregate_credits}
         episodeRunTime={tvShowDetail?.episode_run_time}
         genresMedia={tvShowDetail?.genres}
+        id={tvShowDetail?.id}
         numberOfSeasons={tvShowDetail?.number_of_seasons}
         numberOfEpisodes={tvShowDetail?.number_of_episodes}
         originalLanguage={tvShowDetail?.original_language}

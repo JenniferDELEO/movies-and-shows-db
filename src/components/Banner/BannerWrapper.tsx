@@ -126,7 +126,7 @@ const BannerWrapper: FC<Props> = ({
       <div className="size-full">
         <Banner
           items={homeProps.popularMovies}
-          type="Films"
+          type="movie"
           user={user}
           fetchUserDatas={fetchUserDatas}
           favoriteMoviesIds={favoriteMoviesIds}
@@ -143,7 +143,7 @@ const BannerWrapper: FC<Props> = ({
         />
         <Banner
           items={homeProps.topRatedMovies}
-          type="Films"
+          type="movie"
           user={user}
           fetchUserDatas={fetchUserDatas}
           favoriteMoviesIds={favoriteMoviesIds}
@@ -160,7 +160,7 @@ const BannerWrapper: FC<Props> = ({
         />
         <Banner
           items={homeProps.popularTvShows}
-          type="Séries TV"
+          type="tvshow"
           user={user}
           fetchUserDatas={fetchUserDatas}
           favoriteTvShowsIds={favoriteTvShowsIds}
@@ -177,7 +177,7 @@ const BannerWrapper: FC<Props> = ({
         />
         <Banner
           items={homeProps.topRatedTvShows}
-          type="Séries TV"
+          type="tvshow"
           user={user}
           fetchUserDatas={fetchUserDatas}
           favoriteTvShowsIds={favoriteTvShowsIds}
@@ -202,7 +202,7 @@ const BannerWrapper: FC<Props> = ({
           <div className="mt-4">
             <Banner
               items={personDetailProps.actingMovies}
-              type="Films"
+              type="movie"
               user={user}
               fetchUserDatas={fetchUserDatas}
               favoriteMoviesIds={favoriteMoviesIds}
@@ -223,7 +223,7 @@ const BannerWrapper: FC<Props> = ({
           <div className="mt-4">
             <Banner
               items={personDetailProps.actingTvShows}
-              type="Séries TV"
+              type="tvshow"
               user={user}
               fetchUserDatas={fetchUserDatas}
               favoriteMoviesIds={favoriteMoviesIds}
@@ -244,7 +244,7 @@ const BannerWrapper: FC<Props> = ({
           <div className="mt-4">
             <Banner
               items={personDetailProps.runningMovies}
-              type="Films"
+              type="movie"
               user={user}
               fetchUserDatas={fetchUserDatas}
               favoriteTvShowsIds={favoriteTvShowsIds}
@@ -265,7 +265,7 @@ const BannerWrapper: FC<Props> = ({
           <div className="mt-4">
             <Banner
               items={personDetailProps.runningTvShows}
-              type="Séries TV"
+              type="tvshow"
               user={user}
               fetchUserDatas={fetchUserDatas}
               favoriteTvShowsIds={favoriteTvShowsIds}
@@ -305,7 +305,7 @@ const BannerWrapper: FC<Props> = ({
 
             <Banner
               items={movieDetailsProps.movies}
-              type="Films"
+              type="movie"
               user={user}
               fetchUserDatas={fetchUserDatas}
               favoriteMoviesIds={favoriteMoviesIds}
@@ -345,7 +345,7 @@ const BannerWrapper: FC<Props> = ({
 
             <Banner
               items={tvshowsDetailsProps.tvshows}
-              type="Séries TV"
+              type="tvshow"
               user={user}
               fetchUserDatas={fetchUserDatas}
               favoriteMoviesIds={favoriteMoviesIds}

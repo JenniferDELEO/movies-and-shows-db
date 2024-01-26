@@ -8,10 +8,10 @@ import dayjs from "dayjs";
 
 import { settings } from "@/components/Banner/reactSlickSettings";
 import { User } from "@/models/user";
-import DropdownCard from "@/components/Dropdown/DropdownCard";
 import { List } from "@/models/lists";
 import { Movie } from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
+import AccountInteraction from "../AccountInteraction/AccountInteraction";
 
 type Props = {
   items: {
@@ -24,7 +24,7 @@ type Props = {
     original_name?: string;
     character?: string;
   }[];
-  type: "Films" | "Séries TV";
+  type: "tvshow" | "movie";
   user: User;
   fetchUserDatas: () => Promise<void>;
   favoriteMoviesIds: number[];
@@ -65,8 +65,6 @@ const Banner: FC<Props> = ({
 }) => {
   const router = useRouter();
 
-  if (!items) return <div>Chargement...</div>;
-
   return (
     <section className={classNames.container}>
       <h1 className={classNames.title}>{title}</h1>
@@ -96,25 +94,27 @@ const Banner: FC<Props> = ({
                 }}
                 onClick={() =>
                   router.push(
-                    `/${type === "Films" ? "movie" : "tvshow"}/${item.id}-${(item?.title || item?.name)?.toLowerCase().replace(/[\W_]+/g, "-")}`,
+                    `/${type}/${item.id}-${(item?.title || item?.name)?.toLowerCase().replace(/[\W_]+/g, "-")}`,
                   )
                 }
               />
               {user && user.username && (
-                <DropdownCard
+                <AccountInteraction
                   item={item}
                   type={type}
                   user={user}
                   fetchUserDatas={fetchUserDatas}
-                  favoriteMoviesIds={favoriteMoviesIds}
-                  favoriteTvShowsIds={favoriteTvShowsIds}
-                  watchlistMoviesIds={watchlistMoviesIds}
-                  watchlistTvShowsIds={watchlistTvShowsIds}
-                  ratedMoviesIds={ratedMoviesIds}
-                  ratedTvShowsIds={ratedTvShowsIds}
-                  ratedMovies={ratedMovies}
-                  ratedTvShows={ratedTvShows}
-                  classNames={classNames}
+                  homePageProps={{
+                    favoriteMoviesIds,
+                    favoriteTvShowsIds,
+                    watchlistMoviesIds,
+                    watchlistTvShowsIds,
+                    ratedMovies,
+                    ratedTvShows,
+                    ratedMoviesIds,
+                    ratedTvShowsIds,
+                    classNames,
+                  }}
                   userLists={userLists}
                 />
               )}
