@@ -1,5 +1,11 @@
+import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
+
 const Posters = () => {
-  return <div>Posters</div>;
+  return (
+    <div>
+      <WorkInProgress />
+    </div>
+  );
 };
 
 export default Posters;

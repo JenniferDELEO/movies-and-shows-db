@@ -1,5 +1,11 @@
+import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
+
 const Backdrops = () => {
-  return <div>Backdrops</div>;
+  return (
+    <div>
+      <WorkInProgress />
+    </div>
+  );
 };
 
 export default Backdrops;

@@ -1,5 +1,11 @@
+import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
+
 const Logos = () => {
-  return <div>Logos</div>;
+  return (
+    <div>
+      <WorkInProgress />
+    </div>
+  );
 };
 
 export default Logos;

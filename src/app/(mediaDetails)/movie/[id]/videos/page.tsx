@@ -1,5 +1,11 @@
+import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
+
 const Videos = () => {
-  return <div>Videos</div>;
+  return (
+    <div>
+      <WorkInProgress />
+    </div>
+  );
 };
 
 export default Videos;

@@ -1,5 +1,11 @@
+import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
+
 const Season = () => {
-  return <div>Season</div>;
+  return (
+    <div>
+      <WorkInProgress />
+    </div>
+  );
 };
 
 export default Season;

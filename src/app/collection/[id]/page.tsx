@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { getCollection } from "@/libs/api/collections";
+import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
 
 type Props = {
   params: { id: string };
@@ -21,7 +22,11 @@ const Collection = async ({ params }: Props) => {
 
   const collection = await getCollection(id);
 
-  return <div>Collection</div>;
+  return (
+    <div>
+      <WorkInProgress />
+    </div>
+  );
 };
 
 export default Collection;
