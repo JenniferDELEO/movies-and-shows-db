@@ -17,7 +17,7 @@ const LeftContent: FC<Props> = ({ data }) => {
     <div className="mt-4 flex flex-col items-center justify-center border-b py-4 md:w-[45%] md:items-start md:border-none lg:w-[35%] xl:w-[30%]">
       <Image
         src={
-          data.profile_path
+          data?.profile_path
             ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${data.profile_path}`
             : "/images/defaultImage.png"
         }

@@ -1,3 +1,4 @@
+import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -5,7 +6,11 @@ export const metadata: Metadata = {
 };
 
 const ProfilLists = () => {
-  return <div>ProfilLists</div>;
+  return (
+    <div>
+      <WorkInProgress />
+    </div>
+  );
 };
 
 export default ProfilLists;

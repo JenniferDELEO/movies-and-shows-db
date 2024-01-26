@@ -88,7 +88,11 @@ const TopContent: FC<Props> = (props) => {
             >
               <Image
                 alt={`poster-${title}`}
-                src={`${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${posterPath}`}
+                src={
+                  posterPath
+                    ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${posterPath}`
+                    : "/images/defaultImage.png"
+                }
                 width={0}
                 height={0}
                 style={{
@@ -168,7 +172,11 @@ const TopContent: FC<Props> = (props) => {
                 >
                   <Image
                     alt={`poster-${title}`}
-                    src={`${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${posterPath}`}
+                    src={
+                      posterPath
+                        ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${posterPath}`
+                        : "/images/defaultImage.png"
+                    }
                     width={0}
                     height={0}
                     style={{

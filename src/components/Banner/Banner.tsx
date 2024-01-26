@@ -76,7 +76,7 @@ const Banner: FC<Props> = ({
             <div className="relative m-auto h-[250px] min-h-[250px] w-[145px] min-w-[145px] overflow-hidden rounded-sm sm:h-[300px] sm:w-[200px] 2xl:h-[400px] 2xl:w-[250px]">
               <Image
                 src={
-                  item.poster_path
+                  item?.poster_path
                     ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w342${item.poster_path}`
                     : "/images/defaultImage.png"
                 }
