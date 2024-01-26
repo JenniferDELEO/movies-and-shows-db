@@ -272,7 +272,7 @@ const Infos: FC<Props> = (props) => {
                   );
                 })}
             </p>
-            <p className="text-sm">
+            <p className="pt-2 text-sm">
               <span className="font-bold">Statut : </span>
               {status === "Ended" ? (
                 <span className="text-gray-400">Terminée</span>
@@ -293,8 +293,10 @@ const Infos: FC<Props> = (props) => {
         {tagline && <p className="italic text-gray-400">{tagline}</p>}
         <div className="my-4">
           <h2 className="text-lg font-bold">Synopsis</h2>
-          {overview && (
+          {overview && overview.length > 0 ? (
             <p className="my-4 mr-4 text-sm md:text-justify">{overview}</p>
+          ) : (
+            <p className="my-4 mr-4 text-sm md:text-justify">Non renseigné</p>
           )}
         </div>
       </div>
