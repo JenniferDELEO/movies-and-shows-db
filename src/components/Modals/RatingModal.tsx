@@ -2,17 +2,16 @@
 "use client";
 
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
-
-import ModalComponent from "./ModalComponent";
-import { User } from "@/models/user";
-import { addRateMovie, deleteRateMovie } from "@/libs/api/movies";
-import { addRateTvShow, deleteRateTvShow } from "@/libs/api/tvshows";
-import StarRating from "../StarRate/StarRating";
-import { Movie } from "@/models/movies";
-import { TvShow } from "@/models/tvShows";
 import { Button, Tooltip } from "@nextui-org/react";
 import { TiDelete } from "react-icons/ti";
 import toast from "react-hot-toast";
+
+import ModalComponent from "@/components/Modals/ModalComponent";
+import { addRateMovie, deleteRateMovie } from "@/libs/api/movies";
+import { addRateTvShow, deleteRateTvShow } from "@/libs/api/tvshows";
+import StarRating from "@/components/StarRate/StarRating";
+import { Movie } from "@/models/movies";
+import { TvShow } from "@/models/tvShows";
 
 type Props = {
   modalIsOpen: boolean;

@@ -1,7 +1,8 @@
 "use client";
 
-import { UserContext } from "@/context/userContext";
 import React, { useEffect, useState } from "react";
+
+import { UserContext } from "@/context/userContext";
 
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const localUsername =

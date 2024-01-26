@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
-import Header from "@/components/Header/Header";
-import { Providers } from "./providers";
-
 import { Poppins } from "next/font/google";
 
+import UserProvider from "@/components/UserProvider/UserProvider";
+import Toast from "@/components/Toast/Toast";
+import Header from "@/components/Header/Header";
+import { Providers } from "./providers";
 import "./globals.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import UserProvider from "@/components/UserProvider/UserProvider";
-import Toast from "@/components/Toast/Toast";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -18,9 +17,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Films - Séries TV Database",
+  title: "Accueil - Films & Séries TV DB",
   description:
-    "View all movies and TV shows and create your own lists to manage the ones you own or want to see.",
+    "Accédez aux informations de millions de films et séries TV, gratuitement et sans publicité. Créez votre compte, sauvegardez vos films et séries TV préférés, créez vos propres listes.",
 };
 
 export default function RootLayout({
@@ -37,14 +36,14 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className={`${poppins.className} text-white`}>
+      <body className={`${poppins.className} size-full min-h-full text-white`}>
         <Providers>
           <UserProvider>
             <Toast />
-            <main className="bg-[url('https://images.unsplash.com/photo-1642095902135-f48745dd3df5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTA2fHxtb3ZpZSUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D')] bg-cover bg-fixed bg-no-repeat">
+            <main className="size-full min-h-[100vh] bg-[url('https://images.unsplash.com/photo-1642095902135-f48745dd3df5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTA2fHxtb3ZpZSUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D')] bg-cover bg-fixed bg-no-repeat">
               <Header />
-              <div className="size-full bg-primary/90">
-                <div className="container mx-auto pb-6 pt-10">{children}</div>
+              <div className="size-full min-h-[calc(100vh-64px)] bg-primary/90">
+                <div className="mx-auto size-full pb-6 pt-10">{children}</div>
               </div>
             </main>
           </UserProvider>

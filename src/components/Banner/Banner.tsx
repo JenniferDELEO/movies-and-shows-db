@@ -1,15 +1,15 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FC } from "react";
 import Slider from "react-slick";
 import dayjs from "dayjs";
 
-import { settings } from "./reactSlickSettings";
+import { settings } from "@/components/Banner/reactSlickSettings";
 import { User } from "@/models/user";
-import DropdownCard from "../Dropdown/DropdownCard";
+import DropdownCard from "@/components/Dropdown/DropdownCard";
 import { List } from "@/models/lists";
-import { useRouter } from "next/navigation";
 import { Movie } from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
 
@@ -21,6 +21,7 @@ type Props = {
     first_air_date?: string;
     title?: string;
     name?: string;
+    original_name?: string;
     character?: string;
   }[];
   type: "Films" | "Séries TV";
@@ -67,12 +68,12 @@ const Banner: FC<Props> = ({
   if (!items) return <div>Chargement...</div>;
 
   return (
-    <div className={classNames.container}>
+    <section className={classNames.container}>
       <h1 className={classNames.title}>{title}</h1>
       <Slider {...settings}>
         {items.map((item) => (
           <div key={item.id} className={classNames.items}>
-            <div className="relative">
+            <div className="relative m-auto h-[250px] min-h-[250px] w-[145px] min-w-[145px] overflow-hidden rounded-sm sm:h-[300px] sm:w-[200px] 2xl:h-[400px] 2xl:w-[250px]">
               <Image
                 src={
                   item.poster_path
@@ -84,9 +85,18 @@ const Banner: FC<Props> = ({
                 height={0}
                 className={`${classNames.image} cursor-pointer`}
                 sizes="100vw"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  display: "block",
+                  minWidth: "100%",
+                  minHeight: "100%",
+                  borderWidth: 0,
+                  outline: 0,
+                }}
                 onClick={() =>
                   router.push(
-                    `/${type === "Films" ? "movie" : "tvshow"}/${item.id}/${(item?.title || item?.name)?.toLowerCase().replace(/ /g, "-")}`,
+                    `/${type === "Films" ? "movie" : "tvshow"}/${item.id}-${(item?.title || item?.name)?.toLowerCase().replace(/[\W_]+/g, "-")}`,
                   )
                 }
               />
@@ -109,8 +119,10 @@ const Banner: FC<Props> = ({
                 />
               )}
             </div>
-            <div className="pl-6 md:pl-4 lg:pl-0">
-              <p className="mt-4 font-bold">{item?.title || item?.name}</p>
+            <div className="flex flex-col items-center justify-center pb-4 text-sm md:text-base">
+              <p className="mt-4 text-wrap text-center font-bold">
+                {item?.title || item?.name}
+              </p>
               <p className="mt-2 text-gray-400">
                 {item?.release_date
                   ? dayjs(item.release_date).format("DD MMM. YYYY")
@@ -128,7 +140,7 @@ const Banner: FC<Props> = ({
           </div>
         ))}
       </Slider>
-    </div>
+    </section>
   );
 };
 

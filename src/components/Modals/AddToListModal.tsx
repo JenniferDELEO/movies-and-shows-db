@@ -6,7 +6,7 @@ import { Select, SelectItem } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-import ModalComponent from "./ModalComponent";
+import ModalComponent from "@/components/Modals/ModalComponent";
 import { addItemsToList, checkItemStatus } from "@/libs/api/lists";
 import { List } from "@/models/lists";
 

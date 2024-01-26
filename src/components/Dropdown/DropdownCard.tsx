@@ -11,10 +11,10 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 
-import AddToListModal from "../Modals/AddToListModal";
+import AddToListModal from "@/components/Modals/AddToListModal";
+import RatingModal from "@/components/Modals/RatingModal";
 import { toggleFavorite, toggleWatchlist } from "@/libs/api/user";
 import { toggleUserDatas } from "@/libs/helpers/userDatas";
-import RatingModal from "../Modals/RatingModal";
 import { User } from "@/models/user";
 import { List } from "@/models/lists";
 import { Movie } from "@/models/movies";

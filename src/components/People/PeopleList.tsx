@@ -1,10 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import { People } from "@/models/people";
-import Pagination from "../Pagination/Pagination";
+
 import React, { FC, useEffect, useState } from "react";
-import PeopleCard from "./PeopleCard";
 import { usePathname } from "next/navigation";
+
+import { People } from "@/models/people";
+import Pagination from "@/components/Pagination/Pagination";
+import PeopleCard from "./PeopleCard";
 import { getPopularPeople } from "@/libs/api/people";
 
 type Props = {
@@ -33,11 +35,11 @@ const PeopleList: FC<Props> = (props) => {
   }, [currentPage]);
 
   return (
-    <div>
+    <div className="mx-auto size-full md:w-[95%] lg:w-[90%]">
       {!people ? (
         <div className="text-center text-lg md:text-xl">Chargement...</div>
       ) : (
-        <div>
+        <div className="size-full">
           <h3 className="mx-4 my-6 text-lg lg:text-xl">
             Liste des artistes triés par popularité{" "}
             <span className="text-xs font-bold md:text-lg">

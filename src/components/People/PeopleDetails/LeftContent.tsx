@@ -1,10 +1,11 @@
-import { People } from "@/models/people";
 import dayjs from "dayjs";
 import Image from "next/image";
 import React, { FC } from "react";
 
+import { Person } from "@/models/people";
+
 type Props = {
-  data: People;
+  data: Person;
 };
 
 const LeftContent: FC<Props> = ({ data }) => {

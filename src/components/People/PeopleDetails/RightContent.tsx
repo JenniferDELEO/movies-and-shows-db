@@ -1,8 +1,9 @@
-import { People } from "@/models/people";
 import { FC } from "react";
 
+import { Person } from "@/models/people";
+
 type Props = {
-  data: People;
+  data: Person;
 };
 
 const RightContent: FC<Props> = ({ data }) => {
@@ -19,7 +20,9 @@ const RightContent: FC<Props> = ({ data }) => {
           </p>
         ))
       ) : (
-        <p className="my-4 text-base text-gray-400 lg:text-lg">Non renseigné</p>
+        <p className="my-4 text-base text-gray-400 lg:text-lg">
+          Non renseignée
+        </p>
       )}
     </div>
   );

@@ -1,10 +1,29 @@
 import axios from "axios";
 
-import { ApiResultMovies } from "@/models/movies";
+import { ApiResultMovies, MovieDetails } from "@/models/movies";
 import { optionsGET } from "./auth";
 import { Watcher } from "@/models/watchers";
 import { MoviesFilters } from "@/models/filters";
 import { defaultMoviesFilters } from "../helpers/filters";
+
+/* --------------------GLOBAL-------------------- */
+
+export async function getGenresMovies(): Promise<{
+  genres: { id: number; name: string }[];
+}> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/genre/movie/list?language=fr`,
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+/* --------------------HOME PAGE-------------------- */
 
 export async function getPopularMovies(page: number): Promise<ApiResultMovies> {
   try {
@@ -32,6 +51,8 @@ export async function getTopRatedMovies(): Promise<ApiResultMovies> {
   }
 }
 
+/* --------------------DISCOVER PAGE-------------------- */
+
 export async function getDiscoverMovies(
   filters?: MoviesFilters,
 ): Promise<ApiResultMovies> {
@@ -50,13 +71,13 @@ export async function getDiscoverMovies(
   }
 }
 
-export async function getGenresMovies(): Promise<{
-  genres: { id: number; name: string }[];
+export async function getMoviesProviders(): Promise<{
+  results: Watcher[];
 }> {
   try {
     const result = await axios.request({
       ...optionsGET,
-      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/genre/movie/list?language=fr`,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/watch/providers/movie?language=fr-FR&watch_region=fr`,
     });
     return result.data;
   } catch (error) {
@@ -64,6 +85,33 @@ export async function getGenresMovies(): Promise<{
     throw error;
   }
 }
+
+/* --------------------DETAILS PAGE-------------------- */
+
+export async function getMovieDetail(id: string): Promise<MovieDetails> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/${id}`,
+      params: {
+        append_to_response:
+          "account_states,credits,recommendations,release_dates,similar,videos",
+        language: "fr-FR",
+      },
+    });
+    const images = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/${id}/images`,
+    });
+    const data = result.data;
+    return { ...data, images: images.data };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+/* --------------------SEARCH PAGE-------------------- */
 
 export async function getSearchMovies(
   query: string,
@@ -87,6 +135,8 @@ export async function getSearchMovies(
     throw error;
   }
 }
+
+/* --------------------USER INTERACTIONS-------------------- */
 
 export async function getUserFavoriteMovies(
   accountIdV4: string,
@@ -181,39 +231,6 @@ export async function getUserWatchListMovies(
     }
 
     return data;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
-
-export async function getMoviesProviders(): Promise<{
-  results: Watcher[];
-}> {
-  try {
-    const result = await axios.request({
-      ...optionsGET,
-      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/watch/providers/movie?language=fr-FR&watch_region=fr`,
-    });
-    return result.data;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
-
-export async function getMovieDetail(id: string): Promise<any> {
-  try {
-    const result = await axios.request({
-      ...optionsGET,
-      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/${id}`,
-      params: {
-        append_to_response:
-          "account_states,credits,images,recommendations,release_dates,similar,videos",
-        language: "fr-FR",
-      },
-    });
-    return result.data;
   } catch (error) {
     console.log(error);
     throw error;

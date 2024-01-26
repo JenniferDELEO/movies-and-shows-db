@@ -1,8 +1,9 @@
 "use client";
 
 import { Dispatch, FC, SetStateAction } from "react";
-import ModalComponent from "./ModalComponent";
-import Filters from "../Filters/Filters";
+
+import ModalComponent from "@/components/Modals/ModalComponent";
+import Filters from "@/components/Filters/Filters";
 import { Watcher } from "@/models/watchers";
 import { MoviesFilters, TvShowsFilters } from "@/models/filters";
 
