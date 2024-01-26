@@ -6,6 +6,7 @@ import { FC } from "react";
 import { Card, CardBody, CardFooter } from "@nextui-org/react";
 
 import { SeasonDetails } from "@/models/tvShows";
+import { usePathname, useRouter } from "next/navigation";
 
 type Props = {
   seasonDetails: SeasonDetails;
@@ -13,6 +14,10 @@ type Props = {
 
 const EpisodesBanner: FC<Props> = (props) => {
   const { seasonDetails } = props;
+
+  const router = useRouter();
+  const pathname = usePathname();
+
   return (
     <>
       <h1 className="mx-auto py-4 text-xl font-bold md:w-[90%]">
@@ -23,15 +28,19 @@ const EpisodesBanner: FC<Props> = (props) => {
           seasonDetails.episodes.map((episode) => (
             <div key={episode.id} className="mx-2 my-4">
               <Card
-                /* isPressable */
+                isPressable
                 className="mx-2 my-4 flex cursor-pointer flex-col items-center justify-center bg-transparent"
-                /* onPress={() => setSelectedSeason(season)} */
+                onPress={() =>
+                  router.push(
+                    `${pathname}/season/${seasonDetails.season_number}/episode/${episode.episode_number}`,
+                  )
+                }
               >
                 <CardBody
                   className="flex flex-col items-center justify-center"
                   style={{
                     width: 300,
-                    height: 238,
+                    height: 208,
                   }}
                 >
                   <Image

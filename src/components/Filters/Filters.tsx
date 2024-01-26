@@ -515,7 +515,11 @@ const Filters: FC<Props> = (props) => {
                     >
                       <Image
                         alt={provider.provider_name}
-                        src={`${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w45${provider.logo_path}`}
+                        src={
+                          provider?.logo_path
+                            ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w45${provider.logo_path}`
+                            : "/images/defaultImage.png"
+                        }
                         width={0}
                         height={0}
                         style={{

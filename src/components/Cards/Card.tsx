@@ -39,7 +39,7 @@ const Card: FC<Props> = ({ item, filterType, genres }) => {
     >
       <Image
         src={
-          item.poster_path
+          item?.poster_path
             ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${item.poster_path}`
             : "/images/defaultImage.png"
         }

@@ -40,7 +40,11 @@ const SeasonsBanner: FC<Props> = (props) => {
                 >
                   <Image
                     alt={`poster de la saison ${season.season_number}`}
-                    src={`${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w342${season.poster_path}`}
+                    src={
+                      season?.poster_path
+                        ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w342${season.poster_path}`
+                        : "/images/defaultImage.png"
+                    }
                     width={0}
                     height={0}
                     style={{
