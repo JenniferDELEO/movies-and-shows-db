@@ -1,9 +1,9 @@
 import Card from "@/components/Cards/Card";
 import { getGenresMovies, getSearchMovies } from "@/libs/api/movies";
 import { getGenresTvShows, getSearchTvShows } from "@/libs/api/tvshows";
-import Pagination from "../Pagination/Pagination";
+import Pagination from "@/components/Pagination/Pagination";
 import { getSearchPeople } from "@/libs/api/people";
-import PeopleCard from "../People/PeopleCard";
+import PeopleCard from "@/components/People/PeopleCard";
 import { People } from "@/models/people";
 import { TvShow } from "@/models/tvShows";
 import { Movie } from "@/models/movies";
