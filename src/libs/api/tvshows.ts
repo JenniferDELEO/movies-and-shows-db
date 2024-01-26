@@ -1,9 +1,33 @@
-import { ApiResultTvShows, TvShow } from "@/models/tvShows";
+import {
+  ApiResultTvShows,
+  SeasonDetails,
+  TvShow,
+  TvShowDetails,
+} from "@/models/tvShows";
 import { optionsGET } from "./auth";
 import { Watcher } from "@/models/watchers";
 import axios from "axios";
 import { TvShowsFilters } from "@/models/filters";
 import { defaultTvShowsFilters } from "../helpers/filters";
+
+/* --------------------GLOBAL-------------------- */
+
+export async function getGenresTvShows(): Promise<{
+  genres: { id: number; name: string }[];
+}> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/genre/tv/list?language=fr`,
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+/* --------------------HOME PAGE-------------------- */
 
 export async function getPopularTvShows(
   page: number,
@@ -33,6 +57,8 @@ export async function getTopRatedTvShows(): Promise<ApiResultTvShows> {
   }
 }
 
+/* --------------------DISCOVER PAGE-------------------- */
+
 export async function getDiscoverTvShows(
   filters?: TvShowsFilters,
 ): Promise<ApiResultTvShows> {
@@ -51,13 +77,13 @@ export async function getDiscoverTvShows(
   }
 }
 
-export async function getGenresTvShows(): Promise<{
-  genres: { id: number; name: string }[];
+export async function getTvShowsProviders(): Promise<{
+  results: Watcher[];
 }> {
   try {
     const result = await axios.request({
       ...optionsGET,
-      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/genre/tv/list?language=fr`,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/watch/providers/tv?language=fr-FR&watch_region=fr`,
     });
     return result.data;
   } catch (error) {
@@ -65,6 +91,53 @@ export async function getGenresTvShows(): Promise<{
     throw error;
   }
 }
+
+/* --------------------DETAILS PAGE-------------------- */
+
+export async function getTvShowDetail(id: string): Promise<TvShowDetails> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/${id}`,
+      params: {
+        append_to_response:
+          "account_states,aggregate_credits,recommendations,similar,videos",
+        language: "fr-FR",
+      },
+    });
+    const images = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/${id}/images`,
+    });
+    const data = result.data;
+    return { ...data, images: images.data };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getSeasonDetails(
+  tvShowId: number,
+  seasonNumber: number,
+): Promise<SeasonDetails> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/${tvShowId}/season/${seasonNumber}`,
+      params: {
+        append_to_response: "account_states",
+        language: "fr-FR",
+      },
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+/* --------------------SEARCH PAGE-------------------- */
 
 export async function getSearchTvShows(
   query: string,
@@ -88,6 +161,8 @@ export async function getSearchTvShows(
     throw error;
   }
 }
+
+/* --------------------USER INTERACTIONS-------------------- */
 
 export async function getUserFavoriteTvShows(
   accountIdV4: string,
@@ -182,21 +257,6 @@ export async function getUserWatchlistTvShows(
     }
 
     return data;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
-
-export async function getTvShowsProviders(): Promise<{
-  results: Watcher[];
-}> {
-  try {
-    const result = await axios.request({
-      ...optionsGET,
-      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/watch/providers/tv?language=fr-FR&watch_region=fr`,
-    });
-    return result.data;
   } catch (error) {
     console.log(error);
     throw error;

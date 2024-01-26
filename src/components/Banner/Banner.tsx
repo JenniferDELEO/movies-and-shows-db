@@ -1,15 +1,15 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FC } from "react";
 import Slider from "react-slick";
 import dayjs from "dayjs";
 
-import { settings } from "./reactSlickSettings";
+import { settings } from "@/components/Banner/reactSlickSettings";
 import { User } from "@/models/user";
-import DropdownCard from "../Dropdown/DropdownCard";
+import DropdownCard from "@/components/Dropdown/DropdownCard";
 import { List } from "@/models/lists";
-import { useRouter } from "next/navigation";
 import { Movie } from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
 
@@ -20,7 +20,6 @@ type Props = {
     release_date?: string;
     first_air_date?: string;
     title?: string;
-    original_title?: string;
     name?: string;
     original_name?: string;
     character?: string;
@@ -97,7 +96,7 @@ const Banner: FC<Props> = ({
                 }}
                 onClick={() =>
                   router.push(
-                    `/${type === "Films" ? "movie" : "tvshow"}/${item.id}-${(item?.original_title || item?.original_name)?.toLowerCase().replace(/[\W_]+/g, "-")}`,
+                    `/${type === "Films" ? "movie" : "tvshow"}/${item.id}-${(item?.title || item?.name)?.toLowerCase().replace(/[\W_]+/g, "-")}`,
                   )
                 }
               />

@@ -1,12 +1,7 @@
 "use client";
 
-import { UserContext } from "@/context/userContext";
-import {
-  getAccountDetails,
-  getAccessToken,
-  createSessionFromV4,
-} from "@/libs/api/auth";
 import Link from "next/link";
+import { UserContext } from "@/context/userContext";
 import { useRouter, usePathname } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import {
@@ -24,7 +19,13 @@ import { MdLocalMovies, MdPeople } from "react-icons/md";
 import { PiTelevisionSimpleFill } from "react-icons/pi";
 import { IoPersonSharp } from "react-icons/io5";
 import { TiHome } from "react-icons/ti";
-import SearchBar from "../Search/SearchBar";
+
+import {
+  getAccountDetails,
+  getAccessToken,
+  createSessionFromV4,
+} from "@/libs/api/auth";
+import SearchBar from "@/components/Search/SearchBar";
 
 const Header = () => {
   const router = useRouter();

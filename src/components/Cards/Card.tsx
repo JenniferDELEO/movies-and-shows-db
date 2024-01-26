@@ -3,8 +3,9 @@
 import dayjs from "dayjs";
 import Image from "next/image";
 import { FC } from "react";
-import StarRating from "../StarRate/StarRating";
 import { useRouter } from "next/navigation";
+
+import StarRating from "@/components/StarRate/StarRating";
 
 type Props = {
   item: any;
@@ -32,7 +33,7 @@ const Card: FC<Props> = ({ item, filterType, genres }) => {
       className={styleContainer}
       onClick={() =>
         router.push(
-          `/${filterType === "movie" ? "movie" : "tvshow"}/${item.id}-${(item?.original_title || item?.original_name)?.toLowerCase().replace(/[\W_]+/g, "-")}`,
+          `/${filterType === "movie" ? "movie" : "tvshow"}/${item.id}-${(item?.title || item?.name)?.toLowerCase().replace(/[\W_]+/g, "-")}`,
         )
       }
     >

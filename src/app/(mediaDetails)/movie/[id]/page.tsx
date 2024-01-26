@@ -1,19 +1,18 @@
+import { getMovieDetail } from "@/libs/api/movies";
 import MovieWrapper from "@/components/DetailsMedia/Movie/MovieWrapper";
-import { getGenresMovies, getMovieDetail } from "@/libs/api/movies";
 
-const Movie = async ({ params }: { params: { id: string } }) => {
-  if (!params.id) return <div>Chargement...</div>;
+type Props = {
+  params: { id: string };
+};
 
-  const data = await getMovieDetail(params.id.split("-")[0]);
-  const { genres: genresMovies } = await getGenresMovies();
+const Movie = async ({ params }: Props) => {
+  const id = params.id.split("-")[0];
+
+  const movieDetail = await getMovieDetail(id);
 
   return (
     <div className="size-full">
-      <MovieWrapper
-        movieDetail={data}
-        genres={genresMovies}
-        movieUrl={params.id}
-      />
+      <MovieWrapper movieDetail={movieDetail} movieUrl={params.id} />
     </div>
   );
 };

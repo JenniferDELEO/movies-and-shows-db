@@ -6,7 +6,7 @@ export default function MediaDetailsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <div className="size-full overflow-x-hidden">
       <MediaHeader />
       <div className="size-full">{children}</div>
     </div>

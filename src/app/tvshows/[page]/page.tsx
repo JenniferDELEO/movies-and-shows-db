@@ -1,9 +1,15 @@
+import type { Metadata } from "next";
+
 import TvShowsWrapper from "@/components/ListWrapper/TvShowsWrapper";
 import {
   getDiscoverTvShows,
   getGenresTvShows,
   getTvShowsProviders,
 } from "@/libs/api/tvshows";
+
+export const metadata: Metadata = {
+  title: "Séries TV - Films & Séries TV DB",
+};
 
 const TvShows = async () => {
   const { genres: genresTvShows } = await getGenresTvShows();

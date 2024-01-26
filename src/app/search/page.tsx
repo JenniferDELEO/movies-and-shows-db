@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
+
 import SearchBar from "@/components/Search/SearchBar";
 import SearchFilters from "@/components/Search/SearchFilters";
 import SearchResult from "@/components/Search/SearchResult";
+
+export const metadata: Metadata = {
+  title: "Recherche - Films & Séries TV DB",
+};
 
 const SearchPage = ({
   searchParams,

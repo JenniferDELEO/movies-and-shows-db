@@ -1,8 +1,14 @@
 "use client";
 
-import { getRequestToken } from "@/libs/api/auth";
+import type { Metadata } from "next";
 import { Button } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+
+import { getRequestToken } from "@/libs/api/auth";
+
+export const metadata: Metadata = {
+  title: "Redirection - Films & Séries TV DB",
+};
 
 const RedirectionToTmdb = () => {
   const router = useRouter();

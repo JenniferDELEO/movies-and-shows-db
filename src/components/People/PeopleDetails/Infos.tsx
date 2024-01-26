@@ -1,10 +1,11 @@
-import { People } from "@/models/people";
 import { FC } from "react";
-import LeftContent from "./LeftContent";
-import RightContent from "./RightContent";
+
+import { Person } from "@/models/people";
+import LeftContent from "@/components/People/PeopleDetails/LeftContent";
+import RightContent from "@/components/People/PeopleDetails/RightContent";
 
 type Props = {
-  data: People;
+  data: Person;
 };
 
 const Infos: FC<Props> = ({ data }) => {

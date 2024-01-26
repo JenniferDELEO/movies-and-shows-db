@@ -1,8 +1,9 @@
-import { People } from "@/models/people";
 import { FC } from "react";
 
+import { Person } from "@/models/people";
+
 type Props = {
-  data: People;
+  data: Person;
 };
 
 const RightContent: FC<Props> = ({ data }) => {

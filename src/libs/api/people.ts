@@ -1,6 +1,6 @@
 import axios from "axios";
 import { optionsGET } from "./auth";
-import { ApiResultPeople, People } from "@/models/people";
+import { ApiResultPeople, Person } from "@/models/people";
 
 export async function getPopularPeople(page: number): Promise<ApiResultPeople> {
   try {
@@ -41,13 +41,13 @@ export async function getSearchPeople(
   }
 }
 
-export async function getPeopleDetail(id: string): Promise<People> {
+export async function getPeopleDetail(id: string): Promise<Person> {
   try {
     const result = await axios.request({
       ...optionsGET,
       url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/person/${id}`,
       params: {
-        append_to_response: "latest,images,movie_credits,tv_credits",
+        append_to_response: "images,movie_credits,tv_credits",
         language: "fr-FR",
       },
     });

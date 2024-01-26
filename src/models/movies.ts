@@ -1,4 +1,4 @@
-import { Credits } from "./people";
+import { CreditsMovies } from "./people";
 
 export type AccountRating = {
   created_at: string;
@@ -54,8 +54,11 @@ export type SpokenLanguage = {
 };
 
 export type AccountStates = {
+  id: number;
   favorite: boolean;
-  rated: boolean;
+  rated: {
+    value: number;
+  };
   watchlist: boolean;
 };
 
@@ -95,26 +98,21 @@ export type Video = {
 };
 
 export interface MovieDetails extends Movie {
+  account_states: AccountStates;
   belongs_to_collection: Collection;
   budget: number;
+  credits: CreditsMovies;
   genres: Genre[];
   homepage: string;
-  imdb_id: string;
-  production_companies: ProductionCompany[];
-  production_countries: ProductionCountry[];
-  revenue: number;
-  runtime: number;
-  spoken_languages: SpokenLanguage[];
-  status: string;
-  tagline: string;
-  account_states: AccountStates;
-  credits: Credits;
   images: {
     backdrops: Image[];
     id: number;
     logos: Image[];
     posters: Image[];
   };
+  imdb_id: string;
+  production_companies: ProductionCompany[];
+  production_countries: ProductionCountry[];
   recommendations: {
     page: number;
     results: Movie[];
@@ -127,12 +125,17 @@ export interface MovieDetails extends Movie {
       results: ReleaseDates[];
     };
   };
+  revenue: number;
+  runtime: number;
+  spoken_languages: SpokenLanguage[];
   similar: {
     page: number;
     results: Movie[];
     total_pages: number;
     total_results: number;
   };
+  status: string;
+  tagline: string;
   videos: {
     id: number;
     results: Video[];

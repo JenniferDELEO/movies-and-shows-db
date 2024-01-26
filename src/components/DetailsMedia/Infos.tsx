@@ -2,50 +2,64 @@
 
 import { FC, useState } from "react";
 import dayjs from "dayjs";
-import { FaPlay } from "react-icons/fa";
-import { Button, Tooltip } from "@nextui-org/react";
-import { FaListUl, FaBookmark } from "react-icons/fa";
+import { FaPlay, FaListUl, FaBookmark } from "react-icons/fa";
 import { FaHeart, FaStar } from "react-icons/fa6";
+import { Button, Tooltip } from "@nextui-org/react";
 
-import { Genre, Video } from "@/models/movies";
+import { AccountStates, Genre, Video } from "@/models/movies";
 import StarRating from "@/components/StarRate/StarRating";
 import YoutubeEmbed from "@/components/YoutubeEmbed/YoutubeEmbed";
-import { Credits } from "@/models/people";
+import { CreditsMovies, CreditsTvShows } from "@/models/people";
 import { languages } from "@/libs/helpers/languages";
 
 type Props = {
-  genres: Genre[];
-  genresMedia?: Genre[];
-  title?: string;
-  videos?: {
+  accountStates: AccountStates;
+  genresMedia: Genre[];
+  originalLanguage: string;
+  overview: string;
+  tagline: string;
+  title: string;
+  type: "tvshow" | "movie";
+  videos: {
     id: number;
     results: Video[];
   };
-  runtime?: number;
-  credits?: Credits;
+  voteAverage: number;
+  voteCount: number;
+
+  creditsMovies?: CreditsMovies;
+  creditsTvShows?: CreditsTvShows;
+  episodeRunTime?: number[];
+  numberOfSeasons?: number;
+  numberOfEpisodes?: number;
   releaseDate?: string;
-  voteAverage?: number;
-  voteCount?: number;
-  tagline?: string;
-  overview?: string;
-  originalLanguage?: string;
+  runtime?: number;
+  status?: string;
 };
 
 const Infos: FC<Props> = (props) => {
   const {
-    genres,
+    accountStates,
     genresMedia,
+    originalLanguage,
+    overview,
+    tagline,
     title,
+    type,
     videos,
-    runtime,
-    credits,
-    releaseDate,
     voteAverage,
     voteCount,
-    tagline,
-    overview,
-    originalLanguage,
+
+    creditsMovies,
+    creditsTvShows,
+    episodeRunTime,
+    numberOfSeasons,
+    numberOfEpisodes,
+    releaseDate,
+    runtime,
+    status,
   } = props;
+
   const [openTrailer, setOpenTrailer] = useState(false);
 
   const trailer = videos?.results?.find((video) => video.type === "Trailer");
@@ -53,8 +67,12 @@ const Infos: FC<Props> = (props) => {
   const runtimeHours = runtime ? Math.floor(runtime / 60) : 0;
   const runtimeMinutes = runtime ? runtime % 60 : 0;
 
-  const directors = credits?.crew?.filter((crew) => crew.job === "Director");
-  const writers = credits?.crew
+  const directors =
+    creditsMovies?.crew?.filter((crew) => crew.job === "Director") ||
+    creditsTvShows?.crew
+      ?.filter((crew) => crew.department === "Directing")
+      .slice(0, 3);
+  const writers = creditsMovies?.crew
     ?.filter((crew) => crew.job === "Writer")
     .filter((crew) => crew.name !== directors?.[0]?.name);
 
@@ -78,20 +96,98 @@ const Infos: FC<Props> = (props) => {
           </span>
         </h1>
         <div className="mt-2 hidden text-sm md:block">
-          <p>
-            {releaseDate
-              ? dayjs(releaseDate).format("DD/MM/YYYY")
-              : "Non sortie"}{" "}
-            (FR) - {runtimeHours} h {runtimeMinutes} min -{" "}
-            {genresMedia &&
-              genresMedia.map((g) => {
-                const genre = genres.find((genre) => genre.id === g.id);
-                return <span key={g.id}>{genre?.name} </span>;
-              })}
-          </p>
-          {originalLanguage && (
-            <p className="pt-2">Langue : {originalLanguageName}</p>
+          {type === "movie" && (
+            <p className="text-gray-400">
+              {releaseDate
+                ? dayjs(releaseDate).format("DD/MM/YYYY")
+                : "Non sortie"}{" "}
+              (FR) - {runtimeHours} h {runtimeMinutes} min -{" "}
+              {genresMedia &&
+                genresMedia.map((genre, index) => {
+                  if (index === genresMedia.length - 1) {
+                    return <span key={genre.id}>{genre?.name}</span>;
+                  }
+                  return <span key={genre.id}>{genre?.name}, </span>;
+                })}
+            </p>
           )}
+          {type === "tvshow" && (
+            <div className="flex flex-row items-center justify-start">
+              <p className="pr-3 text-gray-400">
+                <span className="font-bold text-white">Genres : </span>
+
+                {genresMedia &&
+                  genresMedia.map((genre, index) => {
+                    if (index === genresMedia.length - 1) {
+                      return <span key={genre.id}>{genre?.name}</span>;
+                    }
+                    return <span key={genre.id}>{genre?.name}, </span>;
+                  })}
+              </p>
+              <p className="text-gray-400">
+                <span className="font-bold text-white">Statut : </span>
+                {status === "Ended" ? (
+                  <span className="text-gray-400">Terminée</span>
+                ) : status === "Canceled" ? (
+                  <span className="text-gray-400">Annulée</span>
+                ) : (
+                  <span className="text-gray-400">En cours</span>
+                )}
+              </p>
+            </div>
+          )}
+          <div className="flex flex-row items-center justify-start">
+            {originalLanguage && (
+              <p className="pr-3 pt-2 text-gray-400">
+                <span className="font-bold text-white">Langue : </span>
+                {originalLanguageName}
+              </p>
+            )}
+            {episodeRunTime && episodeRunTime?.length > 0 && (
+              <div className="flex flex-row items-center justify-start">
+                <p className="pr-3 pt-2 font-bold text-white">
+                  Durée d&apos;un épisode :{" "}
+                  {episodeRunTime.map((runtime, index) => {
+                    if (index === episodeRunTime.length - 1) {
+                      return (
+                        <span
+                          key={index}
+                          className="pt-2 font-normal text-gray-400"
+                        >
+                          {runtime} min
+                        </span>
+                      );
+                    }
+
+                    return (
+                      <span
+                        key={index}
+                        className="pt-2 font-normal text-gray-400"
+                      >
+                        {runtime},{" "}
+                      </span>
+                    );
+                  })}
+                </p>
+              </div>
+            )}
+            {numberOfSeasons && (
+              <div className="flex flex-row items-center justify-start">
+                <p className="pr-3 pt-2 text-gray-400">
+                  <span className="font-bold text-white">Saisons : </span>
+                  {numberOfSeasons}
+                </p>
+              </div>
+            )}
+            {numberOfEpisodes && (
+              <div className="flex flex-row items-center justify-start">
+                <p className="pr-3 pt-2 text-gray-400">
+                  <span className="font-bold text-white">Episodes : </span>
+                  {numberOfEpisodes}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <div className="m-4 ml-10 flex flex-row items-center justify-evenly md:justify-start">
@@ -137,16 +233,60 @@ const Infos: FC<Props> = (props) => {
         </div>
       </div>
       <div className="my-4 ml-10 flex flex-col items-center justify-center md:hidden">
-        <p className="text-sm">
-          {releaseDate ? dayjs(releaseDate).format("DD/MM/YYYY") : "Non sortie"}{" "}
-          (FR) - {runtimeHours} h {runtimeMinutes} min
-        </p>
-        <p>
-          {genresMedia &&
-            genresMedia.map((g) => {
-              const genre = genres.find((genre) => genre.id === g.id);
-              return <span key={g.id}>{genre?.name} </span>;
-            })}
+        {type === "movie" && (
+          <>
+            <p className="text-sm text-gray-400">
+              {releaseDate
+                ? dayjs(releaseDate).format("DD/MM/YYYY")
+                : "Non sortie"}{" "}
+              (FR) - {runtimeHours} h {runtimeMinutes} min
+            </p>
+            <p className="text-sm text-gray-400">
+              {genresMedia &&
+                genresMedia.map((genre, index) => {
+                  if (index === genresMedia.length - 1) {
+                    return <span key={genre.id}>{genre?.name}</span>;
+                  }
+                  return <span key={genre.id}>{genre?.name}, </span>;
+                })}
+            </p>
+          </>
+        )}
+        {type === "tvshow" && (
+          <div className="flex flex-col items-center justify-start md:flex-row">
+            <p className="pr-2 text-center text-sm">
+              <span className="font-bold">Genres : </span>
+              {genresMedia &&
+                genresMedia.map((genre, index) => {
+                  if (index === genresMedia.length - 1) {
+                    return (
+                      <span key={genre.id} className="text-gray-400">
+                        {genre?.name}
+                      </span>
+                    );
+                  }
+                  return (
+                    <span key={genre.id} className="text-gray-400">
+                      {genre?.name},{" "}
+                    </span>
+                  );
+                })}
+            </p>
+            <p className="text-sm">
+              <span className="font-bold">Statut : </span>
+              {status === "Ended" ? (
+                <span className="text-gray-400">Terminée</span>
+              ) : status === "Canceled" ? (
+                <span className="text-gray-400">Annulée</span>
+              ) : (
+                <span className="text-gray-400">En cours</span>
+              )}
+            </p>
+          </div>
+        )}
+        <p className="pt-2 text-sm text-gray-400">
+          <span className="font-bold text-white">Langue : </span>
+          {originalLanguageName}
         </p>
       </div>
       <div className="m-4 ml-10">

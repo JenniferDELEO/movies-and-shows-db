@@ -8,11 +8,11 @@ import { usePathname } from "next/navigation";
 import Filters from "@/components/Filters/Filters";
 import Cards from "@/components/Cards/Cards";
 import { Movie } from "@/models/movies";
-import OrderingSelect from "../Filters/OrderingSelect";
+import OrderingSelect from "@/components/Filters/OrderingSelect";
 import { Watcher } from "@/models/watchers";
-import FiltersModal from "../Modals/FiltersModal";
+import FiltersModal from "@/components/Modals/FiltersModal";
 import { getDiscoverMovies } from "@/libs/api/movies";
-import Pagination from "../Pagination/Pagination";
+import Pagination from "@/components/Pagination/Pagination";
 import { defaultMoviesFilters } from "@/libs/helpers/filters";
 import { MoviesFilters } from "@/models/filters";
 

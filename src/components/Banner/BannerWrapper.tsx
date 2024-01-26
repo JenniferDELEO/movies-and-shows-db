@@ -5,7 +5,7 @@ import React, { FC, useContext, useEffect, useState } from "react";
 import { Tooltip } from "@nextui-org/react";
 import { FaPlus } from "react-icons/fa";
 
-import Banner from "./Banner";
+import Banner from "@/components/Banner/Banner";
 import { Movie } from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
 import { UserContext } from "@/context/userContext";
@@ -40,12 +40,19 @@ type Props = {
     title: "Films similaires" | "Recommendations";
     totalPages: number;
   };
+
+  tvshowsDetailsProps?: {
+    tvshows: TvShow[];
+    title: "Séries TV similaires" | "Recommendations";
+    totalPages: number;
+  };
 };
 
 const BannerWrapper: FC<Props> = ({
   homeProps,
   personDetailProps,
   movieDetailsProps,
+  tvshowsDetailsProps,
 }) => {
   const [favoriteMoviesIds, setFavoriteMoviesIds] = useState<number[]>([]);
   const [favoriteTvShowsIds, setFavoriteTvShowsIds] = useState<number[]>([]);
@@ -311,6 +318,46 @@ const BannerWrapper: FC<Props> = ({
               ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNamesMovieDetails}
               title={`${movieDetailsProps.title} (${movieDetailsProps.movies.length})`}
+              userLists={userLists}
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (tvshowsDetailsProps) {
+    return (
+      <div className="mx-auto py-4 text-xl font-bold md:w-[90%]">
+        {tvshowsDetailsProps?.tvshows?.length > 0 && (
+          <div className="relative mt-4 size-full">
+            {tvshowsDetailsProps.totalPages > 1 && (
+              <div className="absolute right-0 top-0">
+                <Tooltip
+                  content={`Plus de ${tvshowsDetailsProps.title}`}
+                  placement="bottom"
+                >
+                  <button className="rounded-full bg-primary p-3">
+                    <FaPlus size={16} />
+                  </button>
+                </Tooltip>
+              </div>
+            )}
+
+            <Banner
+              items={tvshowsDetailsProps.tvshows}
+              type="Séries TV"
+              user={user}
+              fetchUserDatas={fetchUserDatas}
+              favoriteMoviesIds={favoriteMoviesIds}
+              watchlistMoviesIds={watchlistMoviesIds}
+              favoriteTvShowsIds={favoriteTvShowsIds}
+              watchlistTvShowsIds={watchlistTvShowsIds}
+              ratedMovies={ratedMovies}
+              ratedTvShows={ratedTvShows}
+              ratedMoviesIds={ratedMoviesIds}
+              ratedTvShowsIds={ratedTvShowsIds}
+              classNames={classNamesMovieDetails}
+              title={`${tvshowsDetailsProps.title} (${tvshowsDetailsProps.tvshows.length})`}
               userLists={userLists}
             />
           </div>

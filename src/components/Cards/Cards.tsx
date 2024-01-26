@@ -1,7 +1,8 @@
+import React, { FC } from "react";
+
+import Card from "@/components/Cards/Card";
 import { Movie } from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
-import React, { FC } from "react";
-import Card from "./Card";
 
 type Props = {
   items: Movie[] | TvShow[];

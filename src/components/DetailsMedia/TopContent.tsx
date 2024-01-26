@@ -1,47 +1,62 @@
 "use client";
 
-import { Genre, Video } from "@/models/movies";
 import Image from "next/image";
 import { FC } from "react";
-import Infos from "./Infos";
-import { Credits } from "@/models/people";
+
+import { AccountStates, Genre, Video } from "@/models/movies";
+import Infos from "@/components/DetailsMedia/Infos";
+import { CreditsMovies, CreditsTvShows } from "@/models/people";
 
 type Props = {
-  genres: Genre[];
-  genresMedia?: Genre[];
-  backdropPath?: string;
-  posterPath?: string;
-  title?: string;
-  videos?: {
+  accountStates: AccountStates;
+  backdropPath: string;
+  genresMedia: Genre[];
+  originalLanguage: string;
+  overview: string;
+  posterPath: string;
+  tagline: string;
+  title: string;
+  type: "tvshow" | "movie";
+  videos: {
     id: number;
     results: Video[];
   };
-  runtime?: number;
-  credits?: Credits;
+  voteAverage: number;
+  voteCount: number;
+
+  creditsMovies?: CreditsMovies;
+  creditsTvShows?: CreditsTvShows;
+  episodeRunTime?: number[];
+  numberOfSeasons?: number;
+  numberOfEpisodes?: number;
   releaseDate?: string;
-  voteAverage?: number;
-  voteCount?: number;
-  tagline?: string;
-  overview?: string;
-  originalLanguage?: string;
+  runtime?: number;
+  status?: string;
 };
 
 const TopContent: FC<Props> = (props) => {
   const {
-    genres,
-    genresMedia,
+    accountStates,
     backdropPath,
+    genresMedia,
+    originalLanguage,
+    overview,
     posterPath,
+    tagline,
     title,
+    type,
     videos,
-    runtime,
-    credits,
-    releaseDate,
     voteAverage,
     voteCount,
-    tagline,
-    overview,
-    originalLanguage,
+
+    creditsMovies,
+    creditsTvShows,
+    episodeRunTime,
+    numberOfSeasons,
+    numberOfEpisodes,
+    releaseDate,
+    runtime,
+    status,
   } = props;
 
   return (
@@ -98,18 +113,24 @@ const TopContent: FC<Props> = (props) => {
           }}
         >
           <Infos
-            genres={genres}
+            accountStates={accountStates}
+            creditsMovies={creditsMovies}
+            creditsTvShows={creditsTvShows}
+            episodeRunTime={episodeRunTime}
             genresMedia={genresMedia}
-            title={title}
-            videos={videos}
-            runtime={runtime}
-            credits={credits}
+            numberOfEpisodes={numberOfEpisodes}
+            numberOfSeasons={numberOfSeasons}
+            originalLanguage={originalLanguage}
+            overview={overview}
             releaseDate={releaseDate}
+            runtime={runtime}
+            status={status}
+            tagline={tagline}
+            title={title}
+            type={type}
+            videos={videos}
             voteAverage={voteAverage}
             voteCount={voteCount}
-            tagline={tagline}
-            overview={overview}
-            originalLanguage={originalLanguage}
           />
         </div>
       </div>
@@ -164,18 +185,24 @@ const TopContent: FC<Props> = (props) => {
                 </div>
               )}
               <Infos
-                genres={genres}
+                accountStates={accountStates}
+                creditsMovies={creditsMovies}
+                creditsTvShows={creditsTvShows}
+                episodeRunTime={episodeRunTime}
                 genresMedia={genresMedia}
-                title={title}
-                videos={videos}
-                runtime={runtime}
-                credits={credits}
+                numberOfEpisodes={numberOfEpisodes}
+                numberOfSeasons={numberOfSeasons}
+                originalLanguage={originalLanguage}
+                overview={overview}
                 releaseDate={releaseDate}
+                runtime={runtime}
+                status={status}
+                tagline={tagline}
+                title={title}
+                type={type}
+                videos={videos}
                 voteAverage={voteAverage}
                 voteCount={voteCount}
-                tagline={tagline}
-                overview={overview}
-                originalLanguage={originalLanguage}
               />
             </div>
           </div>

@@ -1,9 +1,25 @@
+import type { Metadata } from "next";
+
 import { getCollection } from "@/libs/api/collections";
 
-const Collection = async ({ params }: { params: { id: string } }) => {
-  if (!params.id) return <div>Chargement...</div>;
+type Props = {
+  params: { id: string };
+};
 
-  const collection = await getCollection(Number(params.id.split("-")[0]));
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const id = Number(params.id.split("-")[0]);
+
+  const collection = await getCollection(id);
+
+  return {
+    title: `${collection.name} - Films & Séries TV DB`,
+  };
+}
+
+const Collection = async ({ params }: Props) => {
+  const id = Number(params.id.split("-")[0]);
+
+  const collection = await getCollection(id);
 
   return <div>Collection</div>;
 };

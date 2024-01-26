@@ -10,7 +10,7 @@ type Props = {
 };
 
 const YoutubeEmbed: FC<Props> = ({ embedId, setOpenTrailer }) => (
-  <div className="fixed left-0 top-0 z-20 h-[100vh] min-h-[100vh] w-[100vw] min-w-[100vw] bg-primary/90">
+  <div className="fixed left-0 top-0 z-50 h-[100vh] min-h-[100vh] w-[100vw] min-w-[100vw] bg-primary/90">
     <div className="mx-4 mt-[25%] flex flex-row items-center justify-between md:mx-40 md:mt-20">
       <h2 className="text-lg font-bold">Bande-annonce</h2>
       <button onClick={() => setOpenTrailer(false)}>

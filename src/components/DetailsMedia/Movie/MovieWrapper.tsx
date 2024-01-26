@@ -1,57 +1,59 @@
-import { MovieDetails } from "@/models/movies";
 import { FC } from "react";
-import TopContent from "../TopContent";
-import CrewBanner from "../CrewBanner";
-import CollectionCard from "./CollectionCard";
-import Similar from "../Similars";
-import Recommendations from "../Recommendations";
+
+import { MovieDetails } from "@/models/movies";
+import TopContent from "@/components/DetailsMedia/TopContent";
+import CrewBanner from "@/components/DetailsMedia/CrewBanner";
+import CollectionCard from "@/components/DetailsMedia/Movie/CollectionCard";
+import Similar from "@/components/DetailsMedia/Similars";
+import Recommendations from "@/components/DetailsMedia/Recommendations";
 
 type Props = {
   movieDetail: MovieDetails;
-  genres: {
-    id: number;
-    name: string;
-  }[];
   movieUrl: string;
 };
 
 const MovieWrapper: FC<Props> = (props) => {
-  const { movieDetail, genres, movieUrl } = props;
+  const { movieDetail, movieUrl } = props;
 
   return (
     <div className="size-full">
       <TopContent
-        genres={genres}
-        genresMedia={movieDetail?.genres}
+        accountStates={movieDetail?.account_states}
+        creditsMovies={movieDetail?.credits}
         backdropPath={movieDetail?.backdrop_path}
+        genresMedia={movieDetail?.genres}
+        originalLanguage={movieDetail?.original_language}
+        overview={movieDetail?.overview}
         posterPath={movieDetail?.poster_path}
-        title={movieDetail?.title}
-        videos={movieDetail?.videos}
-        runtime={movieDetail?.runtime}
-        credits={movieDetail?.credits}
         releaseDate={movieDetail?.release_date}
+        runtime={movieDetail?.runtime}
+        tagline={movieDetail?.tagline}
+        title={movieDetail?.title}
+        type="movie"
+        videos={movieDetail?.videos}
         voteAverage={movieDetail?.vote_average}
         voteCount={movieDetail?.vote_count}
-        tagline={movieDetail?.tagline}
-        overview={movieDetail?.overview}
-        originalLanguage={movieDetail?.original_language}
       />
-      <CrewBanner cast={movieDetail?.credits?.cast} movieUrl={movieUrl} />
+      <CrewBanner
+        castMovie={movieDetail?.credits?.cast}
+        mediaUrl={movieUrl}
+        type="movie"
+      />
       {movieDetail?.belongs_to_collection && (
         <CollectionCard
           belongsToCollection={movieDetail?.belongs_to_collection}
         />
       )}
-      {movieDetail?.similar?.results.length > 0 && (
-        <Similar
-          similars={movieDetail?.similar?.results}
-          totalPages={movieDetail?.similar?.total_pages}
-        />
-      )}
       {movieDetail?.recommendations?.results.length > 0 && (
         <Recommendations
-          recommendations={movieDetail?.recommendations.results}
+          recommendationsMovies={movieDetail?.recommendations.results}
           totalPages={movieDetail?.recommendations?.total_pages}
+        />
+      )}
+      {movieDetail?.similar?.results.length > 0 && (
+        <Similar
+          similarsMovies={movieDetail?.similar?.results}
+          totalPages={movieDetail?.similar?.total_pages}
         />
       )}
     </div>

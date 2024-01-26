@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
-import Header from "@/components/Header/Header";
-import { Providers } from "./providers";
-
 import { Poppins } from "next/font/google";
 
+import UserProvider from "@/components/UserProvider/UserProvider";
+import Toast from "@/components/Toast/Toast";
+import Header from "@/components/Header/Header";
+import { Providers } from "./providers";
 import "./globals.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import UserProvider from "@/components/UserProvider/UserProvider";
-import Toast from "@/components/Toast/Toast";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -18,9 +17,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Films - Séries TV Database",
+  title: "Accueil - Films & Séries TV DB",
   description:
-    "View all movies and TV shows and create your own lists to manage the ones you own or want to see.",
+    "Accédez aux informations de millions de films et séries TV, gratuitement et sans publicité. Créez votre compte, sauvegardez vos films et séries TV préférés, créez vos propres listes.",
 };
 
 export default function RootLayout({

@@ -26,6 +26,7 @@ import { BsCalendarDateFill } from "react-icons/bs";
 import { FaCheck } from "react-icons/fa";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import dayjs from "dayjs";
 import Image from "next/image";
 import fr from "date-fns/locale/fr";
 registerLocale("fr", fr);
@@ -33,7 +34,6 @@ registerLocale("fr", fr);
 import FiltersWrapper from "./FiltersWrapper";
 import { Watcher } from "@/models/watchers";
 import { MoviesFilters, TvShowsFilters } from "@/models/filters";
-import dayjs from "dayjs";
 import { extraLanguages, topLanguages } from "@/libs/helpers/languages";
 
 type Props = {

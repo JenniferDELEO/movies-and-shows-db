@@ -10,10 +10,17 @@ import {
   NavbarContent,
   NavbarItem,
 } from "@nextui-org/react";
-import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { FaChevronDown } from "react-icons/fa";
 
+import { getItems } from "@/components/Header/ItemsHeader";
+
 const MediaHeader = () => {
+  const pathname = usePathname();
+  const baseUrl = `/${pathname.split("/")[1]}/${pathname.split("/")[2]}`;
+  const type = pathname.split("/")[1];
+  const dropdownItems = getItems(baseUrl, type);
+
   return (
     <Navbar
       classNames={{
@@ -37,23 +44,19 @@ const MediaHeader = () => {
               </Button>
             </DropdownTrigger>
           </NavbarItem>
-          <DropdownMenu>
-            <DropdownItem>
-              <Link href={`/`}>Page Principale</Link>
-            </DropdownItem>
-            <DropdownItem>
-              <Link href={`/`}>Distribution des rôles et équipe technique</Link>
-            </DropdownItem>
-            <DropdownItem>
-              <Link href={`/`}>Dates de sortie</Link>
-            </DropdownItem>
-            <DropdownItem>
-              <Link href={`/`}>Similaires</Link>
-            </DropdownItem>
-            <DropdownItem>
-              <Link href={`/`}>Recommendations</Link>
-            </DropdownItem>
-          </DropdownMenu>
+          {dropdownItems && (
+            <DropdownMenu aria-label="Vue d'ensemble">
+              {dropdownItems.firstTab.map((item) => (
+                <DropdownItem
+                  key={item.key}
+                  href={item.link}
+                  textValue={item.name}
+                >
+                  {item.name}
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          )}
         </Dropdown>
         <Dropdown>
           <NavbarItem>
@@ -69,20 +72,19 @@ const MediaHeader = () => {
               </Button>
             </DropdownTrigger>
           </NavbarItem>
-          <DropdownMenu>
-            <DropdownItem>
-              <Link href={`/`}>Fonds d&apos;écrans</Link>
-            </DropdownItem>
-            <DropdownItem>
-              <Link href={`/`}>Logos</Link>
-            </DropdownItem>
-            <DropdownItem>
-              <Link href={`/`}>Affiches</Link>
-            </DropdownItem>
-            <DropdownItem>
-              <Link href={`/`}>Vidéos</Link>
-            </DropdownItem>
-          </DropdownMenu>
+          {dropdownItems && (
+            <DropdownMenu aria-label="Médias">
+              {dropdownItems.secondTab.map((item) => (
+                <DropdownItem
+                  key={item.key}
+                  href={item.link}
+                  textValue={item.name}
+                >
+                  {item.name}
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          )}
         </Dropdown>
       </NavbarContent>
     </Navbar>

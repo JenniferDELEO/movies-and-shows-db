@@ -1,8 +1,9 @@
 "use client";
 
-import { Collection } from "@/models/movies";
 import Link from "next/link";
 import { FC } from "react";
+
+import { Collection } from "@/models/movies";
 
 type Props = {
   belongsToCollection: Collection;

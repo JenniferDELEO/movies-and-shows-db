@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import { Button } from "@nextui-org/react";
 
 import Filters from "@/components/Filters/Filters";
 import Cards from "@/components/Cards/Cards";
 import { TvShow } from "@/models/tvShows";
-import OrderingSelect from "../Filters/OrderingSelect";
+import OrderingSelect from "@/components/Filters/OrderingSelect";
 import { Watcher } from "@/models/watchers";
-import { Button } from "@nextui-org/react";
-import FiltersModal from "../Modals/FiltersModal";
-import Pagination from "../Pagination/Pagination";
-import { usePathname } from "next/navigation";
+import FiltersModal from "@/components/Modals/FiltersModal";
+import Pagination from "@/components/Pagination/Pagination";
 import { getDiscoverTvShows } from "@/libs/api/tvshows";
 import { defaultTvShowsFilters } from "@/libs/helpers/filters";
 import { TvShowsFilters } from "@/models/filters";

@@ -1,27 +1,39 @@
 "use client";
 
-import { Cast, People } from "@/models/people";
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import { FC } from "react";
 import { useRouter } from "next/navigation";
 
+import { CastMovies, CastTvShows, People } from "@/models/people";
+
 type Props = {
   item?: People;
-  itemCastAndCrew?: Cast;
+  itemCastAndCrewMovie?: CastMovies;
+  itemCastAndCrewTvShow?: CastTvShows;
 };
 
-const PeopleCard: FC<Props> = ({ item, itemCastAndCrew }) => {
+const PeopleCard: FC<Props> = ({
+  item,
+  itemCastAndCrewMovie,
+  itemCastAndCrewTvShow,
+}) => {
   const router = useRouter();
-  const knownFor = item?.known_for
-    ?.map((item) => item?.title || item?.name)
-    .join(", ");
+  const knownFor = item?.known_for?.map((item) => item?.title).join(", ");
   const slug =
     item?.name.toLowerCase().replace(/[\W_]+/g, "-") ||
-    itemCastAndCrew?.name.toLowerCase().replace(/[\W_]+/g, "-");
-  const id = item?.id || itemCastAndCrew?.id;
-  const profilePath = item?.profile_path || itemCastAndCrew?.profile_path;
-  const name = item?.name || itemCastAndCrew?.name;
-  const character = itemCastAndCrew?.character;
+    itemCastAndCrewMovie?.name.toLowerCase().replace(/[\W_]+/g, "-") ||
+    itemCastAndCrewTvShow?.name.toLowerCase().replace(/[\W_]+/g, "-");
+  const id = item?.id || itemCastAndCrewMovie?.id || itemCastAndCrewTvShow?.id;
+  const profilePath =
+    item?.profile_path ||
+    itemCastAndCrewMovie?.profile_path ||
+    itemCastAndCrewTvShow?.profile_path;
+  const name =
+    item?.name || itemCastAndCrewMovie?.name || itemCastAndCrewTvShow?.name;
+  const character =
+    itemCastAndCrewMovie?.character ||
+    itemCastAndCrewTvShow?.roles?.[0]?.character;
+  const episodeCount = itemCastAndCrewTvShow?.roles?.[0].episode_count;
 
   return (
     <Card
@@ -39,16 +51,26 @@ const PeopleCard: FC<Props> = ({ item, itemCastAndCrew }) => {
           width={185}
           alt={name}
           className="rounded-xl object-cover"
-          style={{ maxHeight: itemCastAndCrew ? 168 : "auto" }}
+          style={{
+            maxHeight: itemCastAndCrewMovie
+              ? 168
+              : itemCastAndCrewTvShow
+                ? 145
+                : 278,
+          }}
         />
       </CardBody>
-      <CardFooter className="h-[120px] flex-col items-center justify-start px-4 pb-4">
+      <CardFooter
+        className="flex-col items-center justify-start px-4 pb-4"
+        style={{
+          height: itemCastAndCrewTvShow ? 140 : 120,
+        }}
+      >
         <h4 className="text-sm">{name}</h4>
-        {knownFor && (
-          <p className="text-xs text-gray-500 md:text-sm">{knownFor}</p>
-        )}
-        {character && (
-          <p className="text-xs text-gray-500 md:text-sm">{character}</p>
+        {knownFor && <p className="text-xs text-gray-500">{knownFor}</p>}
+        {character && <p className="text-xs text-gray-500">{character}</p>}
+        {episodeCount && (
+          <p className="text-xs text-gray-500">{episodeCount} épisodes</p>
         )}
       </CardFooter>
     </Card>

@@ -1,10 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import { People } from "@/models/people";
-import Pagination from "../Pagination/Pagination";
+
 import React, { FC, useEffect, useState } from "react";
-import PeopleCard from "./PeopleCard";
 import { usePathname } from "next/navigation";
+
+import { People } from "@/models/people";
+import Pagination from "@/components/Pagination/Pagination";
+import PeopleCard from "./PeopleCard";
 import { getPopularPeople } from "@/libs/api/people";
 
 type Props = {
