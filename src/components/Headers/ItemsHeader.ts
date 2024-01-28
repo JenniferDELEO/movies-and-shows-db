@@ -16,12 +16,12 @@ export const getItems = (baseUrl: string, type: string) => {
       key: "releaseDates",
     },
     {
-      link: `${baseUrl}/similars`,
+      link: `${baseUrl}/similars/1`,
       name: "Similaires",
       key: "similars",
     },
     {
-      link: `${baseUrl}/recommendations`,
+      link: `${baseUrl}/recommendations/1`,
       name: "Recommandations",
       key: "recommendations",
     },

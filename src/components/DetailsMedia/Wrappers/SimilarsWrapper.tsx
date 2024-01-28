@@ -38,8 +38,9 @@ const SimilarsWrapper: FC<Props> = (props) => {
   } = props;
   const params = useParams();
 
-  const [mediasList, setMediasList] = useState<Movie[] | TvShow[]>(
-    similarsMovies || similarsTvShows || [],
+  const [moviesList, setMoviesList] = useState<Movie[]>(similarsMovies || []);
+  const [tvShowsList, setTvShowsList] = useState<TvShow[]>(
+    similarsTvShows || [],
   );
   const [totalPages, setTotalPages] = useState<number>(
     totalPagesSimilarsMovies || totalPagesSimilarsTvShows || 0,
@@ -57,7 +58,7 @@ const SimilarsWrapper: FC<Props> = (props) => {
         mediaId,
         currentPage,
       );
-      setMediasList(results);
+      setMoviesList(results);
       setTotalPages(total_pages);
       setTotalResults(total_results);
     }
@@ -66,7 +67,7 @@ const SimilarsWrapper: FC<Props> = (props) => {
         mediaId,
         currentPage,
       );
-      setMediasList(results);
+      setTvShowsList(results);
       setTotalPages(total_pages);
       setTotalResults(total_results);
     }
@@ -92,19 +93,19 @@ const SimilarsWrapper: FC<Props> = (props) => {
       </h1>
       <div className="mx-auto md:w-[90%] 2xl:grid 2xl:grid-cols-2 2xl:gap-4">
         {similarsMovies &&
-          mediasList.map((movie) => (
+          moviesList.map((movie) => (
             <Card
               key={movie.id}
-              item={movie}
+              movie={movie}
               filterType="movie"
               genres={genres}
             />
           ))}
         {similarsTvShows &&
-          mediasList.map((tvshow) => (
+          tvShowsList.map((tvShow) => (
             <Card
-              key={tvshow.id}
-              item={tvshow}
+              key={tvShow.id}
+              tvShow={tvShow}
               filterType="tvshow"
               genres={genres}
             />

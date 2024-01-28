@@ -161,7 +161,7 @@ const TvShowsWrapper: FC<Props> = (props) => {
           {tvShowsList.length > 0 ? (
             <>
               <Cards
-                items={tvShowsList}
+                tvShows={tvShowsList}
                 filterType="tvshow"
                 genres={genresTvShows}
               />
@@ -199,7 +199,7 @@ const TvShowsWrapper: FC<Props> = (props) => {
         />
         <div className="w-full">
           <Cards
-            items={tvShowsList}
+            tvShows={tvShowsList}
             filterType="tvshow"
             genres={genresTvShows}
           />

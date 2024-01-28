@@ -53,12 +53,14 @@ const TvShowWrapper: FC<Props> = (props) => {
         <RecommendationsBanner
           recommendationsTvShows={tvShowDetail.recommendations.results}
           totalPages={tvShowDetail.recommendations.total_pages}
+          totalResults={tvShowDetail.recommendations.total_results}
         />
       )}
       {tvShowDetail?.similar?.results.length > 0 && (
         <SimilarsBanner
           similarsTvShows={tvShowDetail.similar.results}
           totalPages={tvShowDetail.similar.total_pages}
+          totalResults={tvShowDetail.similar.total_results}
         />
       )}
     </div>

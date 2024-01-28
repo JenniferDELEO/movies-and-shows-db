@@ -5,13 +5,19 @@ import BannerWrapper from "@/components/Banner/BannerWrapper";
 import { TvShow } from "@/models/tvShows";
 
 type Props = {
+  totalPages: number;
+  totalResults: number;
   recommendationsMovies?: Movie[];
   recommendationsTvShows?: TvShow[];
-  totalPages: number;
 };
 
 const RecommendationsBanner: FC<Props> = (props) => {
-  const { recommendationsMovies, recommendationsTvShows, totalPages } = props;
+  const {
+    totalPages,
+    totalResults,
+    recommendationsMovies,
+    recommendationsTvShows,
+  } = props;
 
   return (
     <div>
@@ -22,6 +28,7 @@ const RecommendationsBanner: FC<Props> = (props) => {
               movies: recommendationsMovies,
               title: "Films recommandés",
               totalPages,
+              totalResults,
             }}
           />
           <div className="mx-auto mb-0 mt-16 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
@@ -33,6 +40,7 @@ const RecommendationsBanner: FC<Props> = (props) => {
               tvshows: recommendationsTvShows,
               title: "Séries TV recommandées",
               totalPages,
+              totalResults,
             }}
           />
           <div className="mx-auto mb-0 mt-16 h-[2px] w-full bg-gray-400 lg:w-[90%]" />

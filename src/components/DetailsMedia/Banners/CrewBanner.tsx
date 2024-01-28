@@ -52,7 +52,7 @@ const CrewBanner: FC<Props> = (props) => {
       <div className="mx-auto py-4 text-lg md:w-[90%]">
         <Link
           href={`/${type}/${mediaUrl}/cast`}
-          className="hover:text-gray-400"
+          className="text-sm hover:text-gray-400 md:text-base"
         >
           Distribution des rôles et équipe technique au complet
         </Link>

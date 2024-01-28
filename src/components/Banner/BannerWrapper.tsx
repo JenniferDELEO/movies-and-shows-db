@@ -2,6 +2,8 @@
 "use client";
 
 import React, { FC, useContext, useEffect, useState } from "react";
+import { BsThreeDots } from "react-icons/bs";
+import { usePathname, useRouter } from "next/navigation";
 
 import Banner from "@/components/Banner/Banner";
 import { Movie } from "@/models/movies";
@@ -19,7 +21,7 @@ import {
 } from "@/libs/api/tvshows";
 import { List } from "@/models/lists";
 import { getLists } from "@/libs/api/lists";
-import { usePathname, useRouter } from "next/navigation";
+import { Tooltip } from "@nextui-org/react";
 
 type Props = {
   homeProps?: {
@@ -42,11 +44,13 @@ type Props = {
     movies: Movie[];
     title: "Films similaires" | "Films recommandés";
     totalPages: number;
+    totalResults: number;
   };
   tvshowsDetailsProps?: {
     tvshows: TvShow[];
     title: "Séries TV similaires" | "Séries TV recommandées";
     totalPages: number;
+    totalResults: number;
   };
 };
 
@@ -229,17 +233,19 @@ const BannerWrapper: FC<Props> = ({
         {movieDetailsProps?.movies?.length > 0 && (
           <div className="relative mt-4 size-full">
             {movieDetailsProps.totalPages > 1 && (
-              <div className="absolute right-0 top-0">
-                <button
-                  className="rounded-lg bg-primary p-3 text-base font-normal"
-                  onClick={() =>
-                    router.push(
-                      `${pathname}/${movieDetailsProps.title === "Films similaires" ? "similars" : "recommendations"}/1`,
-                    )
-                  }
-                >
-                  Plus de {movieDetailsProps.title}
-                </button>
+              <div className="absolute right-3 top-0">
+                <Tooltip content="Voir plus" placement="top" color="primary">
+                  <button
+                    className="rounded-full bg-white p-2 text-base font-normal text-primary"
+                    onClick={() =>
+                      router.push(
+                        `${pathname}/${movieDetailsProps.title === "Films similaires" ? "similars" : "recommendations"}/1`,
+                      )
+                    }
+                  >
+                    <BsThreeDots />
+                  </button>
+                </Tooltip>
               </div>
             )}
             <Banner
@@ -256,7 +262,7 @@ const BannerWrapper: FC<Props> = ({
               ratedMoviesIds={ratedMoviesIds}
               ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNamesMovieDetails}
-              title={`${movieDetailsProps.title} (${movieDetailsProps.movies.length})`}
+              title={`${movieDetailsProps.title} (${movieDetailsProps.totalResults})`}
               userLists={userLists}
             />
           </div>
@@ -361,17 +367,19 @@ const BannerWrapper: FC<Props> = ({
         {tvshowsDetailsProps?.tvshows?.length > 0 && (
           <div className="relative mt-4 size-full">
             {tvshowsDetailsProps.totalPages > 1 && (
-              <div className="absolute right-0 top-0">
-                <button
-                  className="rounded-lg bg-primary p-3 text-base font-normal"
-                  onClick={() =>
-                    router.push(
-                      `${pathname}/${tvshowsDetailsProps.title === "Séries TV similaires" ? "similars" : "recommendations"}/1`,
-                    )
-                  }
-                >
-                  Plus de {tvshowsDetailsProps.title}
-                </button>
+              <div className="absolute right-3 top-0">
+                <Tooltip content="Voir plus" placement="top" color="primary">
+                  <button
+                    className="rounded-full bg-white p-2 text-base font-normal text-primary"
+                    onClick={() =>
+                      router.push(
+                        `${pathname}/${tvshowsDetailsProps.title === "Séries TV similaires" ? "similars" : "recommendations"}/1`,
+                      )
+                    }
+                  >
+                    <BsThreeDots />
+                  </button>
+                </Tooltip>
               </div>
             )}
 
@@ -389,7 +397,7 @@ const BannerWrapper: FC<Props> = ({
               ratedMoviesIds={ratedMoviesIds}
               ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNamesMovieDetails}
-              title={`${tvshowsDetailsProps.title} (${tvshowsDetailsProps.tvshows.length})`}
+              title={`${tvshowsDetailsProps.title} (${tvshowsDetailsProps.totalResults})`}
               userLists={userLists}
             />
           </div>

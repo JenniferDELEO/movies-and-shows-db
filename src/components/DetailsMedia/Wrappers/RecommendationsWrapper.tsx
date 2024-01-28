@@ -38,8 +38,11 @@ const RecommendationsWrapper: FC<Props> = (props) => {
   } = props;
   const params = useParams();
 
-  const [mediasList, setMediasList] = useState<Movie[] | TvShow[]>(
-    recommendationsMovies || recommendationsTvShows || [],
+  const [moviesList, setMoviesList] = useState<Movie[]>(
+    recommendationsMovies || [],
+  );
+  const [tvShowsList, setTvShowsList] = useState<TvShow[]>(
+    recommendationsTvShows || [],
   );
   const [totalPages, setTotalPages] = useState<number>(
     totalPagesRecommendationsMovies || totalPagesRecommendationsTvShows || 0,
@@ -57,14 +60,14 @@ const RecommendationsWrapper: FC<Props> = (props) => {
     if (recommendationsMovies) {
       const { results, total_pages, total_results } =
         await getRecommendationsMovies(mediaId, currentPage);
-      setMediasList(results);
+      setMoviesList(results);
       setTotalPages(total_pages);
       setTotalResults(total_results);
     }
     if (recommendationsTvShows) {
       const { results, total_pages, total_results } =
         await getRecommendationsTvShows(mediaId, currentPage);
-      setMediasList(results);
+      setTvShowsList(results);
       setTotalPages(total_pages);
       setTotalResults(total_results);
     }
@@ -90,19 +93,19 @@ const RecommendationsWrapper: FC<Props> = (props) => {
       </h1>
       <div className="mx-auto md:w-[90%] 2xl:grid 2xl:grid-cols-2 2xl:gap-4">
         {recommendationsMovies &&
-          mediasList.map((movie) => (
+          moviesList.map((movie) => (
             <Card
               key={movie.id}
-              item={movie}
+              movie={movie}
               filterType="movie"
               genres={genres}
             />
           ))}
         {recommendationsTvShows &&
-          mediasList.map((tvshow) => (
+          tvShowsList.map((tvShow) => (
             <Card
-              key={tvshow.id}
-              item={tvshow}
+              key={tvShow.id}
+              tvShow={tvShow}
               filterType="tvshow"
               genres={genres}
             />
