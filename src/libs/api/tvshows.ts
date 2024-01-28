@@ -9,6 +9,7 @@ import { Watcher } from "@/models/watchers";
 import axios from "axios";
 import { TvShowsFilters } from "@/models/filters";
 import { defaultTvShowsFilters } from "../helpers/filters";
+import { CastTvShows, CrewTvShows } from "@/models/people";
 
 /* --------------------GLOBAL-------------------- */
 
@@ -123,6 +124,24 @@ export async function getTvShowDetail(id: string): Promise<TvShowDetails> {
       images: images.data,
       watch_providers_fr: watchProvidersFr || {},
     };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getCreditssTvShows(
+  id: string,
+): Promise<{ id: number; cast: CastTvShows[]; crew: CrewTvShows[] }> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/${id}/aggregate_credits`,
+      params: {
+        language: "fr-FR",
+      },
+    });
+    return result.data;
   } catch (error) {
     console.log(error);
     throw error;

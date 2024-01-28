@@ -5,6 +5,7 @@ import { optionsGET } from "./auth";
 import { Watcher } from "@/models/watchers";
 import { MoviesFilters } from "@/models/filters";
 import { defaultMoviesFilters } from "../helpers/filters";
+import { CastMovies, CrewMovies } from "@/models/people";
 
 /* --------------------GLOBAL-------------------- */
 
@@ -117,6 +118,24 @@ export async function getMovieDetail(id: string): Promise<MovieDetails> {
       images: images.data,
       watch_providers_fr: watchProvidersFr || {},
     };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getCreditssMovies(
+  id: string,
+): Promise<{ id: number; cast: CastMovies[]; crew: CrewMovies[] }> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/${id}/credits`,
+      params: {
+        language: "fr-FR",
+      },
+    });
+    return result.data;
   } catch (error) {
     console.log(error);
     throw error;
