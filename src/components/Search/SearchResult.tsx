@@ -62,10 +62,10 @@ const SearchResult = async (props: Props) => {
           </h3>
           {filterType === "movie" ? (
             <div className="2xl:grid 2xl:grid-cols-2 2xl:gap-4">
-              {searchResultsMovies.map((item: Movie) => (
+              {searchResultsMovies.map((movie: Movie) => (
                 <Card
-                  key={item.id}
-                  item={item}
+                  key={movie.id}
+                  movie={movie}
                   filterType={filterType}
                   genres={genresMovies}
                 />
@@ -73,10 +73,10 @@ const SearchResult = async (props: Props) => {
             </div>
           ) : filterType === "tv" ? (
             <div className="2xl:grid 2xl:grid-cols-2 2xl:gap-4">
-              {searchResultsTvShows.map((item: TvShow) => (
+              {searchResultsTvShows.map((tvShow: TvShow) => (
                 <Card
-                  key={item.id}
-                  item={item}
+                  key={tvShow.id}
+                  tvShow={tvShow}
                   filterType={filterType}
                   genres={genresTvShows}
                 />

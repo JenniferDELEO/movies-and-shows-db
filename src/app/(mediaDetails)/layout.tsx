@@ -1,4 +1,4 @@
-import MediaHeader from "@/components/Header/MediaHeader";
+import MediaHeader from "@/components/Headers/MediaHeader";
 
 export default function MediaDetailsLayout({
   children,

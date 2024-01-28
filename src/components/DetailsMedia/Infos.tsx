@@ -151,58 +151,62 @@ const Infos: FC<Props> = (props) => {
       <div className="fixed bottom-0 left-0 z-20 w-full bg-primary md:hidden">
         {watchProvidersFr && watchProvidersFr.length > 0 && (
           <div className="w-full py-3">
-            <div className="flex flex-row flex-wrap items-center justify-center bg-primary/90">
+            <div className="flex flex-col items-center justify-center bg-primary/90">
               <p className="mr-3 text-sm">
                 Justwatch - Disponible en streaming sur :
               </p>
-              {watchProvidersFr.map((watchProvider) => (
-                <div
-                  key={watchProvider.provider_id}
-                  className="flex size-10 flex-row items-center justify-center"
-                >
-                  <Image
-                    alt={`logo-${watchProvider.provider_name}`}
-                    src={
-                      watchProvider.logo_path
-                        ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${watchProvider.logo_path}`
-                        : "/images/defaultImage.png"
-                    }
-                    width={0}
-                    height={0}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      display: "block",
-                      minWidth: "100%",
-                      minHeight: "100%",
-                      borderWidth: 0,
-                      outline: 0,
-                      borderRadius: 5,
-                    }}
-                    sizes="100vw"
-                  />
-                </div>
-              ))}
+              <div className="flex flex-row flex-wrap">
+                {watchProvidersFr.map((watchProvider) => (
+                  <div
+                    key={watchProvider.provider_id}
+                    className="my-2 mr-2 size-10"
+                  >
+                    <Image
+                      alt={`logo-${watchProvider.provider_name}`}
+                      src={
+                        watchProvider.logo_path
+                          ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${watchProvider.logo_path}`
+                          : "/images/defaultImage.png"
+                      }
+                      width={0}
+                      height={0}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        display: "block",
+                        minWidth: "100%",
+                        minHeight: "100%",
+                        borderWidth: 0,
+                        outline: 0,
+                        borderRadius: 5,
+                      }}
+                      sizes="100vw"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}
-        {isFavorite && isInWatchlist && (
-          <div className="flex flex-row items-center justify-evenly">
-            <AccountInteraction
-              item={{ id: id, name: title, title: title }}
-              type={type}
-              user={user}
-              fetchUserDatas={fetchUserAccountStates}
-              mediaDetailsPageProps={{
-                isFavorite,
-                isInWatchlist,
-                isRated,
-                userRatingApi,
-              }}
-              userLists={userLists}
-            />
-          </div>
-        )}
+        {isFavorite !== undefined &&
+          isInWatchlist !== undefined &&
+          isRated !== undefined && (
+            <div className="flex flex-row items-center justify-evenly">
+              <AccountInteraction
+                item={{ id: id, name: title, title: title }}
+                type={type}
+                user={user}
+                fetchUserDatas={fetchUserAccountStates}
+                mediaDetailsPageProps={{
+                  isFavorite,
+                  isInWatchlist,
+                  isRated,
+                  userRatingApi,
+                }}
+                userLists={userLists}
+              />
+            </div>
+          )}
       </div>
       {openTrailer && trailer && (
         <YoutubeEmbed embedId={trailer.key} setOpenTrailer={setOpenTrailer} />
@@ -335,23 +339,25 @@ const Infos: FC<Props> = (props) => {
         </div>
         <div className="flex flex-row items-center justify-evenly md:mx-10">
           <>
-            {isFavorite && isInWatchlist && (
-              <div className="hidden md:block">
-                <AccountInteraction
-                  item={{ id: id, name: title, title: title }}
-                  type={type}
-                  user={user}
-                  fetchUserDatas={fetchUserAccountStates}
-                  mediaDetailsPageProps={{
-                    isFavorite,
-                    isInWatchlist,
-                    isRated,
-                    userRatingApi,
-                  }}
-                  userLists={userLists}
-                />
-              </div>
-            )}
+            {isFavorite !== undefined &&
+              isInWatchlist !== undefined &&
+              isRated !== undefined && (
+                <div className="hidden md:block">
+                  <AccountInteraction
+                    item={{ id: id, name: title, title: title }}
+                    type={type}
+                    user={user}
+                    fetchUserDatas={fetchUserAccountStates}
+                    mediaDetailsPageProps={{
+                      isFavorite,
+                      isInWatchlist,
+                      isRated,
+                      userRatingApi,
+                    }}
+                    userLists={userLists}
+                  />
+                </div>
+              )}
             {trailer && (
               <Button variant="light" onClick={() => setOpenTrailer(true)}>
                 <FaPlay size={12} className="text-white" />

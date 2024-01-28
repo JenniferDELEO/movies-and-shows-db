@@ -13,7 +13,7 @@ import {
 import { usePathname } from "next/navigation";
 import { FaChevronDown } from "react-icons/fa";
 
-import { getItems } from "@/components/Header/ItemsHeader";
+import { getItems } from "@/components/Headers/ItemsHeader";
 
 const MediaHeader = () => {
   const pathname = usePathname();
@@ -24,7 +24,7 @@ const MediaHeader = () => {
   return (
     <Navbar
       classNames={{
-        base: "fixed top-[64px] bg-white/90 justify-center",
+        base: "fixed top-[64px] bg-white/90 justify-center z-30",
         wrapper: "lg:max-w-[80%] mx-auto justify-center",
         item: ["sm:text-xl mr-2"],
       }}

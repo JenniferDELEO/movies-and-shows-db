@@ -177,9 +177,10 @@ const Header = () => {
         </>
       )}
 
-      <NavbarMenu>
+      <NavbarMenu className="px-[15%]">
         <NavbarMenuItem
           isActive={pathname.includes("/movies") || pathname.includes("/movie")}
+          className="border-b-2 py-4"
         >
           <Link
             href="/movies/1"
@@ -194,6 +195,7 @@ const Header = () => {
           isActive={
             pathname.includes("/tvshows") || pathname.includes("/tvshow")
           }
+          className="border-b-2 py-4"
         >
           <Link
             href="/tvshows/1"
@@ -208,6 +210,7 @@ const Header = () => {
           isActive={
             pathname.includes("/people") || pathname.includes("/person")
           }
+          className="border-b-2 py-4"
         >
           <Link
             href="/people/1"
@@ -219,13 +222,16 @@ const Header = () => {
           </Link>
         </NavbarMenuItem>
         {!username && !accountIdV3 && !sessionId ? (
-          <NavbarMenuItem className="cursor-pointer transition-all duration-500 hover:-translate-y-2">
+          <NavbarMenuItem className="border-b-2 py-4">
             <div onClick={() => router.replace("profil/redirection-to-tmdb")}>
               Connexion/Inscription
             </div>
           </NavbarMenuItem>
         ) : (
-          <NavbarMenuItem isActive={pathname.includes("/profil")}>
+          <NavbarMenuItem
+            isActive={pathname.includes("/profil")}
+            className="border-b-2 py-4"
+          >
             <Link
               href="/profil"
               className="flex flex-row items-center"

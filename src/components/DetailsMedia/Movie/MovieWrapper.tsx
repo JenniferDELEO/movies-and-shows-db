@@ -50,12 +50,14 @@ const MovieWrapper: FC<Props> = (props) => {
         <RecommendationsBanner
           recommendationsMovies={movieDetail?.recommendations.results}
           totalPages={movieDetail?.recommendations?.total_pages}
+          totalResults={movieDetail?.recommendations?.total_results}
         />
       )}
       {movieDetail?.similar?.results.length > 0 && (
         <SimilarsBanner
           similarsMovies={movieDetail?.similar?.results}
           totalPages={movieDetail?.similar?.total_pages}
+          totalResults={movieDetail?.similar?.total_results}
         />
       )}
     </div>

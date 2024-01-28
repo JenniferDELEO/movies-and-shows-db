@@ -160,7 +160,7 @@ const MoviesWrapper: FC<Props> = (props) => {
           {moviesList.length > 0 ? (
             <>
               <Cards
-                items={moviesList}
+                movies={moviesList}
                 filterType="movie"
                 genres={genresMovies}
               />
@@ -197,7 +197,7 @@ const MoviesWrapper: FC<Props> = (props) => {
           setIsResetting={setIsResetting}
         />
         <div className="w-full">
-          <Cards items={moviesList} filterType="movie" genres={genresMovies} />
+          <Cards movies={moviesList} filterType="movie" genres={genresMovies} />
           <Pagination
             total={totalPages}
             currentPage={currentPage}

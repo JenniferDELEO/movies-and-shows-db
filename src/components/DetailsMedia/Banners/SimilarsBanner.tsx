@@ -6,12 +6,13 @@ import { TvShow } from "@/models/tvShows";
 
 type Props = {
   totalPages: number;
+  totalResults: number;
   similarsMovies?: Movie[];
   similarsTvShows?: TvShow[];
 };
 
 const SimilarsBanner: FC<Props> = (props) => {
-  const { similarsMovies, similarsTvShows, totalPages } = props;
+  const { totalPages, totalResults, similarsMovies, similarsTvShows } = props;
   return (
     <div>
       {similarsMovies ? (
@@ -21,6 +22,7 @@ const SimilarsBanner: FC<Props> = (props) => {
               movies: similarsMovies,
               title: "Films similaires",
               totalPages,
+              totalResults,
             }}
           />
           <div className="mx-auto mb-0 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
@@ -32,6 +34,7 @@ const SimilarsBanner: FC<Props> = (props) => {
               tvshows: similarsTvShows,
               title: "Séries TV similaires",
               totalPages,
+              totalResults,
             }}
           />
           <div className="mx-auto mb-0 h-[2px] w-full bg-gray-400 lg:w-[90%]" />

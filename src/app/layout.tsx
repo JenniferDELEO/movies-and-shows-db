@@ -3,7 +3,7 @@ import { Poppins } from "next/font/google";
 
 import UserProvider from "@/components/UserProvider/UserProvider";
 import Toast from "@/components/Toast/Toast";
-import Header from "@/components/Header/Header";
+import Header from "@/components/Headers/Header";
 import { Providers } from "./providers";
 import "./globals.css";
 import "slick-carousel/slick/slick.css";
