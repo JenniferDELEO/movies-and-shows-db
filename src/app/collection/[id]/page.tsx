@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
 import { getCollection } from "@/libs/api/collections";
-import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
+import CollectionWrapper from "@/components/DetailsMedia/Collection/CollectionWrapper";
+import { getGenresMovies } from "@/libs/api/movies";
 
 type Props = {
   params: { id: string };
@@ -21,10 +22,14 @@ const Collection = async ({ params }: Props) => {
   const id = Number(params.id.split("-")[0]);
 
   const collection = await getCollection(id);
+  const genres = await getGenresMovies();
 
   return (
     <div>
-      <WorkInProgress />
+      <CollectionWrapper
+        collectionDetail={collection}
+        genresMovies={genres.genres}
+      />
     </div>
   );
 };

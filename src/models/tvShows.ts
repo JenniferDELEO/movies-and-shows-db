@@ -1,49 +1,46 @@
-import { Image, Video } from "./movies";
-import { CastMovies, CastTvShows, CreditsTvShows, CrewTvShows } from "./people";
+import {
+  AccountRating,
+  AccountStates,
+  Genre,
+  Image,
+  ProductionCompany,
+  ProductionCountry,
+  SpokenLanguage,
+  Video,
+  WatchProviderFr,
+} from "./movies";
+import { CastMovies, CreditsTvShows, CrewTvShows } from "./people";
 
-export type AccountRating = {
-  created_at: string;
-  value: number;
+export type ApiResultTvShows = {
+  page: number;
+  results: TvShow[];
+  total_pages: number;
+  total_results: number;
 };
 
-export type TvShow = {
-  backdrop_path: string;
-  first_air_date: string;
-  genre_ids: number[];
+export type CreatedBy = {
+  id: number;
+  credit_id: string;
+  name: string;
+  gender: number;
+  profile_path: string;
+};
+
+export type Episode = {
+  air_date: string;
+  crew: CrewTvShows[];
+  episode_number: number;
+  guest_stars: CastMovies[];
   id: number;
   name: string;
-  origin_country: string[];
-  original_language: string;
-  original_name: string;
   overview: string;
-  popularity: number;
-  poster_path: string;
+  production_code: string;
+  runtime: number;
+  season_number: number;
+  show_id: number;
+  still_path: string;
   vote_average: number;
   vote_count: number;
-  account_rating: AccountRating;
-};
-
-export type Genre = {
-  id: number;
-  name: string;
-};
-
-export type ProductionCompany = {
-  id: number;
-  logo_path: string;
-  name: string;
-  origin_country: string;
-};
-
-export type ProductionCountry = {
-  iso_3166_1: string;
-  name: string;
-};
-
-export type SpokenLanguage = {
-  english_name: string;
-  iso_639_1: string;
-  name: string;
 };
 
 export type LastEpisodeToAir = {
@@ -79,21 +76,34 @@ export type Season = {
   vote_average: number;
 };
 
-export type AccountStates = {
+export type SeasonDetails = {
+  _id: string;
+  account_states: AccountStates;
+  air_date: string;
+  episodes: Episode[];
+  name: string;
+  overview: string;
   id: number;
-  favorite: boolean;
-  rated: {
-    value: number;
-  };
-  watchlist: boolean;
+  poster_path: string;
+  season_number: number;
+  vote_average: number;
 };
 
-export type CreatedBy = {
+export type TvShow = {
+  backdrop_path: string;
+  first_air_date: string;
+  genre_ids: number[];
   id: number;
-  credit_id: string;
   name: string;
-  gender: number;
-  profile_path: string;
+  origin_country: string[];
+  original_language: string;
+  original_name: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  vote_average: number;
+  vote_count: number;
+  account_rating: AccountRating;
 };
 
 export interface TvShowDetails extends TvShow {
@@ -140,41 +150,5 @@ export interface TvShowDetails extends TvShow {
     id: number;
     results: Video[];
   };
+  watch_providers_fr: WatchProviderFr[];
 }
-
-export type Episode = {
-  air_date: string;
-  crew: CrewTvShows[];
-  episode_number: number;
-  guest_stars: CastMovies[];
-  id: number;
-  name: string;
-  overview: string;
-  production_code: string;
-  runtime: number;
-  season_number: number;
-  show_id: number;
-  still_path: string;
-  vote_average: number;
-  vote_count: number;
-};
-
-export type SeasonDetails = {
-  _id: string;
-  account_states: AccountStates;
-  air_date: string;
-  episodes: Episode[];
-  name: string;
-  overview: string;
-  id: number;
-  poster_path: string;
-  season_number: number;
-  vote_average: number;
-};
-
-export type ApiResultTvShows = {
-  page: number;
-  results: TvShow[];
-  total_pages: number;
-  total_results: number;
-};

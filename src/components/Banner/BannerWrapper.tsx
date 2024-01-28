@@ -2,8 +2,6 @@
 "use client";
 
 import React, { FC, useContext, useEffect, useState } from "react";
-import { Tooltip } from "@nextui-org/react";
-import { FaPlus } from "react-icons/fa";
 
 import Banner from "@/components/Banner/Banner";
 import { Movie } from "@/models/movies";
@@ -21,6 +19,7 @@ import {
 } from "@/libs/api/tvshows";
 import { List } from "@/models/lists";
 import { getLists } from "@/libs/api/lists";
+import { usePathname, useRouter } from "next/navigation";
 
 type Props = {
   homeProps?: {
@@ -35,15 +34,18 @@ type Props = {
     actingTvShows: TvShow[];
     runningTvShows: TvShow[];
   };
+  movieCollectionProps?: {
+    movies: Movie[];
+    title: string;
+  };
   movieDetailsProps?: {
     movies: Movie[];
-    title: "Films similaires" | "Recommendations";
+    title: "Films similaires" | "Films recommandés";
     totalPages: number;
   };
-
   tvshowsDetailsProps?: {
     tvshows: TvShow[];
-    title: "Séries TV similaires" | "Recommendations";
+    title: "Séries TV similaires" | "Séries TV recommandées";
     totalPages: number;
   };
 };
@@ -51,6 +53,7 @@ type Props = {
 const BannerWrapper: FC<Props> = ({
   homeProps,
   personDetailProps,
+  movieCollectionProps,
   movieDetailsProps,
   tvshowsDetailsProps,
 }) => {
@@ -68,6 +71,8 @@ const BannerWrapper: FC<Props> = ({
   const [userLists, setUserLists] = useState<List[]>([]);
 
   const { user } = useContext(UserContext);
+  const pathname = usePathname();
+  const router = useRouter();
 
   async function fetchUserDatas() {
     if (user && user.accountIdV4) {
@@ -195,6 +200,70 @@ const BannerWrapper: FC<Props> = ({
       </div>
     );
   }
+  if (movieCollectionProps) {
+    return (
+      <Banner
+        items={movieCollectionProps.movies.sort((a, b) =>
+          a.release_date.localeCompare(b.release_date),
+        )}
+        type="movie"
+        user={user}
+        fetchUserDatas={fetchUserDatas}
+        favoriteMoviesIds={favoriteMoviesIds}
+        watchlistMoviesIds={watchlistMoviesIds}
+        favoriteTvShowsIds={favoriteTvShowsIds}
+        watchlistTvShowsIds={watchlistTvShowsIds}
+        ratedMovies={ratedMovies}
+        ratedTvShows={ratedTvShows}
+        ratedMoviesIds={ratedMoviesIds}
+        ratedTvShowsIds={ratedTvShowsIds}
+        classNames={classNamesMovieDetails}
+        title={movieCollectionProps.title}
+        userLists={userLists}
+      />
+    );
+  }
+  if (movieDetailsProps) {
+    return (
+      <div className="mx-auto py-4 text-xl font-bold md:w-[90%]">
+        {movieDetailsProps?.movies?.length > 0 && (
+          <div className="relative mt-4 size-full">
+            {movieDetailsProps.totalPages > 1 && (
+              <div className="absolute right-0 top-0">
+                <button
+                  className="rounded-lg bg-primary p-3 text-base font-normal"
+                  onClick={() =>
+                    router.push(
+                      `${pathname}/${movieDetailsProps.title === "Films similaires" ? "similars" : "recommendations"}/1`,
+                    )
+                  }
+                >
+                  Plus de {movieDetailsProps.title}
+                </button>
+              </div>
+            )}
+            <Banner
+              items={movieDetailsProps.movies}
+              type="movie"
+              user={user}
+              fetchUserDatas={fetchUserDatas}
+              favoriteMoviesIds={favoriteMoviesIds}
+              watchlistMoviesIds={watchlistMoviesIds}
+              favoriteTvShowsIds={favoriteTvShowsIds}
+              watchlistTvShowsIds={watchlistTvShowsIds}
+              ratedMovies={ratedMovies}
+              ratedTvShows={ratedTvShows}
+              ratedMoviesIds={ratedMoviesIds}
+              ratedTvShowsIds={ratedTvShowsIds}
+              classNames={classNamesMovieDetails}
+              title={`${movieDetailsProps.title} (${movieDetailsProps.movies.length})`}
+              userLists={userLists}
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
   if (personDetailProps) {
     return (
       <div>
@@ -285,46 +354,7 @@ const BannerWrapper: FC<Props> = ({
       </div>
     );
   }
-  if (movieDetailsProps) {
-    return (
-      <div className="mx-auto py-4 text-xl font-bold md:w-[90%]">
-        {movieDetailsProps?.movies?.length > 0 && (
-          <div className="relative mt-4 size-full">
-            {movieDetailsProps.totalPages > 1 && (
-              <div className="absolute right-0 top-0">
-                <Tooltip
-                  content={`Plus de ${movieDetailsProps.title}`}
-                  placement="bottom"
-                >
-                  <button className="rounded-full bg-primary p-3">
-                    <FaPlus size={16} />
-                  </button>
-                </Tooltip>
-              </div>
-            )}
 
-            <Banner
-              items={movieDetailsProps.movies}
-              type="movie"
-              user={user}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
-              classNames={classNamesMovieDetails}
-              title={`${movieDetailsProps.title} (${movieDetailsProps.movies.length})`}
-              userLists={userLists}
-            />
-          </div>
-        )}
-      </div>
-    );
-  }
   if (tvshowsDetailsProps) {
     return (
       <div className="mx-auto py-4 text-xl font-bold md:w-[90%]">
@@ -332,14 +362,16 @@ const BannerWrapper: FC<Props> = ({
           <div className="relative mt-4 size-full">
             {tvshowsDetailsProps.totalPages > 1 && (
               <div className="absolute right-0 top-0">
-                <Tooltip
-                  content={`Plus de ${tvshowsDetailsProps.title}`}
-                  placement="bottom"
+                <button
+                  className="rounded-lg bg-primary p-3 text-base font-normal"
+                  onClick={() =>
+                    router.push(
+                      `${pathname}/${tvshowsDetailsProps.title === "Séries TV similaires" ? "similars" : "recommendations"}/1`,
+                    )
+                  }
                 >
-                  <button className="rounded-full bg-primary p-3">
-                    <FaPlus size={16} />
-                  </button>
-                </Tooltip>
+                  Plus de {tvshowsDetailsProps.title}
+                </button>
               </div>
             )}
 

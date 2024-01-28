@@ -1,9 +1,9 @@
 import { FC } from "react";
 
 import TopContent from "@/components/DetailsMedia/TopContent";
-import CrewBanner from "@/components/DetailsMedia/CrewBanner";
-import Similar from "@/components/DetailsMedia/Similars";
-import Recommendations from "@/components/DetailsMedia/Recommendations";
+import CrewBanner from "@/components/DetailsMedia/Banners/CrewBanner";
+import SimilarsBanner from "@/components/DetailsMedia/Banners/SimilarsBanner";
+import RecommendationsBanner from "@/components/DetailsMedia/Banners/RecommendationsBanner";
 import { TvShowDetails } from "@/models/tvShows";
 import SeasonsAndEpisodesWrapper from "@/components/DetailsMedia/TvShow/SeasonsAndEpisodesWrapper";
 
@@ -50,13 +50,13 @@ const TvShowWrapper: FC<Props> = (props) => {
         />
       )}
       {tvShowDetail?.recommendations?.results.length > 0 && (
-        <Recommendations
+        <RecommendationsBanner
           recommendationsTvShows={tvShowDetail.recommendations.results}
           totalPages={tvShowDetail.recommendations.total_pages}
         />
       )}
       {tvShowDetail?.similar?.results.length > 0 && (
-        <Similar
+        <SimilarsBanner
           similarsTvShows={tvShowDetail.similar.results}
           totalPages={tvShowDetail.similar.total_pages}
         />

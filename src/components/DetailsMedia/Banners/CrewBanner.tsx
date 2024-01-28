@@ -26,7 +26,7 @@ const CrewBanner: FC<Props> = (props) => {
           castMovie.slice(0, 9).map((item) => (
             <div
               key={item.id}
-              className="mx-2 my-4 max-h-[330px] min-w-[120px]"
+              className="mx-2 my-4 max-h-[330px] min-w-[150px]"
             >
               <PeopleCard itemCastAndCrewMovie={item} />
             </div>
@@ -36,7 +36,7 @@ const CrewBanner: FC<Props> = (props) => {
           castTvShow.slice(0, 9).map((item) => (
             <div
               key={item.id}
-              className="mx-2 my-4 max-h-[350px] min-w-[120px]"
+              className="mx-2 my-4 max-h-[350px] min-w-[150px]"
             >
               <PeopleCard itemCastAndCrewTvShow={item} />
             </div>

@@ -10,6 +10,7 @@ import { GrNext } from "react-icons/gr";
 type Props = {
   total: number;
   scrollToTop?: () => void;
+  fromMediaDetails?: boolean;
   fromSearch?: boolean;
   currentPage?: number;
   setCurrentPage?: Dispatch<SetStateAction<number>>;
@@ -18,6 +19,7 @@ type Props = {
 const Pagination: FC<Props> = ({
   total,
   scrollToTop,
+  fromMediaDetails,
   fromSearch,
   currentPage: _currentPage,
   setCurrentPage: _setCurrentPage,
@@ -31,18 +33,19 @@ const Pagination: FC<Props> = ({
     Number(params.get("page")) || _currentPage || 1,
   );
 
+  const oldPathname = pathname.split("/");
+  const newPathname = oldPathname.slice(0, -1).join("/");
+
   useEffect(() => {
     if (fromSearch) {
       params.set("page", currentPage.toString());
       push(`/search?${params.toString()}`);
+    } else if (fromMediaDetails) {
+      push(`${newPathname}/${currentPage}`);
     } else {
       _setCurrentPage && _setCurrentPage(currentPage);
       scrollToTop && scrollToTop();
-      window.history.pushState(
-        null,
-        "",
-        `/${pathname.split("/")[1]}/${currentPage}`,
-      );
+      window.history.pushState(null, "", `${newPathname}/${currentPage}`);
     }
   }, [fromSearch, currentPage]);
 

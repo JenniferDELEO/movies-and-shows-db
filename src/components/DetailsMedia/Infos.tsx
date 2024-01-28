@@ -2,71 +2,74 @@
 
 import { FC, useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { FaPlay, FaListUl, FaBookmark } from "react-icons/fa";
-import { FaHeart, FaStar } from "react-icons/fa6";
-import { Button, Tooltip } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
+import Image from "next/image";
+import { FaPlay } from "react-icons/fa";
 
-import { AccountStates, Genre, Video } from "@/models/movies";
+import { AccountStates, Genre, Video, WatchProviderFr } from "@/models/movies";
 import StarRating from "@/components/StarRate/StarRating";
 import YoutubeEmbed from "@/components/YoutubeEmbed/YoutubeEmbed";
 import { CreditsMovies, CreditsTvShows } from "@/models/people";
 import { languages } from "@/libs/helpers/languages";
-import IconsInteraction from "@/components/AccountInteraction/IconsInteraction";
 import { getMovieDetail } from "@/libs/api/movies";
-import AccountInteraction from "../AccountInteraction/AccountInteraction";
+import AccountInteraction from "@/components/AccountInteraction/AccountInteraction";
 import { UserContext } from "@/context/userContext";
 import { List } from "@/models/lists";
 import { getLists } from "@/libs/api/lists";
 import { getTvShowDetail } from "@/libs/api/tvshows";
 
 type Props = {
-  accountStates: AccountStates;
   genresMedia: Genre[];
   id: number;
-  originalLanguage: string;
   overview: string;
-  tagline: string;
   title: string;
   type: "tvshow" | "movie";
-  videos: {
-    id: number;
-    results: Video[];
-  };
   voteAverage: number;
-  voteCount: number;
 
+  accountStates?: AccountStates;
   creditsMovies?: CreditsMovies;
   creditsTvShows?: CreditsTvShows;
   episodeRunTime?: number[];
+  isCollection?: boolean;
   numberOfSeasons?: number;
   numberOfEpisodes?: number;
+  originalLanguage?: string;
   releaseDate?: string;
   runtime?: number;
   status?: string;
+  tagline?: string;
+  videos?: {
+    id: number;
+    results: Video[];
+  };
+  voteCount?: number;
+  watchProvidersFr?: WatchProviderFr[];
 };
 
 const Infos: FC<Props> = (props) => {
   const {
-    accountStates,
     genresMedia,
     id,
-    originalLanguage,
     overview,
-    tagline,
     title,
     type,
-    videos,
     voteAverage,
-    voteCount,
 
+    accountStates,
     creditsMovies,
     creditsTvShows,
     episodeRunTime,
+    isCollection,
     numberOfSeasons,
     numberOfEpisodes,
+    originalLanguage,
     releaseDate,
     runtime,
     status,
+    tagline,
+    videos,
+    voteCount,
+    watchProvidersFr,
   } = props;
 
   const { user } = useContext(UserContext);
@@ -75,13 +78,13 @@ const Infos: FC<Props> = (props) => {
 
   const [userLists, setUserLists] = useState<List[]>([]);
 
-  const [isFavorite, setIsFavorite] = useState(accountStates.favorite);
-  const [isInWatchlist, setIsInWatchlist] = useState(accountStates.watchlist);
+  const [isFavorite, setIsFavorite] = useState(accountStates?.favorite);
+  const [isInWatchlist, setIsInWatchlist] = useState(accountStates?.watchlist);
   const [isRated, setIsRated] = useState(
-    typeof accountStates.rated === "boolean" ? false : true,
+    typeof accountStates?.rated === "boolean" ? false : true,
   );
   const [userRatingApi, setUserRatingApi] = useState<number>(
-    typeof accountStates.rated === "object" ? accountStates.rated.value : 0,
+    typeof accountStates?.rated === "object" ? accountStates.rated.value : 0,
   );
 
   const trailer = videos?.results?.find((video) => video.type === "Trailer");
@@ -145,22 +148,61 @@ const Infos: FC<Props> = (props) => {
 
   return (
     <div className="md:flex md:size-full md:flex-col md:justify-center">
-      <div className="fixed bottom-0 left-0 z-10 w-full bg-primary md:hidden">
-        <div className="flex flex-row items-center justify-evenly">
-          <AccountInteraction
-            item={{ id: id, name: title, title: title }}
-            type={type}
-            user={user}
-            fetchUserDatas={fetchUserAccountStates}
-            mediaDetailsPageProps={{
-              isFavorite,
-              isInWatchlist,
-              isRated,
-              userRatingApi,
-            }}
-            userLists={userLists}
-          />
-        </div>
+      <div className="fixed bottom-0 left-0 z-20 w-full bg-primary md:hidden">
+        {watchProvidersFr && watchProvidersFr.length > 0 && (
+          <div className="w-full py-3">
+            <div className="flex flex-row flex-wrap items-center justify-center bg-primary/90">
+              <p className="mr-3 text-sm">
+                Justwatch - Disponible en streaming sur :
+              </p>
+              {watchProvidersFr.map((watchProvider) => (
+                <div
+                  key={watchProvider.provider_id}
+                  className="flex size-10 flex-row items-center justify-center"
+                >
+                  <Image
+                    alt={`logo-${watchProvider.provider_name}`}
+                    src={
+                      watchProvider.logo_path
+                        ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${watchProvider.logo_path}`
+                        : "/images/defaultImage.png"
+                    }
+                    width={0}
+                    height={0}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      display: "block",
+                      minWidth: "100%",
+                      minHeight: "100%",
+                      borderWidth: 0,
+                      outline: 0,
+                      borderRadius: 5,
+                    }}
+                    sizes="100vw"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {isFavorite && isInWatchlist && (
+          <div className="flex flex-row items-center justify-evenly">
+            <AccountInteraction
+              item={{ id: id, name: title, title: title }}
+              type={type}
+              user={user}
+              fetchUserDatas={fetchUserAccountStates}
+              mediaDetailsPageProps={{
+                isFavorite,
+                isInWatchlist,
+                isRated,
+                userRatingApi,
+              }}
+              userLists={userLists}
+            />
+          </div>
+        )}
       </div>
       {openTrailer && trailer && (
         <YoutubeEmbed embedId={trailer.key} setOpenTrailer={setOpenTrailer} />
@@ -170,18 +212,24 @@ const Infos: FC<Props> = (props) => {
           {title}
           <span className="text-base font-normal text-gray-400 md:text-2xl">
             {" "}
-            {releaseDate
-              ? `(${dayjs(releaseDate).format("YYYY")})`
-              : "(Non sortie)"}
+            {!isCollection
+              ? releaseDate
+                ? `(${dayjs(releaseDate).format("YYYY")})`
+                : "(Non sortie)"
+              : null}
           </span>
         </h1>
         <div className="mt-2 hidden text-sm md:block">
           {type === "movie" && (
             <p className="text-gray-400">
-              {releaseDate
-                ? dayjs(releaseDate).format("DD/MM/YYYY")
-                : "Non sortie"}{" "}
-              (FR) - {runtimeHours} h {runtimeMinutes} min -{" "}
+              {!isCollection ? (
+                <>
+                  {releaseDate
+                    ? dayjs(releaseDate).format("DD/MM/YYYY")
+                    : "Non sortie"}{" "}
+                  (FR) - {runtimeHours} h {runtimeMinutes} min -{" "}
+                </>
+              ) : null}
               {genresMedia &&
                 genresMedia.map((genre, index) => {
                   if (index === genresMedia.length - 1) {
@@ -238,7 +286,6 @@ const Infos: FC<Props> = (props) => {
                         </span>
                       );
                     }
-
                     return (
                       <span
                         key={index}
@@ -277,32 +324,41 @@ const Infos: FC<Props> = (props) => {
             count={5}
             value={voteAverage ? voteAverage / 2 : 0}
             size={20}
+            edit={false}
           />
-          <p className="mt-1 text-xs text-gray-400">
-            ({voteCount} vote
-            {voteCount && voteCount > 1 ? "s" : ""})
-          </p>
+          {!isCollection && (
+            <p className="mt-1 text-xs text-gray-400">
+              ({voteCount} vote
+              {voteCount && voteCount > 1 ? "s" : ""})
+            </p>
+          )}
         </div>
-        <div className="hidden flex-row items-center justify-evenly md:mx-10 md:flex">
-          <AccountInteraction
-            item={{ id: id, name: title, title: title }}
-            type={type}
-            user={user}
-            fetchUserDatas={fetchUserAccountStates}
-            mediaDetailsPageProps={{
-              isFavorite,
-              isInWatchlist,
-              isRated,
-              userRatingApi,
-            }}
-            userLists={userLists}
-          />
-        </div>
-        <div className="flex flex-col items-center justify-center">
-          <Button variant="light" onClick={() => setOpenTrailer(true)}>
-            <FaPlay size={12} className="text-white" />
-            Bande annonce
-          </Button>
+        <div className="flex flex-row items-center justify-evenly md:mx-10">
+          <>
+            {isFavorite && isInWatchlist && (
+              <div className="hidden md:block">
+                <AccountInteraction
+                  item={{ id: id, name: title, title: title }}
+                  type={type}
+                  user={user}
+                  fetchUserDatas={fetchUserAccountStates}
+                  mediaDetailsPageProps={{
+                    isFavorite,
+                    isInWatchlist,
+                    isRated,
+                    userRatingApi,
+                  }}
+                  userLists={userLists}
+                />
+              </div>
+            )}
+            {trailer && (
+              <Button variant="light" onClick={() => setOpenTrailer(true)}>
+                <FaPlay size={12} className="text-white" />
+                Bande annonce
+              </Button>
+            )}
+          </>
         </div>
       </div>
       <div className="my-4 ml-10 flex flex-col items-center justify-center md:hidden">

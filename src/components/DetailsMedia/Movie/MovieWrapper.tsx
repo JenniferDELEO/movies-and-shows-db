@@ -2,10 +2,10 @@ import { FC } from "react";
 
 import { MovieDetails } from "@/models/movies";
 import TopContent from "@/components/DetailsMedia/TopContent";
-import CrewBanner from "@/components/DetailsMedia/CrewBanner";
+import CrewBanner from "@/components/DetailsMedia/Banners/CrewBanner";
 import CollectionCard from "@/components/DetailsMedia/Movie/CollectionCard";
-import Similar from "@/components/DetailsMedia/Similars";
-import Recommendations from "@/components/DetailsMedia/Recommendations";
+import SimilarsBanner from "@/components/DetailsMedia/Banners/SimilarsBanner";
+import RecommendationsBanner from "@/components/DetailsMedia/Banners/RecommendationsBanner";
 
 type Props = {
   movieDetail: MovieDetails;
@@ -34,6 +34,7 @@ const MovieWrapper: FC<Props> = (props) => {
         videos={movieDetail?.videos}
         voteAverage={movieDetail?.vote_average}
         voteCount={movieDetail?.vote_count}
+        watchProvidersFr={movieDetail?.watch_providers_fr}
       />
       <CrewBanner
         castMovie={movieDetail?.credits?.cast}
@@ -46,13 +47,13 @@ const MovieWrapper: FC<Props> = (props) => {
         />
       )}
       {movieDetail?.recommendations?.results.length > 0 && (
-        <Recommendations
+        <RecommendationsBanner
           recommendationsMovies={movieDetail?.recommendations.results}
           totalPages={movieDetail?.recommendations?.total_pages}
         />
       )}
       {movieDetail?.similar?.results.length > 0 && (
-        <Similar
+        <SimilarsBanner
           similarsMovies={movieDetail?.similar?.results}
           totalPages={movieDetail?.similar?.total_pages}
         />

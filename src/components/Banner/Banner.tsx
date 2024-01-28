@@ -6,7 +6,12 @@ import { FC } from "react";
 import Slider from "react-slick";
 import dayjs from "dayjs";
 
-import { settings } from "@/components/Banner/reactSlickSettings";
+import {
+  settingsMinTwoSlides,
+  settingsMinThreeSlides,
+  settingsMinFourSlides,
+  settingsMinFiveSlides,
+} from "@/components/Banner/reactSlickSettings";
 import { User } from "@/models/user";
 import { List } from "@/models/lists";
 import { Movie } from "@/models/movies";
@@ -64,6 +69,14 @@ const Banner: FC<Props> = ({
   ratedTvShows,
 }) => {
   const router = useRouter();
+  const settings =
+    items.length > 4
+      ? settingsMinFiveSlides
+      : items.length > 3
+        ? settingsMinFourSlides
+        : items.length > 2
+          ? settingsMinThreeSlides
+          : settingsMinTwoSlides;
 
   return (
     <section className={classNames.container}>
