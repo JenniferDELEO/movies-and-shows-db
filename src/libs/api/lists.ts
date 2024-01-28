@@ -23,7 +23,7 @@ export async function checkItemStatus(
   try {
     const result = await axios.request({
       ...optionsGET,
-      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/list/${listId}/item_status?media_id=${itemId}&media_type=${itemType}`,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/list/${listId}/item_status?media_id=${itemId}&media_type=${itemType === "movie" ? "movie" : "tv"}`,
     });
     return result.data;
   } catch (error: any) {

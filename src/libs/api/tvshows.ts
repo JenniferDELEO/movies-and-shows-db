@@ -105,12 +105,24 @@ export async function getTvShowDetail(id: string): Promise<TvShowDetails> {
         language: "fr-FR",
       },
     });
+    const data = result.data;
+
     const images = await axios.request({
       ...optionsGET,
       url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/${id}/images`,
     });
-    const data = result.data;
-    return { ...data, images: images.data };
+
+    const responseWatchProviders = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/${id}/watch/providers`,
+    });
+    const watchProvidersFr = responseWatchProviders.data.results?.FR?.flatrate;
+
+    return {
+      ...data,
+      images: images.data,
+      watch_providers_fr: watchProvidersFr || {},
+    };
   } catch (error) {
     console.log(error);
     throw error;
@@ -128,6 +140,46 @@ export async function getSeasonDetails(
       params: {
         append_to_response: "account_states",
         language: "fr-FR",
+      },
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getSimilarsTvShows(
+  id: string,
+  page: number,
+): Promise<ApiResultTvShows> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/${id}/similar`,
+      params: {
+        language: "fr-FR",
+        page,
+      },
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getRecommendationsTvShows(
+  id: string,
+  page: number,
+): Promise<ApiResultTvShows> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/${id}/recommendations`,
+      params: {
+        language: "fr-FR",
+        page,
       },
     });
     return result.data;

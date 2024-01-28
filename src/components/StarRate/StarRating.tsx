@@ -1,5 +1,6 @@
 "use client";
 
+import { Tooltip } from "@nextui-org/react";
 import { cloneElement, useState } from "react";
 
 interface RatingProps {
@@ -80,6 +81,8 @@ const StarRating: React.FC<RatingProps> = ({
 }) => {
   const [hoverValue, setHoverValue] = useState<number | undefined>(undefined);
 
+  const rate = parseFloat(value.toFixed(1));
+
   const handleMouseMove = (index: number) => {
     if (!edit) {
       return;
@@ -106,9 +109,9 @@ const StarRating: React.FC<RatingProps> = ({
 
   for (let i = 0; i < count; i++) {
     let star: React.ReactElement;
-    if (isHalf && value - i > 0 && value - i < 1) {
+    if (isHalf && rate - i > 0 && rate - i < 1) {
       star = halfIcon;
-    } else if (i < value) {
+    } else if (i < rate) {
       star = fullIcon;
     } else {
       star = emptyIcon;
@@ -133,7 +136,7 @@ const StarRating: React.FC<RatingProps> = ({
           color:
             i <= Number(hoverValue)
               ? hoverColor
-              : i < value
+              : i < rate
                 ? activeColor
                 : color,
         })}
@@ -142,7 +145,9 @@ const StarRating: React.FC<RatingProps> = ({
   }
 
   return (
-    <div className="flex flex-row items-center justify-center">{stars}</div>
+    <Tooltip content={rate.toFixed(1)} placement="bottom">
+      <div className="flex flex-row items-center justify-center">{stars}</div>
+    </Tooltip>
   );
 };
 

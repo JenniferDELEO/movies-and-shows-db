@@ -5,40 +5,41 @@ import BannerWrapper from "@/components/Banner/BannerWrapper";
 import { TvShow } from "@/models/tvShows";
 
 type Props = {
+  recommendationsMovies?: Movie[];
+  recommendationsTvShows?: TvShow[];
   totalPages: number;
-  similarsMovies?: Movie[];
-  similarsTvShows?: TvShow[];
 };
 
-const Similar: FC<Props> = (props) => {
-  const { similarsMovies, similarsTvShows, totalPages } = props;
+const RecommendationsBanner: FC<Props> = (props) => {
+  const { recommendationsMovies, recommendationsTvShows, totalPages } = props;
+
   return (
     <div>
-      {similarsMovies ? (
+      {recommendationsMovies ? (
         <section className="p-4 md:px-[2.5%] lg:px-[5%] 2xl:px-[10%]">
           <BannerWrapper
             movieDetailsProps={{
-              movies: similarsMovies,
-              title: "Films similaires",
+              movies: recommendationsMovies,
+              title: "Films recommandés",
               totalPages,
             }}
           />
-          <div className="mx-auto mb-0 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
+          <div className="mx-auto mb-0 mt-16 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
         </section>
-      ) : similarsTvShows ? (
+      ) : recommendationsTvShows ? (
         <section className="p-4 md:px-[2.5%] lg:px-[5%] 2xl:px-[10%]">
           <BannerWrapper
             tvshowsDetailsProps={{
-              tvshows: similarsTvShows,
-              title: "Séries TV similaires",
+              tvshows: recommendationsTvShows,
+              title: "Séries TV recommandées",
               totalPages,
             }}
           />
-          <div className="mx-auto mb-0 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
+          <div className="mx-auto mb-0 mt-16 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
         </section>
       ) : null}
     </div>
   );
 };
 
-export default Similar;
+export default RecommendationsBanner;

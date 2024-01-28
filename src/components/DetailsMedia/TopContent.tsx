@@ -3,60 +3,66 @@
 import Image from "next/image";
 import { FC } from "react";
 
-import { AccountStates, Genre, Video } from "@/models/movies";
+import { AccountStates, Genre, Video, WatchProviderFr } from "@/models/movies";
 import Infos from "@/components/DetailsMedia/Infos";
 import { CreditsMovies, CreditsTvShows } from "@/models/people";
 
 type Props = {
-  accountStates: AccountStates;
   backdropPath: string;
   genresMedia: Genre[];
-  originalLanguage: string;
+  id: number;
   overview: string;
   posterPath: string;
-  tagline: string;
   title: string;
   type: "tvshow" | "movie";
-  videos: {
-    id: number;
-    results: Video[];
-  };
   voteAverage: number;
-  voteCount: number;
 
+  accountStates?: AccountStates;
   creditsMovies?: CreditsMovies;
   creditsTvShows?: CreditsTvShows;
   episodeRunTime?: number[];
+  isCollection?: boolean;
   numberOfSeasons?: number;
   numberOfEpisodes?: number;
+  originalLanguage?: string;
   releaseDate?: string;
   runtime?: number;
   status?: string;
+  tagline?: string;
+  videos?: {
+    id: number;
+    results: Video[];
+  };
+  voteCount?: number;
+  watchProvidersFr?: WatchProviderFr[];
 };
 
 const TopContent: FC<Props> = (props) => {
   const {
-    accountStates,
     backdropPath,
     genresMedia,
-    originalLanguage,
+    id,
     overview,
     posterPath,
-    tagline,
     title,
     type,
-    videos,
     voteAverage,
-    voteCount,
 
+    accountStates,
     creditsMovies,
     creditsTvShows,
     episodeRunTime,
+    isCollection,
     numberOfSeasons,
     numberOfEpisodes,
+    originalLanguage,
     releaseDate,
     runtime,
     status,
+    tagline,
+    videos,
+    voteCount,
+    watchProvidersFr,
   } = props;
 
   return (
@@ -122,6 +128,8 @@ const TopContent: FC<Props> = (props) => {
             creditsTvShows={creditsTvShows}
             episodeRunTime={episodeRunTime}
             genresMedia={genresMedia}
+            id={id}
+            isCollection={isCollection}
             numberOfEpisodes={numberOfEpisodes}
             numberOfSeasons={numberOfSeasons}
             originalLanguage={originalLanguage}
@@ -135,13 +143,16 @@ const TopContent: FC<Props> = (props) => {
             videos={videos}
             voteAverage={voteAverage}
             voteCount={voteCount}
+            watchProvidersFr={watchProvidersFr}
           />
         </div>
       </div>
       <div className="relative hidden size-full md:block">
         <div
           style={{
-            backgroundImage: `url(${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/original${backdropPath})`,
+            backgroundImage: backdropPath
+              ? `url(${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/original${backdropPath})`
+              : "bg-primary/90",
             backgroundSize: "cover",
             backgroundPosition: "left calc((50vw - 170px) - 340px) top",
             backgroundRepeat: "no-repeat",
@@ -168,7 +179,7 @@ const TopContent: FC<Props> = (props) => {
                     height: "450px",
                     minHeight: "450px",
                   }}
-                  className="my-auto overflow-hidden rounded-sm"
+                  className="relative my-auto overflow-hidden rounded-sm"
                 >
                   <Image
                     alt={`poster-${title}`}
@@ -190,6 +201,43 @@ const TopContent: FC<Props> = (props) => {
                     }}
                     sizes="100vw"
                   />
+                  {watchProvidersFr && watchProvidersFr.length > 0 && (
+                    <div className="absolute bottom-0 left-0 w-full">
+                      <div className="flex flex-row flex-wrap items-center justify-center bg-primary/90">
+                        <p className="mr-2 text-xs">
+                          Justwatch - Disponible en streaming sur :
+                        </p>
+                        {watchProvidersFr.map((watchProvider) => (
+                          <div
+                            key={watchProvider.provider_id}
+                            className="flex size-10 flex-row items-center justify-center"
+                          >
+                            <Image
+                              alt={`logo-${watchProvider.provider_name}`}
+                              src={
+                                watchProvider.logo_path
+                                  ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${watchProvider.logo_path}`
+                                  : "/images/defaultImage.png"
+                              }
+                              width={0}
+                              height={0}
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                                display: "block",
+                                minWidth: "100%",
+                                minHeight: "100%",
+                                borderWidth: 0,
+                                outline: 0,
+                                borderRadius: 5,
+                              }}
+                              sizes="100vw"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
               <Infos
@@ -198,6 +246,8 @@ const TopContent: FC<Props> = (props) => {
                 creditsTvShows={creditsTvShows}
                 episodeRunTime={episodeRunTime}
                 genresMedia={genresMedia}
+                id={id}
+                isCollection={isCollection}
                 numberOfEpisodes={numberOfEpisodes}
                 numberOfSeasons={numberOfSeasons}
                 originalLanguage={originalLanguage}
@@ -211,6 +261,7 @@ const TopContent: FC<Props> = (props) => {
                 videos={videos}
                 voteAverage={voteAverage}
                 voteCount={voteCount}
+                watchProvidersFr={watchProvidersFr}
               />
             </div>
           </div>

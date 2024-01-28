@@ -6,8 +6,6 @@ export async function toggleUserDatas(
   type: string,
   id: string,
   user: User,
-  moviesIds: number[],
-  tvShowsIds: number[],
   toggleFunction: (
     accountIdV3: number,
     sessionId: string,
@@ -18,54 +16,86 @@ export async function toggleUserDatas(
     status_message: string;
   }>,
   fetchDataFunction: () => Promise<void>,
+  moviesIds?: number[],
+  tvShowsIds?: number[],
+  isFavorite?: boolean,
+  isInWatchlist?: boolean,
 ) {
   const item = {
-    media_type: type === "Films" ? "movie" : "tv",
+    media_type: type === "movie" ? "movie" : "tv",
     media_id: parseInt(id),
   };
 
   if (user && user.accountIdV3 && user.sessionId && user.accountIdV4) {
-    if (moviesIds.includes(parseInt(id))) {
+    if (typeof isFavorite !== "undefined") {
       const responseToggle = await toggleFunction(
         user.accountIdV3,
         user.sessionId,
-        category === "favorite"
-          ? { ...item, favorite: false }
-          : { ...item, watchlist: false },
+        { ...item, favorite: !isFavorite },
       );
       if (responseToggle.success) {
         await fetchDataFunction();
         toast.success(
-          `Film ${category === "favorite" ? "supprimé des favoris" : "marqué comme non vu"} avec succès`,
+          `${type === "movie" ? "Film" : "Série TV"} ${isFavorite ? `supprimé${type === "movie" ? "" : "e"} des favoris` : `ajouté${type === "movie" ? "" : "e"} aux favoris`} avec succès`,
         );
       }
-    } else if (tvShowsIds.includes(parseInt(id))) {
+    }
+    if (typeof isInWatchlist !== "undefined") {
       const responseToggle = await toggleFunction(
         user.accountIdV3,
         user.sessionId,
-        category === "favorite"
-          ? { ...item, favorite: false }
-          : { ...item, watchlist: false },
+        { ...item, watchlist: !isInWatchlist },
       );
       if (responseToggle.success) {
         await fetchDataFunction();
         toast.success(
-          `Série TV ${category === "favorite" ? "supprimée des favoris" : "marquée comme non vu"} avec succès`,
+          `${type === "movie" ? "Film" : "Série TV"} ${isInWatchlist ? `supprimé${type === "movie" ? "" : "e"} de la liste de suivi` : `ajouté${type === "movie" ? "" : "e"} à la liste de suivi`} avec succès`,
         );
       }
-    } else {
-      const responseToggle = await toggleFunction(
-        user.accountIdV3,
-        user.sessionId,
-        category === "favorite"
-          ? { ...item, favorite: true }
-          : { ...item, watchlist: true },
-      );
-      if (responseToggle.success) {
-        await fetchDataFunction();
-        toast.success(
-          `${type === "Films" ? "Film" : "Série TV"} ${category === "favorite" ? `ajouté${type === "Films" ? "" : "e"} aux favoris` : `marqué${type === "Films" ? "" : "e"} comme vu`} avec succès`,
+    }
+    if (moviesIds && tvShowsIds) {
+      if (moviesIds.includes(parseInt(id))) {
+        const responseToggle = await toggleFunction(
+          user.accountIdV3,
+          user.sessionId,
+          category === "favorite"
+            ? { ...item, favorite: false }
+            : { ...item, watchlist: false },
         );
+        if (responseToggle.success) {
+          await fetchDataFunction();
+          toast.success(
+            `Film ${category === "favorite" ? "supprimé des favoris" : "supprimé de la liste de suivi"} avec succès`,
+          );
+        }
+      } else if (tvShowsIds.includes(parseInt(id))) {
+        const responseToggle = await toggleFunction(
+          user.accountIdV3,
+          user.sessionId,
+          category === "favorite"
+            ? { ...item, favorite: false }
+            : { ...item, watchlist: false },
+        );
+        if (responseToggle.success) {
+          await fetchDataFunction();
+          toast.success(
+            `Série TV ${category === "favorite" ? "supprimée des favoris" : "supprimée de la liste de suivi"} avec succès`,
+          );
+        }
+      } else {
+        const responseToggle = await toggleFunction(
+          user.accountIdV3,
+          user.sessionId,
+          category === "favorite"
+            ? { ...item, favorite: true }
+            : { ...item, watchlist: true },
+        );
+        if (responseToggle.success) {
+          await fetchDataFunction();
+          toast.success(
+            `${type === "movie" ? "Film" : "Série TV"} ${category === "favorite" ? `ajouté${type === "movie" ? "" : "e"} aux favoris` : `marqué${type === "movie" ? "" : "e"} comme vu`} avec succès`,
+          );
+        }
       }
     }
   }

@@ -22,7 +22,7 @@ export const getItems = (baseUrl: string, type: string) => {
     },
     {
       link: `${baseUrl}/recommendations`,
-      name: "Recommendations",
+      name: "Recommandations",
       key: "recommendations",
     },
   ];

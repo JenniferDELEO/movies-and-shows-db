@@ -34,7 +34,6 @@ const SeasonsAndEpisodesWrapper: FC<Props> = (props) => {
     fetchSeasonDetails();
   }, [selectedSeason]);
 
-  console.log(seasons);
   return (
     <>
       <section className="p-4 md:px-[2.5%] lg:px-[5%] 2xl:px-[10%]">

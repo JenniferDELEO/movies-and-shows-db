@@ -1,6 +1,6 @@
 import axios from "axios";
 import { optionsGET } from "./auth";
-import { Collection } from "@/models/movies";
+import { Collection } from "@/models/collections";
 
 export async function getCollection(collectionId: number): Promise<Collection> {
   try {

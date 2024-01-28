@@ -1,0 +1,122 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+"use client";
+
+import { Genre, Movie } from "@/models/movies";
+import { TvShow } from "@/models/tvShows";
+import React, { FC, useEffect, useState } from "react";
+import Card from "../../Cards/Card";
+import Pagination from "../../Pagination/Pagination";
+import { useParams } from "next/navigation";
+import { getRecommendationsMovies } from "@/libs/api/movies";
+import { getRecommendationsTvShows } from "@/libs/api/tvshows";
+
+type Props = {
+  mediaId: string;
+
+  genresMovies?: Genre[];
+  recommendationsMovies?: Movie[];
+  totalPagesRecommendationsMovies?: number;
+  totalResultsRecommendationsMovies?: number;
+  genresTvShows?: Genre[];
+  recommendationsTvShows?: TvShow[];
+  totalPagesRecommendationsTvShows?: number;
+  totalResultsRecommendationsTvShows?: number;
+};
+
+const RecommendationsWrapper: FC<Props> = (props) => {
+  const {
+    mediaId,
+
+    genresMovies,
+    recommendationsMovies,
+    totalPagesRecommendationsMovies,
+    totalResultsRecommendationsMovies,
+    genresTvShows,
+    recommendationsTvShows,
+    totalPagesRecommendationsTvShows,
+    totalResultsRecommendationsTvShows,
+  } = props;
+  const params = useParams();
+
+  const [mediasList, setMediasList] = useState<Movie[] | TvShow[]>(
+    recommendationsMovies || recommendationsTvShows || [],
+  );
+  const [totalPages, setTotalPages] = useState<number>(
+    totalPagesRecommendationsMovies || totalPagesRecommendationsTvShows || 0,
+  );
+  const [totalResults, setTotalResults] = useState<number>(
+    totalResultsRecommendationsMovies ||
+      totalResultsRecommendationsTvShows ||
+      0,
+  );
+  const [currentPage, setCurrentPage] = useState<number>(Number(params.page));
+
+  const genres = genresMovies || genresTvShows || [];
+
+  async function getRecommendationssNextPages() {
+    if (recommendationsMovies) {
+      const { results, total_pages, total_results } =
+        await getRecommendationsMovies(mediaId, currentPage);
+      setMediasList(results);
+      setTotalPages(total_pages);
+      setTotalResults(total_results);
+    }
+    if (recommendationsTvShows) {
+      const { results, total_pages, total_results } =
+        await getRecommendationsTvShows(mediaId, currentPage);
+      setMediasList(results);
+      setTotalPages(total_pages);
+      setTotalResults(total_results);
+    }
+  }
+
+  useEffect(() => {
+    if (currentPage > 1) {
+      getRecommendationssNextPages();
+    }
+  }, [currentPage]);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  };
+
+  return (
+    <section className="p-4 md:px-[2.5%] lg:px-[5%] 2xl:px-[10%]">
+      <h1 className="mx-auto mb-4 py-4 text-xl font-bold md:w-[90%] lg:px-4">
+        {recommendationsMovies
+          ? "Liste des films recommandés"
+          : "Liste des séries TV recommandés"}{" "}
+        <span className="font-normal">({totalResults} résultats)</span>
+      </h1>
+      <div className="mx-auto md:w-[90%] 2xl:grid 2xl:grid-cols-2 2xl:gap-4">
+        {recommendationsMovies &&
+          mediasList.map((movie) => (
+            <Card
+              key={movie.id}
+              item={movie}
+              filterType="movie"
+              genres={genres}
+            />
+          ))}
+        {recommendationsTvShows &&
+          mediasList.map((tvshow) => (
+            <Card
+              key={tvshow.id}
+              item={tvshow}
+              filterType="tvshow"
+              genres={genres}
+            />
+          ))}
+      </div>
+      <Pagination
+        currentPage={currentPage}
+        fromMediaDetails={true}
+        scrollToTop={scrollToTop}
+        setCurrentPage={setCurrentPage}
+        total={totalPages || 0}
+      />
+    </section>
+  );
+};
+
+export default RecommendationsWrapper;

@@ -5,6 +5,46 @@ export type AccountRating = {
   value: number;
 };
 
+export type AccountStates = {
+  id: number;
+  favorite: boolean;
+  rated:
+    | boolean
+    | {
+        value: number;
+      };
+  watchlist: boolean;
+};
+
+export type ApiResultMovies = {
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
+};
+
+export type Collection = {
+  id: number;
+  name: string;
+  poster_path: string;
+  backdrop_path: string;
+};
+
+export type Genre = {
+  id: number;
+  name: string;
+};
+
+export type Image = {
+  aspect_ratio: number;
+  file_path: string;
+  height: number;
+  iso_639_1: string;
+  vote_average: number;
+  vote_count: number;
+  width: number;
+};
+
 export type Movie = {
   adulte: boolean;
   backdrop_path: string;
@@ -21,80 +61,6 @@ export type Movie = {
   vote_average: number;
   vote_count: number;
   account_rating: AccountRating;
-};
-
-export type Collection = {
-  id: number;
-  name: string;
-  poster_path: string;
-  backdrop_path: string;
-};
-
-export type Genre = {
-  id: number;
-  name: string;
-};
-
-export type ProductionCompany = {
-  id: number;
-  logo_path: string;
-  name: string;
-  origin_country: string;
-};
-
-export type ProductionCountry = {
-  iso_3166_1: string;
-  name: string;
-};
-
-export type SpokenLanguage = {
-  english_name: string;
-  iso_639_1: string;
-  name: string;
-};
-
-export type AccountStates = {
-  id: number;
-  favorite: boolean;
-  rated: {
-    value: number;
-  };
-  watchlist: boolean;
-};
-
-export type Image = {
-  aspect_ratio: number;
-  file_path: string;
-  height: number;
-  iso_639_1: string;
-  vote_average: number;
-  vote_count: number;
-  width: number;
-};
-
-export type ReleaseDates = {
-  iso_3166_1: string;
-  release_dates: {
-    certification: string;
-    descriptors: any[];
-    iso_639_1: string;
-    note: string;
-    release_date: string;
-    type: number;
-  };
-};
-
-export type Video = {
-  id: string;
-  iso_639_1: string;
-  iso_3166_1: string;
-  key: string;
-  name: string;
-  site: string;
-  size: number;
-  type: string;
-  official: boolean;
-  published_at: string;
 };
 
 export interface MovieDetails extends Movie {
@@ -140,11 +106,55 @@ export interface MovieDetails extends Movie {
     id: number;
     results: Video[];
   };
+  watch_providers_fr: WatchProviderFr[];
 }
 
-export type ApiResultMovies = {
-  page: number;
-  results: Movie[];
-  total_pages: number;
-  total_results: number;
+export type ProductionCompany = {
+  id: number;
+  logo_path: string;
+  name: string;
+  origin_country: string;
+};
+
+export type ProductionCountry = {
+  iso_3166_1: string;
+  name: string;
+};
+
+export type ReleaseDates = {
+  iso_3166_1: string;
+  release_dates: {
+    certification: string;
+    descriptors: any[];
+    iso_639_1: string;
+    note: string;
+    release_date: string;
+    type: number;
+  };
+};
+
+export type SpokenLanguage = {
+  english_name: string;
+  iso_639_1: string;
+  name: string;
+};
+
+export type Video = {
+  id: string;
+  iso_639_1: string;
+  iso_3166_1: string;
+  key: string;
+  name: string;
+  site: string;
+  size: number;
+  type: string;
+  official: boolean;
+  published_at: string;
+};
+
+export type WatchProviderFr = {
+  logo_path: string;
+  provider_id: number;
+  provider_name: string;
+  display_priority: number;
 };

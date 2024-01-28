@@ -162,7 +162,7 @@ const TvShowsWrapper: FC<Props> = (props) => {
             <>
               <Cards
                 items={tvShowsList}
-                filterType="tv"
+                filterType="tvshow"
                 genres={genresTvShows}
               />
               <Pagination
@@ -198,7 +198,11 @@ const TvShowsWrapper: FC<Props> = (props) => {
           setIsResetting={setIsResetting}
         />
         <div className="w-full">
-          <Cards items={tvShowsList} filterType="tv" genres={genresTvShows} />
+          <Cards
+            items={tvShowsList}
+            filterType="tvshow"
+            genres={genresTvShows}
+          />
           <Pagination
             total={totalPages}
             currentPage={currentPage}

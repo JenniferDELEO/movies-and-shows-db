@@ -14,7 +14,7 @@ type Props = {
   modalIsOpen: boolean;
   setModalIsOpen: Dispatch<SetStateAction<boolean>>;
   itemId: number;
-  itemType: "movie" | "tv";
+  itemType: "movie" | "tvshow";
   title: string;
   userLists: List[];
 };
