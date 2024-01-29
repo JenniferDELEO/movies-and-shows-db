@@ -10,6 +10,7 @@ import axios from "axios";
 import { TvShowsFilters } from "@/models/filters";
 import { defaultTvShowsFilters } from "../helpers/filters";
 import { CastTvShows, CrewTvShows } from "@/models/people";
+import { Image, Video } from "@/models/movies";
 
 /* --------------------GLOBAL-------------------- */
 
@@ -130,7 +131,7 @@ export async function getTvShowDetail(id: string): Promise<TvShowDetails> {
   }
 }
 
-export async function getCreditssTvShows(
+export async function getCreditsTvShow(
   id: string,
 ): Promise<{ id: number; cast: CastTvShows[]; crew: CrewTvShows[] }> {
   try {
@@ -140,6 +141,24 @@ export async function getCreditssTvShows(
       params: {
         language: "fr-FR",
       },
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getImagesTvShow(id: string): Promise<{
+  backdrops: Image[];
+  id: number;
+  logos: Image[];
+  posters: Image[];
+}> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/${id}/images`,
     });
     return result.data;
   } catch (error) {
@@ -168,7 +187,7 @@ export async function getSeasonDetails(
   }
 }
 
-export async function getSimilarsTvShows(
+export async function getSimilarsTvShow(
   id: string,
   page: number,
 ): Promise<ApiResultTvShows> {
@@ -188,7 +207,7 @@ export async function getSimilarsTvShows(
   }
 }
 
-export async function getRecommendationsTvShows(
+export async function getRecommendationsTvShow(
   id: string,
   page: number,
 ): Promise<ApiResultTvShows> {
@@ -200,6 +219,23 @@ export async function getRecommendationsTvShows(
         language: "fr-FR",
         page,
       },
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getVideosTvShow(id: string): Promise<{
+  id: number;
+  results: Video[];
+}> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/${id}/videos`,
+      params: { language: "fr-FR" },
     });
     return result.data;
   } catch (error) {

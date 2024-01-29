@@ -7,8 +7,8 @@ import React, { FC, useEffect, useState } from "react";
 import Card from "../../Cards/Card";
 import Pagination from "../../Pagination/Pagination";
 import { useParams } from "next/navigation";
-import { getRecommendationsMovies } from "@/libs/api/movies";
-import { getRecommendationsTvShows } from "@/libs/api/tvshows";
+import { getRecommendationsMovie } from "@/libs/api/movies";
+import { getRecommendationsTvShow } from "@/libs/api/tvshows";
 
 type Props = {
   mediaId: string;
@@ -59,14 +59,14 @@ const RecommendationsWrapper: FC<Props> = (props) => {
   async function getRecommendationssNextPages() {
     if (recommendationsMovies) {
       const { results, total_pages, total_results } =
-        await getRecommendationsMovies(mediaId, currentPage);
+        await getRecommendationsMovie(mediaId, currentPage);
       setMoviesList(results);
       setTotalPages(total_pages);
       setTotalResults(total_results);
     }
     if (recommendationsTvShows) {
       const { results, total_pages, total_results } =
-        await getRecommendationsTvShows(mediaId, currentPage);
+        await getRecommendationsTvShow(mediaId, currentPage);
       setTvShowsList(results);
       setTotalPages(total_pages);
       setTotalResults(total_results);
@@ -89,35 +89,49 @@ const RecommendationsWrapper: FC<Props> = (props) => {
         {recommendationsMovies
           ? "Liste des films recommandés"
           : "Liste des séries TV recommandés"}{" "}
-        <span className="font-normal">({totalResults} résultats)</span>
+        <span className="font-normal">
+          ({totalResults} résultat{totalResults > 1 ? "s" : ""})
+        </span>
       </h1>
-      <div className="mx-auto md:w-[90%] 2xl:grid 2xl:grid-cols-2 2xl:gap-4">
-        {recommendationsMovies &&
-          moviesList.map((movie) => (
-            <Card
-              key={movie.id}
-              movie={movie}
-              filterType="movie"
-              genres={genres}
-            />
-          ))}
-        {recommendationsTvShows &&
-          tvShowsList.map((tvShow) => (
-            <Card
-              key={tvShow.id}
-              tvShow={tvShow}
-              filterType="tvshow"
-              genres={genres}
-            />
-          ))}
-      </div>
-      <Pagination
-        currentPage={currentPage}
-        fromMediaDetails={true}
-        scrollToTop={scrollToTop}
-        setCurrentPage={setCurrentPage}
-        total={totalPages || 0}
-      />
+      {totalResults === 0 ? (
+        <div>
+          <p className="mx-auto mb-4 py-4 text-lg md:w-[90%] lg:px-4">
+            Nous n&apos;avons pas suffisamment de données pour vous suggérer des
+            films. Vous pouvez nous y aider en notant les films que vous avez
+            vus.
+          </p>
+        </div>
+      ) : (
+        <div>
+          <div className="mx-auto md:w-[90%] 2xl:grid 2xl:grid-cols-2 2xl:gap-4">
+            {recommendationsMovies &&
+              moviesList.map((movie) => (
+                <Card
+                  key={movie.id}
+                  movie={movie}
+                  filterType="movie"
+                  genres={genres}
+                />
+              ))}
+            {recommendationsTvShows &&
+              tvShowsList.map((tvShow) => (
+                <Card
+                  key={tvShow.id}
+                  tvShow={tvShow}
+                  filterType="tvshow"
+                  genres={genres}
+                />
+              ))}
+          </div>
+          <Pagination
+            currentPage={currentPage}
+            fromMediaDetails={true}
+            scrollToTop={scrollToTop}
+            setCurrentPage={setCurrentPage}
+            total={totalPages || 0}
+          />
+        </div>
+      )}
     </section>
   );
 };

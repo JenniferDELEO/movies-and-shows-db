@@ -1,5 +1,5 @@
 import RecommendationsWrapper from "@/components/DetailsMedia/Wrappers/RecommendationsWrapper";
-import { getGenresMovies, getRecommendationsMovies } from "@/libs/api/movies";
+import { getGenresMovies, getRecommendationsMovie } from "@/libs/api/movies";
 
 type Props = {
   params: { id: string };
@@ -13,7 +13,7 @@ const Recommendations = async ({ params }: Props) => {
     results: recommendationsMovies,
     total_pages: totalPagesRecommendationsMovies,
     total_results: totalResultsRecommendationsMovies,
-  } = await getRecommendationsMovies(id, 1);
+  } = await getRecommendationsMovie(id, 1);
 
   return (
     <div className="pt-[64px]">

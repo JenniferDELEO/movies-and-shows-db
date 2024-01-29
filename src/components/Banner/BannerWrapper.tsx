@@ -208,7 +208,7 @@ const BannerWrapper: FC<Props> = ({
     return (
       <Banner
         items={movieCollectionProps.movies.sort((a, b) =>
-          a.release_date.localeCompare(b.release_date),
+          b.release_date.localeCompare(a.release_date),
         )}
         type="movie"
         user={user}
@@ -276,7 +276,9 @@ const BannerWrapper: FC<Props> = ({
         {personDetailProps.actingMovies.length > 0 && (
           <div className="mt-4">
             <Banner
-              items={personDetailProps.actingMovies}
+              items={personDetailProps.actingMovies.sort((a, b) =>
+                b.release_date.localeCompare(a.release_date),
+              )}
               type="movie"
               user={user}
               fetchUserDatas={fetchUserDatas}
@@ -298,7 +300,9 @@ const BannerWrapper: FC<Props> = ({
         {personDetailProps.actingTvShows.length > 0 && (
           <div className="mt-4">
             <Banner
-              items={personDetailProps.actingTvShows}
+              items={personDetailProps.actingTvShows.sort((a, b) =>
+                b.first_air_date.localeCompare(a.first_air_date),
+              )}
               type="tvshow"
               user={user}
               fetchUserDatas={fetchUserDatas}
@@ -320,7 +324,9 @@ const BannerWrapper: FC<Props> = ({
         {personDetailProps.runningMovies.length > 0 && (
           <div className="mt-4">
             <Banner
-              items={personDetailProps.runningMovies}
+              items={personDetailProps.runningMovies.sort((a, b) =>
+                b.release_date.localeCompare(a.release_date),
+              )}
               type="movie"
               user={user}
               fetchUserDatas={fetchUserDatas}
@@ -342,7 +348,9 @@ const BannerWrapper: FC<Props> = ({
         {personDetailProps.runningTvShows.length > 0 && (
           <div className="mt-4">
             <Banner
-              items={personDetailProps.runningTvShows}
+              items={personDetailProps.runningTvShows.sort((a, b) =>
+                b.first_air_date.localeCompare(a.first_air_date),
+              )}
               type="tvshow"
               user={user}
               fetchUserDatas={fetchUserDatas}

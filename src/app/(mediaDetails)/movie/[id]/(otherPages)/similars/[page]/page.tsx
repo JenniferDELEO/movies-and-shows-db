@@ -1,5 +1,5 @@
 import SimilarsWrapper from "@/components/DetailsMedia/Wrappers/SimilarsWrapper";
-import { getGenresMovies, getSimilarsMovies } from "@/libs/api/movies";
+import { getGenresMovies, getSimilarsMovie } from "@/libs/api/movies";
 
 type Props = {
   params: { id: string };
@@ -13,7 +13,7 @@ const Similars = async ({ params }: Props) => {
     results: similarsMovies,
     total_pages: totalPagesSimilarsMovies,
     total_results: totalResultsSimilarsMovies,
-  } = await getSimilarsMovies(id, 1);
+  } = await getSimilarsMovie(id, 1);
 
   return (
     <div className="pt-[64px]">

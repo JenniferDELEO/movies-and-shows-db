@@ -1,4 +1,11 @@
-export const getItems = (baseUrl: string, type: string) => {
+export const getItems = (
+  baseUrl: string,
+  type: string,
+  numberOfBackdrops: number,
+  numberOfLogos: number,
+  numberOfPosters: number,
+  numberOfVideos: number,
+) => {
   const firstTab = [
     {
       link: `${baseUrl}`,
@@ -38,21 +45,25 @@ export const getItems = (baseUrl: string, type: string) => {
       link: `${baseUrl}/images/backdrops`,
       name: "Fonds d'écran",
       key: "backdrops",
+      number: numberOfBackdrops,
     },
     {
       link: `${baseUrl}/images/logos`,
       name: "Logos",
       key: "logos",
+      number: numberOfLogos,
     },
     {
       link: `${baseUrl}/images/posters`,
       name: "Affiches",
       key: "posters",
+      number: numberOfPosters,
     },
     {
       link: `${baseUrl}/videos`,
       name: "Vidéos",
       key: "videos",
+      number: numberOfVideos,
     },
   ];
   return { firstTab, secondTab };

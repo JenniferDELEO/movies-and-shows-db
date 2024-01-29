@@ -1,8 +1,5 @@
 import RecommendationsWrapper from "@/components/DetailsMedia/Wrappers/RecommendationsWrapper";
-import {
-  getGenresTvShows,
-  getRecommendationsTvShows,
-} from "@/libs/api/tvshows";
+import { getGenresTvShows, getRecommendationsTvShow } from "@/libs/api/tvshows";
 
 type Props = {
   params: { id: string };
@@ -16,7 +13,7 @@ const Recommendations = async ({ params }: Props) => {
     results: recommendationsTvShows,
     total_pages: totalPagesRecommendationsTvShows,
     total_results: totalResultsRecommendationsTvShows,
-  } = await getRecommendationsTvShows(id, 1);
+  } = await getRecommendationsTvShow(id, 1);
 
   return (
     <div className="pt-[64px]">

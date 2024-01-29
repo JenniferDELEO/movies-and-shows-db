@@ -38,7 +38,7 @@ const OtherPagesHeader: FC<Props> = (props) => {
     >
       <Navbar
         classNames={{
-          base: `justify-center z-30 bg-primary/80 h-[200px]`,
+          base: `justify-center z-30 bg-primary/80 h-[120px]`,
           wrapper: "lg:max-w-[90%] mx-auto justify-center",
           item: ["sm:text-xl mr-2"],
         }}

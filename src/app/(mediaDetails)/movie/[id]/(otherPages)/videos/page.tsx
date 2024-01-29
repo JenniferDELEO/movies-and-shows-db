@@ -1,11 +1,16 @@
-import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
+import VideosContent from "@/components/DetailsMedia/Videos/VideosContent";
+import { getVideosMovie } from "@/libs/api/movies";
 
-const Videos = () => {
-  return (
-    <div>
-      <WorkInProgress />
-    </div>
-  );
+type Props = {
+  params: { id: string };
+};
+
+const Videos = async ({ params }: Props) => {
+  const id = params.id.split("-")[0];
+
+  const videos = await getVideosMovie(id);
+
+  return <VideosContent videos={videos.results} />;
 };
 
 export default Videos;

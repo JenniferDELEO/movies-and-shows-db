@@ -1,6 +1,4 @@
-import PeopleCard from "@/components/People/PeopleCard";
-import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
-import { getCreditssMovies } from "@/libs/api/movies";
+import { getCreditsMovie } from "@/libs/api/movies";
 import CreditsWrapper from "@/components/DetailsMedia/Wrappers/CreditsWrapper";
 
 type Props = {
@@ -10,7 +8,7 @@ type Props = {
 const Cast = async ({ params }: Props) => {
   const id = params.id.split("-")[0];
 
-  const results = await getCreditssMovies(id);
+  const results = await getCreditsMovie(id);
   const moviesCast = results.cast;
   const moviesCrew = results.crew;
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { ApiResultMovies, MovieDetails } from "@/models/movies";
+import { ApiResultMovies, Image, MovieDetails, Video } from "@/models/movies";
 import { optionsGET } from "./auth";
 import { Watcher } from "@/models/watchers";
 import { MoviesFilters } from "@/models/filters";
@@ -124,7 +124,7 @@ export async function getMovieDetail(id: string): Promise<MovieDetails> {
   }
 }
 
-export async function getCreditssMovies(
+export async function getCreditsMovie(
   id: string,
 ): Promise<{ id: number; cast: CastMovies[]; crew: CrewMovies[] }> {
   try {
@@ -142,7 +142,25 @@ export async function getCreditssMovies(
   }
 }
 
-export async function getSimilarsMovies(
+export async function getImagesMovie(id: string): Promise<{
+  backdrops: Image[];
+  id: number;
+  logos: Image[];
+  posters: Image[];
+}> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/${id}/images`,
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getSimilarsMovie(
   id: string,
   page: number,
 ): Promise<ApiResultMovies> {
@@ -162,7 +180,7 @@ export async function getSimilarsMovies(
   }
 }
 
-export async function getRecommendationsMovies(
+export async function getRecommendationsMovie(
   id: string,
   page: number,
 ): Promise<ApiResultMovies> {
@@ -174,6 +192,23 @@ export async function getRecommendationsMovies(
         language: "fr-FR",
         page,
       },
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getVideosMovie(id: string): Promise<{
+  id: number;
+  results: Video[];
+}> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/${id}/videos`,
+      params: { language: "fr-FR" },
     });
     return result.data;
   } catch (error) {

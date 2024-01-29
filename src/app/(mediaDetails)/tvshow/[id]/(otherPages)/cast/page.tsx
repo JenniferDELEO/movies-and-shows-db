@@ -1,6 +1,6 @@
 import CreditsWrapper from "@/components/DetailsMedia/Wrappers/CreditsWrapper";
 import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
-import { getCreditssTvShows } from "@/libs/api/tvshows";
+import { getCreditsTvShow } from "@/libs/api/tvshows";
 
 type Props = {
   params: { id: string };
@@ -9,7 +9,7 @@ type Props = {
 const Cast = async ({ params }: Props) => {
   const id = params.id.split("-")[0];
 
-  const results = await getCreditssTvShows(id);
+  const results = await getCreditsTvShow(id);
   const tvShowsCast = results.cast;
   const tvShowsCrew = results.crew;
 

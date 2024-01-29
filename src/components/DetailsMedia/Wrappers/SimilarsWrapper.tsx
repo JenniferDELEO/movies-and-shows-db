@@ -7,8 +7,8 @@ import React, { FC, useEffect, useState } from "react";
 import Card from "../../Cards/Card";
 import Pagination from "../../Pagination/Pagination";
 import { useParams } from "next/navigation";
-import { getSimilarsMovies } from "@/libs/api/movies";
-import { getSimilarsTvShows } from "@/libs/api/tvshows";
+import { getSimilarsMovie } from "@/libs/api/movies";
+import { getSimilarsTvShow } from "@/libs/api/tvshows";
 
 type Props = {
   mediaId: string;
@@ -54,7 +54,7 @@ const SimilarsWrapper: FC<Props> = (props) => {
 
   async function getSimilarsNextPages() {
     if (similarsMovies) {
-      const { results, total_pages, total_results } = await getSimilarsMovies(
+      const { results, total_pages, total_results } = await getSimilarsMovie(
         mediaId,
         currentPage,
       );
@@ -63,7 +63,7 @@ const SimilarsWrapper: FC<Props> = (props) => {
       setTotalResults(total_results);
     }
     if (similarsTvShows) {
-      const { results, total_pages, total_results } = await getSimilarsTvShows(
+      const { results, total_pages, total_results } = await getSimilarsTvShow(
         mediaId,
         currentPage,
       );
@@ -89,7 +89,9 @@ const SimilarsWrapper: FC<Props> = (props) => {
         {similarsMovies
           ? "Liste des films similaires"
           : "Liste des séries TV similaires"}{" "}
-        <span className="font-normal">({totalResults} résultats)</span>
+        <span className="font-normal">
+          ({totalResults} résultat{totalResults > 1 ? "s" : ""})
+        </span>
       </h1>
       <div className="mx-auto md:w-[90%] 2xl:grid 2xl:grid-cols-2 2xl:gap-4">
         {similarsMovies &&

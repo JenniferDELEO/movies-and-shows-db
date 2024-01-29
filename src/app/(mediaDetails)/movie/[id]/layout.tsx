@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import MediaHeader from "@/components/Headers/MediaHeader";
 import { getMovieDetail } from "@/libs/api/movies";
 
 type Props = {
@@ -16,10 +17,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function MovieDetailsLayout({
+export default async function MovieDetailsLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: { id: string };
 }) {
-  return <div className="size-full">{children}</div>;
+  const id = params.id.split("-")[0];
+
+  const movieDetail = await getMovieDetail(id);
+
+  return (
+    <div className="size-full overflow-x-hidden">
+      <MediaHeader
+        numberOfBackdrops={movieDetail?.images?.backdrops?.length || 0}
+        numberOfLogos={movieDetail?.images?.logos?.length || 0}
+        numberOfPosters={movieDetail?.images?.posters?.length || 0}
+        numberOfVideos={movieDetail?.videos?.results?.length || 0}
+      />
+      <div className="size-full">{children}</div>
+    </div>
+  );
 }
