@@ -96,7 +96,7 @@ export async function getMovieDetail(id: string): Promise<MovieDetails> {
       url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/${id}`,
       params: {
         append_to_response:
-          "account_states,credits,recommendations,release_dates,similar,videos",
+          "account_states,credits,recommendations,similar,videos",
         language: "fr-FR",
       },
     });

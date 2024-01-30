@@ -1,4 +1,4 @@
-import VideosContent from "@/components/DetailsMedia/Videos/VideosContent";
+import VideosTabs from "@/components/DetailsMedia/Videos/VideosTabs";
 import { getVideosMovie } from "@/libs/api/movies";
 
 type Props = {
@@ -10,7 +10,7 @@ const Videos = async ({ params }: Props) => {
 
   const videos = await getVideosMovie(id);
 
-  return <VideosContent videos={videos.results} />;
+  return <VideosTabs videos={videos.results} />;
 };
 
 export default Videos;

@@ -15,17 +15,36 @@ const LeftContent: FC<Props> = ({ data }) => {
 
   return (
     <div className="mt-4 flex flex-col items-center justify-center border-b py-4 md:w-[45%] md:items-start md:border-none lg:w-[35%] xl:w-[30%]">
-      <Image
-        src={
-          data?.profile_path
-            ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${data.profile_path}`
-            : "/images/defaultImage.png"
-        }
-        width={100}
-        height={150}
-        alt={data.name}
-        className="mb-4 rounded-lg object-center md:h-auto md:w-[300px]"
-      />
+      <div className="hidden size-full md:block">
+        <Image
+          src={
+            data?.profile_path
+              ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w300${data.profile_path}`
+              : "/images/defaultImage.png"
+          }
+          width={300}
+          height={450}
+          quality={100}
+          alt={data.name}
+          loading="eager"
+          className="mb-4 rounded-lg"
+        />
+      </div>
+      <div className="flex size-full flex-row items-center justify-center md:hidden">
+        <Image
+          src={
+            data?.profile_path
+              ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w300${data.profile_path}`
+              : "/images/defaultImage.png"
+          }
+          width={100}
+          height={150}
+          quality={100}
+          alt={data.name}
+          loading="eager"
+          className="mb-4 rounded-lg"
+        />
+      </div>
       <h1 className="mt-4 text-2xl font-bold md:hidden lg:text-3xl">
         {data.name}
       </h1>

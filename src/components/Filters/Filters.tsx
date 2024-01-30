@@ -239,6 +239,7 @@ const Filters: FC<Props> = (props) => {
             <h3 className="mb-4 text-lg font-bold">Options de filtres</h3>
           }
           aria-label="Filtrer"
+          variant="light"
         >
           <ListboxSection
             showDivider
@@ -274,10 +275,16 @@ const Filters: FC<Props> = (props) => {
             >
               <Select
                 aria-label="Langue"
-                variant="bordered"
+                /* color="primary" */
                 placeholder="Sélectionner une langue"
                 selectedKeys={[selectedLanguage]}
                 onChange={handleSelectedLanguage}
+                classNames={{
+                  base: "bg-primary shadow-primary rounded-lg border-[#6b7280]",
+                  trigger:
+                    "border-[#6b7280] bg-primary data-[hover=true]:bg-primary data-[hover=true]:bg-primary",
+                  popoverContent: "bg-primary",
+                }}
               >
                 <SelectSection showDivider>
                   {topLanguages.map((language) => (

@@ -18,11 +18,6 @@ export const getItems = (
       key: "castAndCrew",
     },
     {
-      link: `${baseUrl}/release-dates`,
-      name: "Dates de sortie",
-      key: "releaseDates",
-    },
-    {
       link: `${baseUrl}/similars/1`,
       name: "Similaires",
       key: "similars",

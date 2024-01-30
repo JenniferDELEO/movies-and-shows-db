@@ -63,12 +63,18 @@ const MediaHeader: FC<Props> = (props) => {
             </DropdownTrigger>
           </NavbarItem>
           {dropdownItems && (
-            <DropdownMenu aria-label="Vue d'ensemble">
+            <DropdownMenu
+              aria-label="Vue d'ensemble"
+              classNames={{
+                base: "bg-primary border-primary border-2 rounded-lg shadow-primary outline-none",
+              }}
+            >
               {dropdownItems.firstTab.map((item) => (
                 <DropdownItem
                   key={item.key}
                   href={item.link}
                   textValue={item.name}
+                  classNames={{ base: "bg-primary border-primary" }}
                 >
                   {item.name}
                 </DropdownItem>
@@ -91,7 +97,12 @@ const MediaHeader: FC<Props> = (props) => {
             </DropdownTrigger>
           </NavbarItem>
           {dropdownItems && (
-            <DropdownMenu aria-label="Médias">
+            <DropdownMenu
+              aria-label="Médias"
+              classNames={{
+                base: "bg-primary border-primary border-2 rounded-lg shadow-primary outline-none",
+              }}
+            >
               {dropdownItems.secondTab.map((item) => (
                 <DropdownItem
                   key={item.key}

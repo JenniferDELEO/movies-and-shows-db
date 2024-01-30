@@ -33,6 +33,7 @@ const OrderingSelect: FC<Props> = (props) => {
         label: "hidden",
         selectorIcon: "mt-4",
         listboxWrapper: "min-w-[190px]",
+        popoverContent: "bg-primary",
       }}
     >
       {orderingOptions.map((option) => (

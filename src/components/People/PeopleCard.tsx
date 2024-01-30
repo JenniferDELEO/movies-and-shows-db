@@ -14,7 +14,9 @@ type Props = {
 
 const PeopleCard: FC<Props> = ({ item, itemCastMovie, itemCastTvShow }) => {
   const router = useRouter();
-  const knownFor = item?.known_for?.map((item) => item?.title).join(", ");
+  const knownFor = item?.known_for
+    ?.map((item) => item?.title || item?.name)
+    .join(", ");
   const slug =
     item?.name.toLowerCase().replace(/[\W_]+/g, "-") ||
     itemCastMovie?.name.toLowerCase().replace(/[\W_]+/g, "-") ||
@@ -32,7 +34,7 @@ const PeopleCard: FC<Props> = ({ item, itemCastMovie, itemCastTvShow }) => {
   return (
     <Card
       isPressable
-      className="mb-4 cursor-pointer items-center justify-center"
+      className="mb-4 cursor-pointer items-center justify-center bg-primary"
       onPress={() => router.push(`/person/${id}/${slug}`)}
     >
       <CardBody className="items-center justify-center">
