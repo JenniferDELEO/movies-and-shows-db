@@ -38,7 +38,7 @@ export const settingsMinFiveSlides = {
         slidesToShow: 2,
         slidesToScroll: 2,
         arrows: false,
-        dots: true,
+        dots: false,
       },
     },
   ],
@@ -75,7 +75,7 @@ export const settingsMinFourSlides = {
         slidesToShow: 2,
         slidesToScroll: 2,
         arrows: false,
-        dots: true,
+        dots: false,
       },
     },
   ],
@@ -103,7 +103,7 @@ export const settingsMinThreeSlides = {
         slidesToShow: 2,
         slidesToScroll: 2,
         arrows: false,
-        dots: true,
+        dots: false,
       },
     },
   ],
@@ -115,4 +115,15 @@ export const settingsMinTwoSlides = {
   autoplay: false,
   slidesToShow: 2,
   slidesToScroll: 2,
+  responsive: [
+    {
+      breakpoint: 480,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2,
+        arrows: false,
+        dots: false,
+      },
+    },
+  ],
 };

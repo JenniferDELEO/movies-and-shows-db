@@ -31,7 +31,7 @@ const RecommendationsBanner: FC<Props> = (props) => {
               totalResults,
             }}
           />
-          <div className="mx-auto mb-0 mt-16 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
+          <div className="mx-auto mb-0 mt-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
         </section>
       ) : recommendationsTvShows ? (
         <section className="p-4 md:px-[2.5%] lg:px-[5%] 2xl:px-[10%]">
@@ -43,7 +43,7 @@ const RecommendationsBanner: FC<Props> = (props) => {
               totalResults,
             }}
           />
-          <div className="mx-auto mb-0 mt-16 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
+          <div className="mx-auto mb-0 mt-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
         </section>
       ) : null}
     </div>

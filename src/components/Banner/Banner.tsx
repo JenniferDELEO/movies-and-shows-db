@@ -5,6 +5,29 @@ import { useRouter } from "next/navigation";
 import { FC } from "react";
 import Slider from "react-slick";
 import dayjs from "dayjs";
+import "dayjs/locale/fr";
+import updateLocale from "dayjs/plugin/updateLocale";
+
+dayjs.locale("fr");
+
+dayjs.extend(updateLocale);
+
+dayjs.updateLocale("fr", {
+  monthsShort: [
+    "Jan",
+    "Fev",
+    "Mar",
+    "Avr",
+    "Mai",
+    "Juin",
+    "Juil",
+    "Aout",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ],
+});
 
 import {
   settingsMinTwoSlides,

@@ -28,7 +28,7 @@ const CrewBanner: FC<Props> = (props) => {
               key={item.id}
               className="mx-2 my-4 max-h-[330px] min-w-[150px]"
             >
-              <PeopleCard itemCastAndCrewMovie={item} />
+              <PeopleCard itemCastMovie={item} />
             </div>
           ))}
         {type === "tvshow" &&
@@ -38,7 +38,7 @@ const CrewBanner: FC<Props> = (props) => {
               key={item.id}
               className="mx-2 my-4 max-h-[350px] min-w-[150px]"
             >
-              <PeopleCard itemCastAndCrewTvShow={item} />
+              <PeopleCard itemCastTvShow={item} />
             </div>
           ))}
         <Link

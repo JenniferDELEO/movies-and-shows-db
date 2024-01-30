@@ -119,15 +119,15 @@ const BannerWrapper: FC<Props> = ({
   const classNames = {
     container: "mx-auto w-full md:w-[80%] lg:w[90%] mb-20 pb-16",
     title: "pl-5 text-xl tracking-wide font-bold",
-    items: "mx-auto pb-5 pt-10 sm:px-1 md:pl-4",
+    items: "mx-auto pt-10 sm:px-1 md:pl-4",
     image:
       "w-[185px] h-[278px] 2xl:w-[288px] min-h-auto 2xl:h-[400px] rounded-md mx-auto",
     dropdownContainer: "absolute right-2 top-2 z-10 ",
   };
 
-  const classNamesMovieDetails = {
+  const classNamesPagesDetails = {
     ...classNames,
-    container: "mx-auto w-full mb-20 pb-16",
+    container: "mx-auto w-full",
   };
 
   if (homeProps) {
@@ -208,7 +208,7 @@ const BannerWrapper: FC<Props> = ({
     return (
       <Banner
         items={movieCollectionProps.movies.sort((a, b) =>
-          a.release_date.localeCompare(b.release_date),
+          b.release_date.localeCompare(a.release_date),
         )}
         type="movie"
         user={user}
@@ -221,7 +221,7 @@ const BannerWrapper: FC<Props> = ({
         ratedTvShows={ratedTvShows}
         ratedMoviesIds={ratedMoviesIds}
         ratedTvShowsIds={ratedTvShowsIds}
-        classNames={classNamesMovieDetails}
+        classNames={classNamesPagesDetails}
         title={movieCollectionProps.title}
         userLists={userLists}
       />
@@ -229,12 +229,12 @@ const BannerWrapper: FC<Props> = ({
   }
   if (movieDetailsProps) {
     return (
-      <div className="mx-auto py-4 text-xl font-bold md:w-[90%]">
+      <div className="mx-auto py-4 text-xl font-bold">
         {movieDetailsProps?.movies?.length > 0 && (
           <div className="relative mt-4 size-full">
             {movieDetailsProps.totalPages > 1 && (
               <div className="absolute right-3 top-0">
-                <Tooltip content="Voir plus" placement="top" color="primary">
+                <Tooltip content="Voir plus" placement="top">
                   <button
                     className="rounded-full bg-white p-2 text-base font-normal text-primary"
                     onClick={() =>
@@ -261,7 +261,7 @@ const BannerWrapper: FC<Props> = ({
               ratedTvShows={ratedTvShows}
               ratedMoviesIds={ratedMoviesIds}
               ratedTvShowsIds={ratedTvShowsIds}
-              classNames={classNamesMovieDetails}
+              classNames={classNamesPagesDetails}
               title={`${movieDetailsProps.title} (${movieDetailsProps.totalResults})`}
               userLists={userLists}
             />
@@ -276,7 +276,9 @@ const BannerWrapper: FC<Props> = ({
         {personDetailProps.actingMovies.length > 0 && (
           <div className="mt-4">
             <Banner
-              items={personDetailProps.actingMovies}
+              items={personDetailProps.actingMovies.sort((a, b) =>
+                b.release_date.localeCompare(a.release_date),
+              )}
               type="movie"
               user={user}
               fetchUserDatas={fetchUserDatas}
@@ -288,16 +290,19 @@ const BannerWrapper: FC<Props> = ({
               ratedTvShows={ratedTvShows}
               ratedMoviesIds={ratedMoviesIds}
               ratedTvShowsIds={ratedTvShowsIds}
-              classNames={classNames}
+              classNames={classNamesPagesDetails}
               title={`Films (${personDetailProps.actingMovies.length})`}
               userLists={userLists}
             />
+            <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
         )}
         {personDetailProps.actingTvShows.length > 0 && (
           <div className="mt-4">
             <Banner
-              items={personDetailProps.actingTvShows}
+              items={personDetailProps.actingTvShows.sort((a, b) =>
+                b.first_air_date.localeCompare(a.first_air_date),
+              )}
               type="tvshow"
               user={user}
               fetchUserDatas={fetchUserDatas}
@@ -309,16 +314,19 @@ const BannerWrapper: FC<Props> = ({
               ratedTvShows={ratedTvShows}
               ratedMoviesIds={ratedMoviesIds}
               ratedTvShowsIds={ratedTvShowsIds}
-              classNames={classNames}
+              classNames={classNamesPagesDetails}
               title={`Séries TV (${personDetailProps.actingTvShows.length})`}
               userLists={userLists}
             />
+            <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
         )}
         {personDetailProps.runningMovies.length > 0 && (
           <div className="mt-4">
             <Banner
-              items={personDetailProps.runningMovies}
+              items={personDetailProps.runningMovies.sort((a, b) =>
+                b.release_date.localeCompare(a.release_date),
+              )}
               type="movie"
               user={user}
               fetchUserDatas={fetchUserDatas}
@@ -330,16 +338,19 @@ const BannerWrapper: FC<Props> = ({
               ratedTvShows={ratedTvShows}
               ratedMoviesIds={ratedMoviesIds}
               ratedTvShowsIds={ratedTvShowsIds}
-              classNames={classNames}
+              classNames={classNamesPagesDetails}
               title={`Films réalisés (${personDetailProps.runningMovies.length})`}
               userLists={userLists}
             />
+            <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
         )}
         {personDetailProps.runningTvShows.length > 0 && (
           <div className="mt-4">
             <Banner
-              items={personDetailProps.runningTvShows}
+              items={personDetailProps.runningTvShows.sort((a, b) =>
+                b.first_air_date.localeCompare(a.first_air_date),
+              )}
               type="tvshow"
               user={user}
               fetchUserDatas={fetchUserDatas}
@@ -351,10 +362,11 @@ const BannerWrapper: FC<Props> = ({
               ratedTvShows={ratedTvShows}
               ratedMoviesIds={ratedMoviesIds}
               ratedTvShowsIds={ratedTvShowsIds}
-              classNames={classNames}
+              classNames={classNamesPagesDetails}
               title={`Séries TV réalisées (${personDetailProps.runningTvShows.length})`}
               userLists={userLists}
             />
+            <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
         )}
       </div>
@@ -363,12 +375,12 @@ const BannerWrapper: FC<Props> = ({
 
   if (tvshowsDetailsProps) {
     return (
-      <div className="mx-auto py-4 text-xl font-bold md:w-[90%]">
+      <div className="mx-auto py-4 text-xl font-bold">
         {tvshowsDetailsProps?.tvshows?.length > 0 && (
           <div className="relative mt-4 size-full">
             {tvshowsDetailsProps.totalPages > 1 && (
               <div className="absolute right-3 top-0">
-                <Tooltip content="Voir plus" placement="top" color="primary">
+                <Tooltip content="Voir plus" placement="top">
                   <button
                     className="rounded-full bg-white p-2 text-base font-normal text-primary"
                     onClick={() =>
@@ -396,7 +408,7 @@ const BannerWrapper: FC<Props> = ({
               ratedTvShows={ratedTvShows}
               ratedMoviesIds={ratedMoviesIds}
               ratedTvShowsIds={ratedTvShowsIds}
-              classNames={classNamesMovieDetails}
+              classNames={classNamesPagesDetails}
               title={`${tvshowsDetailsProps.title} (${tvshowsDetailsProps.totalResults})`}
               userLists={userLists}
             />

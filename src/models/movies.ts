@@ -85,12 +85,6 @@ export interface MovieDetails extends Movie {
     total_pages: number;
     total_results: number;
   };
-  release_dates: {
-    results: {
-      id: number;
-      results: ReleaseDates[];
-    };
-  };
   revenue: number;
   runtime: number;
   spoken_languages: SpokenLanguage[];
@@ -119,18 +113,6 @@ export type ProductionCompany = {
 export type ProductionCountry = {
   iso_3166_1: string;
   name: string;
-};
-
-export type ReleaseDates = {
-  iso_3166_1: string;
-  release_dates: {
-    certification: string;
-    descriptors: any[];
-    iso_639_1: string;
-    note: string;
-    release_date: string;
-    type: number;
-  };
 };
 
 export type SpokenLanguage = {

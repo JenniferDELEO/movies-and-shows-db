@@ -8,37 +8,33 @@ import { CastMovies, CastTvShows, People } from "@/models/people";
 
 type Props = {
   item?: People;
-  itemCastAndCrewMovie?: CastMovies;
-  itemCastAndCrewTvShow?: CastTvShows;
+  itemCastMovie?: CastMovies;
+  itemCastTvShow?: CastTvShows;
 };
 
-const PeopleCard: FC<Props> = ({
-  item,
-  itemCastAndCrewMovie,
-  itemCastAndCrewTvShow,
-}) => {
+const PeopleCard: FC<Props> = ({ item, itemCastMovie, itemCastTvShow }) => {
   const router = useRouter();
-  const knownFor = item?.known_for?.map((item) => item?.title).join(", ");
+  const knownFor = item?.known_for
+    ?.map((item) => item?.title || item?.name)
+    .join(", ");
   const slug =
     item?.name.toLowerCase().replace(/[\W_]+/g, "-") ||
-    itemCastAndCrewMovie?.name.toLowerCase().replace(/[\W_]+/g, "-") ||
-    itemCastAndCrewTvShow?.name.toLowerCase().replace(/[\W_]+/g, "-");
-  const id = item?.id || itemCastAndCrewMovie?.id || itemCastAndCrewTvShow?.id;
+    itemCastMovie?.name.toLowerCase().replace(/[\W_]+/g, "-") ||
+    itemCastTvShow?.name.toLowerCase().replace(/[\W_]+/g, "-");
+  const id = item?.id || itemCastMovie?.id || itemCastTvShow?.id;
   const profilePath =
     item?.profile_path ||
-    itemCastAndCrewMovie?.profile_path ||
-    itemCastAndCrewTvShow?.profile_path;
-  const name =
-    item?.name || itemCastAndCrewMovie?.name || itemCastAndCrewTvShow?.name;
+    itemCastMovie?.profile_path ||
+    itemCastTvShow?.profile_path;
+  const name = item?.name || itemCastMovie?.name || itemCastTvShow?.name;
   const character =
-    itemCastAndCrewMovie?.character ||
-    itemCastAndCrewTvShow?.roles?.[0]?.character;
-  const episodeCount = itemCastAndCrewTvShow?.roles?.[0].episode_count;
+    itemCastMovie?.character || itemCastTvShow?.roles?.[0]?.character;
+  const episodeCount = itemCastTvShow?.roles?.[0].episode_count;
 
   return (
     <Card
       isPressable
-      className="mb-4 cursor-pointer items-center justify-center bg-white text-primary"
+      className="mb-4 cursor-pointer items-center justify-center bg-primary"
       onPress={() => router.push(`/person/${id}/${slug}`)}
     >
       <CardBody className="items-center justify-center">
@@ -52,18 +48,14 @@ const PeopleCard: FC<Props> = ({
           alt={name}
           className="rounded-xl object-cover"
           style={{
-            maxHeight: itemCastAndCrewMovie
-              ? 168
-              : itemCastAndCrewTvShow
-                ? 145
-                : 278,
+            maxHeight: itemCastMovie ? 168 : itemCastTvShow ? 145 : 278,
           }}
         />
       </CardBody>
       <CardFooter
         className="flex-col items-center justify-start px-4 pb-4"
         style={{
-          height: itemCastAndCrewTvShow ? 140 : 120,
+          height: itemCastTvShow ? 140 : 120,
         }}
       >
         <h4 className="text-sm">{name}</h4>

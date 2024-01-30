@@ -2,6 +2,7 @@
 
 import {
   Button,
+  Chip,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -14,12 +15,29 @@ import { usePathname } from "next/navigation";
 import { FaChevronDown } from "react-icons/fa";
 
 import { getItems } from "@/components/Headers/ItemsHeader";
+import { FC } from "react";
 
-const MediaHeader = () => {
+type Props = {
+  numberOfBackdrops: number;
+  numberOfLogos: number;
+  numberOfPosters: number;
+  numberOfVideos: number;
+};
+
+const MediaHeader: FC<Props> = (props) => {
+  const { numberOfBackdrops, numberOfLogos, numberOfPosters, numberOfVideos } =
+    props;
   const pathname = usePathname();
   const baseUrl = `/${pathname.split("/")[1]}/${pathname.split("/")[2]}`;
   const type = pathname.split("/")[1];
-  const dropdownItems = getItems(baseUrl, type);
+  const dropdownItems = getItems(
+    baseUrl,
+    type,
+    numberOfBackdrops,
+    numberOfLogos,
+    numberOfPosters,
+    numberOfVideos,
+  );
 
   return (
     <Navbar
@@ -45,12 +63,18 @@ const MediaHeader = () => {
             </DropdownTrigger>
           </NavbarItem>
           {dropdownItems && (
-            <DropdownMenu aria-label="Vue d'ensemble">
+            <DropdownMenu
+              aria-label="Vue d'ensemble"
+              classNames={{
+                base: "bg-primary border-primary border-2 rounded-lg shadow-primary outline-none",
+              }}
+            >
               {dropdownItems.firstTab.map((item) => (
                 <DropdownItem
                   key={item.key}
                   href={item.link}
                   textValue={item.name}
+                  classNames={{ base: "bg-primary border-primary" }}
                 >
                   {item.name}
                 </DropdownItem>
@@ -73,12 +97,18 @@ const MediaHeader = () => {
             </DropdownTrigger>
           </NavbarItem>
           {dropdownItems && (
-            <DropdownMenu aria-label="Médias">
+            <DropdownMenu
+              aria-label="Médias"
+              classNames={{
+                base: "bg-primary border-primary border-2 rounded-lg shadow-primary outline-none",
+              }}
+            >
               {dropdownItems.secondTab.map((item) => (
                 <DropdownItem
                   key={item.key}
                   href={item.link}
                   textValue={item.name}
+                  endContent={<Chip>{item.number}</Chip>}
                 >
                   {item.name}
                 </DropdownItem>

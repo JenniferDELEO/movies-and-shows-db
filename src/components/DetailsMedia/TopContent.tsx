@@ -6,6 +6,7 @@ import { FC } from "react";
 import { AccountStates, Genre, Video, WatchProviderFr } from "@/models/movies";
 import Infos from "@/components/DetailsMedia/Infos";
 import { CreditsMovies, CreditsTvShows } from "@/models/people";
+import { Tooltip } from "@nextui-org/react";
 
 type Props = {
   backdropPath: string;
@@ -203,38 +204,43 @@ const TopContent: FC<Props> = (props) => {
                   />
                   {watchProvidersFr && watchProvidersFr.length > 0 && (
                     <div className="absolute bottom-0 left-0 w-full">
-                      <div className="flex flex-row flex-wrap items-center justify-center bg-primary/90">
+                      <div className="flex flex-col items-center justify-center bg-primary/90 py-3">
                         <p className="mr-2 text-xs">
                           Justwatch - Disponible en streaming sur :
                         </p>
-                        {watchProvidersFr.map((watchProvider) => (
-                          <div
-                            key={watchProvider.provider_id}
-                            className="flex size-10 flex-row items-center justify-center"
-                          >
-                            <Image
-                              alt={`logo-${watchProvider.provider_name}`}
-                              src={
-                                watchProvider.logo_path
-                                  ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${watchProvider.logo_path}`
-                                  : "/images/defaultImage.png"
-                              }
-                              width={0}
-                              height={0}
-                              style={{
-                                width: "100%",
-                                height: "100%",
-                                display: "block",
-                                minWidth: "100%",
-                                minHeight: "100%",
-                                borderWidth: 0,
-                                outline: 0,
-                                borderRadius: 5,
-                              }}
-                              sizes="100vw"
-                            />
-                          </div>
-                        ))}
+                        <div className="flex flex-row flex-wrap">
+                          {watchProvidersFr.map((watchProvider) => (
+                            <Tooltip
+                              key={watchProvider.provider_id}
+                              content={watchProvider.provider_name}
+                              placement="bottom"
+                            >
+                              <div className="my-2 mr-2 size-10">
+                                <Image
+                                  alt={`logo-${watchProvider.provider_name}`}
+                                  src={
+                                    watchProvider.logo_path
+                                      ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${watchProvider.logo_path}`
+                                      : "/images/defaultImage.png"
+                                  }
+                                  width={0}
+                                  height={0}
+                                  style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    display: "block",
+                                    minWidth: "100%",
+                                    minHeight: "100%",
+                                    borderWidth: 0,
+                                    outline: 0,
+                                    borderRadius: 5,
+                                  }}
+                                  sizes="100vw"
+                                />
+                              </div>
+                            </Tooltip>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   )}

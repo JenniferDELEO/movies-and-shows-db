@@ -2,7 +2,8 @@ import TvShowWrapper from "@/components/DetailsMedia/TvShow/TvShowWrapper";
 import { getTvShowDetail } from "@/libs/api/tvshows";
 
 const Tvshow = async ({ params }: { params: { id: string } }) => {
-  const tvShowDetail = await getTvShowDetail(params.id.split("-")[0]);
+  const id = params.id.split("-")[0];
+  const tvShowDetail = await getTvShowDetail(id);
 
   return (
     <div className="size-full">
