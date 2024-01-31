@@ -37,6 +37,7 @@ const TvShowWrapper: FC<Props> = (props) => {
         videos={tvShowDetail?.videos}
         voteAverage={tvShowDetail?.vote_average}
         voteCount={tvShowDetail?.vote_count}
+        watchProvidersFr={tvShowDetail?.watch_providers_fr}
       />
       <CrewBanner
         castTvShow={tvShowDetail?.aggregate_credits?.cast}

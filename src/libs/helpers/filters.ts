@@ -31,6 +31,7 @@ export const defaultTvShowsFilters = {
   include_video: false,
   language: "fr-FR",
   page: 1,
+  screened_theatrically: true,
   show_me: 0,
   sort_by: "popularity.desc",
   "vote_average.gte": 0,

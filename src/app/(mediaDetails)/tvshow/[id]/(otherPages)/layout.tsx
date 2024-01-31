@@ -20,7 +20,7 @@ export default async function TvShowsDetailsLayout({
         posterPath={tvShowDetail?.poster_path}
         title={tvShowDetail?.name}
       />
-      <div className="size-full pt-[150px]">{children}</div>
+      <div className="size-full">{children}</div>
     </div>
   );
 }

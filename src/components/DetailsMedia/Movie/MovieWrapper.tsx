@@ -19,8 +19,8 @@ const MovieWrapper: FC<Props> = (props) => {
     <div className="size-full">
       <TopContent
         accountStates={movieDetail?.account_states}
-        creditsMovies={movieDetail?.credits}
         backdropPath={movieDetail?.backdrop_path}
+        creditsMovies={movieDetail?.credits}
         genresMedia={movieDetail?.genres}
         id={movieDetail?.id}
         originalLanguage={movieDetail?.original_language}

@@ -16,7 +16,7 @@ const Recommendations = async ({ params }: Props) => {
   } = await getRecommendationsTvShow(id, 1);
 
   return (
-    <div className="pt-[64px]">
+    <div>
       <RecommendationsWrapper
         genresTvShows={genresTvShows}
         mediaId={id}
