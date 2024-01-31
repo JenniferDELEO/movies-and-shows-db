@@ -1,13 +1,16 @@
 import BannerWrapper from "@/components/Banner/BannerWrapper";
 import SearchBar from "@/components/Search/SearchBar";
 import { getPopularMovies, getTopRatedMovies } from "@/libs/api/movies";
-import { getPopularTvShows, getTopRatedTvShows } from "@/libs/api/tvshows";
+import { getDiscoverTvShows, getTopRatedTvShows } from "@/libs/api/tvshows";
+import { defaultTvShowsFilters } from "@/libs/helpers/filters";
 
 export default async function Home() {
   const { results: popularMovies } = await getPopularMovies(1);
   const { results: topRatedMovies } = await getTopRatedMovies();
 
-  const { results: popularTvShows } = await getPopularTvShows(1);
+  const { results: popularTvShows } = await getDiscoverTvShows(
+    defaultTvShowsFilters,
+  );
   const { results: topRatedTvShows } = await getTopRatedTvShows();
 
   return (

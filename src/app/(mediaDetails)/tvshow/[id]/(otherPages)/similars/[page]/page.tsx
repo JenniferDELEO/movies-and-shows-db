@@ -16,7 +16,7 @@ const Similars = async ({ params }: Props) => {
   } = await getSimilarsTvShow(id, 1);
 
   return (
-    <div className="pt-[64px]">
+    <div>
       <SimilarsWrapper
         genresTvShows={genresTvShows}
         mediaId={id}

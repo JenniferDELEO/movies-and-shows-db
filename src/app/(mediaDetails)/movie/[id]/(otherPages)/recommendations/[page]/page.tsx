@@ -16,7 +16,7 @@ const Recommendations = async ({ params }: Props) => {
   } = await getRecommendationsMovie(id, 1);
 
   return (
-    <div className="pt-[64px]">
+    <div>
       <RecommendationsWrapper
         genresMovies={genresMovies}
         mediaId={id}

@@ -29,6 +29,7 @@ export type TvShowsFilters = {
   include_video: boolean;
   language: string;
   page: number;
+  screened_theatrically: boolean;
   show_me: number;
   sort_by: string;
   "vote_average.gte": number | null;

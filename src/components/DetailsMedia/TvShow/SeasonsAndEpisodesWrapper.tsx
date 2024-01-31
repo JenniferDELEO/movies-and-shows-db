@@ -16,7 +16,7 @@ type Props = {
 const SeasonsAndEpisodesWrapper: FC<Props> = (props) => {
   const { seasons, tvShowId } = props;
   const [selectedSeason, setSelectedSeason] = useState<Season>(
-    seasons[seasons.length - 1],
+    seasons.filter((season) => season.season_number === 1)[0],
   );
   const [seasonDetails, setSeasonDetails] = useState<SeasonDetails | null>(
     null,

@@ -17,18 +17,21 @@ import { UserContext } from "@/context/userContext";
 import { List } from "@/models/lists";
 import { getLists } from "@/libs/api/lists";
 import { getTvShowDetail } from "@/libs/api/tvshows";
+import { Episode } from "@/models/tvShows";
 
 type Props = {
   genresMedia: Genre[];
   id: number;
   overview: string;
   title: string;
-  type: "tvshow" | "movie";
+  type: "episode" | "movie" | "tvshow";
   voteAverage: number;
 
   accountStates?: AccountStates;
   creditsMovies?: CreditsMovies;
   creditsTvShows?: CreditsTvShows;
+  episodePrecedent?: Episode | undefined;
+  episodeNumber?: number;
   episodeRunTime?: number[];
   isCollection?: boolean;
   numberOfSeasons?: number;
@@ -36,6 +39,7 @@ type Props = {
   originalLanguage?: string;
   releaseDate?: string;
   runtime?: number;
+  seasonNumber?: number;
   status?: string;
   tagline?: string;
   videos?: {
@@ -58,6 +62,8 @@ const Infos: FC<Props> = (props) => {
     accountStates,
     creditsMovies,
     creditsTvShows,
+    episodeNumber,
+    episodePrecedent,
     episodeRunTime,
     isCollection,
     numberOfSeasons,
@@ -65,6 +71,7 @@ const Infos: FC<Props> = (props) => {
     originalLanguage,
     releaseDate,
     runtime,
+    seasonNumber,
     status,
     tagline,
     videos,
@@ -148,6 +155,7 @@ const Infos: FC<Props> = (props) => {
 
   return (
     <div className="md:flex md:size-full md:flex-col md:justify-center">
+      {/* Screen size < md */}
       <div className="fixed bottom-0 left-0 z-20 w-full bg-primary md:hidden">
         {watchProvidersFr && watchProvidersFr.length > 0 && (
           <div className="w-full py-3">
@@ -190,7 +198,8 @@ const Infos: FC<Props> = (props) => {
         )}
         {isFavorite !== undefined &&
           isInWatchlist !== undefined &&
-          isRated !== undefined && (
+          isRated !== undefined &&
+          type !== "episode" && (
             <div className="flex flex-row items-center justify-evenly">
               <AccountInteraction
                 item={{ id: id, name: title, title: title }}
@@ -208,54 +217,90 @@ const Infos: FC<Props> = (props) => {
             </div>
           )}
       </div>
+
       {openTrailer && trailer && (
         <YoutubeEmbed embedId={trailer.key} setOpenTrailer={setOpenTrailer} />
       )}
-      <div className="my-4 text-center md:ml-10 md:text-start">
+
+      {/* All screen sizes */}
+      <div className="text-center md:my-4 md:ml-10 md:text-start">
         <h1 className="text-xl font-bold md:text-3xl">
           {title}
           <span className="text-base font-normal text-gray-400 md:text-2xl">
             {" "}
-            {!isCollection
+            {!isCollection && type !== "episode"
               ? releaseDate
                 ? `(${dayjs(releaseDate).format("YYYY")})`
                 : "(Non sortie)"
               : null}
           </span>
         </h1>
+
+        {/* Screen size > md */}
         <div className="mt-2 hidden text-sm md:block">
-          {type === "movie" && (
-            <p className="text-gray-400">
-              {!isCollection ? (
-                <>
+          {type === "movie" && !isCollection ? (
+            <div className="text-gray-400">
+              <div className="flex flex-row items-center justify-start">
+                <p className="pr-3 text-gray-400">
+                  <span className="font-bold text-white">
+                    Date de sortie :{" "}
+                  </span>
                   {releaseDate
-                    ? dayjs(releaseDate).format("DD/MM/YYYY")
+                    ? dayjs(releaseDate).format("DD MMMM YYYY")
                     : "Non sortie"}{" "}
-                  (FR) - {runtimeHours} h {runtimeMinutes} min -{" "}
-                </>
-              ) : null}
-              {genresMedia &&
-                genresMedia.map((genre, index) => {
-                  if (index === genresMedia.length - 1) {
-                    return <span key={genre.id}>{genre?.name}</span>;
-                  }
-                  return <span key={genre.id}>{genre?.name}, </span>;
-                })}
-            </p>
-          )}
-          {type === "tvshow" && (
+                  (FR)
+                </p>
+                <p className="pr-3 text-gray-400">
+                  <span className="font-bold text-white">Durée : </span>
+                  {runtimeHours} h {runtimeMinutes} min
+                </p>
+              </div>
+            </div>
+          ) : null}
+          {(type === "tvshow" || type === "episode") && (
             <div className="flex flex-row items-center justify-start">
               <p className="pr-3 text-gray-400">
-                <span className="font-bold text-white">Genres : </span>
-
-                {genresMedia &&
-                  genresMedia.map((genre, index) => {
-                    if (index === genresMedia.length - 1) {
-                      return <span key={genre.id}>{genre?.name}</span>;
-                    }
-                    return <span key={genre.id}>{genre?.name}, </span>;
-                  })}
+                <span className="font-bold text-white">Date de sortie : </span>
+                {releaseDate
+                  ? dayjs(releaseDate).format("DD MMMM YYYY")
+                  : "Non sortie"}{" "}
+                (FR)
               </p>
+              {type === "tvshow" &&
+                episodeRunTime &&
+                episodeRunTime?.length > 0 && (
+                  <div className="flex flex-row items-center justify-start">
+                    <p className="pr-3 font-bold text-white">
+                      Durée d&apos;un épisode :{" "}
+                      {episodeRunTime.map((runtime, index) => {
+                        if (index === episodeRunTime.length - 1) {
+                          return (
+                            <span
+                              key={index}
+                              className="pt-2 font-normal text-gray-400"
+                            >
+                              {runtime} min
+                            </span>
+                          );
+                        }
+                        return (
+                          <span
+                            key={index}
+                            className="pt-2 font-normal text-gray-400"
+                          >
+                            {runtime},{" "}
+                          </span>
+                        );
+                      })}
+                    </p>
+                  </div>
+                )}
+              {type === "episode" && (
+                <p className="pr-3 text-gray-400">
+                  <span className="font-bold text-white">Durée : </span>
+                  {episodeRunTime} min
+                </p>
+              )}
               <p className="text-gray-400">
                 <span className="font-bold text-white">Statut : </span>
                 {status === "Ended" ? (
@@ -268,45 +313,44 @@ const Infos: FC<Props> = (props) => {
               </p>
             </div>
           )}
-          <div className="flex flex-row items-center justify-start">
+          <div className="flex flex-row flex-wrap items-center justify-start">
+            <p className="pr-3 pt-2">
+              <span className="font-bold">Genres : </span>
+              {genresMedia &&
+                genresMedia.map((genre, index) => {
+                  if (index === genresMedia.length - 1) {
+                    return (
+                      <span key={genre.id} className="text-gray-400">
+                        {genre?.name}
+                      </span>
+                    );
+                  }
+                  return (
+                    <span key={genre.id} className="text-gray-400">
+                      {genre?.name},{" "}
+                    </span>
+                  );
+                })}
+            </p>
             {originalLanguage && (
               <p className="pr-3 pt-2 text-gray-400">
                 <span className="font-bold text-white">Langue : </span>
                 {originalLanguageName}
               </p>
             )}
-            {episodeRunTime && episodeRunTime?.length > 0 && (
-              <div className="flex flex-row items-center justify-start">
-                <p className="pr-3 pt-2 font-bold text-white">
-                  Durée d&apos;un épisode :{" "}
-                  {episodeRunTime.map((runtime, index) => {
-                    if (index === episodeRunTime.length - 1) {
-                      return (
-                        <span
-                          key={index}
-                          className="pt-2 font-normal text-gray-400"
-                        >
-                          {runtime} min
-                        </span>
-                      );
-                    }
-                    return (
-                      <span
-                        key={index}
-                        className="pt-2 font-normal text-gray-400"
-                      >
-                        {runtime},{" "}
-                      </span>
-                    );
-                  })}
-                </p>
-              </div>
-            )}
             {numberOfSeasons && (
               <div className="flex flex-row items-center justify-start">
                 <p className="pr-3 pt-2 text-gray-400">
                   <span className="font-bold text-white">Saisons : </span>
                   {numberOfSeasons}
+                </p>
+              </div>
+            )}
+            {seasonNumber && (
+              <div className="flex flex-row items-center justify-start">
+                <p className="pr-3 pt-2 text-gray-400">
+                  <span className="font-bold text-white">Saison : </span>
+                  {seasonNumber}
                 </p>
               </div>
             )}
@@ -318,9 +362,37 @@ const Infos: FC<Props> = (props) => {
                 </p>
               </div>
             )}
+            {episodeNumber && (
+              <div className="flex flex-row items-center justify-start">
+                <p className="pr-3 pt-2 text-gray-400">
+                  <span className="font-bold text-white">Episode : </span>
+                  {episodeNumber}
+                </p>
+              </div>
+            )}
+            {episodePrecedent && seasonNumber && episodeNumber && (
+              <div className="flex flex-row items-center justify-start">
+                <p className="pr-3 pt-2 text-gray-400">
+                  <span className="font-bold text-white">
+                    Episode précédent :{" "}
+                  </span>
+                  S
+                  {episodePrecedent.season_number > 9
+                    ? episodePrecedent.season_number
+                    : `0${episodePrecedent.season_number}`}
+                  E
+                  {episodePrecedent.episode_number > 9
+                    ? episodePrecedent.episode_number
+                    : `0${episodePrecedent.episode_number}`}{" "}
+                  - {episodePrecedent.name}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
+
+      {/* All screen sizes */}
       <div className="m-4 ml-10 flex flex-row items-center justify-evenly md:justify-start">
         <div className="flex flex-col items-center justify-center md:mr-4 md:items-start">
           <p className="font-bold">Note moyenne</p>
@@ -341,7 +413,8 @@ const Infos: FC<Props> = (props) => {
           <>
             {isFavorite !== undefined &&
               isInWatchlist !== undefined &&
-              isRated !== undefined && (
+              isRated !== undefined &&
+              type !== "episode" && (
                 <div className="hidden md:block">
                   <AccountInteraction
                     item={{ id: id, name: title, title: title }}
@@ -367,67 +440,174 @@ const Infos: FC<Props> = (props) => {
           </>
         </div>
       </div>
-      <div className="my-4 ml-10 flex flex-col items-center justify-center md:hidden">
-        {type === "movie" && (
+
+      {/* Screen size < md */}
+      <div className="my-4 flex flex-col items-center justify-center px-[10%] text-sm text-gray-400 md:hidden">
+        {type === "movie" && !isCollection && (
           <>
-            <p className="text-sm text-gray-400">
+            <p>
+              <span className="font-bold text-white">Date de sortie : </span>
               {releaseDate
-                ? dayjs(releaseDate).format("DD/MM/YYYY")
+                ? dayjs(releaseDate).format("DD MMMM YYYY")
                 : "Non sortie"}{" "}
-              (FR) - {runtimeHours} h {runtimeMinutes} min
+              (FR)
             </p>
-            <p className="text-sm text-gray-400">
-              {genresMedia &&
-                genresMedia.map((genre, index) => {
-                  if (index === genresMedia.length - 1) {
-                    return <span key={genre.id}>{genre?.name}</span>;
-                  }
-                  return <span key={genre.id}>{genre?.name}, </span>;
-                })}
-            </p>
+            <div className="flex flex-row items-center justify-center pt-2">
+              <p className="pt-2">
+                <span className="font-bold text-white">Durée : </span>
+                {runtimeHours} h {runtimeMinutes} min
+              </p>
+              {originalLanguage && (
+                <p className="pt-2">
+                  <span className="font-bold text-white">Langue : </span>
+                  {originalLanguageName}
+                </p>
+              )}
+            </div>
           </>
         )}
-        {type === "tvshow" && (
+        {(type === "tvshow" || type === "episode") && (
           <div className="flex flex-col items-center justify-start md:flex-row">
-            <p className="pr-2 text-center text-sm">
-              <span className="font-bold">Genres : </span>
-              {genresMedia &&
-                genresMedia.map((genre, index) => {
-                  if (index === genresMedia.length - 1) {
-                    return (
-                      <span key={genre.id} className="text-gray-400">
-                        {genre?.name}
-                      </span>
-                    );
-                  }
-                  return (
-                    <span key={genre.id} className="text-gray-400">
-                      {genre?.name},{" "}
-                    </span>
-                  );
-                })}
+            <p className="text-gray-400">
+              <span className="font-bold text-white">Date de sortie : </span>
+              {releaseDate
+                ? dayjs(releaseDate).format("DD MMMM YYYY")
+                : "Non sortie"}{" "}
+              (FR)
             </p>
-            <p className="pt-2 text-sm">
-              <span className="font-bold">Statut : </span>
-              {status === "Ended" ? (
-                <span className="text-gray-400">Terminée</span>
-              ) : status === "Canceled" ? (
-                <span className="text-gray-400">Annulée</span>
-              ) : (
-                <span className="text-gray-400">En cours</span>
+            {type === "tvshow" &&
+              episodeRunTime &&
+              episodeRunTime?.length > 0 && (
+                <div className="flex flex-row items-center justify-start">
+                  <p className="pt-2 font-bold text-white">
+                    Durée d&apos;un épisode :{" "}
+                    {episodeRunTime.map((runtime, index) => {
+                      if (index === episodeRunTime.length - 1) {
+                        return (
+                          <span
+                            key={index}
+                            className="font-normal text-gray-400"
+                          >
+                            {runtime} min
+                          </span>
+                        );
+                      }
+                      return (
+                        <span key={index} className="font-normal text-gray-400">
+                          {runtime},{" "}
+                        </span>
+                      );
+                    })}
+                  </p>
+                </div>
               )}
-            </p>
+            <div className="flex flex-row flex-wrap items-center justify-center pt-2">
+              <>
+                {type === "tvshow" &&
+                  episodeRunTime &&
+                  episodeRunTime?.length > 0 && (
+                    <div className="flex flex-row items-center justify-start">
+                      <p className="pr-3 font-bold text-white">
+                        Durée d&apos;un épisode :{" "}
+                        {episodeRunTime.map((runtime, index) => {
+                          if (index === episodeRunTime.length - 1) {
+                            return (
+                              <span
+                                key={index}
+                                className="pt-2 font-normal text-gray-400"
+                              >
+                                {runtime} min
+                              </span>
+                            );
+                          }
+                          return (
+                            <span
+                              key={index}
+                              className="pt-2 font-normal text-gray-400"
+                            >
+                              {runtime},{" "}
+                            </span>
+                          );
+                        })}
+                      </p>
+                    </div>
+                  )}
+                {type === "episode" && (
+                  <p className="pr-3 pt-2 text-gray-400">
+                    <span className="font-bold text-white">Durée : </span>
+                    {episodeRunTime} min
+                  </p>
+                )}
+                <p className="pr-3 pt-2 text-gray-400">
+                  <span className="font-bold text-white">Statut : </span>
+                  {status === "Ended" ? (
+                    <span className="text-gray-400">Terminée</span>
+                  ) : status === "Canceled" ? (
+                    <span className="text-gray-400">Annulée</span>
+                  ) : (
+                    <span className="text-gray-400">En cours</span>
+                  )}
+                </p>
+              </>
+
+              {originalLanguage && (
+                <p className="pt-2">
+                  <span className="font-bold text-white">Langue : </span>
+                  {originalLanguageName}
+                </p>
+              )}
+            </div>
           </div>
         )}
-        <p className="pt-2 text-sm text-gray-400">
-          <span className="font-bold text-white">Langue : </span>
-          {originalLanguageName}
+        <p className="pt-2 text-center">
+          <span className="font-bold text-white">Genres : </span>
+          {genresMedia &&
+            genresMedia.map((genre, index) => {
+              if (index === genresMedia.length - 1) {
+                return <span key={genre.id}>{genre?.name}</span>;
+              }
+              return <span key={genre.id}>{genre?.name}, </span>;
+            })}
         </p>
+        {numberOfEpisodes && numberOfSeasons && (
+          <div className="flex flex-row flex-wrap items-center justify-center">
+            <div className="flex flex-row items-center justify-start">
+              <p className="pr-3 pt-2 text-gray-400">
+                <span className="font-bold text-white">Saisons : </span>
+                {numberOfSeasons}
+              </p>
+            </div>
+            <div className="flex flex-row items-center justify-start">
+              <p className="pr-3 pt-2 text-gray-400">
+                <span className="font-bold text-white">Episodes : </span>
+                {numberOfEpisodes}
+              </p>
+            </div>
+          </div>
+        )}
+        {episodeNumber && seasonNumber && (
+          <div className="flex flex-row flex-wrap items-center justify-center">
+            <div className="flex flex-row items-center justify-start">
+              <p className="pr-3 pt-2 text-gray-400">
+                <span className="font-bold text-white">Saison : </span>
+                {seasonNumber}
+              </p>
+            </div>
+            <div className="flex flex-row items-center justify-start">
+              <p className="pr-3 pt-2 text-gray-400">
+                <span className="font-bold text-white">Episode : </span>
+                {episodeNumber}
+              </p>
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* All screen sizes */}
       <div className="m-4 ml-10">
         {tagline && <p className="italic text-gray-400">{tagline}</p>}
         <div className="my-4">
-          <h2 className="text-lg font-bold">Synopsis</h2>
+          <h2 className="pt-2 text-lg font-bold">Synopsis</h2>
           {overview && overview.length > 0 ? (
             <p className="my-4 mr-4 text-sm md:text-justify">{overview}</p>
           ) : (
@@ -435,6 +615,8 @@ const Infos: FC<Props> = (props) => {
           )}
         </div>
       </div>
+
+      {/* All screen sizes */}
       <div className="m-4 ml-10 mr-6 flex flex-row flex-wrap items-center justify-between">
         {directors?.map((director) => (
           <div key={director.id} className="m-2">

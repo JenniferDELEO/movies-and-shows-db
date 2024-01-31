@@ -18,13 +18,16 @@ const EpisodesBanner: FC<Props> = (props) => {
   const router = useRouter();
   const pathname = usePathname();
 
+  const pathUrlArray = pathname.split("/").slice(0, 3).join("/");
+  const pathUrl = pathUrlArray === "" ? "/" : pathUrlArray;
+
   return (
     <>
-      <h1 className="mx-auto py-4 text-xl font-bold md:w-[90%]">
-        Episodes ({seasonDetails.episodes.length})
+      <h1 className="mx-auto w-[90%] py-4 text-xl font-bold">
+        Episodes ({seasonDetails?.episodes?.length})
       </h1>
       <div className="mx-auto flex size-full flex-row items-baseline justify-start overflow-x-auto md:w-[93%]">
-        {seasonDetails.episodes.length > 0 &&
+        {seasonDetails?.episodes?.length > 0 &&
           seasonDetails.episodes.map((episode) => (
             <div key={episode.id} className="mx-2 my-4">
               <Card
@@ -32,7 +35,7 @@ const EpisodesBanner: FC<Props> = (props) => {
                 className="mx-2 my-4 flex cursor-pointer flex-col items-center justify-center bg-transparent"
                 onPress={() =>
                   router.push(
-                    `${pathname}/season/${seasonDetails.season_number}/episode/${episode.episode_number}`,
+                    `${pathUrl}/episode/s${episode.season_number > 9 ? episode.season_number : `0${episode.season_number}`}e${episode.episode_number > 9 ? episode.episode_number : `0${episode.episode_number}`}`,
                   )
                 }
               >

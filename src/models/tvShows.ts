@@ -9,7 +9,7 @@ import {
   Video,
   WatchProviderFr,
 } from "./movies";
-import { CastMovies, CreditsTvShows, CrewTvShows } from "./people";
+import { CastMovies, CastTvShows, CreditsTvShows, CrewTvShows } from "./people";
 
 export type ApiResultTvShows = {
   page: number;
@@ -34,6 +34,7 @@ export type Episode = {
   id: number;
   name: string;
   overview: string;
+  poster_path: string;
   production_code: string;
   runtime: number;
   season_number: number;
@@ -42,6 +43,24 @@ export type Episode = {
   vote_average: number;
   vote_count: number;
 };
+
+export interface EpisodeDetails extends Episode {
+  account_states: { id: number; rated: boolean | { value: number } };
+  credits: {
+    id: number;
+    cast: CastTvShows[];
+    crew: CrewTvShows[];
+    guest_stars: CastMovies[];
+  };
+  images: {
+    id: number;
+    stills: Image[];
+  };
+  videos: {
+    id: number;
+    results: Video[];
+  };
+}
 
 export type LastEpisodeToAir = {
   air_date: string;
@@ -78,7 +97,18 @@ export type Season = {
 
 export type SeasonDetails = {
   _id: string;
-  account_states: AccountStates;
+  account_states: {
+    results: {
+      id: number;
+      episode_number: number;
+      rated: boolean | { value: number };
+    }[];
+  };
+  aggregate_credits: {
+    id: number;
+    cast: CastTvShows[];
+    crew: CrewTvShows[];
+  };
   air_date: string;
   episodes: Episode[];
   name: string;
