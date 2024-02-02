@@ -6,6 +6,7 @@ export type MoviesFilters = {
   page: number;
   "primary_release_date.gte": string | null;
   "primary_release_date.lte": string | null;
+  "release_date.gte": string | null;
   "release_date.lte": string;
   show_me: number;
   sort_by: string;
@@ -16,6 +17,7 @@ export type MoviesFilters = {
   with_genres: string | null;
   with_original_language: string | null;
   with_people: string | null;
+  with_release_type: number | null;
   "with_runtime.gte": number | null;
   "with_runtime.lte": number | null;
   with_watch_providers: string | null;
@@ -23,13 +25,16 @@ export type MoviesFilters = {
 };
 
 export type TvShowsFilters = {
+  "air_date.gte": string | null;
+  "air_date.lte": string | null;
+  certification_country: string | null;
   "first_air_date.gte": string | null;
   "first_air_date.lte": string | null;
   include_adult: boolean;
   include_video: boolean;
   language: string;
   page: number;
-  screened_theatrically: boolean;
+  region: string | null;
   show_me: number;
   sort_by: string;
   "vote_average.gte": number | null;
@@ -40,6 +45,7 @@ export type TvShowsFilters = {
   with_original_language: string | null;
   "with_runtime.gte": number | null;
   "with_runtime.lte": number | null;
+  with_watch_monetization_types: string | null;
   with_watch_providers: string | null;
   without_genres: string | null;
 };

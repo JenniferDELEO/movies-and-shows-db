@@ -99,7 +99,7 @@ const VideosTabs: FC<Props> = (props) => {
         className="mx-4 md:mx-0"
         variant="bordered"
         classNames={{
-          base: "w-full w-[250px]",
+          base: "w-[250px]",
           tabList: "flex flex-col items-start justify-evenly",
           tab: "justify-start",
           panel: "col-span-3 w-full p-0",

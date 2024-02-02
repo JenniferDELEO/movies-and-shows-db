@@ -62,7 +62,7 @@ export interface EpisodeDetails extends Episode {
   };
 }
 
-export type LastEpisodeToAir = {
+export type EpisodeToAir = {
   air_date: string;
   episode_number: number;
   id: number;
@@ -152,8 +152,8 @@ export interface TvShowDetails extends TvShow {
   in_production: boolean;
   languages: string[];
   last_air_date: string;
-  last_episode_to_air: LastEpisodeToAir;
-  next_episode_to_air: string;
+  last_episode_to_air: EpisodeToAir;
+  next_episode_to_air: EpisodeToAir | null;
   networks: Network[];
   number_of_episodes: number;
   number_of_seasons: number;

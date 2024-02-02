@@ -12,6 +12,8 @@ import { Movie } from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
 import DropdownCard from "@/components/AccountInteraction/DropdownCard";
 import IconsInteraction from "./IconsInteraction";
+import { Tooltip } from "@nextui-org/react";
+import { FaStar } from "react-icons/fa";
 
 type Props = {
   item: {
@@ -22,10 +24,18 @@ type Props = {
     name?: string;
     character?: string;
   };
-  type: "tvshow" | "movie";
+  type: "tvshow" | "movie" | "episode";
   user: User;
   fetchUserDatas: () => Promise<void>;
   userLists: List[];
+  episodeDetailsProps?: {
+    episodeNumber: number;
+    id: number;
+    isRated: boolean;
+    seasonNumber: number;
+    tvShowId: number;
+    userRatingApi: number;
+  };
   homePageProps?: {
     favoriteMoviesIds: number[];
     favoriteTvShowsIds: number[];
@@ -58,6 +68,8 @@ const AccountInteraction: FC<Props> = (props) => {
     user,
     fetchUserDatas,
     userLists,
+
+    episodeDetailsProps,
     homePageProps,
     mediaDetailsPageProps,
   } = props;
@@ -159,7 +171,7 @@ const AccountInteraction: FC<Props> = (props) => {
     }
   };
 
-  return (
+  return type !== "episode" ? (
     <>
       <AddToListModal
         modalIsOpen={modalAddToListIsOpen}
@@ -200,8 +212,42 @@ const AccountInteraction: FC<Props> = (props) => {
           isFavorite={mediaDetailsPageProps.isFavorite}
           isRated={mediaDetailsPageProps.isRated}
           isInWatchlist={mediaDetailsPageProps.isInWatchlist}
+          userRatingApi={mediaDetailsPageProps.userRatingApi}
         />
       )}
+    </>
+  ) : (
+    <>
+      <RatingModal
+        episodeNumber={episodeDetailsProps?.episodeNumber}
+        modalIsOpen={modalRateIsOpen}
+        setModalIsOpen={setModalRateIsOpen}
+        fetchUserDatas={fetchUserDatas}
+        itemId={episodeDetailsProps?.tvShowId || 0}
+        itemType={type}
+        seasonNumber={episodeDetailsProps?.seasonNumber}
+        title={modalTitle}
+        userRatingApi={episodeDetailsProps?.userRatingApi}
+      />
+      <Tooltip
+        content={
+          episodeDetailsProps?.isRated
+            ? `Votre note : ${episodeDetailsProps?.userRatingApi / 2}`
+            : "Mettre une note"
+        }
+        placement="bottom"
+      >
+        <button
+          value={`note-${item.id}-${item.title}`}
+          onClick={(e) => handleClick(e.currentTarget.value)}
+          className="rounded-full bg-primary p-3"
+        >
+          <FaStar
+            size={16}
+            className={`${episodeDetailsProps?.isRated ? "text-yellow-400" : ""}`}
+          />
+        </button>
+      </Tooltip>
     </>
   );
 };

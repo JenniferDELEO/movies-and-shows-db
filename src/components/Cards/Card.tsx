@@ -4,10 +4,33 @@ import dayjs from "dayjs";
 import Image from "next/image";
 import { FC } from "react";
 import { useRouter } from "next/navigation";
+import "dayjs/locale/fr";
+import updateLocale from "dayjs/plugin/updateLocale";
 
 import StarRating from "@/components/StarRate/StarRating";
 import { TvShow } from "@/models/tvShows";
 import { Movie } from "@/models/movies";
+
+dayjs.locale("fr");
+
+dayjs.extend(updateLocale);
+
+dayjs.updateLocale("fr", {
+  monthsShort: [
+    "Jan",
+    "Fev",
+    "Mar",
+    "Avr",
+    "Mai",
+    "Juin",
+    "Juil",
+    "Aout",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ],
+});
 
 type Props = {
   filterType: string;

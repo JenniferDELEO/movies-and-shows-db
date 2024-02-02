@@ -10,10 +10,10 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const id = params.id.split("-")[0];
 
-  const tvShowDetail = await getTvShowDetail(id);
+  const tvShowDetails = await getTvShowDetail(id);
 
   return {
-    title: `${tvShowDetail.name} - Films & Séries TV DB`,
+    title: `${tvShowDetails.name} - Films & Séries TV DB`,
   };
 }
 
@@ -26,15 +26,15 @@ export default async function TvShowDetailsLayout({
 }) {
   const id = params.id.split("-")[0];
 
-  const tvShowDetail = await getTvShowDetail(id);
+  const tvShowDetails = await getTvShowDetail(id);
 
   return (
     <div className="size-full overflow-x-hidden">
       <MediaHeader
-        numberOfBackdrops={tvShowDetail?.images?.backdrops?.length || 0}
-        numberOfLogos={tvShowDetail?.images?.logos?.length || 0}
-        numberOfPosters={tvShowDetail?.images?.posters?.length || 0}
-        numberOfVideos={tvShowDetail?.videos?.results?.length || 0}
+        numberOfBackdrops={tvShowDetails?.images?.backdrops?.length || 0}
+        numberOfLogos={tvShowDetails?.images?.logos?.length || 0}
+        numberOfPosters={tvShowDetails?.images?.posters?.length || 0}
+        numberOfVideos={tvShowDetails?.videos?.results?.length || 0}
       />
       <div className="size-full">{children}</div>
     </div>

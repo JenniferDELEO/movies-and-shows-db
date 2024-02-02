@@ -14,10 +14,18 @@ type Props = {
   isFavorite: boolean;
   isInWatchlist: boolean;
   isRated: boolean;
+  userRatingApi: number;
 };
 
 const IconsInteraction: FC<Props> = (props) => {
-  const { item, handleClick, isFavorite, isInWatchlist, isRated } = props;
+  const {
+    item,
+    handleClick,
+    isFavorite,
+    isInWatchlist,
+    isRated,
+    userRatingApi,
+  } = props;
 
   return (
     <>
@@ -54,7 +62,12 @@ const IconsInteraction: FC<Props> = (props) => {
           />
         </button>
       </Tooltip>
-      <Tooltip content="Donner une note" placement="bottom">
+      <Tooltip
+        content={
+          isRated ? `Votre note : ${userRatingApi / 2}` : "Mettre une note"
+        }
+        placement="bottom"
+      >
         <button
           value={`note-${item.id}-${item.title}`}
           onClick={(e) => handleClick(e.currentTarget.value)}

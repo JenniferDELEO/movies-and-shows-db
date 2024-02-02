@@ -20,11 +20,14 @@ const Movies = async () => {
   } = await getDiscoverMovies();
   const { results: providersMovies } = await getMoviesProviders();
 
+  const title = `Liste des films (${totalResultsMovies})`;
+
   return (
     <MoviesWrapper
-      movies={movies}
       genresMovies={genresMovies}
+      movies={movies}
       providersMovies={providersMovies}
+      title={title}
       totalPagesMovies={totalPagesMovies}
       totalResultsMovies={totalResultsMovies}
     />

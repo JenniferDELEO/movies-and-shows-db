@@ -21,6 +21,7 @@ import {
   Select,
   SelectSection,
   SelectItem,
+  Tooltip,
 } from "@nextui-org/react";
 import { BsCalendarDateFill } from "react-icons/bs";
 import { FaCheck } from "react-icons/fa";
@@ -66,14 +67,22 @@ const Filters: FC<Props> = (props) => {
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     moviesFilters && moviesFilters?.["primary_release_date.gte"]
       ? new Date(moviesFilters["primary_release_date.gte"] as string)
-      : tvshowsFilters && tvshowsFilters?.["first_air_date.gte"]
-        ? new Date(tvshowsFilters["first_air_date.lte"] as string)
-        : null,
+      : moviesFilters && moviesFilters?.["release_date.gte"]
+        ? new Date(moviesFilters["release_date.gte"] as string)
+        : tvshowsFilters && tvshowsFilters?.["first_air_date.gte"]
+          ? new Date(tvshowsFilters["first_air_date.gte"] as string)
+          : tvshowsFilters && tvshowsFilters?.["air_date.gte"]
+            ? new Date(tvshowsFilters["air_date.gte"] as string)
+            : null,
     moviesFilters && moviesFilters?.["primary_release_date.lte"]
       ? new Date(moviesFilters["primary_release_date.lte"] as string)
-      : tvshowsFilters && tvshowsFilters?.["first_air_date.lte"]
-        ? new Date(tvshowsFilters["first_air_date.lte"] as string)
-        : null,
+      : moviesFilters && moviesFilters?.["release_date.lte"]
+        ? new Date(moviesFilters["release_date.lte"] as string)
+        : tvshowsFilters && tvshowsFilters?.["air_date.lte"]
+          ? new Date(tvshowsFilters["air_date.lte"] as string)
+          : tvshowsFilters && tvshowsFilters?.["first_air_date.lte"]
+            ? new Date(tvshowsFilters["first_air_date.lte"] as string)
+            : null,
   ]);
   const [startDate, endDate] = dateRange;
   const [voteAverage, setVoteAverage] = useState<number[]>([
@@ -129,13 +138,13 @@ const Filters: FC<Props> = (props) => {
       setMoviesFilters &&
       setMoviesFilters({
         ...moviesFilters,
-        with_original_language: e.target.value,
+        with_original_language: e.target.value !== "all" ? e.target.value : "",
       });
     tvshowsFilters &&
       setTvShowsFilters &&
       setTvShowsFilters({
         ...tvshowsFilters,
-        with_original_language: e.target.value,
+        with_original_language: e.target.value !== "all" ? e.target.value : "",
       });
   };
   const handleSelectedWatchList = (e: ChangeEvent<HTMLInputElement>) => {
@@ -350,7 +359,7 @@ const Filters: FC<Props> = (props) => {
                     });
                   }
                 }}
-                className="max-w-[220px] rounded-lg bg-primary text-xs xl:text-base"
+                className="max-w-[220px] rounded-lg bg-primary text-xs xl:text-sm"
               />
             </ListboxItem>
           </ListboxSection>
@@ -459,89 +468,96 @@ const Filters: FC<Props> = (props) => {
                   }}
                 >
                   {providers.map((provider) => (
-                    <div
+                    <Tooltip
                       key={provider.provider_id}
-                      className="relative m-1"
-                      onClick={() => {
-                        if (
-                          !selectedWatchers.includes(
-                            provider.provider_id.toString(),
-                          )
-                        ) {
-                          setSelectedWatchers([
-                            ...selectedWatchers,
-                            provider.provider_id.toString(),
-                          ]);
-                          if (moviesFilters && setMoviesFilters) {
-                            setMoviesFilters({
-                              ...moviesFilters,
-                              with_watch_providers: [
-                                ...selectedWatchers,
-                                provider.provider_id,
-                              ].join("|"),
-                            });
-                          }
-                          if (tvshowsFilters && setTvShowsFilters) {
-                            setTvShowsFilters({
-                              ...tvshowsFilters,
-                              with_watch_providers: [
-                                ...selectedWatchers,
-                                provider.provider_id,
-                              ].join("|"),
-                            });
-                          }
-                        } else {
-                          setSelectedWatchers(
-                            selectedWatchers.filter(
-                              (watcher) =>
-                                watcher !== provider.provider_id.toString(),
-                            ),
-                          );
-                          if (moviesFilters && setMoviesFilters) {
-                            setMoviesFilters({
-                              ...moviesFilters,
-                              with_watch_providers: selectedWatchers
-                                .filter(
-                                  (w) => w !== provider.provider_id.toString(),
-                                )
-                                .join("|"),
-                            });
-                          }
-                          if (tvshowsFilters && setTvShowsFilters) {
-                            setTvShowsFilters({
-                              ...tvshowsFilters,
-                              with_watch_providers: selectedWatchers
-                                .filter(
-                                  (w) => w !== provider.provider_id.toString(),
-                                )
-                                .join("|"),
-                            });
-                          }
-                        }
-                      }}
+                      content={provider.provider_name}
+                      placement="bottom"
                     >
-                      <Image
-                        alt={provider.provider_name}
-                        src={
-                          provider?.logo_path
-                            ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w45${provider.logo_path}`
-                            : "/images/defaultImage.png"
-                        }
-                        width={0}
-                        height={0}
-                        style={{
-                          width: 45,
-                          height: 45,
-                          borderRadius: 5,
-                        }}
-                        sizes="100vw"
-                      />
                       <div
-                        className={`absolute left-0 top-0 flex size-full items-center justify-center ${selectedWatchers.includes(provider.provider_id.toString()) ? "bg-secondary/70" : "hidden"}`}
+                        className="relative m-1"
+                        onClick={() => {
+                          if (
+                            !selectedWatchers.includes(
+                              provider.provider_id.toString(),
+                            )
+                          ) {
+                            setSelectedWatchers([
+                              ...selectedWatchers,
+                              provider.provider_id.toString(),
+                            ]);
+                            if (moviesFilters && setMoviesFilters) {
+                              setMoviesFilters({
+                                ...moviesFilters,
+                                with_watch_providers: [
+                                  ...selectedWatchers,
+                                  provider.provider_id,
+                                ].join("|"),
+                              });
+                            }
+                            if (tvshowsFilters && setTvShowsFilters) {
+                              setTvShowsFilters({
+                                ...tvshowsFilters,
+                                with_watch_providers: [
+                                  ...selectedWatchers,
+                                  provider.provider_id,
+                                ].join("|"),
+                              });
+                            }
+                          } else {
+                            setSelectedWatchers(
+                              selectedWatchers.filter(
+                                (watcher) =>
+                                  watcher !== provider.provider_id.toString(),
+                              ),
+                            );
+                            if (moviesFilters && setMoviesFilters) {
+                              setMoviesFilters({
+                                ...moviesFilters,
+                                with_watch_providers: selectedWatchers
+                                  .filter(
+                                    (w) =>
+                                      w !== provider.provider_id.toString(),
+                                  )
+                                  .join("|"),
+                              });
+                            }
+                            if (tvshowsFilters && setTvShowsFilters) {
+                              setTvShowsFilters({
+                                ...tvshowsFilters,
+                                with_watch_providers: selectedWatchers
+                                  .filter(
+                                    (w) =>
+                                      w !== provider.provider_id.toString(),
+                                  )
+                                  .join("|"),
+                              });
+                            }
+                          }
+                        }}
                       >
-                        <FaCheck className="text-white" size={20} />
+                        <Image
+                          alt={provider.provider_name}
+                          src={
+                            provider?.logo_path
+                              ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w45${provider.logo_path}`
+                              : "/images/defaultImage.png"
+                          }
+                          width={0}
+                          height={0}
+                          style={{
+                            width: 45,
+                            height: 45,
+                            borderRadius: 5,
+                          }}
+                          sizes="100vw"
+                        />
+                        <div
+                          className={`absolute left-0 top-0 flex size-full items-center justify-center ${selectedWatchers.includes(provider.provider_id.toString()) ? "bg-secondary/70" : "hidden"}`}
+                        >
+                          <FaCheck className="text-white" size={20} />
+                        </div>
                       </div>
-                    </div>
+                    </Tooltip>
                   ))}
                 </AccordionItem>
               </Accordion>

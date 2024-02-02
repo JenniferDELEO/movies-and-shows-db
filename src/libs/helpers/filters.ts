@@ -8,6 +8,7 @@ export const defaultMoviesFilters = {
   page: 1,
   "primary_release_date.gte": null,
   "primary_release_date.lte": null,
+  "release_date.gte": null,
   "release_date.lte": dayjs().format("YYYY-MM-DD"),
   show_me: 0,
   sort_by: "popularity.desc",
@@ -18,6 +19,7 @@ export const defaultMoviesFilters = {
   with_genres: null,
   with_original_language: null,
   with_people: null,
+  with_release_type: null,
   "with_runtime.gte": 0,
   "with_runtime.lte": 400,
   with_watch_providers: null,
@@ -25,13 +27,16 @@ export const defaultMoviesFilters = {
 };
 
 export const defaultTvShowsFilters = {
+  "air_date.gte": null,
+  "air_date.lte": null,
+  certification_country: "FR",
   "first_air_date.gte": null,
   "first_air_date.lte": null,
   include_adult: false,
   include_video: false,
   language: "fr-FR",
   page: 1,
-  screened_theatrically: true,
+  region: "FR|BE|XX",
   show_me: 0,
   sort_by: "popularity.desc",
   "vote_average.gte": 0,
@@ -43,6 +48,7 @@ export const defaultTvShowsFilters = {
   with_people: null,
   "with_runtime.gte": 0,
   "with_runtime.lte": 400,
+  with_watch_monetization_types: "flatrate|free|ads|rent|buy",
   with_watch_providers: null,
   without_genres: null,
 };

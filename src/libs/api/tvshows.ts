@@ -59,6 +59,21 @@ export async function getTopRatedTvShows(): Promise<ApiResultTvShows> {
   }
 }
 
+export async function getTrendingTvShows(
+  timeWindow: string,
+): Promise<ApiResultTvShows> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/trending/tv/${timeWindow}?language=fr-FR&page=1`,
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 /* --------------------DISCOVER PAGE-------------------- */
 
 export async function getDiscoverTvShows(
@@ -451,6 +466,52 @@ export async function deleteRateTvShow(
       ...optionsGET,
       method: "DELETE",
       url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/${tvShowId}/rating`,
+      headers: {
+        ...optionsGET.headers,
+        "content-type": "application/json;charset=utf-8",
+      },
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function addRateTvShowEpisode(
+  tvShowId: number,
+  seasonNumber: number,
+  episodeNumber: number,
+  rate: number,
+): Promise<{ success: boolean; status_code: number; status_message: string }> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      method: "POST",
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/${tvShowId}/season/${seasonNumber}/episode/${episodeNumber}/rating`,
+      headers: {
+        ...optionsGET.headers,
+        "content-type": "application/json;charset=utf-8",
+      },
+      data: { value: rate },
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function deleteRateTvShowEpisode(
+  tvShowId: number,
+  seasonNumber: number,
+  episodeNumber: number,
+): Promise<{ success: boolean; status_code: number; status_message: string }> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      method: "DELETE",
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/${tvShowId}/season/${seasonNumber}/episode/${episodeNumber}/rating`,
       headers: {
         ...optionsGET.headers,
         "content-type": "application/json;charset=utf-8",

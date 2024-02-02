@@ -14,7 +14,7 @@ import {
 import { usePathname } from "next/navigation";
 import { FaChevronDown } from "react-icons/fa";
 
-import { getItems } from "@/components/Headers/ItemsHeader";
+import { getItems } from "@/libs/helpers/itemsHeader";
 import { FC } from "react";
 
 type Props = {
