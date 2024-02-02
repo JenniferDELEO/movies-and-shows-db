@@ -12,8 +12,15 @@ import {
   NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
+  Accordion,
+  AccordionItem,
+  Dropdown,
+  DropdownTrigger,
+  Button,
+  DropdownMenu,
+  DropdownItem,
 } from "@nextui-org/react";
-import { FaSearch } from "react-icons/fa";
+import { FaChevronDown, FaSearch } from "react-icons/fa";
 import { RxCross1 } from "react-icons/rx";
 import { MdLocalMovies, MdPeople } from "react-icons/md";
 import { PiTelevisionSimpleFill } from "react-icons/pi";
@@ -113,28 +120,78 @@ const Header = () => {
             </NavbarBrand>
           </NavbarContent>
           <NavbarContent className="flex gap-4 md:gap-10" justify="end">
-            <NavbarItem
-              isActive={
-                pathname.includes("/movies") || pathname.includes("/movie")
-              }
-              className="hidden md:block"
-            >
-              <Link href="/movies/1" className="flex flex-row items-center">
-                <MdLocalMovies />
-                <span className="ml-2">Films</span>
-              </Link>
-            </NavbarItem>
-            <NavbarItem
-              isActive={
-                pathname.includes("/tvshows") || pathname.includes("/tvshow")
-              }
-              className="hidden md:block"
-            >
-              <Link href="/tvshows/1" className="flex flex-row items-center">
-                <PiTelevisionSimpleFill />
-                <span className="ml-2">Séries TV</span>
-              </Link>
-            </NavbarItem>
+            <Dropdown>
+              <NavbarItem
+                isActive={
+                  pathname.includes("/movies") || pathname.includes("/movie")
+                }
+                className="hidden md:block"
+              >
+                <DropdownTrigger>
+                  <Button
+                    disableRipple
+                    className="bg-transparent p-0 data-[hover=true]:bg-transparent"
+                    endContent={<FaChevronDown />}
+                    radius="sm"
+                    variant="light"
+                  >
+                    <MdLocalMovies />
+                    <span className="ml-2 text-xl">Films</span>
+                  </Button>
+                </DropdownTrigger>
+              </NavbarItem>
+              <DropdownMenu
+                aria-label="Films"
+                classNames={{
+                  base: "bg-primary border-primary border-2 rounded-lg shadow-primary outline-none",
+                }}
+              >
+                <DropdownItem href="/movies/1">
+                  <span className="ml-2">Liste</span>
+                </DropdownItem>
+                <DropdownItem href="/movies/now-playing/1">
+                  <span className="ml-2">Actuellement au cinéma</span>
+                </DropdownItem>
+                <DropdownItem href="/movies/upcoming/1">
+                  <span className="ml-2">À venir</span>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+            <Dropdown>
+              <NavbarItem
+                isActive={
+                  pathname.includes("/tvshows") || pathname.includes("/tvshow")
+                }
+                className="hidden md:block"
+              >
+                <DropdownTrigger>
+                  <Button
+                    disableRipple
+                    className="bg-transparent p-0 data-[hover=true]:bg-transparent"
+                    endContent={<FaChevronDown />}
+                    radius="sm"
+                    variant="light"
+                  >
+                    <PiTelevisionSimpleFill />
+                    <span className="ml-2 text-xl">Séries TV</span>
+                  </Button>
+                </DropdownTrigger>
+              </NavbarItem>
+              <DropdownMenu
+                aria-label="Séries TV"
+                classNames={{
+                  base: "bg-primary border-primary border-2 rounded-lg shadow-primary outline-none",
+                }}
+              >
+                <DropdownItem href="/tvshows/1">
+                  <span className="ml-2">Liste</span>
+                </DropdownItem>
+                <DropdownItem href="/tvshows/on-the-air/1">
+                  <span className="ml-2">En cours de diffusion</span>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+
             <NavbarItem
               isActive={
                 pathname.includes("/people") || pathname.includes("/person")
@@ -155,17 +212,35 @@ const Header = () => {
                 </div>
               </NavbarItem>
             ) : (
-              <NavbarItem
-                isActive={pathname.includes("/profil")}
-                className="hidden md:block"
-              >
-                <Link href="/profil" className="flex flex-row items-center">
-                  <IoPersonSharp />
-                  <div className="ml-2">
-                    <p>{username}</p>
-                  </div>
-                </Link>
-              </NavbarItem>
+              <Dropdown>
+                <NavbarItem
+                  isActive={pathname.includes("/profil")}
+                  className="hidden md:block"
+                >
+                  <DropdownTrigger>
+                    <Button
+                      disableRipple
+                      className="bg-transparent p-0 data-[hover=true]:bg-transparent"
+                      endContent={<FaChevronDown />}
+                      radius="sm"
+                      variant="light"
+                    >
+                      <IoPersonSharp />
+                      <span className="ml-2 text-xl">{username}</span>
+                    </Button>
+                  </DropdownTrigger>
+                </NavbarItem>
+                <DropdownMenu
+                  aria-label="Profil"
+                  classNames={{
+                    base: "bg-primary border-primary border-2 rounded-lg shadow-primary outline-none",
+                  }}
+                >
+                  <DropdownItem href="/profil">
+                    <span className="ml-2">Mon profil</span>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
             )}
             <NavbarItem
               className="cursor-pointer"
@@ -178,34 +253,48 @@ const Header = () => {
       )}
 
       <NavbarMenu className="px-[15%]">
-        <NavbarMenuItem
-          isActive={pathname.includes("/movies") || pathname.includes("/movie")}
-          className="border-b-2 py-4"
-        >
-          <Link
-            href="/movies/1"
-            className="flex flex-row items-center"
-            onClick={() => setIsMenuOpen(false)}
+        <Accordion>
+          <AccordionItem
+            key="movies"
+            aria-label="Movies"
+            title={
+              <NavbarMenuItem
+                isActive={
+                  pathname.includes("/movies") || pathname.includes("/movie")
+                }
+                className="flex flex-row items-center border-b-2 py-4"
+              >
+                <MdLocalMovies />
+                Films
+              </NavbarMenuItem>
+            }
           >
-            <MdLocalMovies />
-            <span className="ml-2">Films</span>
-          </Link>
-        </NavbarMenuItem>
-        <NavbarMenuItem
-          isActive={
-            pathname.includes("/tvshows") || pathname.includes("/tvshow")
-          }
-          className="border-b-2 py-4"
-        >
-          <Link
-            href="/tvshows/1"
-            className="flex flex-row items-center"
-            onClick={() => setIsMenuOpen(false)}
+            <Link href="/movies/1" onClick={() => setIsMenuOpen(false)}>
+              <span className="ml-2">Liste des Films</span>
+            </Link>
+          </AccordionItem>
+        </Accordion>
+        <Accordion>
+          <AccordionItem
+            key="tvshows"
+            aria-label="Tvshows"
+            title={
+              <NavbarMenuItem
+                isActive={
+                  pathname.includes("/tvshows") || pathname.includes("/tvshow")
+                }
+                className="flex flex-row items-center border-b-2 py-4"
+              >
+                <PiTelevisionSimpleFill />
+                Séries TV
+              </NavbarMenuItem>
+            }
           >
-            <PiTelevisionSimpleFill />
-            <span className="ml-2">Séries TV</span>
-          </Link>
-        </NavbarMenuItem>
+            <Link href="/tvshows/1" onClick={() => setIsMenuOpen(false)}>
+              <span className="ml-2">Liste des Séries TV</span>
+            </Link>
+          </AccordionItem>
+        </Accordion>
         <NavbarMenuItem
           isActive={
             pathname.includes("/people") || pathname.includes("/person")
@@ -221,6 +310,7 @@ const Header = () => {
             <span className="ml-2">Artistes</span>
           </Link>
         </NavbarMenuItem>
+
         {!username && !accountIdV3 && !sessionId ? (
           <NavbarMenuItem className="border-b-2 py-4">
             <div onClick={() => router.replace("profil/redirection-to-tmdb")}>
@@ -228,21 +318,27 @@ const Header = () => {
             </div>
           </NavbarMenuItem>
         ) : (
-          <NavbarMenuItem
-            isActive={pathname.includes("/profil")}
-            className="border-b-2 py-4"
-          >
-            <Link
-              href="/profil"
-              className="flex flex-row items-center"
-              onClick={() => setIsMenuOpen(false)}
+          <Accordion>
+            <AccordionItem
+              key="tvshows"
+              aria-label="Tvshows"
+              title={
+                <NavbarMenuItem
+                  isActive={pathname.includes("/profil")}
+                  className="flex flex-row items-center border-b-2 py-4"
+                >
+                  <IoPersonSharp />
+                  {username}
+                </NavbarMenuItem>
+              }
             >
-              <IoPersonSharp />
-              <div className="ml-2">
-                <p>{username}</p>
-              </div>
-            </Link>
-          </NavbarMenuItem>
+              <Link href="/profil" onClick={() => setIsMenuOpen(false)}>
+                <div className="ml-2">
+                  <p>Mon profil</p>
+                </div>
+              </Link>
+            </AccordionItem>
+          </Accordion>
         )}
       </NavbarMenu>
     </Navbar>

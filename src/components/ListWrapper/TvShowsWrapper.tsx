@@ -19,8 +19,11 @@ type Props = {
   tvShows: TvShow[];
   genresTvShows: { id: number; name: string }[];
   providersTvShows: Watcher[];
+  title: string;
   totalPagesTvShows: number;
   totalResultsTvShows: number;
+
+  defaultFilters?: TvShowsFilters;
 };
 
 const TvShowsWrapper: FC<Props> = (props) => {
@@ -28,12 +31,17 @@ const TvShowsWrapper: FC<Props> = (props) => {
     tvShows,
     genresTvShows,
     providersTvShows,
+    title,
     totalPagesTvShows,
     totalResultsTvShows,
+
+    defaultFilters,
   } = props;
   const pathname = usePathname();
   const [tvShowsList, setTvShowsList] = useState<TvShow[]>(tvShows);
-  const [filters, setFilters] = useState<TvShowsFilters>(defaultTvShowsFilters);
+  const [filters, setFilters] = useState<TvShowsFilters>(
+    defaultFilters || defaultTvShowsFilters,
+  );
   const [openFilters, setOpenFilters] = useState<boolean>(false);
   const [totalResults, setTotalResults] = useState<number>(totalResultsTvShows);
   const [totalPages, setTotalPages] = useState<number>(totalPagesTvShows);
@@ -126,9 +134,7 @@ const TvShowsWrapper: FC<Props> = (props) => {
   return (
     <div className="mx-auto w-full md:w-[95%] lg:w-[90%]">
       <div className="mx-4 mb-4 flex flex-row items-baseline justify-between">
-        <h3 className="text-lg lg:text-xl">
-          Liste des séries TV ({totalResults})
-        </h3>
+        <h3 className="text-lg lg:text-xl">{title}</h3>
         <div className="hidden lg:block">
           {!hideResetButton() && (
             <Button onClick={handleResetFilters}>Effacer les Filtres</Button>

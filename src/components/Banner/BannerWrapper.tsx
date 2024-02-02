@@ -21,19 +21,23 @@ import {
 } from "@/libs/api/tvshows";
 import { List } from "@/models/lists";
 import { getLists } from "@/libs/api/lists";
-import { Tooltip } from "@nextui-org/react";
+import { Tab, Tabs, Tooltip } from "@nextui-org/react";
 
 type Props = {
   homeProps?: {
     popularMovies: Movie[];
-    topRatedMovies: Movie[];
     popularTvShows: TvShow[];
+    topRatedMovies: Movie[];
     topRatedTvShows: TvShow[];
+    trendingMoviesToday: Movie[];
+    trendingMoviesThisWeek: Movie[];
+    trendingTvShowsToday: TvShow[];
+    trendingTvShowsThisWeek: TvShow[];
   };
   personDetailProps?: {
     actingMovies: Movie[];
-    runningMovies: Movie[];
     actingTvShows: TvShow[];
+    runningMovies: Movie[];
     runningTvShows: TvShow[];
   };
   movieCollectionProps?: {
@@ -47,10 +51,10 @@ type Props = {
     totalResults: number;
   };
   tvshowsDetailsProps?: {
-    tvshows: TvShow[];
     title: "Séries TV similaires" | "Séries TV recommandées";
     totalPages: number;
     totalResults: number;
+    tvshows: TvShow[];
   };
 };
 
@@ -118,7 +122,7 @@ const BannerWrapper: FC<Props> = ({
 
   const classNames = {
     container: "mx-auto w-full md:w-[80%] lg:w[90%] mb-20 pb-16",
-    title: "pl-5 text-xl tracking-wide font-bold",
+    title: "pt-3 text-xl tracking-wide font-bold",
     items: "mx-auto pt-10 sm:px-1 md:pl-4",
     image:
       "w-[185px] h-[278px] 2xl:w-[288px] min-h-auto 2xl:h-[400px] rounded-md mx-auto",
@@ -133,6 +137,62 @@ const BannerWrapper: FC<Props> = ({
   if (homeProps) {
     return (
       <div className="size-full">
+        <Tabs
+          aria-label="Onglets Films"
+          className="mx-4 md:mx-[10%]"
+          variant="bordered"
+        >
+          <Tab
+            title={
+              <div className="my-2">
+                <span className="text-sm">Aujourd&apos;hui</span>
+              </div>
+            }
+          >
+            <Banner
+              items={homeProps.trendingMoviesToday}
+              type="movie"
+              user={user}
+              fetchUserDatas={fetchUserDatas}
+              favoriteMoviesIds={favoriteMoviesIds}
+              watchlistMoviesIds={watchlistMoviesIds}
+              favoriteTvShowsIds={favoriteTvShowsIds}
+              watchlistTvShowsIds={watchlistTvShowsIds}
+              ratedMovies={ratedMovies}
+              ratedTvShows={ratedTvShows}
+              ratedMoviesIds={ratedMoviesIds}
+              ratedTvShowsIds={ratedTvShowsIds}
+              classNames={classNames}
+              title="Les 20 Films dans les tendances"
+              userLists={userLists}
+            />
+          </Tab>
+          <Tab
+            title={
+              <div className="my-2">
+                <span className="text-sm">Cette semaine</span>
+              </div>
+            }
+          >
+            <Banner
+              items={homeProps.trendingMoviesThisWeek}
+              type="movie"
+              user={user}
+              fetchUserDatas={fetchUserDatas}
+              favoriteMoviesIds={favoriteMoviesIds}
+              watchlistMoviesIds={watchlistMoviesIds}
+              favoriteTvShowsIds={favoriteTvShowsIds}
+              watchlistTvShowsIds={watchlistTvShowsIds}
+              ratedMovies={ratedMovies}
+              ratedTvShows={ratedTvShows}
+              ratedMoviesIds={ratedMoviesIds}
+              ratedTvShowsIds={ratedTvShowsIds}
+              classNames={classNames}
+              title="Les 20 Films dans les tendances"
+              userLists={userLists}
+            />
+          </Tab>
+        </Tabs>
         <Banner
           items={homeProps.popularMovies}
           type="movie"
@@ -167,6 +227,62 @@ const BannerWrapper: FC<Props> = ({
           title="Les 20 Films les mieux notés"
           userLists={userLists}
         />
+        <Tabs
+          aria-label="Onglets Séries TV"
+          className="mx-4 md:mx-[10%]"
+          variant="bordered"
+        >
+          <Tab
+            title={
+              <div className="my-2">
+                <span className="text-sm">Aujourd&apos;hui</span>
+              </div>
+            }
+          >
+            <Banner
+              items={homeProps.trendingTvShowsToday}
+              type="tvshow"
+              user={user}
+              fetchUserDatas={fetchUserDatas}
+              favoriteMoviesIds={favoriteMoviesIds}
+              watchlistMoviesIds={watchlistMoviesIds}
+              favoriteTvShowsIds={favoriteTvShowsIds}
+              watchlistTvShowsIds={watchlistTvShowsIds}
+              ratedMovies={ratedMovies}
+              ratedTvShows={ratedTvShows}
+              ratedMoviesIds={ratedMoviesIds}
+              ratedTvShowsIds={ratedTvShowsIds}
+              classNames={classNames}
+              title="Les 20 Séries TV dans les tendances"
+              userLists={userLists}
+            />
+          </Tab>
+          <Tab
+            title={
+              <div className="my-2">
+                <span className="text-sm">Cette semaine</span>
+              </div>
+            }
+          >
+            <Banner
+              items={homeProps.trendingTvShowsThisWeek}
+              type="movie"
+              user={user}
+              fetchUserDatas={fetchUserDatas}
+              favoriteMoviesIds={favoriteMoviesIds}
+              watchlistMoviesIds={watchlistMoviesIds}
+              favoriteTvShowsIds={favoriteTvShowsIds}
+              watchlistTvShowsIds={watchlistTvShowsIds}
+              ratedMovies={ratedMovies}
+              ratedTvShows={ratedTvShows}
+              ratedMoviesIds={ratedMoviesIds}
+              ratedTvShowsIds={ratedTvShowsIds}
+              classNames={classNames}
+              title="Les 20 Séries TV dans les tendances"
+              userLists={userLists}
+            />
+          </Tab>
+        </Tabs>
         <Banner
           items={homeProps.popularTvShows}
           type="tvshow"

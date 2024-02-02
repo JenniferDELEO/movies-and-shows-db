@@ -52,6 +52,21 @@ export async function getTopRatedMovies(): Promise<ApiResultMovies> {
   }
 }
 
+export async function getTrendingMovies(
+  timeWindow: string,
+): Promise<ApiResultMovies> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/trending/movie/${timeWindow}?language=fr-FR&page=1`,
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 /* --------------------DISCOVER PAGE-------------------- */
 
 export async function getDiscoverMovies(

@@ -17,11 +17,14 @@ import { defaultMoviesFilters } from "@/libs/helpers/filters";
 import { MoviesFilters } from "@/models/filters";
 
 type Props = {
-  movies: Movie[];
   genresMovies: { id: number; name: string }[];
+  movies: Movie[];
   providersMovies: Watcher[];
+  title: string;
   totalPagesMovies: number;
   totalResultsMovies: number;
+
+  defaultFilters?: MoviesFilters;
 };
 
 const MoviesWrapper: FC<Props> = (props) => {
@@ -29,12 +32,17 @@ const MoviesWrapper: FC<Props> = (props) => {
     movies,
     genresMovies,
     providersMovies,
+    title,
     totalPagesMovies,
     totalResultsMovies,
+
+    defaultFilters,
   } = props;
   const pathname = usePathname();
   const [moviesList, setMoviesList] = useState<Movie[]>(movies);
-  const [filters, setFilters] = useState<MoviesFilters>(defaultMoviesFilters);
+  const [filters, setFilters] = useState<MoviesFilters>(
+    defaultFilters || defaultMoviesFilters,
+  );
   const [openFilters, setOpenFilters] = useState<boolean>(false);
   const [totalResults, setTotalResults] = useState<number>(totalResultsMovies);
   const [totalPages, setTotalPages] = useState<number>(totalPagesMovies);
@@ -127,7 +135,7 @@ const MoviesWrapper: FC<Props> = (props) => {
   return (
     <div className="mx-auto w-full md:w-[95%] lg:w-[90%]">
       <div className="mx-4 mb-4 flex flex-row items-baseline justify-between">
-        <h3 className="text-lg lg:text-xl">Liste des films ({totalResults})</h3>
+        <h3 className="text-lg lg:text-xl">{title}</h3>
         <div className="hidden lg:block">
           {!hideResetButton() && (
             <Button onClick={handleResetFilters}>Effacer les Filtres</Button>

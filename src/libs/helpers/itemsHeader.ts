@@ -28,13 +28,6 @@ export const getItems = (
       key: "recommendations",
     },
   ];
-  if (type === "tvshow") {
-    firstTab.push({
-      link: `${baseUrl}/seasons`,
-      name: "Saisons",
-      key: "seasons",
-    });
-  }
   const secondTab = [
     {
       link: `${baseUrl}/images/backdrops`,

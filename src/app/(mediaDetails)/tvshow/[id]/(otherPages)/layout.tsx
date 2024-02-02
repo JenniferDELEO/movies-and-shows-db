@@ -10,15 +10,15 @@ export default async function TvShowsDetailsLayout({
 }) {
   const id = params.id.split("-")[0];
 
-  const tvShowDetail = await getTvShowDetail(id);
+  const tvShowDetails = await getTvShowDetail(id);
 
   return (
     <div className="size-full overflow-x-hidden pt-[64px]">
       <OtherPagesHeader
-        backdropPath={tvShowDetail?.backdrop_path}
-        date={tvShowDetail?.first_air_date}
-        posterPath={tvShowDetail?.poster_path}
-        title={tvShowDetail?.name}
+        backdropPath={tvShowDetails?.backdrop_path}
+        date={tvShowDetails?.first_air_date}
+        posterPath={tvShowDetails?.poster_path}
+        title={tvShowDetails?.name}
       />
       <div className="size-full">{children}</div>
     </div>

@@ -7,7 +7,7 @@ import { AccountStates, Genre, Video, WatchProviderFr } from "@/models/movies";
 import Infos from "@/components/DetailsMedia/Infos";
 import { CreditsMovies, CreditsTvShows } from "@/models/people";
 import { Tooltip } from "@nextui-org/react";
-import { Episode } from "@/models/tvShows";
+import { Episode, EpisodeToAir } from "@/models/tvShows";
 
 type Props = {
   genresMedia: Genre[];
@@ -21,10 +21,12 @@ type Props = {
   backdropPath?: string;
   creditsMovies?: CreditsMovies;
   creditsTvShows?: CreditsTvShows;
+  episodeAccountStates?: { id: number; rated: boolean | { value: number } };
   episodePrecedent?: Episode | undefined;
   episodeNumber?: number;
   episodeRunTime?: number[];
   isCollection?: boolean;
+  nextEpisodeToAir?: EpisodeToAir | null;
   numberOfSeasons?: number;
   numberOfEpisodes?: number;
   originalLanguage?: string;
@@ -35,6 +37,7 @@ type Props = {
   status?: string;
   stillPath?: string;
   tagline?: string;
+  tvShowId?: number;
   videos?: {
     id: number;
     results: Video[];
@@ -56,10 +59,12 @@ const TopContent: FC<Props> = (props) => {
     backdropPath,
     creditsMovies,
     creditsTvShows,
+    episodeAccountStates,
     episodePrecedent,
     episodeNumber,
     episodeRunTime,
     isCollection,
+    nextEpisodeToAir,
     numberOfSeasons,
     numberOfEpisodes,
     originalLanguage,
@@ -70,6 +75,7 @@ const TopContent: FC<Props> = (props) => {
     status,
     stillPath,
     tagline,
+    tvShowId,
     videos,
     voteCount,
     watchProvidersFr,
@@ -138,12 +144,14 @@ const TopContent: FC<Props> = (props) => {
             accountStates={accountStates}
             creditsMovies={creditsMovies}
             creditsTvShows={creditsTvShows}
+            episodeAccountStates={episodeAccountStates}
             episodeNumber={episodeNumber}
             episodePrecedent={episodePrecedent}
             episodeRunTime={episodeRunTime}
             genresMedia={genresMedia}
             id={id}
             isCollection={isCollection}
+            nextEpisodeToAir={nextEpisodeToAir}
             numberOfEpisodes={numberOfEpisodes}
             numberOfSeasons={numberOfSeasons}
             originalLanguage={originalLanguage}
@@ -155,6 +163,7 @@ const TopContent: FC<Props> = (props) => {
             tagline={tagline}
             title={title}
             type={type}
+            tvShowId={tvShowId}
             videos={videos}
             voteAverage={voteAverage}
             voteCount={voteCount}
@@ -298,12 +307,14 @@ const TopContent: FC<Props> = (props) => {
                 accountStates={accountStates}
                 creditsMovies={creditsMovies}
                 creditsTvShows={creditsTvShows}
+                episodeAccountStates={episodeAccountStates}
                 episodeNumber={episodeNumber}
                 episodePrecedent={episodePrecedent}
                 episodeRunTime={episodeRunTime}
                 genresMedia={genresMedia}
                 id={id}
                 isCollection={isCollection}
+                nextEpisodeToAir={nextEpisodeToAir}
                 numberOfEpisodes={numberOfEpisodes}
                 numberOfSeasons={numberOfSeasons}
                 originalLanguage={originalLanguage}
@@ -315,6 +326,7 @@ const TopContent: FC<Props> = (props) => {
                 tagline={tagline}
                 title={title}
                 type={type}
+                tvShowId={tvShowId}
                 videos={videos}
                 voteAverage={voteAverage}
                 voteCount={voteCount}
