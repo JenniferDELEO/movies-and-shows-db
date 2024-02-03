@@ -26,11 +26,16 @@ export async function toggleUserDatas(
     media_id: parseInt(id),
   };
 
-  if (user && user.accountIdV3 && user.sessionId && user.accountIdV4) {
+  if (
+    user &&
+    user.tmdb_accountIdV3 &&
+    user.tmdb_sessionId &&
+    user.tmdb_accountIdV4
+  ) {
     if (typeof isFavorite !== "undefined") {
       const responseToggle = await toggleFunction(
-        user.accountIdV3,
-        user.sessionId,
+        user.tmdb_accountIdV3,
+        user.tmdb_sessionId,
         { ...item, favorite: !isFavorite },
       );
       if (responseToggle.success) {
@@ -42,8 +47,8 @@ export async function toggleUserDatas(
     }
     if (typeof isInWatchlist !== "undefined") {
       const responseToggle = await toggleFunction(
-        user.accountIdV3,
-        user.sessionId,
+        user.tmdb_accountIdV3,
+        user.tmdb_sessionId,
         { ...item, watchlist: !isInWatchlist },
       );
       if (responseToggle.success) {
@@ -56,8 +61,8 @@ export async function toggleUserDatas(
     if (moviesIds && tvShowsIds) {
       if (moviesIds.includes(parseInt(id))) {
         const responseToggle = await toggleFunction(
-          user.accountIdV3,
-          user.sessionId,
+          user.tmdb_accountIdV3,
+          user.tmdb_sessionId,
           category === "favorite"
             ? { ...item, favorite: false }
             : { ...item, watchlist: false },
@@ -70,8 +75,8 @@ export async function toggleUserDatas(
         }
       } else if (tvShowsIds.includes(parseInt(id))) {
         const responseToggle = await toggleFunction(
-          user.accountIdV3,
-          user.sessionId,
+          user.tmdb_accountIdV3,
+          user.tmdb_sessionId,
           category === "favorite"
             ? { ...item, favorite: false }
             : { ...item, watchlist: false },
@@ -84,8 +89,8 @@ export async function toggleUserDatas(
         }
       } else {
         const responseToggle = await toggleFunction(
-          user.accountIdV3,
-          user.sessionId,
+          user.tmdb_accountIdV3,
+          user.tmdb_sessionId,
           category === "favorite"
             ? { ...item, favorite: true }
             : { ...item, watchlist: true },

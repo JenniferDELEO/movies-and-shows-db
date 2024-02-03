@@ -22,9 +22,9 @@ export type InternalUser = {
   user_image: string | null;
 };
 
-export interface User extends InternalUser {
+export type User = {
   tmdb_username: string | null;
   tmdb_accountIdV3: number | null;
   tmdb_accountIdV4: string | null;
   tmdb_sessionId: string | null;
-}
+};
