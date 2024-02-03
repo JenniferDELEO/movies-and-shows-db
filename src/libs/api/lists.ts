@@ -2,7 +2,7 @@ import axios from "axios";
 import { optionsGET } from "./auth";
 
 export async function getLists() {
-  const accountIdV4 = localStorage.getItem("account_id_v4");
+  const accountIdV4 = localStorage.getItem("tmdb_account_id_v4");
   try {
     const result = await axios.request({
       ...optionsGET,
@@ -37,7 +37,7 @@ export async function addItemsToList(
   items: { media_type: string; media_id: number }[],
 ) {
   try {
-    const writeAccessToken = localStorage.getItem("access_token");
+    const writeAccessToken = localStorage.getItem("tmdb_access_token");
     const result = await axios.request({
       ...optionsGET,
       method: "POST",

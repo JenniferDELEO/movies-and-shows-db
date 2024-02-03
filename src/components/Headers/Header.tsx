@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { UserContext } from "@/context/userContext";
 import { useRouter, usePathname } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import {
   Navbar,
   NavbarContent,
@@ -21,73 +21,50 @@ import { MdLocalMovies, MdPeople } from "react-icons/md";
 import { PiTelevisionSimpleFill } from "react-icons/pi";
 import { IoPersonSharp } from "react-icons/io5";
 import { TiHome } from "react-icons/ti";
-
-import { getAccountDetails } from "@/libs/api/user";
-import { getAccessToken, createSessionFromV4 } from "@/libs/api/auth";
-import SearchBar from "@/components/Search/SearchBar";
 import toast from "react-hot-toast";
+
+import SearchBar from "@/components/Search/SearchBar";
+import { signOut, useSession } from "next-auth/react";
+import { InternalUserContext } from "@/context/internalUserContext";
 
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const [requestToken, setRequestToken] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
+  const { status } = useSession();
+
+  const { setUser } = useContext(UserContext);
   const {
-    user: { username, accountIdV3, accountIdV4, sessionId },
-    setUser,
-  } = useContext(UserContext);
-
-  useEffect(() => {
-    setRequestToken(localStorage.getItem("request_token"));
-
-    async function getUserAccount() {
-      if (!requestToken) return;
-      const responseJsonSession = await getAccessToken(requestToken);
-
-      const responseJsonCreateSession = await createSessionFromV4(
-        responseJsonSession.access_token,
-      );
-
-      await getAccountDetails(responseJsonCreateSession.session_id);
-      window.location.reload();
-    }
-    if (
-      requestToken &&
-      !username &&
-      !accountIdV3 &&
-      !accountIdV4 &&
-      !sessionId
-    ) {
-      getUserAccount();
-    }
-  }, [
-    accountIdV3,
-    accountIdV4,
-    requestToken,
-    router,
-    sessionId,
-    setUser,
-    username,
-  ]);
+    internalUser: { user_name },
+    setInternalUser,
+  } = useContext(InternalUserContext);
 
   const handleLogOut = () => {
-    localStorage.removeItem("gravatar_hash");
-    localStorage.removeItem("account_id_v4");
-    localStorage.removeItem("session_id");
-    localStorage.removeItem("username");
-    localStorage.removeItem("tmdb_avatar_path");
-    localStorage.removeItem("account_username");
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("account_id_v3");
+    localStorage.removeItem("tmdb_account_username");
+    localStorage.removeItem("tmdb_account_id_v3");
+    localStorage.removeItem("tmdb_account_id_v4");
+    localStorage.removeItem("tmdb_session_id");
+    localStorage.removeItem("tmdb_access_token");
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("user_name");
+    localStorage.removeItem("user_email");
+    localStorage.removeItem("user_image");
     setUser({
-      username: null,
-      accountIdV3: null,
-      accountIdV4: null,
-      sessionId: null,
+      tmdb_username: null,
+      tmdb_accountIdV3: null,
+      tmdb_accountIdV4: null,
+      tmdb_sessionId: null,
     });
+    setInternalUser({
+      user_id: null,
+      user_name: null,
+      user_email: null,
+      user_image: null,
+    });
+    signOut({ callbackUrl: "/" });
     toast.success("Vous êtes déconnecté");
-    router.replace("/");
+    router.push("/");
   };
 
   return (
@@ -227,12 +204,13 @@ const Header = () => {
                 </Link>
               </Button>
             </NavbarItem>
-            {!username && !accountIdV3 && !sessionId ? (
+            {status !== "authenticated" ? (
               <NavbarItem className="ml-2 hidden cursor-pointer text-sm md:block lg:text-lg">
                 <div
-                  onClick={() => router.replace("/profil/redirection-to-tmdb")}
+                  onClick={() => router.replace("/auth")}
+                  className="text-sm  lg:text-lg"
                 >
-                  Connexion/Inscription
+                  Inscription
                 </div>
               </NavbarItem>
             ) : (
@@ -248,7 +226,7 @@ const Header = () => {
                     >
                       <IoPersonSharp />
                       <span className="ml-2 hidden text-sm md:block lg:text-lg">
-                        {username}
+                        {user_name}
                       </span>
                     </Button>
                   </DropdownTrigger>
@@ -262,7 +240,7 @@ const Header = () => {
                   <DropdownSection showDivider>
                     <DropdownItem href="/profile" textValue="Mon profil">
                       <div className="flex flex-col">
-                        <span className="font-bold">{username}</span>
+                        <span className="font-bold">{user_name}</span>
                         <span className="pt-2">Mon profil</span>
                       </div>
                     </DropdownItem>
@@ -290,137 +268,6 @@ const Header = () => {
           </NavbarContent>
         </>
       )}
-
-      {/* <NavbarMenu className="bg-primary/90 px-[15%]">
-        <Accordion itemClasses={{ content: "flex flex-col" }}>
-          <AccordionItem
-            key="movies"
-            aria-label="Movies"
-            title={
-              <NavbarMenuItem
-                isActive={
-                  pathname.includes("/movies") || pathname.includes("/movie")
-                }
-                className="flex flex-row items-center border-b-2 py-4"
-              >
-                <MdLocalMovies />
-                <span className="ml-2">Films</span>
-              </NavbarMenuItem>
-            }
-          >
-            <Link
-              className="ml-2"
-              href="/movies/1"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Liste
-            </Link>
-            <Link
-              className="ml-2 mt-4"
-              href="/movies/now-playing/1"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Actuellement au cinéma
-            </Link>
-            <Link
-              className="ml-2 mt-4"
-              href="/movies/upcoming/1"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              À venir
-            </Link>
-          </AccordionItem>
-        </Accordion>
-        <Accordion itemClasses={{ content: "flex flex-col" }}>
-          <AccordionItem
-            key="tvshows"
-            aria-label="Tvshows"
-            title={
-              <NavbarMenuItem
-                isActive={
-                  pathname.includes("/tvshows") || pathname.includes("/tvshow")
-                }
-                className="flex flex-row items-center border-b-2 py-4"
-              >
-                <PiTelevisionSimpleFill />
-                <span className="ml-2">Séries TV</span>
-              </NavbarMenuItem>
-            }
-          >
-            <Link
-              className="ml-2"
-              href="/tvshows/1"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Liste
-            </Link>
-            <Link
-              className="ml-2 mt-4"
-              href="/tvshows/on-the-air/1"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              En cours de diffusion
-            </Link>
-          </AccordionItem>
-        </Accordion>
-        <NavbarMenuItem
-          isActive={
-            pathname.includes("/people") || pathname.includes("/person")
-          }
-          className="ml-2 flex w-[88%] flex-row items-center border-b-2 py-4"
-        >
-          <Link
-            href="/people/1"
-            className="flex flex-row items-center"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <MdPeople />
-            <span className="ml-2">Artistes</span>
-          </Link>
-        </NavbarMenuItem>
-
-        {!username && !accountIdV3 && !sessionId ? (
-          <NavbarMenuItem className="border-b-2 py-4">
-            <div onClick={() => router.replace("profil/redirection-to-tmdb")}>
-              Connexion/Inscription
-            </div>
-          </NavbarMenuItem>
-        ) : (
-          <Accordion itemClasses={{ content: "flex flex-col" }}>
-            <AccordionItem
-              key="profile"
-              aria-label="Profile"
-              title={
-                <NavbarMenuItem
-                  isActive={pathname.includes("/profile")}
-                  className="flex flex-row items-center border-b-2 py-4"
-                >
-                  <IoPersonSharp />
-                  <span className="ml-2">{username}</span>
-                </NavbarMenuItem>
-              }
-            >
-              <Link
-                className="ml-2 mt-4 border-b-2 pb-4"
-                href="/profile"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <div className="flex flex-col">
-                  <span className="font-bold">{username}</span>
-                  <span className="pt-2">Mon profil</span>
-                </div>
-              </Link>
-              <Link
-                className="ml-2 mt-4 text-gray-400"
-                href="/tvshows/on-the-air/1"
-                onClick={handleLogOut}
-              >
-                Déconnexion
-              </Link>
-            </AccordionItem>
-          </Accordion>
-        )}
-      </NavbarMenu> */}
     </Navbar>
   );
 };

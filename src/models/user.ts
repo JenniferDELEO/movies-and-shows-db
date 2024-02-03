@@ -15,9 +15,16 @@ export type AccountDetail = {
   username: string;
 };
 
-export type User = {
-  username: string | null;
-  accountIdV3: number | null;
-  accountIdV4: string | null;
-  sessionId: string | null;
+export type InternalUser = {
+  user_id: string | null;
+  user_name: string | null;
+  user_email: string | null;
+  user_image: string | null;
 };
+
+export interface User extends InternalUser {
+  tmdb_username: string | null;
+  tmdb_accountIdV3: number | null;
+  tmdb_accountIdV4: string | null;
+  tmdb_sessionId: string | null;
+}

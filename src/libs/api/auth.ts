@@ -1,7 +1,5 @@
 import axios from "axios";
 
-import { AccountDetail } from "@/models/user";
-
 export const optionsGET = {
   method: "GET",
   url: "",
@@ -25,7 +23,7 @@ export async function getRequestToken(): Promise<{
         ...optionsGET.headers,
         "content-type": "application/json",
       },
-      data: { redirect_to: `${process.env.NEXT_PUBLIC_URL}` },
+      data: { redirect_to: `${process.env.NEXT_PUBLIC_URL}/profile` },
     });
     const responseJsonRequestToken = responseRequestToken.data;
     localStorage.setItem(
@@ -58,8 +56,14 @@ export async function getAccessToken(requestToken: string): Promise<{
       data: { request_token: requestToken },
     });
     const responseJsonAccessToken = responseAccessToken.data;
-    localStorage.setItem("account_id_v4", responseJsonAccessToken.account_id);
-    localStorage.setItem("access_token", responseJsonAccessToken.access_token);
+    localStorage.setItem(
+      "tmdb_account_id_v4",
+      responseJsonAccessToken.account_id,
+    );
+    localStorage.setItem(
+      "tmdb_access_token",
+      responseJsonAccessToken.access_token,
+    );
     localStorage.removeItem("request_token");
     return responseJsonAccessToken;
   } catch (error) {
@@ -84,7 +88,10 @@ export async function createSessionFromV4(accessToken: string): Promise<{
       data: { access_token: accessToken },
     });
     const responseJsonCreateSession = responseCreateSession.data;
-    localStorage.setItem("session_id", responseJsonCreateSession.session_id);
+    localStorage.setItem(
+      "tmdb_session_id",
+      responseJsonCreateSession.session_id,
+    );
     return responseJsonCreateSession;
   } catch (error) {
     console.log(error);
