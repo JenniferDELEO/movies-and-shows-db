@@ -136,7 +136,7 @@ const Banner: FC<Props> = ({
                 />
               </picture>
 
-              {user && user.username && (
+              {user && user.tmdb_username && (
                 <AccountInteraction
                   item={item}
                   type={type}

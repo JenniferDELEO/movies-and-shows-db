@@ -125,7 +125,7 @@ const Infos: FC<Props> = (props) => {
   )?.name;
 
   useEffect(() => {
-    if (user && user.accountIdV4) {
+    if (user && user.tmdb_accountIdV4) {
       getUserList();
     }
   }, [user]);

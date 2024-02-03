@@ -83,14 +83,14 @@ const BannerWrapper: FC<Props> = ({
   const router = useRouter();
 
   async function fetchUserDatas() {
-    if (user && user.accountIdV4) {
+    if (user && user.tmdb_accountIdV4) {
       const responses = await Promise.all([
-        getUserFavoriteMovies(user.accountIdV4),
-        getUserFavoriteTvShows(user.accountIdV4),
-        getUserWatchListMovies(user.accountIdV4),
-        getUserWatchlistTvShows(user.accountIdV4),
-        getUserRatedMovies(user.accountIdV4),
-        getUserRatedTvShows(user.accountIdV4),
+        getUserFavoriteMovies(user.tmdb_accountIdV4),
+        getUserFavoriteTvShows(user.tmdb_accountIdV4),
+        getUserWatchListMovies(user.tmdb_accountIdV4),
+        getUserWatchlistTvShows(user.tmdb_accountIdV4),
+        getUserRatedMovies(user.tmdb_accountIdV4),
+        getUserRatedTvShows(user.tmdb_accountIdV4),
       ]);
       setFavoriteMoviesIds(responses[0].results.map((movie) => movie.id));
       setFavoriteTvShowsIds(responses[1].results.map((tv) => tv.id));
@@ -114,7 +114,7 @@ const BannerWrapper: FC<Props> = ({
   }
 
   useEffect(() => {
-    if (user && user.accountIdV4) {
+    if (user && user.tmdb_accountIdV4) {
       fetchUserDatas();
       getUserList();
     }

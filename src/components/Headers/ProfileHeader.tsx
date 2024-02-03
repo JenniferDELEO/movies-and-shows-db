@@ -16,12 +16,13 @@ import { MdLocalMovies } from "react-icons/md";
 import { PiTelevisionSimpleFill } from "react-icons/pi";
 
 import { UserContext } from "@/context/userContext";
+import { InternalUserContext } from "@/context/internalUserContext";
 
 const ProfileHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const {
-    user: { username },
-  } = useContext(UserContext);
+    internalUser: { user_name, user_image },
+  } = useContext(InternalUserContext);
   return (
     <div
       style={{
@@ -57,26 +58,24 @@ const ProfileHeader = () => {
                   height: "58px",
                   minHeight: "58px",
                 }}
-                className="overflow-hidden rounded-full bg-white p-3"
+                className="overflow-hidden rounded-full bg-white"
               >
                 <picture>
                   <img
                     alt="profile"
-                    src="/images/defaultProfile.png"
-                    width={58}
-                    height={58}
+                    src={user_image ? user_image : "/images/defaultProfile.png"}
+                    width="100%"
+                    height="100%"
+                    className="rounded-full"
                   />
                 </picture>
               </div>
-              <Link
-                href="/profile"
-                className="ml-4 flex flex-col items-start justify-start"
-              >
-                <p className="text-sm lg:text-lg">{username}</p>
+              <div className="ml-4 flex flex-col items-start justify-start">
+                <p className="text-sm lg:text-lg">{user_name}</p>
                 <p className="pt-2 text-xs text-gray-400 md:text-sm">
                   Mon profil
                 </p>
-              </Link>
+              </div>
             </Link>
           </NavbarBrand>
         </NavbarContent>

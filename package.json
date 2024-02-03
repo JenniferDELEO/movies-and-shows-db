@@ -10,20 +10,26 @@
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.9",
+    "@sanity/vision": "^3.27.1",
     "@tailwindcss/forms": "^0.5.7",
     "@vercel/analytics": "^1.1.2",
     "axios": "^1.6.5",
     "date-fns": "^3.2.0",
     "dayjs": "^1.11.10",
     "framer-motion": "^10.17.9",
-    "next": "14.0.4",
+    "next": "^14.1.0",
+    "next-auth": "^4.24.5",
+    "next-auth-sanity": "^1.5.3",
+    "next-sanity": "^7.0.17",
     "react": "^18",
     "react-datepicker": "^4.25.0",
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.12.0",
     "react-slick": "^0.29.0",
-    "slick-carousel": "^1.8.1"
+    "sanity": "^3.27.1",
+    "slick-carousel": "^1.8.1",
+    "swr": "^2.2.4"
   },
   "devDependencies": {
     "@types/node": "^20",
