@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 
 import UserProvider from "@/components/UserProvider/UserProvider";
 import Toast from "@/components/Toast/Toast";
@@ -46,6 +47,7 @@ export default function RootLayout({
                 <div className="mx-auto size-full pb-6 pt-10">{children}</div>
               </div>
             </main>
+            <Analytics />
           </UserProvider>
         </Providers>
       </body>
