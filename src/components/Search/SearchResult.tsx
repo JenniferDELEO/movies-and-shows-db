@@ -7,7 +7,7 @@ import PeopleCard from "@/components/People/PeopleCard";
 import { People } from "@/models/people";
 import { TvShow } from "@/models/tvShows";
 import { Movie } from "@/models/movies";
-import LoadingSpinner from "@/app/loading";
+import Loading from "@/components/Loading/Loading";
 
 type Props = {
   query: string;
@@ -41,7 +41,7 @@ const SearchResult = async (props: Props) => {
       {(filterType === "movie" && !searchResultsMovies && !genresMovies) ||
       (filterType === "tv" && !searchResultsTvShows && !genresTvShows) ||
       (filterType === "people" && !searchResultsPeople) ? (
-        <LoadingSpinner />
+        <Loading />
       ) : (filterType === "movie" && searchResultsMovies.length === 0) ||
         (filterType === "tv" && searchResultsTvShows.length === 0) ||
         (filterType === "people" && searchResultsPeople.length === 0) ? (
