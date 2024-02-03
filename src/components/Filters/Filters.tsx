@@ -83,7 +83,6 @@ const Filters: FC<Props> = (props) => {
             ? new Date(tvshowsFilters["first_air_date.lte"] as string)
             : null,
   ]);
-  console.log(moviesFilters);
   const [startDate, endDate] = dateRange;
   const [voteAverage, setVoteAverage] = useState<number[]>([
     moviesFilters?.["vote_average.gte"] ||
