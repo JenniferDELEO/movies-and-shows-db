@@ -17,7 +17,7 @@ const Logos = async ({ params }: Props) => {
   };
 
   return (
-    <div className="mx-auto size-full pt-[64px] md:w-[95%] lg:w-[90%]">
+    <div className="mx-auto size-full pt-[100px] md:w-[95%] lg:w-[90%]">
       <ImagesWrapper
         images={images?.logos}
         imageWidth={324}

@@ -38,19 +38,21 @@ const PeopleCard: FC<Props> = ({ item, itemCastMovie, itemCastTvShow }) => {
       onPress={() => router.push(`/person/${id}/${slug}`)}
     >
       <CardBody className="items-center justify-center">
-        <Image
-          src={
-            profilePath
-              ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${profilePath}`
-              : "/images/defaultImage.png"
-          }
-          width={185}
-          alt={name}
-          className="rounded-xl object-cover"
-          style={{
-            maxHeight: itemCastMovie ? 168 : itemCastTvShow ? 145 : 278,
-          }}
-        />
+        <picture>
+          <img
+            src={
+              profilePath
+                ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${profilePath}`
+                : "/images/defaultImage.png"
+            }
+            width={185}
+            alt={name}
+            className="rounded-xl object-cover"
+            style={{
+              maxHeight: itemCastMovie ? 168 : itemCastTvShow ? 145 : 278,
+            }}
+          />
+        </picture>
       </CardBody>
       <CardFooter
         className="flex-col items-center justify-start px-4 pb-4"

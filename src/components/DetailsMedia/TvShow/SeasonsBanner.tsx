@@ -1,7 +1,6 @@
 "use client";
 
 import { Card, CardBody, CardFooter } from "@nextui-org/react";
-import Image from "next/image";
 import { Dispatch, FC, SetStateAction } from "react";
 
 import StarRating from "@/components/StarRate/StarRating";
@@ -40,26 +39,28 @@ const SeasonsBanner: FC<Props> = (props) => {
                       height: 215,
                     }}
                   >
-                    <Image
-                      alt={`poster de la saison ${season.season_number}`}
-                      src={
-                        season?.poster_path
-                          ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w342${season.poster_path}`
-                          : "/images/defaultImage.png"
-                      }
-                      width={0}
-                      height={0}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        borderRadius: 5,
-                        boxShadow:
-                          selectedSeason.id === season.id
-                            ? "0 0 10px #fff"
-                            : "",
-                      }}
-                      sizes="100vw"
-                    />
+                    <picture>
+                      <img
+                        alt={`poster de la saison ${season.season_number}`}
+                        src={
+                          season?.poster_path
+                            ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w342${season.poster_path}`
+                            : "/images/defaultImage.png"
+                        }
+                        width={0}
+                        height={0}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          borderRadius: 5,
+                          boxShadow:
+                            selectedSeason.id === season.id
+                              ? "0 0 10px #fff"
+                              : "",
+                        }}
+                        sizes="100vw"
+                      />
+                    </picture>
                   </CardBody>
                   <CardFooter className="h-[120px] flex-col items-center justify-start px-4 pb-4">
                     <h4 className="text-sm">Saison {season.season_number}</h4>

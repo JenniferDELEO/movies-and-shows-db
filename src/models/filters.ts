@@ -7,7 +7,7 @@ export type MoviesFilters = {
   "primary_release_date.gte": string | null;
   "primary_release_date.lte": string | null;
   "release_date.gte": string | null;
-  "release_date.lte": string;
+  "release_date.lte": string | null;
   show_me: number;
   sort_by: string;
   "vote_average.gte": number | null;

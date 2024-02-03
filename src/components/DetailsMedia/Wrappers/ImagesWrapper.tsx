@@ -2,7 +2,6 @@
 
 import { Image as ImageType } from "@/models/movies";
 import { Card, CardBody, CardFooter } from "@nextui-org/react";
-import Image from "next/image";
 import Link from "next/link";
 import { FC } from "react";
 
@@ -28,14 +27,15 @@ const ImagesWrapper: FC<Props> = ({
       {images.map((image) => (
         <Card key={image.file_path} className={classNames.card}>
           <CardBody className="overflow-hidden">
-            <Image
-              src={`${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/original${image.file_path}`}
-              alt={image.file_path}
-              width={imageWidth}
-              height={imageHeight}
-              layout="responsive"
-              style={{ backgroundPosition: "top", borderRadius: "10px" }}
-            />
+            <picture>
+              <img
+                src={`${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/original${image.file_path}`}
+                alt={image.file_path}
+                width={imageWidth}
+                height={imageHeight}
+                style={{ backgroundPosition: "top", borderRadius: "10px" }}
+              />
+            </picture>
           </CardBody>
           <CardFooter className={classNames.cardFooter}>
             <p className="pt-2">Définition (en pixels)</p>

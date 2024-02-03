@@ -1,7 +1,6 @@
 "use client";
 
 import dayjs from "dayjs";
-import Image from "next/image";
 import { FC } from "react";
 import { useRouter } from "next/navigation";
 import "dayjs/locale/fr";
@@ -67,20 +66,23 @@ const Card: FC<Props> = ({ filterType, genres, movie, tvShow }) => {
         )
       }
     >
-      <Image
-        src={
-          movie?.poster_path
-            ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${movie.poster_path}`
-            : tvShow?.poster_path
-              ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${tvShow.poster_path}`
-              : "/images/defaultImage.png"
-        }
-        alt={title ? title : "defaultImage"}
-        width={0}
-        height={0}
-        sizes="100vw"
-        className="my-auto h-[255px] min-h-[255px] w-[170px] min-w-[170px] rounded-md md:h-[278px] md:w-[185px]"
-      />
+      <picture>
+        <img
+          src={
+            movie?.poster_path
+              ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${movie.poster_path}`
+              : tvShow?.poster_path
+                ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${tvShow.poster_path}`
+                : "/images/defaultImage.png"
+          }
+          alt={title ? title : "defaultImage"}
+          width={0}
+          height={0}
+          sizes="100vw"
+          className="my-auto h-[255px] min-h-[255px] w-[170px] min-w-[170px] rounded-md md:h-[278px] md:w-[185px]"
+        />
+      </picture>
+
       <div className="ml-2 md:ml-4">
         <h3 className="py-1 text-sm md:pt-4 md:text-xl">{title}</h3>
         {movie && (

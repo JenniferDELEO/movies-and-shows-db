@@ -2,10 +2,10 @@ import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Mes listes - Films & Séries TV DB",
+  title: "Mes films - Films & Séries TV DB",
 };
 
-const ProfilLists = () => {
+const ProfileMovies = () => {
   return (
     <div>
       <WorkInProgress />
@@ -13,4 +13,4 @@ const ProfilLists = () => {
   );
 };
 
-export default ProfilLists;
+export default ProfileMovies;

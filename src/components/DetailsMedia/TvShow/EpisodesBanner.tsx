@@ -1,7 +1,6 @@
 "use client";
 
 import dayjs from "dayjs";
-import Image from "next/image";
 import { FC } from "react";
 import { Card, CardBody, CardFooter } from "@nextui-org/react";
 
@@ -46,22 +45,24 @@ const EpisodesBanner: FC<Props> = (props) => {
                     height: 208,
                   }}
                 >
-                  <Image
-                    alt={`poster de l'épisode ${episode.episode_number} de la saison ${seasonDetails.season_number}`}
-                    src={
-                      episode?.still_path
-                        ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w342${episode.still_path}`
-                        : "/images/defaultImage.png"
-                    }
-                    width={0}
-                    height={0}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      borderRadius: 5,
-                    }}
-                    sizes="100vw"
-                  />
+                  <picture>
+                    <img
+                      alt={`poster de l'épisode ${episode.episode_number} de la saison ${seasonDetails.season_number}`}
+                      src={
+                        episode?.still_path
+                          ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w342${episode.still_path}`
+                          : "/images/defaultImage.png"
+                      }
+                      width={0}
+                      height={0}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        borderRadius: 5,
+                      }}
+                      sizes="100vw"
+                    />
+                  </picture>
                 </CardBody>
                 <CardFooter className="h-[120px] flex-col items-center justify-start px-4 pb-4">
                   <h4 className="text-center text-sm">

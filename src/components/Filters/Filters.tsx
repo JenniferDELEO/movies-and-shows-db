@@ -28,7 +28,6 @@ import { FaCheck } from "react-icons/fa";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
-import Image from "next/image";
 import fr from "date-fns/locale/fr";
 registerLocale("fr", fr);
 
@@ -535,22 +534,24 @@ const Filters: FC<Props> = (props) => {
                           }
                         }}
                       >
-                        <Image
-                          alt={provider.provider_name}
-                          src={
-                            provider?.logo_path
-                              ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w45${provider.logo_path}`
-                              : "/images/defaultImage.png"
-                          }
-                          width={0}
-                          height={0}
-                          style={{
-                            width: 45,
-                            height: 45,
-                            borderRadius: 5,
-                          }}
-                          sizes="100vw"
-                        />
+                        <picture>
+                          <img
+                            alt={provider.provider_name}
+                            src={
+                              provider?.logo_path
+                                ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w45${provider.logo_path}`
+                                : "/images/defaultImage.png"
+                            }
+                            width={0}
+                            height={0}
+                            style={{
+                              width: 45,
+                              height: 45,
+                              borderRadius: 5,
+                            }}
+                            sizes="100vw"
+                          />
+                        </picture>
                         <div
                           className={`absolute left-0 top-0 flex size-full items-center justify-center ${selectedWatchers.includes(provider.provider_id.toString()) ? "bg-secondary/70" : "hidden"}`}
                         >

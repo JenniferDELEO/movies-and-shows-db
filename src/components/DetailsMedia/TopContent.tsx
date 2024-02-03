@@ -1,12 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { FC } from "react";
+import { Tooltip } from "@nextui-org/react";
 
 import { AccountStates, Genre, Video, WatchProviderFr } from "@/models/movies";
 import Infos from "@/components/DetailsMedia/Infos";
 import { CreditsMovies, CreditsTvShows } from "@/models/people";
-import { Tooltip } from "@nextui-org/react";
 import { Episode, EpisodeToAir } from "@/models/tvShows";
 
 type Props = {
@@ -110,26 +109,28 @@ const TopContent: FC<Props> = (props) => {
               }}
               className="absolute left-5 top-5 z-10 overflow-hidden rounded-sm"
             >
-              <Image
-                alt={`poster-${title}`}
-                src={
-                  posterPath
-                    ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${posterPath}`
-                    : "/images/defaultImage.png"
-                }
-                width={0}
-                height={0}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  display: "block",
-                  minWidth: "100%",
-                  minHeight: "100%",
-                  borderWidth: 0,
-                  outline: 0,
-                }}
-                sizes="100vw"
-              />
+              <picture>
+                <img
+                  alt={`poster-${title}`}
+                  src={
+                    posterPath
+                      ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${posterPath}`
+                      : "/images/defaultImage.png"
+                  }
+                  width={0}
+                  height={0}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    display: "block",
+                    minWidth: "100%",
+                    minHeight: "100%",
+                    borderWidth: 0,
+                    outline: 0,
+                  }}
+                  sizes="100vw"
+                />
+              </picture>
             </div>
           )}
         </div>
@@ -206,26 +207,28 @@ const TopContent: FC<Props> = (props) => {
                     }}
                     className="relative my-auto overflow-hidden rounded-sm"
                   >
-                    <Image
-                      alt={`poster-${title}`}
-                      src={
-                        posterPath
-                          ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${posterPath}`
-                          : "/images/defaultImage.png"
-                      }
-                      width={0}
-                      height={0}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        display: "block",
-                        minWidth: "100%",
-                        minHeight: "100%",
-                        borderWidth: 0,
-                        outline: 0,
-                      }}
-                      sizes="100vw"
-                    />
+                    <picture>
+                      <img
+                        alt={`poster-${title}`}
+                        src={
+                          posterPath
+                            ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${posterPath}`
+                            : "/images/defaultImage.png"
+                        }
+                        width={0}
+                        height={0}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          display: "block",
+                          minWidth: "100%",
+                          minHeight: "100%",
+                          borderWidth: 0,
+                          outline: 0,
+                        }}
+                        sizes="100vw"
+                      />
+                    </picture>
                     {watchProvidersFr && watchProvidersFr.length > 0 && (
                       <div className="absolute bottom-0 left-0 w-full">
                         <div className="flex flex-col items-center justify-center bg-primary/90 py-3">
@@ -240,27 +243,29 @@ const TopContent: FC<Props> = (props) => {
                                 placement="bottom"
                               >
                                 <div className="my-2 mr-2 size-10">
-                                  <Image
-                                    alt={`logo-${watchProvider.provider_name}`}
-                                    src={
-                                      watchProvider.logo_path
-                                        ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${watchProvider.logo_path}`
-                                        : "/images/defaultImage.png"
-                                    }
-                                    width={0}
-                                    height={0}
-                                    style={{
-                                      width: "100%",
-                                      height: "100%",
-                                      display: "block",
-                                      minWidth: "100%",
-                                      minHeight: "100%",
-                                      borderWidth: 0,
-                                      outline: 0,
-                                      borderRadius: 5,
-                                    }}
-                                    sizes="100vw"
-                                  />
+                                  <picture>
+                                    <img
+                                      alt={`logo-${watchProvider.provider_name}`}
+                                      src={
+                                        watchProvider.logo_path
+                                          ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${watchProvider.logo_path}`
+                                          : "/images/defaultImage.png"
+                                      }
+                                      width={0}
+                                      height={0}
+                                      style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        display: "block",
+                                        minWidth: "100%",
+                                        minHeight: "100%",
+                                        borderWidth: 0,
+                                        outline: 0,
+                                        borderRadius: 5,
+                                      }}
+                                      sizes="100vw"
+                                    />
+                                  </picture>
                                 </div>
                               </Tooltip>
                             ))}
@@ -280,26 +285,28 @@ const TopContent: FC<Props> = (props) => {
                     }}
                     className="relative my-auto overflow-hidden rounded-sm"
                   >
-                    <Image
-                      alt={`poster-${title}`}
-                      src={
-                        stillPath
-                          ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w300${stillPath}`
-                          : "/images/defaultImage.png"
-                      }
-                      width={0}
-                      height={0}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        display: "block",
-                        minWidth: "100%",
-                        minHeight: "100%",
-                        borderWidth: 0,
-                        outline: 0,
-                      }}
-                      sizes="100vw"
-                    />
+                    <picture>
+                      <img
+                        alt={`poster-${title}`}
+                        src={
+                          stillPath
+                            ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w300${stillPath}`
+                            : "/images/defaultImage.png"
+                        }
+                        width={0}
+                        height={0}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          display: "block",
+                          minWidth: "100%",
+                          minHeight: "100%",
+                          borderWidth: 0,
+                          outline: 0,
+                        }}
+                        sizes="100vw"
+                      />
+                    </picture>
                   </div>
                 )}
               </>
