@@ -2,7 +2,6 @@
 
 import { Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
 import dayjs from "dayjs";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { FC } from "react";
 import { FaLongArrowAltLeft } from "react-icons/fa";
@@ -29,7 +28,7 @@ const OtherPagesHeader: FC<Props> = (props) => {
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundPosition: "center",
-        height: "10px",
+        height: "120px",
         width: "100vw",
         position: "fixed",
         top: "128px",
@@ -54,27 +53,29 @@ const OtherPagesHeader: FC<Props> = (props) => {
               }}
               className="overflow-hidden rounded-lg"
             >
-              <Image
-                alt={`poster-${title}`}
-                src={
-                  posterPath
-                    ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${posterPath}`
-                    : "/images/defaultImage.png"
-                }
-                width={0}
-                height={0}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  display: "block",
-                  minWidth: "100%",
-                  minHeight: "100%",
-                  borderWidth: 0,
-                  outline: 0,
-                }}
-                sizes="100vw"
-                onClick={() => router.push(`${newPathname}`)}
-              />
+              <picture>
+                <img
+                  alt={`poster-${title}`}
+                  src={
+                    posterPath
+                      ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${posterPath}`
+                      : "/images/defaultImage.png"
+                  }
+                  width={0}
+                  height={0}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    display: "block",
+                    minWidth: "100%",
+                    minHeight: "100%",
+                    borderWidth: 0,
+                    outline: 0,
+                  }}
+                  sizes="100vw"
+                  onClick={() => router.push(`${newPathname}`)}
+                />
+              </picture>
             </div>
           </NavbarItem>
           <NavbarItem>

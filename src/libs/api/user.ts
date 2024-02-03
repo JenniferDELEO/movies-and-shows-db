@@ -1,5 +1,24 @@
 import axios from "axios";
 import { optionsGET } from "./auth";
+import { AccountDetail } from "@/models/user";
+
+export async function getAccountDetails(
+  sessionId: string,
+): Promise<AccountDetail> {
+  try {
+    const responseFetchAccount = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/account?session_id=${sessionId}`,
+    });
+    const responseJsonAccount = responseFetchAccount.data;
+    localStorage.setItem("account_id_v3", responseJsonAccount.id);
+    localStorage.setItem("account_username", responseJsonAccount.username);
+    return responseJsonAccount;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
 
 export async function toggleFavorite(
   accountIdV3: number,

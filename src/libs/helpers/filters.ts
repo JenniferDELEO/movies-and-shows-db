@@ -9,7 +9,7 @@ export const defaultMoviesFilters = {
   "primary_release_date.gte": null,
   "primary_release_date.lte": null,
   "release_date.gte": null,
-  "release_date.lte": dayjs().format("YYYY-MM-DD"),
+  "release_date.lte": null,
   show_me: 0,
   sort_by: "popularity.desc",
   "vote_average.gte": 0,

@@ -1,6 +1,7 @@
+"use client";
 import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
 
-const Profil = () => {
+const Profile = () => {
   return (
     <div>
       <WorkInProgress />
@@ -8,4 +9,4 @@ const Profil = () => {
   );
 };
 
-export default Profil;
+export default Profile;

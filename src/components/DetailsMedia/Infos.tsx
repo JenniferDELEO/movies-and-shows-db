@@ -3,7 +3,6 @@
 import { FC, useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { Button } from "@nextui-org/react";
-import Image from "next/image";
 import { FaPlay } from "react-icons/fa";
 
 import { AccountStates, Genre, Video, WatchProviderFr } from "@/models/movies";
@@ -182,27 +181,29 @@ const Infos: FC<Props> = (props) => {
                     key={watchProvider.provider_id}
                     className="my-2 mr-2 size-10"
                   >
-                    <Image
-                      alt={`logo-${watchProvider.provider_name}`}
-                      src={
-                        watchProvider.logo_path
-                          ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${watchProvider.logo_path}`
-                          : "/images/defaultImage.png"
-                      }
-                      width={0}
-                      height={0}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        display: "block",
-                        minWidth: "100%",
-                        minHeight: "100%",
-                        borderWidth: 0,
-                        outline: 0,
-                        borderRadius: 5,
-                      }}
-                      sizes="100vw"
-                    />
+                    <picture>
+                      <img
+                        alt={`logo-${watchProvider.provider_name}`}
+                        src={
+                          watchProvider.logo_path
+                            ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${watchProvider.logo_path}`
+                            : "/images/defaultImage.png"
+                        }
+                        width={0}
+                        height={0}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          display: "block",
+                          minWidth: "100%",
+                          minHeight: "100%",
+                          borderWidth: 0,
+                          outline: 0,
+                          borderRadius: 5,
+                        }}
+                        sizes="100vw"
+                      />
+                    </picture>
                   </div>
                 ))}
               </div>

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
 import Slider from "react-slick";
@@ -108,32 +107,35 @@ const Banner: FC<Props> = ({
         {items.map((item) => (
           <div key={item.id} className={classNames.items}>
             <div className="relative m-auto h-[250px] min-h-[250px] w-[145px] min-w-[145px] overflow-hidden rounded-sm sm:h-[300px] sm:w-[200px] 2xl:h-[400px] 2xl:w-[250px]">
-              <Image
-                src={
-                  item?.poster_path
-                    ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w342${item.poster_path}`
-                    : "/images/defaultImage.png"
-                }
-                alt={`${item?.title || item?.name} poster`}
-                width={0}
-                height={0}
-                className={`${classNames.image} cursor-pointer`}
-                sizes="100vw"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  display: "block",
-                  minWidth: "100%",
-                  minHeight: "100%",
-                  borderWidth: 0,
-                  outline: 0,
-                }}
-                onClick={() =>
-                  router.push(
-                    `/${type}/${item.id}-${(item?.title || item?.name)?.toLowerCase().replace(/[\W_]+/g, "-")}`,
-                  )
-                }
-              />
+              <picture>
+                <img
+                  src={
+                    item?.poster_path
+                      ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w342${item.poster_path}`
+                      : "/images/defaultImage.png"
+                  }
+                  alt={`${item?.title || item?.name} poster`}
+                  width={0}
+                  height={0}
+                  className={`${classNames.image} cursor-pointer`}
+                  sizes="100vw"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    display: "block",
+                    minWidth: "100%",
+                    minHeight: "100%",
+                    borderWidth: 0,
+                    outline: 0,
+                  }}
+                  onClick={() =>
+                    router.push(
+                      `/${type}/${item.id}-${(item?.title || item?.name)?.toLowerCase().replace(/[\W_]+/g, "-")}`,
+                    )
+                  }
+                />
+              </picture>
+
               {user && user.username && (
                 <AccountInteraction
                   item={item}
