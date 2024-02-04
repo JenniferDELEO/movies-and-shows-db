@@ -1,5 +1,7 @@
 import { CreditsMovies } from "./people";
 
+/* ----------------------- TMDB Models ----------------------- */
+
 export type AccountRating = {
   created_at: string;
   value: number;
@@ -139,4 +141,17 @@ export type WatchProviderFr = {
   provider_id: number;
   provider_name: string;
   display_priority: number;
+};
+
+/* ----------------------- Internal Models ----------------------- */
+
+export type InternalMovie = {
+  _id: string;
+  title: string;
+  release_date: string;
+  runtime: number;
+  poster_path: string;
+  overview: string;
+  user: any;
+  account_states: any;
 };

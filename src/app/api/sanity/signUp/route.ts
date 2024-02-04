@@ -1,4 +1,4 @@
-import sanityClient from "@/libs/sanity";
+import sanityClient from "@/libs/sanity/sanity";
 import { signUpHandler } from "next-auth-sanity";
 import { SanityClient } from "sanity";
 

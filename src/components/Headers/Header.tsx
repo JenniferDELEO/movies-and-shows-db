@@ -205,12 +205,12 @@ const Header = () => {
               </Button>
             </NavbarItem>
             {status !== "authenticated" ? (
-              <NavbarItem className="ml-2 hidden cursor-pointer text-sm md:block lg:text-lg">
+              <NavbarItem className="ml-2 cursor-pointer">
                 <div
                   onClick={() => router.replace("/auth")}
-                  className="text-sm  lg:text-lg"
+                  className="text-sm lg:text-lg"
                 >
-                  Inscription
+                  Se connecter
                 </div>
               </NavbarItem>
             ) : (
