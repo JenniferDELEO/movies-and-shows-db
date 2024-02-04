@@ -46,7 +46,6 @@ const NowPlayingMovies = async () => {
       providersMovies={providersMovies}
       title={title}
       totalPagesMovies={totalPagesMovies}
-      totalResultsMovies={totalResultsMovies}
     />
   );
 };
