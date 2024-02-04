@@ -29,7 +29,6 @@ const Movies = async () => {
       providersMovies={providersMovies}
       title={title}
       totalPagesMovies={totalPagesMovies}
-      totalResultsMovies={totalResultsMovies}
     />
   );
 };

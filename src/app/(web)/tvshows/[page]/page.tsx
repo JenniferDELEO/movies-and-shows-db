@@ -29,7 +29,6 @@ const TvShows = async () => {
       providersTvShows={providersTvShows}
       title={title}
       totalPagesTvShows={totalPagesTvShows}
-      totalResultsTvShows={totalResultsTvShows}
     />
   );
 };

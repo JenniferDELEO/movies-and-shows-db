@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ReactNode } from "react";
 
 import MediaHeader from "@/components/Headers/MediaHeader";
 import { getTvShowDetail } from "@/libs/api/tvshows";
@@ -21,7 +22,7 @@ export default async function TvShowDetailsLayout({
   children,
   params,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   params: { id: string };
 }) {
   const id = params.id.split("-")[0];

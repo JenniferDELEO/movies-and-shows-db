@@ -4,7 +4,6 @@ import {
   getSeasonDetails,
   getTvShowDetail,
 } from "@/libs/api/tvshows";
-import { SeasonDetails } from "@/models/tvShows";
 
 type Props = {
   params: { id: string; episodeNumber: string };

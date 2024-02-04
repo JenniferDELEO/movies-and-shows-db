@@ -15,7 +15,6 @@ import { FaListUl, FaStar, FaHeart } from "react-icons/fa";
 import { MdLocalMovies } from "react-icons/md";
 import { PiTelevisionSimpleFill } from "react-icons/pi";
 
-import { UserContext } from "@/context/userContext";
 import { InternalUserContext } from "@/context/internalUserContext";
 
 const ProfileHeader = () => {

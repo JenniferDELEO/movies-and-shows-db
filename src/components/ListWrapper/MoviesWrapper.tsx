@@ -22,7 +22,6 @@ type Props = {
   providersMovies: Watcher[];
   title: string;
   totalPagesMovies: number;
-  totalResultsMovies: number;
 
   defaultFilters?: MoviesFilters;
 };
@@ -34,7 +33,6 @@ const MoviesWrapper: FC<Props> = (props) => {
     providersMovies,
     title,
     totalPagesMovies,
-    totalResultsMovies,
 
     defaultFilters,
   } = props;
@@ -44,7 +42,6 @@ const MoviesWrapper: FC<Props> = (props) => {
     defaultFilters || defaultMoviesFilters,
   );
   const [openFilters, setOpenFilters] = useState<boolean>(false);
-  const [totalResults, setTotalResults] = useState<number>(totalResultsMovies);
   const [totalPages, setTotalPages] = useState<number>(totalPagesMovies);
   const [filterType, setFilterType] = useState("popularity.desc");
   const [currentPage, setCurrentPage] = useState(
@@ -89,7 +86,6 @@ const MoviesWrapper: FC<Props> = (props) => {
       ...filters,
     });
     setMoviesList(result.results);
-    setTotalResults(result.total_results);
     setTotalPages(result.total_pages);
     scrollToTop();
   };
@@ -100,7 +96,6 @@ const MoviesWrapper: FC<Props> = (props) => {
       ...defaultMoviesFilters,
     });
     setMoviesList(result.results);
-    setTotalResults(result.total_results);
     setTotalPages(result.total_pages);
     setIsResetting(true);
   };

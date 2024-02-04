@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import { ReactNode } from "react";
 
 import UserProvider from "@/components/UserProvider/UserProvider";
 import Toast from "@/components/Toast/Toast";
@@ -25,11 +26,7 @@ export const metadata: Metadata = {
     "Accédez aux informations de millions de films et séries TV, gratuitement et sans publicité. Créez votre compte, sauvegardez vos films et séries TV préférés, créez vos propres listes.",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className="dark">
       <head>

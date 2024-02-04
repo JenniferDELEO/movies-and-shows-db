@@ -1,7 +1,7 @@
 "use client";
 
 import { Tooltip } from "@nextui-org/react";
-import { cloneElement, useState } from "react";
+import { FC, ReactElement, cloneElement, useState } from "react";
 
 interface RatingProps {
   count: number;
@@ -13,9 +13,9 @@ interface RatingProps {
   edit?: boolean;
   isHalf?: boolean;
   onChange?: (value: number) => void;
-  emptyIcon?: React.ReactElement;
-  halfIcon?: React.ReactElement;
-  fullIcon?: React.ReactElement;
+  emptyIcon?: ReactElement;
+  halfIcon?: ReactElement;
+  fullIcon?: ReactElement;
 }
 
 interface IconProps {
@@ -65,7 +65,7 @@ const EmptyStar = ({ size = 24, color = "#000000" }: IconProps) => {
   );
 };
 
-const StarRating: React.FC<RatingProps> = ({
+const StarRating: FC<RatingProps> = ({
   count,
   value,
   color = "#ffd700",
@@ -108,7 +108,7 @@ const StarRating: React.FC<RatingProps> = ({
   const stars = [];
 
   for (let i = 0; i < count; i++) {
-    let star: React.ReactElement;
+    let star: ReactElement;
     if (isHalf && rate - i > 0 && rate - i < 1) {
       star = halfIcon;
     } else if (i < rate) {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ReactNode } from "react";
 
 import MediaHeader from "@/components/Headers/MediaHeader";
 import { getMovieDetail } from "@/libs/api/movies";
@@ -21,7 +22,7 @@ export default async function MovieDetailsLayout({
   children,
   params,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   params: { id: string };
 }) {
   const id = params.id.split("-")[0];
