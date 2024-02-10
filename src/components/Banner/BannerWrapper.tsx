@@ -6,7 +6,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { usePathname, useRouter } from "next/navigation";
 
 import Banner from "@/components/Banner/Banner";
-import { Movie } from "@/models/movies";
+import { InternalMovieResponse, Movie } from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
 import { UserContext } from "@/context/userContext";
 import {
@@ -33,6 +33,7 @@ type Props = {
     trendingMoviesThisWeek: Movie[];
     trendingTvShowsToday: TvShow[];
     trendingTvShowsThisWeek: TvShow[];
+    userMovies: InternalMovieResponse[];
   };
   personDetailProps?: {
     actingMovies: Movie[];
@@ -134,6 +135,8 @@ const BannerWrapper: FC<Props> = ({
     container: "mx-auto w-full",
   };
 
+  console.log(homeProps?.userMovies);
+
   if (homeProps) {
     return (
       <div className="size-full">
@@ -165,6 +168,7 @@ const BannerWrapper: FC<Props> = ({
               classNames={classNames}
               title="Les 20 Films dans les tendances"
               userLists={userLists}
+              userMovies={homeProps.userMovies}
             />
           </Tab>
           <Tab
@@ -190,6 +194,7 @@ const BannerWrapper: FC<Props> = ({
               classNames={classNames}
               title="Les 20 Films dans les tendances"
               userLists={userLists}
+              userMovies={homeProps.userMovies}
             />
           </Tab>
         </Tabs>
@@ -209,6 +214,7 @@ const BannerWrapper: FC<Props> = ({
           classNames={classNames}
           title="Les 20 Films les plus populaires"
           userLists={userLists}
+          userMovies={homeProps.userMovies}
         />
         <Banner
           items={homeProps.topRatedMovies}
@@ -226,6 +232,7 @@ const BannerWrapper: FC<Props> = ({
           classNames={classNames}
           title="Les 20 Films les mieux notés"
           userLists={userLists}
+          userMovies={homeProps.userMovies}
         />
         <Tabs
           aria-label="Onglets Séries TV"

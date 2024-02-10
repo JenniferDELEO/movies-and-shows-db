@@ -2,10 +2,11 @@
 
 /* import type { Metadata } from "next"; */
 import { useSession } from "next-auth/react";
-import useSWR from "swr";
 
 import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
-import axios from "axios";
+import { getUserMovies } from "@/libs/sanity/api/movie";
+import { useEffect, useState } from "react";
+import { InternalMovieResponse } from "@/models/movies";
 
 /* export const metadata: Metadata = {
   title: "Mes films - Films & Séries TV DB",
@@ -13,15 +14,19 @@ import axios from "axios";
 
 const ProfileMovies = () => {
   const { data: session } = useSession();
+  console.log(session);
+  const [moviesList, setMoviesList] = useState<InternalMovieResponse[]>([]);
 
   const fetchMovies = async () => {
-    const { data } = await axios.get<any>("/api/movies");
-    return data;
+    if (session) {
+      const results = await getUserMovies(session?.user.id);
+      setMoviesList(results?.movies);
+    }
   };
 
-  const { data, error, isLoading } = useSWR("/api/movies", fetchMovies);
-
-  console.log(data);
+  useEffect(() => {
+    if (session) fetchMovies();
+  }, [session]);
 
   if (!session) {
     return <div>Vous devez être authentifé pour accéder à cette page</div>;

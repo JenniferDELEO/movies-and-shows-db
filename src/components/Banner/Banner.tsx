@@ -36,7 +36,7 @@ import {
 } from "@/components/Banner/reactSlickSettings";
 import { User } from "@/models/user";
 import { List } from "@/models/lists";
-import { Movie } from "@/models/movies";
+import { InternalMovieResponse, Movie } from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
 import AccountInteraction from "../AccountInteraction/AccountInteraction";
 
@@ -71,6 +71,7 @@ type Props = {
   };
   title: string;
   userLists: List[];
+  userMovies?: InternalMovieResponse[];
 };
 
 const Banner: FC<Props> = ({
@@ -89,6 +90,7 @@ const Banner: FC<Props> = ({
   userLists,
   ratedMovies,
   ratedTvShows,
+  userMovies,
 }) => {
   const router = useRouter();
   const settings =
@@ -152,6 +154,7 @@ const Banner: FC<Props> = ({
                     ratedMoviesIds,
                     ratedTvShowsIds,
                     classNames,
+                    userMovies: userMovies || [],
                   }}
                   userLists={userLists}
                 />

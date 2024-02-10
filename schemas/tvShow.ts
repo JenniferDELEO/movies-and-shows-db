@@ -36,34 +36,11 @@ const tvShow = {
       initialValue: 0,
     }),
     defineField({
-      name: "user",
-      title: "User",
-      type: "reference",
-      to: [{ type: "user" }],
+      name: "users",
+      title: "Users",
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "user" }] }],
       validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: "account_states",
-      title: "Account States",
-      type: "object",
-      fields: [
-        {
-          name: "status",
-          title: "Status",
-          type: "string",
-          options: {
-            list: ["active", "archived", "to_discover"],
-          },
-        },
-        {
-          name: "watch_state",
-          title: "Watch State",
-          type: "string",
-          options: {
-            list: ["started", "finished", "to_watch"],
-          },
-        },
-      ],
     }),
   ],
 };

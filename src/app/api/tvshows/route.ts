@@ -1,4 +1,4 @@
-import { getUserMovies } from "@/libs/sanity/api/movie";
+import { getUserTvShows } from "@/libs/sanity/api/tvshow";
 import { authOptions } from "@/libs/sanity/auth";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
@@ -13,7 +13,7 @@ export async function GET() {
   const userId = session.user.id;
 
   try {
-    const data = await getUserMovies(userId);
+    const data = await getUserTvShows(userId);
     return NextResponse.json(data, { status: 200, statusText: "Successful" });
   } catch (error) {
     return new NextResponse("Unable to fetch", {

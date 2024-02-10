@@ -147,11 +147,30 @@ export type WatchProviderFr = {
 
 export type InternalMovie = {
   _id: string;
+  tmdb_id: number;
   title: string;
   release_date: string;
   runtime: number;
   poster_path: string;
   overview: string;
   user: any;
-  account_states: any;
+};
+
+export type InternalMovieResponse = {
+  movie: InternalMovie;
+  account_states: {
+    status: "watched" | "to_watch";
+  };
+};
+
+export type AddMovieToAccount = {
+  tmdbId: number;
+  title: string;
+  releaseDate: string;
+  runtime: number;
+  genres: string[];
+  posterPath: string;
+  overview: string;
+  userId: string;
+  status: string;
 };

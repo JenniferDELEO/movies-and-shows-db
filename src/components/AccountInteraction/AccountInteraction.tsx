@@ -8,7 +8,7 @@ import { toggleFavorite, toggleWatchlist } from "@/libs/api/user";
 import { toggleUserDatas } from "@/libs/helpers/userDatas";
 import { User } from "@/models/user";
 import { List } from "@/models/lists";
-import { Movie } from "@/models/movies";
+import { InternalMovieResponse, Movie } from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
 import DropdownCard from "@/components/AccountInteraction/DropdownCard";
 import IconsInteraction from "./IconsInteraction";
@@ -52,6 +52,7 @@ type Props = {
       image: string;
       dropdownContainer: string;
     };
+    userMovies: InternalMovieResponse[];
   };
   mediaDetailsPageProps?: {
     isFavorite: boolean;
@@ -202,6 +203,7 @@ const AccountInteraction: FC<Props> = (props) => {
           ratedMoviesIds={homePageProps.ratedMoviesIds}
           ratedTvShowsIds={homePageProps.ratedTvShowsIds}
           classNames={homePageProps.classNames}
+          userMovies={homePageProps.userMovies}
           handleClick={handleClick}
         />
       )}

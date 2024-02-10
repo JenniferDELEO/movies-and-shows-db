@@ -11,8 +11,14 @@ import {
   getTrendingTvShows,
 } from "@/libs/api/tvshows";
 import { defaultTvShowsFilters } from "@/libs/helpers/filters";
+import { getUserMovies } from "@/libs/sanity/api/movie";
+import { authOptions } from "@/libs/sanity/auth";
+import { InternalMovie, InternalMovieResponse } from "@/models/movies";
+import { getServerSession } from "next-auth";
 
 export default async function Home() {
+  const session = await getServerSession(authOptions);
+
   const { results: popularMovies } = await getPopularMovies(1);
   const { results: topRatedMovies } = await getTopRatedMovies();
   const { results: trendingMoviesToday } = await getTrendingMovies("day");
@@ -24,6 +30,12 @@ export default async function Home() {
   const { results: topRatedTvShows } = await getTopRatedTvShows();
   const { results: trendingTvShowsToday } = await getTrendingTvShows("day");
   const { results: trendingTvShowsThisWeek } = await getTrendingTvShows("week");
+
+  let userMovies: InternalMovieResponse[] = [];
+  if (session) {
+    const results = await getUserMovies(session?.user.id);
+    userMovies = results.movies;
+  }
 
   return (
     <div className="size-full">
@@ -41,6 +53,7 @@ export default async function Home() {
           trendingMoviesThisWeek,
           trendingTvShowsToday,
           trendingTvShowsThisWeek,
+          userMovies,
         }}
       />
     </div>

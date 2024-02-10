@@ -5,11 +5,17 @@ import { HiDotsCircleHorizontal } from "react-icons/hi";
 import { FaListUl, FaBookmark } from "react-icons/fa";
 import { FaHeart, FaStar } from "react-icons/fa6";
 import {
+  MdOutlineCheckBox,
+  MdOutlineCheckBoxOutlineBlank,
+} from "react-icons/md";
+
+import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
+import { InternalMovieResponse } from "@/models/movies";
 
 type Props = {
   item: {
@@ -33,6 +39,7 @@ type Props = {
     image: string;
     dropdownContainer: string;
   };
+  userMovies: InternalMovieResponse[];
   handleClick: (item: Key) => Promise<void>;
 };
 
@@ -46,8 +53,11 @@ const DropdownCard: FC<Props> = (props) => {
     ratedMoviesIds,
     ratedTvShowsIds,
     classNames,
+    userMovies,
     handleClick,
   } = props;
+
+  const userMoviesId = userMovies?.map((movie) => movie.movie.tmdb_id);
 
   return (
     <div className={classNames.dropdownContainer}>
@@ -62,6 +72,20 @@ const DropdownCard: FC<Props> = (props) => {
           aria-label="Dropdown menu with icons"
           onAction={(item) => handleClick(item)}
         >
+          <DropdownItem
+            key={`watched-${item.id}-${item.title || item.name}`}
+            startContent={
+              userMoviesId.includes(item.id) ? (
+                <MdOutlineCheckBox />
+              ) : (
+                <MdOutlineCheckBoxOutlineBlank />
+              )
+            }
+          >
+            {userMoviesId.includes(item.id)
+              ? "Supprimer du compte"
+              : "Marquer comme vu"}
+          </DropdownItem>
           <DropdownItem
             key={`addToList-${item.id}-${item.title || item.name}`}
             startContent={<FaListUl />}
