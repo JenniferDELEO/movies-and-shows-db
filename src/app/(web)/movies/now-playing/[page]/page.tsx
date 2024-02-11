@@ -9,6 +9,10 @@ import {
   getMoviesProviders,
 } from "@/libs/api/movies";
 import { defaultMoviesFilters } from "@/libs/helpers/filters";
+import { InternalMovieUser } from "@/models/movies";
+import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/libs/sanity/auth";
 
 dayjs.extend(weekdayPlugin);
 
@@ -17,6 +21,7 @@ export const metadata: Metadata = {
 };
 
 const NowPlayingMovies = async () => {
+  const session = await getServerSession(authOptions);
   const lastMonth = dayjs().subtract(5, "week").day(3).format("YYYY-MM-DD");
   const nextWednesday = dayjs().weekday(7).weekday(3).format("YYYY-MM-DD");
 
@@ -36,6 +41,16 @@ const NowPlayingMovies = async () => {
 
   const { results: providersMovies } = await getMoviesProviders();
 
+  let userMovies: InternalMovieUser[] = [];
+  let userMoviesId: string = "";
+  if (session) {
+    const results = await getUserMovies(session.user.id);
+    userMovies = results?.movies || [];
+    userMoviesId = results?._id;
+  }
+
+  const internalMovies = await getAllMovies();
+
   const title = `Films au cinéma (${totalResultsMovies})`;
 
   return (
@@ -46,6 +61,9 @@ const NowPlayingMovies = async () => {
       providersMovies={providersMovies}
       title={title}
       totalPagesMovies={totalPagesMovies}
+      userMovies={userMovies}
+      userMoviesId={userMoviesId}
+      internalMovies={internalMovies}
     />
   );
 };

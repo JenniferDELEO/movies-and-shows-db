@@ -3,84 +3,115 @@
 import { FC } from "react";
 import { Tooltip } from "@nextui-org/react";
 
-import { AccountStates, Genre, Video, WatchProviderFr } from "@/models/movies";
+import {
+  AccountStates,
+  Genre,
+  InternalMovie,
+  InternalMovieUser,
+  MovieDetails,
+  Video,
+  WatchProviderFr,
+} from "@/models/movies";
 import Infos from "@/components/DetailsMedia/Infos";
 import { CreditsMovies, CreditsTvShows } from "@/models/people";
-import { Episode, EpisodeToAir } from "@/models/tvShows";
+import {
+  Episode,
+  EpisodeDetails,
+  EpisodeToAir,
+  TvShowDetails,
+} from "@/models/tvShows";
 
 type Props = {
-  genresMedia: Genre[];
+  movieDetails?: MovieDetails;
+  tvShowDetails?: TvShowDetails;
+  episodeDetails?: EpisodeDetails;
+  /* genresMedia: Genre[];
   id: number;
   overview: string;
-  title: string;
+  title: string; */
   type: "episode" | "movie" | "tvshow";
-  voteAverage: number;
+  /* voteAverage: number; */
 
-  accountStates?: AccountStates;
+  /* accountStates?: AccountStates;
   backdropPath?: string;
-  creditsMovies?: CreditsMovies;
-  creditsTvShows?: CreditsTvShows;
-  episodeAccountStates?: { id: number; rated: boolean | { value: number } };
+  creditsMovies?: CreditsMovies; */
+  /* creditsTvShows?: CreditsTvShows; */
+  /* episodeAccountStates?: { id: number; rated: boolean | { value: number } }; */
   episodePrecedent?: Episode | undefined;
   episodeNumber?: number;
-  episodeRunTime?: number[];
+  /* episodeRunTime?: number[]; */
   isCollection?: boolean;
-  nextEpisodeToAir?: EpisodeToAir | null;
+  /* nextEpisodeToAir?: EpisodeToAir | null;
   numberOfSeasons?: number;
-  numberOfEpisodes?: number;
-  originalLanguage?: string;
+  numberOfEpisodes?: number; */
+  /* originalLanguage?: string;
   posterPath?: string;
   releaseDate?: string;
-  runtime?: number;
+  runtime?: number; */
   seasonNumber?: number;
-  status?: string;
-  stillPath?: string;
-  tagline?: string;
+  /*  status?: string; */
+  /* stillPath?: string; */
+  /* tagline?: string; */
   tvShowId?: number;
-  videos?: {
+  /* videos?: {
     id: number;
     results: Video[];
   };
   voteCount?: number;
-  watchProvidersFr?: WatchProviderFr[];
+  watchProvidersFr?: WatchProviderFr[]; */
+  userMovies?: InternalMovieUser[];
+  userMoviesId?: string;
+  internalMovies?: InternalMovie[];
 };
 
 const TopContent: FC<Props> = (props) => {
   const {
-    genresMedia,
+    movieDetails,
+    tvShowDetails,
+    episodeDetails,
+    /* genresMedia,
     id,
     overview,
-    title,
+    title, */
     type,
-    voteAverage,
+    /* voteAverage,
 
     accountStates,
     backdropPath,
-    creditsMovies,
-    creditsTvShows,
-    episodeAccountStates,
+    creditsMovies, */
+    /* creditsTvShows, */
+    /*  episodeAccountStates, */
     episodePrecedent,
     episodeNumber,
-    episodeRunTime,
+    /* episodeRunTime, */
     isCollection,
-    nextEpisodeToAir,
+    /* nextEpisodeToAir,
     numberOfSeasons,
-    numberOfEpisodes,
-    originalLanguage,
+    numberOfEpisodes, */
+    /* originalLanguage,
     posterPath,
     releaseDate,
-    runtime,
+    runtime, */
     seasonNumber,
-    status,
-    stillPath,
-    tagline,
+    /* status, */
+    /* stillPath, */
+    /* tagline, */
     tvShowId,
-    videos,
+    /* videos,
     voteCount,
-    watchProvidersFr,
+    watchProvidersFr, */
+    userMovies,
+    userMoviesId,
+    internalMovies,
   } = props;
 
-  const backgroundImage = backdropPath || stillPath;
+  const backgroundImage =
+    movieDetails?.backdrop_path ||
+    episodeDetails?.still_path ||
+    tvShowDetails?.backdrop_path;
+  const posterPath = movieDetails?.poster_path || tvShowDetails?.poster_path;
+  const watchProvidersFr =
+    movieDetails?.watch_providers_fr || tvShowDetails?.watch_providers_fr;
 
   return (
     <section className="size-full">
@@ -93,13 +124,16 @@ const TopContent: FC<Props> = (props) => {
             backgroundRepeat: "no-repeat",
             width: "100vw",
             position: "absolute",
-            top: backdropPath ? 150 : 250,
+            top:
+              movieDetails?.backdrop_path || tvShowDetails?.backdrop_path
+                ? 150
+                : 250,
             left: 0,
             height: "calc(100vw/2.222222)",
           }}
           className="relative md:hidden"
         >
-          {posterPath && (
+          {posterPath && type !== "episode" && (
             <div
               style={{
                 width: "calc(((100vw/2.222222) - 40px)/1.5)",
@@ -111,7 +145,7 @@ const TopContent: FC<Props> = (props) => {
             >
               <picture>
                 <img
-                  alt={`poster-${title}`}
+                  alt={`poster-${movieDetails?.title || tvShowDetails?.name}`}
                   src={
                     posterPath
                       ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${posterPath}`
@@ -142,33 +176,39 @@ const TopContent: FC<Props> = (props) => {
           }}
         >
           <Infos
-            accountStates={accountStates}
-            creditsMovies={creditsMovies}
-            creditsTvShows={creditsTvShows}
-            episodeAccountStates={episodeAccountStates}
+            movieDetails={movieDetails}
+            tvShowDetails={tvShowDetails}
+            episodeDetails={episodeDetails}
+            /* accountStates={accountStates}
+            creditsMovies={creditsMovies} */
+            /* creditsTvShows={creditsTvShows} */
+            /* episodeAccountStates={episodeAccountStates} */
             episodeNumber={episodeNumber}
             episodePrecedent={episodePrecedent}
-            episodeRunTime={episodeRunTime}
-            genresMedia={genresMedia}
-            id={id}
-            isCollection={isCollection}
+            /* episodeRunTime={episodeRunTime} */
+            /* genresMedia={genresMedia}
+            id={id} */
+            /* isCollection={isCollection}
             nextEpisodeToAir={nextEpisodeToAir}
             numberOfEpisodes={numberOfEpisodes}
-            numberOfSeasons={numberOfSeasons}
-            originalLanguage={originalLanguage}
+            numberOfSeasons={numberOfSeasons} */
+            /* originalLanguage={originalLanguage}
             overview={overview}
             releaseDate={releaseDate}
-            runtime={runtime}
+            runtime={runtime} */
             seasonNumber={seasonNumber}
-            status={status}
-            tagline={tagline}
-            title={title}
+            /* status={status} */
+            /* tagline={tagline}
+            title={title} */
             type={type}
             tvShowId={tvShowId}
-            videos={videos}
+            /* videos={videos}
             voteAverage={voteAverage}
             voteCount={voteCount}
-            watchProvidersFr={watchProvidersFr}
+            watchProvidersFr={watchProvidersFr} */
+            userMovies={userMovies}
+            userMoviesId={userMoviesId}
+            internalMovies={internalMovies}
           />
         </div>
       </div>
@@ -197,7 +237,7 @@ const TopContent: FC<Props> = (props) => {
           >
             <div className="mx-auto flex size-full flex-row items-start justify-between md:w-[95%] lg:w-[90%] 2xl:w-[70%]">
               <>
-                {posterPath && (
+                {posterPath && type !== "episode" && (
                   <div
                     style={{
                       width: "300px",
@@ -209,7 +249,7 @@ const TopContent: FC<Props> = (props) => {
                   >
                     <picture>
                       <img
-                        alt={`poster-${title}`}
+                        alt={`poster-${movieDetails?.title || tvShowDetails?.name}`}
                         src={
                           posterPath
                             ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${posterPath}`
@@ -230,52 +270,47 @@ const TopContent: FC<Props> = (props) => {
                       />
                     </picture>
                     {watchProvidersFr && watchProvidersFr.length > 0 && (
-                      <div className="absolute bottom-0 left-0 w-full">
-                        <div className="flex flex-col items-center justify-center bg-primary/90 py-3">
-                          <p className="mr-2 text-xs">
-                            Justwatch - Disponible en streaming sur :
-                          </p>
-                          <div className="flex flex-row flex-wrap">
-                            {watchProvidersFr.map((watchProvider) => (
-                              <Tooltip
-                                key={watchProvider.provider_id}
-                                content={watchProvider.provider_name}
-                                placement="bottom"
-                              >
-                                <div className="my-2 mr-2 size-10">
-                                  <picture>
-                                    <img
-                                      alt={`logo-${watchProvider.provider_name}`}
-                                      src={
-                                        watchProvider.logo_path
-                                          ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${watchProvider.logo_path}`
-                                          : "/images/defaultImage.png"
-                                      }
-                                      width={0}
-                                      height={0}
-                                      style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        display: "block",
-                                        minWidth: "100%",
-                                        minHeight: "100%",
-                                        borderWidth: 0,
-                                        outline: 0,
-                                        borderRadius: 5,
-                                      }}
-                                      sizes="100vw"
-                                    />
-                                  </picture>
-                                </div>
-                              </Tooltip>
-                            ))}
-                          </div>
+                      <div className="absolute bottom-0 left-0 w-full bg-primary/90">
+                        <div className="flex flex-row flex-wrap items-center justify-center">
+                          {watchProvidersFr.map((watchProvider) => (
+                            <Tooltip
+                              key={watchProvider.provider_id}
+                              content={watchProvider.provider_name}
+                              placement="bottom"
+                            >
+                              <div className="my-2 mr-2 size-10">
+                                <picture>
+                                  <img
+                                    alt={`logo-${watchProvider.provider_name}`}
+                                    src={
+                                      watchProvider.logo_path
+                                        ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${watchProvider.logo_path}`
+                                        : "/images/defaultImage.png"
+                                    }
+                                    width={0}
+                                    height={0}
+                                    style={{
+                                      width: "100%",
+                                      height: "100%",
+                                      display: "block",
+                                      minWidth: "100%",
+                                      minHeight: "100%",
+                                      borderWidth: 0,
+                                      outline: 0,
+                                      borderRadius: 5,
+                                    }}
+                                    sizes="100vw"
+                                  />
+                                </picture>
+                              </div>
+                            </Tooltip>
+                          ))}
                         </div>
                       </div>
                     )}
                   </div>
                 )}
-                {stillPath && (
+                {episodeDetails?.still_path && (
                   <div
                     style={{
                       width: "300px",
@@ -287,10 +322,10 @@ const TopContent: FC<Props> = (props) => {
                   >
                     <picture>
                       <img
-                        alt={`poster-${title}`}
+                        alt={`poster-${episodeDetails?.name || ""}`}
                         src={
-                          stillPath
-                            ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w300${stillPath}`
+                          episodeDetails.still_path
+                            ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w300${episodeDetails.still_path}`
                             : "/images/defaultImage.png"
                         }
                         width={0}
@@ -311,33 +346,39 @@ const TopContent: FC<Props> = (props) => {
                 )}
               </>
               <Infos
-                accountStates={accountStates}
-                creditsMovies={creditsMovies}
-                creditsTvShows={creditsTvShows}
-                episodeAccountStates={episodeAccountStates}
+                movieDetails={movieDetails}
+                tvShowDetails={tvShowDetails}
+                episodeDetails={episodeDetails}
+                /* accountStates={accountStates}
+            creditsMovies={creditsMovies} */
+                /* creditsTvShows={creditsTvShows} */
+                /* episodeAccountStates={episodeAccountStates} */
                 episodeNumber={episodeNumber}
                 episodePrecedent={episodePrecedent}
-                episodeRunTime={episodeRunTime}
-                genresMedia={genresMedia}
-                id={id}
+                /* episodeRunTime={episodeRunTime} */
+                /* genresMedia={genresMedia}
+            id={id} */
                 isCollection={isCollection}
-                nextEpisodeToAir={nextEpisodeToAir}
+                /* nextEpisodeToAir={nextEpisodeToAir}
                 numberOfEpisodes={numberOfEpisodes}
-                numberOfSeasons={numberOfSeasons}
-                originalLanguage={originalLanguage}
-                overview={overview}
-                releaseDate={releaseDate}
-                runtime={runtime}
+                numberOfSeasons={numberOfSeasons} */
+                /* originalLanguage={originalLanguage}
+            overview={overview}
+            releaseDate={releaseDate}
+            runtime={runtime} */
                 seasonNumber={seasonNumber}
-                status={status}
-                tagline={tagline}
-                title={title}
+                /* status={status} */
+                /* tagline={tagline}
+            title={title} */
                 type={type}
                 tvShowId={tvShowId}
-                videos={videos}
-                voteAverage={voteAverage}
-                voteCount={voteCount}
-                watchProvidersFr={watchProvidersFr}
+                /* videos={videos}
+            voteAverage={voteAverage}
+            voteCount={voteCount}
+            watchProvidersFr={watchProvidersFr} */
+                userMovies={userMovies}
+                userMoviesId={userMoviesId}
+                internalMovies={internalMovies}
               />
             </div>
           </div>

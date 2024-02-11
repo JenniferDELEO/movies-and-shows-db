@@ -1,6 +1,7 @@
 import BannerWrapper from "@/components/Banner/BannerWrapper";
 import SearchBar from "@/components/Search/SearchBar";
 import {
+  getGenresMovies,
   getPopularMovies,
   getTopRatedMovies,
   getTrendingMovies,
@@ -11,9 +12,9 @@ import {
   getTrendingTvShows,
 } from "@/libs/api/tvshows";
 import { defaultTvShowsFilters } from "@/libs/helpers/filters";
-import { getUserMovies } from "@/libs/sanity/api/movie";
+import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
 import { authOptions } from "@/libs/sanity/auth";
-import { InternalMovie, InternalMovieResponse } from "@/models/movies";
+import { InternalMovieUser } from "@/models/movies";
 import { getServerSession } from "next-auth";
 
 export default async function Home() {
@@ -31,11 +32,17 @@ export default async function Home() {
   const { results: trendingTvShowsToday } = await getTrendingTvShows("day");
   const { results: trendingTvShowsThisWeek } = await getTrendingTvShows("week");
 
-  let userMovies: InternalMovieResponse[] = [];
+  const { genres: genresMovies } = await getGenresMovies();
+
+  let userMovies: InternalMovieUser[] = [];
+  let userMoviesId: string = "";
   if (session) {
-    const results = await getUserMovies(session?.user.id);
-    userMovies = results.movies;
+    const results = await getUserMovies(session.user.id);
+    userMovies = results?.movies || [];
+    userMoviesId = results?._id;
   }
+
+  const internalMovies = await getAllMovies();
 
   return (
     <div className="size-full">
@@ -53,7 +60,10 @@ export default async function Home() {
           trendingMoviesThisWeek,
           trendingTvShowsToday,
           trendingTvShowsThisWeek,
+          internalMovies,
+          genresMovies,
           userMovies,
+          userMoviesId,
         }}
       />
     </div>

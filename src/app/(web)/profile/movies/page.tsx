@@ -4,9 +4,9 @@
 import { useSession } from "next-auth/react";
 
 import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
-import { getUserMovies } from "@/libs/sanity/api/movie";
+import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
 import { useEffect, useState } from "react";
-import { InternalMovieResponse } from "@/models/movies";
+import { InternalMovie, InternalMovieUser } from "@/models/movies";
 
 /* export const metadata: Metadata = {
   title: "Mes films - Films & Séries TV DB",
@@ -14,18 +14,26 @@ import { InternalMovieResponse } from "@/models/movies";
 
 const ProfileMovies = () => {
   const { data: session } = useSession();
-  console.log(session);
-  const [moviesList, setMoviesList] = useState<InternalMovieResponse[]>([]);
 
-  const fetchMovies = async () => {
+  const [moviesList, setMoviesList] = useState<InternalMovie[]>([]);
+  const [moviesUserList, setMoviesUserList] = useState<InternalMovieUser[]>([]);
+
+  const fetchAllMovies = async () => {
+    const results = await getAllMovies();
+    setMoviesList(results);
+  };
+
+  const fetchUserMovies = async () => {
     if (session) {
       const results = await getUserMovies(session?.user.id);
-      setMoviesList(results?.movies);
+      setMoviesUserList(results?.movies);
     }
   };
 
   useEffect(() => {
-    if (session) fetchMovies();
+    fetchAllMovies();
+
+    if (session) fetchUserMovies();
   }, [session]);
 
   if (!session) {

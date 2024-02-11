@@ -18,7 +18,8 @@ const TvShowWrapper: FC<Props> = (props) => {
   return (
     <div className="size-full">
       <TopContent
-        accountStates={tvShowDetails?.account_states}
+        tvShowDetails={tvShowDetails}
+        /* accountStates={tvShowDetails?.account_states}
         backdropPath={tvShowDetails?.backdrop_path}
         creditsTvShows={tvShowDetails?.aggregate_credits}
         episodeRunTime={tvShowDetails?.episode_run_time}
@@ -33,12 +34,12 @@ const TvShowWrapper: FC<Props> = (props) => {
         status={tvShowDetails?.status}
         releaseDate={tvShowDetails?.first_air_date}
         tagline={tvShowDetails?.tagline}
-        title={tvShowDetails?.name}
+        title={tvShowDetails?.name} */
         type="tvshow"
-        videos={tvShowDetails?.videos}
+        /* videos={tvShowDetails?.videos}
         voteAverage={tvShowDetails?.vote_average}
         voteCount={tvShowDetails?.vote_count}
-        watchProvidersFr={tvShowDetails?.watch_providers_fr}
+        watchProvidersFr={tvShowDetails?.watch_providers_fr} */
       />
       <CrewBanner
         castTvShow={tvShowDetails?.aggregate_credits?.cast}

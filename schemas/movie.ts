@@ -24,11 +24,6 @@ const movie = {
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "runtime",
-      title: "Runtime",
-      type: "number",
-    }),
-    defineField({
       name: "genres",
       title: "Genres",
       type: "array",

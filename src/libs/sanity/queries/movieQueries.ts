@@ -1,6 +1,6 @@
 import { groq } from "next-sanity";
 
-export const getUserMoviesQuery = groq`*[_type == "user_movies" && title._ref == $userId][0] {
+export const getUserMoviesQuery = groq`*[_type == "user_movie" && title._ref == $userId][0] {
     _id,
     movies[]{
         movie->,
@@ -8,3 +8,15 @@ export const getUserMoviesQuery = groq`*[_type == "user_movies" && title._ref ==
     }
     }
     `;
+
+export const getAllMoviesQuery = groq`*[_type == "movie"] {
+    _id,
+    tmdb_id,
+    title,
+    release_date,
+    runtime,
+    genres,
+    poster_path,
+    overview,
+    users[]
+}`;

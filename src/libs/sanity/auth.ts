@@ -38,16 +38,6 @@ export const authOptions: NextAuthOptions = {
       }`,
         { email: userEmail },
       );
-      console.log(
-        "session",
-        session,
-        "token",
-        token,
-        "userEmail",
-        userEmail,
-        "user object id",
-        userIdObject,
-      );
       return {
         ...session,
         user: {

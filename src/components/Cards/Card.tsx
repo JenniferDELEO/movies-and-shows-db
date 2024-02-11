@@ -1,14 +1,23 @@
 "use client";
 
 import dayjs from "dayjs";
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { useRouter } from "next/navigation";
 import "dayjs/locale/fr";
 import updateLocale from "dayjs/plugin/updateLocale";
 
 import StarRating from "@/components/StarRate/StarRating";
 import { TvShow } from "@/models/tvShows";
-import { Movie } from "@/models/movies";
+import {
+  Genre,
+  InternalMovie,
+  InternalMovieUser,
+  Movie,
+} from "@/models/movies";
+import { UserContext } from "@/context/userContext";
+import { InternalUserContext } from "@/context/internalUserContext";
+import AccountInteraction from "../AccountInteraction/AccountInteraction";
+import { List } from "@/models/lists";
 
 dayjs.locale("fr");
 
@@ -33,16 +42,54 @@ dayjs.updateLocale("fr", {
 
 type Props = {
   filterType: string;
-  genres: {
-    id: number;
-    name: string;
-  }[];
+  genres: Genre[];
   movie?: Movie;
   tvShow?: TvShow;
+  classNames: {
+    container: string;
+    title: string;
+    items: string;
+    image: string;
+    dropdownContainer: string;
+  };
+  fetchUserDatas: () => Promise<void>;
+  favoriteMoviesIds: number[];
+  favoriteTvShowsIds: number[];
+  watchlistMoviesIds: number[];
+  watchlistTvShowsIds: number[];
+  ratedMovies: Movie[];
+  ratedTvShows: TvShow[];
+  ratedMoviesIds: number[];
+  ratedTvShowsIds: number[];
+  userLists: List[];
+  userMovies: InternalMovieUser[];
+  userMoviesId: string;
+  internalMovies: InternalMovie[];
 };
 
-const Card: FC<Props> = ({ filterType, genres, movie, tvShow }) => {
+const Card: FC<Props> = ({
+  filterType,
+  genres,
+  movie,
+  tvShow,
+  classNames,
+  fetchUserDatas,
+  favoriteMoviesIds,
+  favoriteTvShowsIds,
+  watchlistMoviesIds,
+  watchlistTvShowsIds,
+  ratedMovies,
+  ratedTvShows,
+  ratedMoviesIds,
+  ratedTvShowsIds,
+  userLists,
+  userMovies,
+  userMoviesId,
+  internalMovies,
+}) => {
   const router = useRouter();
+  const { user } = useContext(UserContext);
+  const { internalUser } = useContext(InternalUserContext);
 
   const overviewRest =
     movie?.overview?.split(" ")?.filter(Boolean) ||
@@ -83,7 +130,7 @@ const Card: FC<Props> = ({ filterType, genres, movie, tvShow }) => {
         />
       </picture>
 
-      <div className="ml-2 md:ml-4">
+      <div className="relative ml-2 w-full md:ml-4">
         <h3 className="py-1 text-sm md:pt-4 md:text-xl">{title}</h3>
         {movie && (
           <p className="text-xs text-gray-400 md:text-sm">
@@ -128,6 +175,36 @@ const Card: FC<Props> = ({ filterType, genres, movie, tvShow }) => {
           {overviewShow}
           {overviewRest?.length ? "..." : ""}
         </p>
+        {user &&
+          user.tmdb_username &&
+          internalUser &&
+          internalUser.user_id &&
+          movie && (
+            <div className="absolute -right-2 top-0 md:top-2">
+              <AccountInteraction
+                item={movie}
+                type="movie"
+                user={user}
+                fetchUserDatas={fetchUserDatas}
+                listsPageProps={{
+                  favoriteMoviesIds,
+                  favoriteTvShowsIds,
+                  watchlistMoviesIds,
+                  watchlistTvShowsIds,
+                  ratedMovies,
+                  ratedTvShows,
+                  ratedMoviesIds,
+                  ratedTvShowsIds,
+                  classNames,
+                  internalMovies: internalMovies || [],
+                  genresMovies: genres,
+                  userMovies: userMovies || [],
+                  userMoviesId: userMoviesId || "",
+                }}
+                userLists={userLists}
+              />
+            </div>
+          )}
       </div>
     </div>
   );

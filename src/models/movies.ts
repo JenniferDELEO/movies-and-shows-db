@@ -153,24 +153,50 @@ export type InternalMovie = {
   runtime: number;
   poster_path: string;
   overview: string;
-  user: any;
+  users: {
+    _key: string;
+    _type: "reference";
+    _ref: string;
+  }[];
 };
 
-export type InternalMovieResponse = {
+export type InternalMovieUser = {
+  _id: string;
   movie: InternalMovie;
   account_states: {
     status: "watched" | "to_watch";
   };
 };
 
-export type AddMovieToAccount = {
+export type AddMovieAndUser = {
   tmdbId: number;
   title: string;
   releaseDate: string;
-  runtime: number;
   genres: string[];
   posterPath: string;
   overview: string;
   userId: string;
-  status: string;
+};
+
+export type UpdateMovieAndUser = {
+  userId: string;
+  movieId: string;
+};
+
+export type CreateUserStatus = {
+  movieId: string;
+  userId: string;
+  status: "watched" | "to_watch";
+};
+
+export type AddMovieStatus = {
+  userMovieId: string;
+  movieId: string;
+  status: "watched" | "to_watch";
+};
+
+export type UpdateMovieStatus = {
+  userMovieId: string;
+  movieId: string;
+  status: "watched" | "to_watch";
 };
