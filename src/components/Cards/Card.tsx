@@ -45,7 +45,7 @@ type Props = {
   genres: Genre[];
   movie?: Movie;
   tvShow?: TvShow;
-  classNames: {
+  classNames?: {
     container: string;
     title: string;
     items: string;
@@ -184,6 +184,36 @@ const Card: FC<Props> = ({
               <AccountInteraction
                 item={movie}
                 type="movie"
+                user={user}
+                fetchUserDatas={fetchUserDatas}
+                listsPageProps={{
+                  favoriteMoviesIds,
+                  favoriteTvShowsIds,
+                  watchlistMoviesIds,
+                  watchlistTvShowsIds,
+                  ratedMovies,
+                  ratedTvShows,
+                  ratedMoviesIds,
+                  ratedTvShowsIds,
+                  classNames,
+                  internalMovies: internalMovies || [],
+                  genresMovies: genres,
+                  userMovies: userMovies || [],
+                  userMoviesId: userMoviesId || "",
+                }}
+                userLists={userLists}
+              />
+            </div>
+          )}
+        {user &&
+          user.tmdb_username &&
+          internalUser &&
+          internalUser.user_id &&
+          tvShow && (
+            <div className="absolute -right-2 top-0 md:top-2">
+              <AccountInteraction
+                item={tvShow}
+                type="tvshow"
                 user={user}
                 fetchUserDatas={fetchUserDatas}
                 listsPageProps={{

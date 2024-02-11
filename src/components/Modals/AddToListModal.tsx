@@ -64,7 +64,9 @@ const AddToListModal: FC<Props> = ({
       router.push("/profil/lists/create");
     }
     if (!itemStatus && selectedList !== "1") {
-      const items = [{ media_type: itemType, media_id: itemId }];
+      const items = [
+        { media_type: itemType === "movie" ? "movie" : "tv", media_id: itemId },
+      ];
       const responseAddToList = await addItemsToList(
         Number(selectedList),
         items,

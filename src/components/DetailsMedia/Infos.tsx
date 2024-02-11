@@ -6,17 +6,12 @@ import { Button } from "@nextui-org/react";
 import { FaPlay } from "react-icons/fa";
 
 import {
-  AccountStates,
-  Genre,
   InternalMovie,
   InternalMovieUser,
   MovieDetails,
-  Video,
-  WatchProviderFr,
 } from "@/models/movies";
 import StarRating from "@/components/StarRate/StarRating";
 import YoutubeEmbed from "@/components/YoutubeEmbed/YoutubeEmbed";
-import { CreditsMovies, CreditsTvShows } from "@/models/people";
 import { languages } from "@/libs/helpers/languages";
 import { getMovieDetail } from "@/libs/api/movies";
 import AccountInteraction from "@/components/AccountInteraction/AccountInteraction";
@@ -24,48 +19,18 @@ import { UserContext } from "@/context/userContext";
 import { List } from "@/models/lists";
 import { getLists } from "@/libs/api/lists";
 import { getTvShowDetail } from "@/libs/api/tvshows";
-import {
-  Episode,
-  EpisodeDetails,
-  EpisodeToAir,
-  TvShowDetails,
-} from "@/models/tvShows";
+import { Episode, EpisodeDetails, TvShowDetails } from "@/models/tvShows";
 
 type Props = {
   movieDetails?: MovieDetails;
   tvShowDetails?: TvShowDetails;
   episodeDetails?: EpisodeDetails;
-  /* genresMedia: Genre[];
-  id: number;
-  overview: string;
-  title: string; */
   type: "episode" | "movie" | "tvshow";
-  /* voteAverage: number; */
-
-  /* accountStates?: AccountStates;
-  creditsMovies?: CreditsMovies; */
-  /* creditsTvShows?: CreditsTvShows; */
-  /* episodeAccountStates?: { id: number; rated: boolean | { value: number } }; */
   episodePrecedent?: Episode | undefined;
   episodeNumber?: number;
-  /* episodeRunTime?: number[]; */
   isCollection?: boolean;
-  /* nextEpisodeToAir?: EpisodeToAir | null;
-  numberOfSeasons?: number;
-  numberOfEpisodes?: number; */
-  /* originalLanguage?: string;
-  releaseDate?: string;
-  runtime?: number; */
   seasonNumber?: number;
-  /* status?: string;
-  tagline?: string; */
   tvShowId?: number;
-  /* videos?: {
-    id: number;
-    results: Video[];
-  };
-  voteCount?: number;
-  watchProvidersFr?: WatchProviderFr[]; */
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
@@ -76,20 +41,9 @@ const Infos: FC<Props> = (props) => {
     movieDetails,
     tvShowDetails,
     episodeDetails,
-    /* genresMedia,
-    id,
-    overview,
-    title, */
     type,
-    /* voteAverage, */
-
-    /* accountStates,
-    creditsMovies, */
-    /* creditsTvShows, */
-    /* episodeAccountStates, */
     episodeNumber,
     episodePrecedent,
-    /* episodeRunTime, */
     isCollection,
     seasonNumber,
     tvShowId,
@@ -647,32 +601,6 @@ const Infos: FC<Props> = (props) => {
                 : "Non sortie"}{" "}
               (FR)
             </p>
-            {/* {type === "tvshow" &&
-              tvShowDetails?.episode_run_time &&
-              tvShowDetails.episode_run_time?.length > 0 && (
-                <div className="flex flex-row items-center justify-start">
-                  <p className="pt-2 font-bold text-white">
-                    Durée d&apos;un épisode :{" "}
-                    {tvShowDetails.episode_run_time.map((runtime, index) => {
-                      if (index === tvShowDetails.episode_run_time.length - 1) {
-                        return (
-                          <span
-                            key={index}
-                            className="font-normal text-gray-400"
-                          >
-                            {runtime} min
-                          </span>
-                        );
-                      }
-                      return (
-                        <span key={index} className="font-normal text-gray-400">
-                          {runtime},{" "}
-                        </span>
-                      );
-                    })}
-                  </p>
-                </div>
-              )} */}
             <div className="flex flex-row flex-wrap items-center justify-center pt-2">
               <>
                 {type === "tvshow" &&

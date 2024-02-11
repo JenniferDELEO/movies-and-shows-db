@@ -33,7 +33,7 @@ type Props = {
   watchlistTvShowsIds: number[];
   ratedMoviesIds: number[];
   ratedTvShowsIds: number[];
-  classNames: {
+  classNames?: {
     container: string;
     title: string;
     items: string;
@@ -148,7 +148,7 @@ const DropdownCard: FC<Props> = (props) => {
   }
 
   return (
-    <div className={classNames.dropdownContainer}>
+    <div className={classNames?.dropdownContainer}>
       <Dropdown classNames={{ content: "bg-primary border-primary" }}>
         <DropdownTrigger>
           <button>

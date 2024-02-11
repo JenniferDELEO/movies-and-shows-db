@@ -1,14 +1,32 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { Genre, Movie } from "@/models/movies";
+import {
+  Genre,
+  InternalMovie,
+  InternalMovieUser,
+  Movie,
+} from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import Card from "../../Cards/Card";
 import Pagination from "../../Pagination/Pagination";
 import { useParams } from "next/navigation";
-import { getSimilarsMovie } from "@/libs/api/movies";
-import { getSimilarsTvShow } from "@/libs/api/tvshows";
+import {
+  getSimilarsMovie,
+  getUserFavoriteMovies,
+  getUserRatedMovies,
+  getUserWatchListMovies,
+} from "@/libs/api/movies";
+import {
+  getSimilarsTvShow,
+  getUserFavoriteTvShows,
+  getUserRatedTvShows,
+  getUserWatchlistTvShows,
+} from "@/libs/api/tvshows";
+import { UserContext } from "@/context/userContext";
+import { List } from "@/models/lists";
+import { getLists } from "@/libs/api/lists";
 
 type Props = {
   mediaId: string;
@@ -21,6 +39,9 @@ type Props = {
   similarsTvShows?: TvShow[];
   totalPagesSimilarsTvShows?: number;
   totalResultsSimilarsTvShows?: number;
+  userMovies: InternalMovieUser[];
+  userMoviesId: string;
+  internalMovies: InternalMovie[];
 };
 
 const SimilarsWrapper: FC<Props> = (props) => {
@@ -35,6 +56,9 @@ const SimilarsWrapper: FC<Props> = (props) => {
     similarsTvShows,
     totalPagesSimilarsTvShows,
     totalResultsSimilarsTvShows,
+    userMovies,
+    userMoviesId,
+    internalMovies,
   } = props;
   const params = useParams();
 
@@ -51,6 +75,59 @@ const SimilarsWrapper: FC<Props> = (props) => {
   const [currentPage, setCurrentPage] = useState<number>(Number(params.page));
 
   const genres = genresMovies || genresTvShows || [];
+
+  const { user } = useContext(UserContext);
+
+  const [favoriteMoviesIds, setFavoriteMoviesIds] = useState<number[]>([]);
+  const [favoriteTvShowsIds, setFavoriteTvShowsIds] = useState<number[]>([]);
+
+  const [watchlistMoviesIds, setWatchlistMoviesIds] = useState<number[]>([]);
+  const [watchlistTvShowsIds, setWatchlistTvShowsIds] = useState<number[]>([]);
+
+  const [ratedMovies, setRatedMovies] = useState<Movie[]>([]);
+  const [ratedTvShows, setRatedTvShows] = useState<TvShow[]>([]);
+  const [ratedMoviesIds, setRatedMoviesIds] = useState<number[]>([]);
+  const [ratedTvShowsIds, setRatedTvShowsIds] = useState<number[]>([]);
+
+  const [userLists, setUserLists] = useState<List[]>([]);
+
+  async function fetchUserDatas() {
+    if (user && user.tmdb_accountIdV4) {
+      const responses = await Promise.all([
+        getUserFavoriteMovies(user.tmdb_accountIdV4),
+        getUserFavoriteTvShows(user.tmdb_accountIdV4),
+        getUserWatchListMovies(user.tmdb_accountIdV4),
+        getUserWatchlistTvShows(user.tmdb_accountIdV4),
+        getUserRatedMovies(user.tmdb_accountIdV4),
+        getUserRatedTvShows(user.tmdb_accountIdV4),
+      ]);
+      setFavoriteMoviesIds(responses[0].results.map((movie) => movie.id));
+      setFavoriteTvShowsIds(responses[1].results.map((tv) => tv.id));
+      setWatchlistMoviesIds(responses[2].results.map((movie) => movie.id));
+      setWatchlistTvShowsIds(responses[3].results.map((tv) => tv.id));
+      setRatedMovies(responses[4].results);
+      setRatedTvShows(responses[5].results);
+      setRatedMoviesIds(responses[4].results.map((movie) => movie.id));
+      setRatedTvShowsIds(responses[5].results.map((tv) => tv.id));
+    }
+  }
+
+  async function getUserList() {
+    const res = await getLists();
+    const listsResponse = res.results;
+    listsResponse.unshift({
+      id: "1",
+      name: "Créer une nouvelle liste",
+    });
+    setUserLists(listsResponse);
+  }
+
+  useEffect(() => {
+    if (user && user.tmdb_accountIdV4) {
+      fetchUserDatas();
+      getUserList();
+    }
+  }, [user]);
 
   async function getSimilarsNextPages() {
     if (similarsMovies) {
@@ -101,6 +178,19 @@ const SimilarsWrapper: FC<Props> = (props) => {
               movie={movie}
               filterType="movie"
               genres={genres}
+              fetchUserDatas={fetchUserDatas}
+              favoriteMoviesIds={favoriteMoviesIds}
+              watchlistMoviesIds={watchlistMoviesIds}
+              favoriteTvShowsIds={favoriteTvShowsIds}
+              watchlistTvShowsIds={watchlistTvShowsIds}
+              ratedMovies={ratedMovies}
+              ratedTvShows={ratedTvShows}
+              ratedMoviesIds={ratedMoviesIds}
+              ratedTvShowsIds={ratedTvShowsIds}
+              userLists={userLists}
+              userMovies={userMovies}
+              userMoviesId={userMoviesId}
+              internalMovies={internalMovies}
             />
           ))}
         {similarsTvShows &&
@@ -110,6 +200,19 @@ const SimilarsWrapper: FC<Props> = (props) => {
               tvShow={tvShow}
               filterType="tvshow"
               genres={genres}
+              fetchUserDatas={fetchUserDatas}
+              favoriteMoviesIds={favoriteMoviesIds}
+              watchlistMoviesIds={watchlistMoviesIds}
+              favoriteTvShowsIds={favoriteTvShowsIds}
+              watchlistTvShowsIds={watchlistTvShowsIds}
+              ratedMovies={ratedMovies}
+              ratedTvShows={ratedTvShows}
+              ratedMoviesIds={ratedMoviesIds}
+              ratedTvShowsIds={ratedTvShowsIds}
+              userLists={userLists}
+              userMovies={userMovies}
+              userMoviesId={userMoviesId}
+              internalMovies={internalMovies}
             />
           ))}
       </div>

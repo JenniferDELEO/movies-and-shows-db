@@ -56,7 +56,7 @@ type Props = {
     ratedTvShows: TvShow[];
     ratedMoviesIds: number[];
     ratedTvShowsIds: number[];
-    classNames: {
+    classNames?: {
       container: string;
       title: string;
       items: string;
@@ -328,7 +328,7 @@ const AccountInteraction: FC<Props> = (props) => {
           watchlistTvShowsIds={listsPageProps.watchlistTvShowsIds}
           ratedMoviesIds={listsPageProps.ratedMoviesIds}
           ratedTvShowsIds={listsPageProps.ratedTvShowsIds}
-          classNames={listsPageProps.classNames}
+          classNames={listsPageProps?.classNames}
           userMovies={moviesAccount}
           handleClick={handleClick}
         />
@@ -340,7 +340,6 @@ const AccountInteraction: FC<Props> = (props) => {
           isFavorite={mediaDetailsPageProps.isFavorite}
           isRated={mediaDetailsPageProps.isRated}
           isInWatchlist={mediaDetailsPageProps.isInWatchlist}
-          userRatingApi={mediaDetailsPageProps.userRatingApi}
           userMovies={moviesAccount}
         />
       )}

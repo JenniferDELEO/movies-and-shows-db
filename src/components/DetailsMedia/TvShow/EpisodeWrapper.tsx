@@ -53,25 +53,11 @@ const EpisodeWrapper: FC<Props> = (props) => {
       <TopContent
         episodeDetails={episodeDetails}
         tvShowDetails={tvShowDetails}
-        /* creditsTvShows={episodeDetails?.credits}
-        episodeAccountStates={episodeDetails?.account_states} */
         episodeNumber={episodeNumber}
         episodePrecedent={episodePrecedent}
-        /* episodeRunTime={[episodeDetails?.runtime]}
-        genresMedia={tvShowDetails?.genres}
-        id={episodeDetails?.id}
-        originalLanguage={tvShowDetails?.original_language}
-        overview={episodeDetails?.overview}
-        releaseDate={episodeDetails?.air_date} */
         seasonNumber={seasonNumber}
-        /*  status={tvShowDetails?.status}
-        stillPath={episodeDetails?.still_path}
-        title={episodeDetails?.name} */
         type="episode"
         tvShowId={tvShowId}
-        /* videos={episodeDetails?.videos}
-        voteAverage={episodeDetails?.vote_average}
-        voteCount={episodeDetails?.vote_count} */
       />
       {tvShowDetails?.seasons?.length > 0 && (
         <SeasonsAndEpisodesWrapper

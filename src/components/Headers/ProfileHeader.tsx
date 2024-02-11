@@ -22,6 +22,7 @@ const ProfileHeader = () => {
   const {
     internalUser: { user_name, user_image },
   } = useContext(InternalUserContext);
+
   return (
     <div
       style={{
@@ -49,7 +50,7 @@ const ProfileHeader = () => {
             className="md:hidden"
           />
           <NavbarBrand>
-            <Link href="/" className="flex flex-row items-center">
+            <Link href="/profile" className="flex flex-row items-center">
               <div
                 style={{
                   width: "58px",

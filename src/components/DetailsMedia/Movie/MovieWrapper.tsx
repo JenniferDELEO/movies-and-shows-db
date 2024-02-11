@@ -27,23 +27,6 @@ const MovieWrapper: FC<Props> = (props) => {
     <div className="size-full">
       <TopContent
         movieDetails={movieDetails}
-        /* accountStates={movieDetail?.account_states}
-        backdropPath={movieDetail?.backdrop_path}
-        creditsMovies={movieDetail?.credits}
-        genresMedia={movieDetail?.genres}
-        id={movieDetail?.id}
-        originalLanguage={movieDetail?.original_language}
-        overview={movieDetail?.overview}
-        posterPath={movieDetail?.poster_path}
-        releaseDate={movieDetail?.release_date}
-        runtime={movieDetail?.runtime}
-        tagline={movieDetail?.tagline}
-        title={movieDetail?.title}
-        
-        videos={movieDetail?.videos}
-        voteAverage={movieDetail?.vote_average}
-        voteCount={movieDetail?.vote_count}
-        watchProvidersFr={movieDetail?.watch_providers_fr} */
         type="movie"
         userMovies={userMovies}
         userMoviesId={userMoviesId}

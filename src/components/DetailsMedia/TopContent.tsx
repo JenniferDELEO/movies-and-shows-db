@@ -4,61 +4,23 @@ import { FC } from "react";
 import { Tooltip } from "@nextui-org/react";
 
 import {
-  AccountStates,
-  Genre,
   InternalMovie,
   InternalMovieUser,
   MovieDetails,
-  Video,
-  WatchProviderFr,
 } from "@/models/movies";
 import Infos from "@/components/DetailsMedia/Infos";
-import { CreditsMovies, CreditsTvShows } from "@/models/people";
-import {
-  Episode,
-  EpisodeDetails,
-  EpisodeToAir,
-  TvShowDetails,
-} from "@/models/tvShows";
+import { Episode, EpisodeDetails, TvShowDetails } from "@/models/tvShows";
 
 type Props = {
   movieDetails?: MovieDetails;
   tvShowDetails?: TvShowDetails;
   episodeDetails?: EpisodeDetails;
-  /* genresMedia: Genre[];
-  id: number;
-  overview: string;
-  title: string; */
   type: "episode" | "movie" | "tvshow";
-  /* voteAverage: number; */
-
-  /* accountStates?: AccountStates;
-  backdropPath?: string;
-  creditsMovies?: CreditsMovies; */
-  /* creditsTvShows?: CreditsTvShows; */
-  /* episodeAccountStates?: { id: number; rated: boolean | { value: number } }; */
   episodePrecedent?: Episode | undefined;
   episodeNumber?: number;
-  /* episodeRunTime?: number[]; */
   isCollection?: boolean;
-  /* nextEpisodeToAir?: EpisodeToAir | null;
-  numberOfSeasons?: number;
-  numberOfEpisodes?: number; */
-  /* originalLanguage?: string;
-  posterPath?: string;
-  releaseDate?: string;
-  runtime?: number; */
   seasonNumber?: number;
-  /*  status?: string; */
-  /* stillPath?: string; */
-  /* tagline?: string; */
   tvShowId?: number;
-  /* videos?: {
-    id: number;
-    results: Video[];
-  };
-  voteCount?: number;
-  watchProvidersFr?: WatchProviderFr[]; */
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
@@ -69,37 +31,12 @@ const TopContent: FC<Props> = (props) => {
     movieDetails,
     tvShowDetails,
     episodeDetails,
-    /* genresMedia,
-    id,
-    overview,
-    title, */
     type,
-    /* voteAverage,
-
-    accountStates,
-    backdropPath,
-    creditsMovies, */
-    /* creditsTvShows, */
-    /*  episodeAccountStates, */
     episodePrecedent,
     episodeNumber,
-    /* episodeRunTime, */
     isCollection,
-    /* nextEpisodeToAir,
-    numberOfSeasons,
-    numberOfEpisodes, */
-    /* originalLanguage,
-    posterPath,
-    releaseDate,
-    runtime, */
     seasonNumber,
-    /* status, */
-    /* stillPath, */
-    /* tagline, */
     tvShowId,
-    /* videos,
-    voteCount,
-    watchProvidersFr, */
     userMovies,
     userMoviesId,
     internalMovies,
@@ -179,33 +116,11 @@ const TopContent: FC<Props> = (props) => {
             movieDetails={movieDetails}
             tvShowDetails={tvShowDetails}
             episodeDetails={episodeDetails}
-            /* accountStates={accountStates}
-            creditsMovies={creditsMovies} */
-            /* creditsTvShows={creditsTvShows} */
-            /* episodeAccountStates={episodeAccountStates} */
             episodeNumber={episodeNumber}
             episodePrecedent={episodePrecedent}
-            /* episodeRunTime={episodeRunTime} */
-            /* genresMedia={genresMedia}
-            id={id} */
-            /* isCollection={isCollection}
-            nextEpisodeToAir={nextEpisodeToAir}
-            numberOfEpisodes={numberOfEpisodes}
-            numberOfSeasons={numberOfSeasons} */
-            /* originalLanguage={originalLanguage}
-            overview={overview}
-            releaseDate={releaseDate}
-            runtime={runtime} */
             seasonNumber={seasonNumber}
-            /* status={status} */
-            /* tagline={tagline}
-            title={title} */
             type={type}
             tvShowId={tvShowId}
-            /* videos={videos}
-            voteAverage={voteAverage}
-            voteCount={voteCount}
-            watchProvidersFr={watchProvidersFr} */
             userMovies={userMovies}
             userMoviesId={userMoviesId}
             internalMovies={internalMovies}
@@ -349,33 +264,12 @@ const TopContent: FC<Props> = (props) => {
                 movieDetails={movieDetails}
                 tvShowDetails={tvShowDetails}
                 episodeDetails={episodeDetails}
-                /* accountStates={accountStates}
-            creditsMovies={creditsMovies} */
-                /* creditsTvShows={creditsTvShows} */
-                /* episodeAccountStates={episodeAccountStates} */
                 episodeNumber={episodeNumber}
                 episodePrecedent={episodePrecedent}
-                /* episodeRunTime={episodeRunTime} */
-                /* genresMedia={genresMedia}
-            id={id} */
                 isCollection={isCollection}
-                /* nextEpisodeToAir={nextEpisodeToAir}
-                numberOfEpisodes={numberOfEpisodes}
-                numberOfSeasons={numberOfSeasons} */
-                /* originalLanguage={originalLanguage}
-            overview={overview}
-            releaseDate={releaseDate}
-            runtime={runtime} */
                 seasonNumber={seasonNumber}
-                /* status={status} */
-                /* tagline={tagline}
-            title={title} */
                 type={type}
                 tvShowId={tvShowId}
-                /* videos={videos}
-            voteAverage={voteAverage}
-            voteCount={voteCount}
-            watchProvidersFr={watchProvidersFr} */
                 userMovies={userMovies}
                 userMoviesId={userMoviesId}
                 internalMovies={internalMovies}

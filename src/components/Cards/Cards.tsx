@@ -95,14 +95,6 @@ const Cards: FC<Props> = ({
     }
   }, [user]);
 
-  const classNames = {
-    container: "",
-    title: "",
-    items: "",
-    image: "",
-    dropdownContainer: "",
-  };
-
   return (
     <div className="w-full">
       {movies && (
@@ -113,7 +105,6 @@ const Cards: FC<Props> = ({
               movie={movie}
               filterType={filterType}
               genres={genres}
-              classNames={classNames}
               fetchUserDatas={fetchUserDatas}
               favoriteMoviesIds={favoriteMoviesIds}
               watchlistMoviesIds={watchlistMoviesIds}
@@ -139,7 +130,6 @@ const Cards: FC<Props> = ({
               tvShow={tvShow}
               filterType={filterType}
               genres={genres}
-              classNames={classNames}
               fetchUserDatas={fetchUserDatas}
               favoriteMoviesIds={favoriteMoviesIds}
               watchlistMoviesIds={watchlistMoviesIds}
