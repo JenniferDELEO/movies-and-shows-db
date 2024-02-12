@@ -28,9 +28,9 @@ type Props = {
   genres: Genre[];
   movies?: Movie[];
   tvShows?: TvShow[];
-  userMovies: InternalMovieUser[];
-  userMoviesId: string;
-  internalMovies: InternalMovie[];
+  userMovies?: InternalMovieUser[];
+  userMoviesId?: string;
+  internalMovies?: InternalMovie[];
 };
 
 const Cards: FC<Props> = ({
@@ -97,7 +97,7 @@ const Cards: FC<Props> = ({
 
   return (
     <div className="w-full">
-      {movies && (
+      {movies && userMovies && userMoviesId && internalMovies && (
         <div className="2xl:grid 2xl:grid-cols-2 2xl:gap-2">
           {movies.map((movie) => (
             <Card
@@ -140,9 +140,6 @@ const Cards: FC<Props> = ({
               ratedMoviesIds={ratedMoviesIds}
               ratedTvShowsIds={ratedTvShowsIds}
               userLists={userLists}
-              userMovies={userMovies}
-              userMoviesId={userMoviesId}
-              internalMovies={internalMovies}
             />
           ))}
         </div>
