@@ -1,14 +1,32 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { Genre, Movie } from "@/models/movies";
+import {
+  Genre,
+  InternalMovie,
+  InternalMovieUser,
+  Movie,
+} from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import Card from "../../Cards/Card";
 import Pagination from "../../Pagination/Pagination";
 import { useParams } from "next/navigation";
-import { getRecommendationsMovie } from "@/libs/api/movies";
-import { getRecommendationsTvShow } from "@/libs/api/tvshows";
+import {
+  getRecommendationsMovie,
+  getUserFavoriteMovies,
+  getUserRatedMovies,
+  getUserWatchListMovies,
+} from "@/libs/api/movies";
+import {
+  getRecommendationsTvShow,
+  getUserFavoriteTvShows,
+  getUserRatedTvShows,
+  getUserWatchlistTvShows,
+} from "@/libs/api/tvshows";
+import { UserContext } from "@/context/userContext";
+import { getLists } from "@/libs/api/lists";
+import { List } from "@/models/lists";
 
 type Props = {
   mediaId: string;
@@ -21,6 +39,9 @@ type Props = {
   recommendationsTvShows?: TvShow[];
   totalPagesRecommendationsTvShows?: number;
   totalResultsRecommendationsTvShows?: number;
+  userMovies?: InternalMovieUser[];
+  userMoviesId?: string;
+  internalMovies?: InternalMovie[];
 };
 
 const RecommendationsWrapper: FC<Props> = (props) => {
@@ -35,6 +56,9 @@ const RecommendationsWrapper: FC<Props> = (props) => {
     recommendationsTvShows,
     totalPagesRecommendationsTvShows,
     totalResultsRecommendationsTvShows,
+    userMovies,
+    userMoviesId,
+    internalMovies,
   } = props;
   const params = useParams();
 
@@ -55,6 +79,59 @@ const RecommendationsWrapper: FC<Props> = (props) => {
   const [currentPage, setCurrentPage] = useState<number>(Number(params.page));
 
   const genres = genresMovies || genresTvShows || [];
+
+  const { user } = useContext(UserContext);
+
+  const [favoriteMoviesIds, setFavoriteMoviesIds] = useState<number[]>([]);
+  const [favoriteTvShowsIds, setFavoriteTvShowsIds] = useState<number[]>([]);
+
+  const [watchlistMoviesIds, setWatchlistMoviesIds] = useState<number[]>([]);
+  const [watchlistTvShowsIds, setWatchlistTvShowsIds] = useState<number[]>([]);
+
+  const [ratedMovies, setRatedMovies] = useState<Movie[]>([]);
+  const [ratedTvShows, setRatedTvShows] = useState<TvShow[]>([]);
+  const [ratedMoviesIds, setRatedMoviesIds] = useState<number[]>([]);
+  const [ratedTvShowsIds, setRatedTvShowsIds] = useState<number[]>([]);
+
+  const [userLists, setUserLists] = useState<List[]>([]);
+
+  async function fetchUserDatas() {
+    if (user && user.tmdb_accountIdV4) {
+      const responses = await Promise.all([
+        getUserFavoriteMovies(user.tmdb_accountIdV4),
+        getUserFavoriteTvShows(user.tmdb_accountIdV4),
+        getUserWatchListMovies(user.tmdb_accountIdV4),
+        getUserWatchlistTvShows(user.tmdb_accountIdV4),
+        getUserRatedMovies(user.tmdb_accountIdV4),
+        getUserRatedTvShows(user.tmdb_accountIdV4),
+      ]);
+      setFavoriteMoviesIds(responses[0].results.map((movie) => movie.id));
+      setFavoriteTvShowsIds(responses[1].results.map((tv) => tv.id));
+      setWatchlistMoviesIds(responses[2].results.map((movie) => movie.id));
+      setWatchlistTvShowsIds(responses[3].results.map((tv) => tv.id));
+      setRatedMovies(responses[4].results);
+      setRatedTvShows(responses[5].results);
+      setRatedMoviesIds(responses[4].results.map((movie) => movie.id));
+      setRatedTvShowsIds(responses[5].results.map((tv) => tv.id));
+    }
+  }
+
+  async function getUserList() {
+    const res = await getLists();
+    const listsResponse = res.results;
+    listsResponse.unshift({
+      id: "1",
+      name: "Créer une nouvelle liste",
+    });
+    setUserLists(listsResponse);
+  }
+
+  useEffect(() => {
+    if (user && user.tmdb_accountIdV4) {
+      fetchUserDatas();
+      getUserList();
+    }
+  }, [user]);
 
   async function getRecommendationssNextPages() {
     if (recommendationsMovies) {
@@ -105,12 +182,28 @@ const RecommendationsWrapper: FC<Props> = (props) => {
         <div>
           <div className="mx-auto md:w-[90%] 2xl:grid 2xl:grid-cols-2 2xl:gap-4">
             {recommendationsMovies &&
+              userMovies &&
+              userMoviesId &&
+              internalMovies &&
               moviesList.map((movie) => (
                 <Card
                   key={movie.id}
                   movie={movie}
                   filterType="movie"
                   genres={genres}
+                  fetchUserDatas={fetchUserDatas}
+                  favoriteMoviesIds={favoriteMoviesIds}
+                  watchlistMoviesIds={watchlistMoviesIds}
+                  favoriteTvShowsIds={favoriteTvShowsIds}
+                  watchlistTvShowsIds={watchlistTvShowsIds}
+                  ratedMovies={ratedMovies}
+                  ratedTvShows={ratedTvShows}
+                  ratedMoviesIds={ratedMoviesIds}
+                  ratedTvShowsIds={ratedTvShowsIds}
+                  userLists={userLists}
+                  userMovies={userMovies}
+                  userMoviesId={userMoviesId}
+                  internalMovies={internalMovies}
                 />
               ))}
             {recommendationsTvShows &&
@@ -120,6 +213,16 @@ const RecommendationsWrapper: FC<Props> = (props) => {
                   tvShow={tvShow}
                   filterType="tvshow"
                   genres={genres}
+                  fetchUserDatas={fetchUserDatas}
+                  favoriteMoviesIds={favoriteMoviesIds}
+                  watchlistMoviesIds={watchlistMoviesIds}
+                  favoriteTvShowsIds={favoriteTvShowsIds}
+                  watchlistTvShowsIds={watchlistTvShowsIds}
+                  ratedMovies={ratedMovies}
+                  ratedTvShows={ratedTvShows}
+                  ratedMoviesIds={ratedMoviesIds}
+                  ratedTvShowsIds={ratedTvShowsIds}
+                  userLists={userLists}
                 />
               ))}
           </div>

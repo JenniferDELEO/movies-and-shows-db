@@ -1,8 +1,8 @@
 import { defineField } from "sanity";
 
-const userMovies = {
-  name: "user_movies",
-  title: "User Movies",
+const userTvShow = {
+  name: "user_tvshows",
+  title: "User TV Shows",
   type: "document",
   fields: [
     defineField({
@@ -13,18 +13,18 @@ const userMovies = {
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "movies",
-      title: "Movies",
+      name: "tvshows",
+      title: "TV Shows",
       type: "array",
       of: [
         {
           type: "object",
           fields: [
             {
-              name: "movie",
-              title: "Movie",
+              name: "tvshow",
+              title: "TV Show",
               type: "reference",
-              to: [{ type: "movie" }],
+              to: [{ type: "tvshow" }],
             },
             {
               name: "account_states",
@@ -36,7 +36,15 @@ const userMovies = {
                   title: "Status",
                   type: "string",
                   options: {
-                    list: ["watched", "to_watch"],
+                    list: ["active", "archived", "to_discover"],
+                  },
+                },
+                {
+                  name: "watch_state",
+                  title: "Watch State",
+                  type: "string",
+                  options: {
+                    list: ["started", "finished", "to_watch"],
                   },
                 },
               ],
@@ -49,4 +57,4 @@ const userMovies = {
   ],
 };
 
-export default userMovies;
+export default userTvShow;

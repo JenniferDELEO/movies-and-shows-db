@@ -6,7 +6,12 @@ import { BsThreeDots } from "react-icons/bs";
 import { usePathname, useRouter } from "next/navigation";
 
 import Banner from "@/components/Banner/Banner";
-import { Movie } from "@/models/movies";
+import {
+  Genre,
+  InternalMovie,
+  InternalMovieUser,
+  Movie,
+} from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
 import { UserContext } from "@/context/userContext";
 import {
@@ -33,6 +38,10 @@ type Props = {
     trendingMoviesThisWeek: Movie[];
     trendingTvShowsToday: TvShow[];
     trendingTvShowsThisWeek: TvShow[];
+    internalMovies: InternalMovie[];
+    genresMovies: Genre[];
+    userMovies: InternalMovieUser[];
+    userMoviesId: string;
   };
   personDetailProps?: {
     actingMovies: Movie[];
@@ -165,6 +174,10 @@ const BannerWrapper: FC<Props> = ({
               classNames={classNames}
               title="Les 20 Films dans les tendances"
               userLists={userLists}
+              internalMovies={homeProps.internalMovies}
+              genresMovies={homeProps.genresMovies}
+              userMovies={homeProps.userMovies}
+              userMoviesId={homeProps.userMoviesId}
             />
           </Tab>
           <Tab
@@ -190,6 +203,10 @@ const BannerWrapper: FC<Props> = ({
               classNames={classNames}
               title="Les 20 Films dans les tendances"
               userLists={userLists}
+              internalMovies={homeProps.internalMovies}
+              genresMovies={homeProps.genresMovies}
+              userMovies={homeProps.userMovies}
+              userMoviesId={homeProps.userMoviesId}
             />
           </Tab>
         </Tabs>
@@ -209,6 +226,10 @@ const BannerWrapper: FC<Props> = ({
           classNames={classNames}
           title="Les 20 Films les plus populaires"
           userLists={userLists}
+          internalMovies={homeProps.internalMovies}
+          genresMovies={homeProps.genresMovies}
+          userMovies={homeProps.userMovies}
+          userMoviesId={homeProps.userMoviesId}
         />
         <Banner
           items={homeProps.topRatedMovies}
@@ -226,6 +247,10 @@ const BannerWrapper: FC<Props> = ({
           classNames={classNames}
           title="Les 20 Films les mieux notés"
           userLists={userLists}
+          internalMovies={homeProps.internalMovies}
+          genresMovies={homeProps.genresMovies}
+          userMovies={homeProps.userMovies}
+          userMoviesId={homeProps.userMoviesId}
         />
         <Tabs
           aria-label="Onglets Séries TV"

@@ -21,13 +21,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const Collection = async ({ params }: Props) => {
   const id = Number(params.id.split("-")[0]);
 
-  const collection = await getCollection(id);
+  const collectionDetails = await getCollection(id);
   const genres = await getGenresMovies();
 
   return (
     <div>
       <CollectionWrapper
-        collectionDetail={collection}
+        collectionDetails={collectionDetails}
         genresMovies={genres.genres}
       />
     </div>

@@ -2,10 +2,11 @@
 
 /* import type { Metadata } from "next"; */
 import { useSession } from "next-auth/react";
-import useSWR from "swr";
 
 import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
-import axios from "axios";
+import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
+import { useEffect, useState } from "react";
+import { InternalMovie, InternalMovieUser } from "@/models/movies";
 
 /* export const metadata: Metadata = {
   title: "Mes films - Films & Séries TV DB",
@@ -14,14 +15,26 @@ import axios from "axios";
 const ProfileMovies = () => {
   const { data: session } = useSession();
 
-  const fetchMovies = async () => {
-    const { data } = await axios.get<any>("/api/movies");
-    return data;
+  const [moviesList, setMoviesList] = useState<InternalMovie[]>([]);
+  const [moviesUserList, setMoviesUserList] = useState<InternalMovieUser[]>([]);
+
+  const fetchAllMovies = async () => {
+    const results = await getAllMovies();
+    setMoviesList(results);
   };
 
-  const { data, error, isLoading } = useSWR("/api/movies", fetchMovies);
+  const fetchUserMovies = async () => {
+    if (session) {
+      const results = await getUserMovies(session?.user.id);
+      setMoviesUserList(results?.movies);
+    }
+  };
 
-  console.log(data);
+  useEffect(() => {
+    fetchAllMovies();
+
+    if (session) fetchUserMovies();
+  }, [session]);
 
   if (!session) {
     return <div>Vous devez être authentifé pour accéder à cette page</div>;

@@ -5,11 +5,18 @@ import { HiDotsCircleHorizontal } from "react-icons/hi";
 import { FaListUl, FaBookmark } from "react-icons/fa";
 import { FaHeart, FaStar } from "react-icons/fa6";
 import {
+  MdOutlineCheckBox,
+  MdOutlineCheckBoxOutlineBlank,
+} from "react-icons/md";
+import { FaBan } from "react-icons/fa";
+
+import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
+import { InternalMovieUser } from "@/models/movies";
 
 type Props = {
   item: {
@@ -26,13 +33,15 @@ type Props = {
   watchlistTvShowsIds: number[];
   ratedMoviesIds: number[];
   ratedTvShowsIds: number[];
-  classNames: {
+  classNames?: {
     container: string;
     title: string;
     items: string;
     image: string;
     dropdownContainer: string;
   };
+  userMovies: InternalMovieUser[];
+  // eslint-disable-next-line no-unused-vars
   handleClick: (item: Key) => Promise<void>;
 };
 
@@ -46,70 +55,117 @@ const DropdownCard: FC<Props> = (props) => {
     ratedMoviesIds,
     ratedTvShowsIds,
     classNames,
+    userMovies,
     handleClick,
   } = props;
 
+  const internalUserMoviesIds = userMovies?.map((movie) => movie.movie.tmdb_id);
+  const watchedMovies = userMovies?.filter(
+    (movie) => movie.account_states.status === "watched",
+  );
+  const watchedMoviesIds = watchedMovies?.map((movie) => movie.movie.tmdb_id);
+
+  const dropdownItems = [
+    {
+      key: `addToList-${item.id}-${item.title || item.name}`,
+      startContent: <FaListUl />,
+      content: "Ajouter à une liste",
+    },
+    {
+      key: `favorite-${item.id}`,
+      startContent: (
+        <FaHeart
+          className={`${
+            (item?.release_date && favoriteMoviesIds?.includes(item.id)) ||
+            (item?.first_air_date && favoriteTvShowsIds?.includes(item.id))
+              ? "text-red-600"
+              : ""
+          }`}
+        />
+      ),
+      content: "Favoris",
+    },
+    {
+      key: `watchlist-${item.id}`,
+      startContent: (
+        <FaBookmark
+          className={`${
+            (item?.release_date && watchlistMoviesIds?.includes(item.id)) ||
+            (item?.first_air_date && watchlistTvShowsIds?.includes(item.id))
+              ? "text-orange-600"
+              : ""
+          }`}
+        />
+      ),
+      content: "Liste de suivi",
+    },
+    {
+      key: `note-${item.id}-${item.title || item.name}`,
+      startContent: (
+        <FaStar
+          className={`${
+            (item?.release_date && ratedMoviesIds?.includes(item.id)) ||
+            (item?.first_air_date && ratedTvShowsIds?.includes(item.id))
+              ? "text-yellow-400"
+              : ""
+          }`}
+        />
+      ),
+      content: "Votre note",
+    },
+  ];
+
+  if (internalUserMoviesIds.includes(item.id)) {
+    dropdownItems.unshift({
+      key: `delete-${item.id}-${item.title || item.name}`,
+      startContent: <FaBan />,
+      content: "Supprimer du compte",
+    });
+    if (watchedMoviesIds.includes(item.id)) {
+      dropdownItems.unshift({
+        key: `toWatch-${item.id}-${item.title || item.name}`,
+        startContent: <MdOutlineCheckBoxOutlineBlank />,
+        content: "Marquer comme à voir",
+      });
+    } else {
+      dropdownItems.unshift({
+        key: `watched-${item.id}-${item.title || item.name}`,
+        startContent: <MdOutlineCheckBox />,
+        content: "Marquer comme vu",
+      });
+    }
+  } else {
+    dropdownItems.unshift({
+      key: `toWatch-${item.id}-${item.title || item.name}`,
+      startContent: <MdOutlineCheckBoxOutlineBlank />,
+      content: "Marquer comme à voir",
+    });
+    dropdownItems.unshift({
+      key: `watched-${item.id}-${item.title || item.name}`,
+      startContent: <MdOutlineCheckBox />,
+      content: "Marquer comme vu",
+    });
+  }
+
   return (
-    <div className={classNames.dropdownContainer}>
+    <div className={classNames?.dropdownContainer}>
       <Dropdown classNames={{ content: "bg-primary border-primary" }}>
         <DropdownTrigger>
           <button>
-            <HiDotsCircleHorizontal className="cursor-pointer text-2xl hover:text-secondary" />
+            <HiDotsCircleHorizontal className="cursor-pointer rounded-full bg-black text-3xl hover:bg-white hover:text-secondary" />
           </button>
         </DropdownTrigger>
         <DropdownMenu
           variant="faded"
           aria-label="Dropdown menu with icons"
           onAction={(item) => handleClick(item)}
+          items={dropdownItems}
         >
-          <DropdownItem
-            key={`addToList-${item.id}-${item.title || item.name}`}
-            startContent={<FaListUl />}
-          >
-            Ajouter à une liste
-          </DropdownItem>
-          <DropdownItem
-            key={`favorite-${item.id}`}
-            startContent={
-              <FaHeart
-                className={`${(item?.release_date && favoriteMoviesIds?.includes(item.id)) || (item?.first_air_date && favoriteTvShowsIds?.includes(item.id)) ? "text-red-600" : ""}`}
-              />
-            }
-          >
-            Favoris
-          </DropdownItem>
-          <DropdownItem
-            key={`watchlist-${item.id}`}
-            startContent={
-              <FaBookmark
-                className={`${
-                  (item?.release_date &&
-                    watchlistMoviesIds?.includes(item.id)) ||
-                  (item?.first_air_date &&
-                    watchlistTvShowsIds?.includes(item.id))
-                    ? "text-orange-600"
-                    : ""
-                }`}
-              />
-            }
-          >
-            Liste de suivi
-          </DropdownItem>
-          <DropdownItem
-            key={`note-${item.id}-${item.title || item.name}`}
-            startContent={
-              <FaStar
-                className={`${
-                  (item?.release_date && ratedMoviesIds?.includes(item.id)) ||
-                  (item?.first_air_date && ratedTvShowsIds?.includes(item.id))
-                    ? "text-yellow-400"
-                    : ""
-                }`}
-              />
-            }
-          >
-            Votre note
-          </DropdownItem>
+          {(item) => (
+            <DropdownItem key={item.key} startContent={item.startContent}>
+              {item.content}
+            </DropdownItem>
+          )}
         </DropdownMenu>
       </Dropdown>
     </div>

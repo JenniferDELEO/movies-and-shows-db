@@ -147,11 +147,56 @@ export type WatchProviderFr = {
 
 export type InternalMovie = {
   _id: string;
+  tmdb_id: number;
   title: string;
   release_date: string;
   runtime: number;
   poster_path: string;
   overview: string;
-  user: any;
-  account_states: any;
+  users: {
+    _key: string;
+    _type: "reference";
+    _ref: string;
+  }[];
+};
+
+export type InternalMovieUser = {
+  _id: string;
+  movie: InternalMovie;
+  account_states: {
+    status: "watched" | "to_watch";
+  };
+};
+
+export type AddMovieAndUser = {
+  tmdbId: number;
+  title: string;
+  releaseDate: string;
+  genres: string[];
+  posterPath: string;
+  overview: string;
+  userId: string;
+};
+
+export type UpdateMovieAndUser = {
+  userId: string;
+  movieId: string;
+};
+
+export type CreateUserStatus = {
+  movieId: string;
+  userId: string;
+  status: "watched" | "to_watch";
+};
+
+export type AddMovieStatus = {
+  userMovieId: string;
+  movieId: string;
+  status: "watched" | "to_watch";
+};
+
+export type UpdateMovieStatus = {
+  userMovieId: string;
+  movieId: string;
+  status: "watched" | "to_watch";
 };

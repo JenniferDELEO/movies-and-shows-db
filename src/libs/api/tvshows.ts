@@ -84,7 +84,7 @@ export async function getDiscoverTvShows(
   try {
     const result = await axios.request({
       ...optionsGET,
-      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/discover/tv?language=fr-FR&page=1`,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/discover/tv`,
       params: queryFilters,
     });
     return result.data;

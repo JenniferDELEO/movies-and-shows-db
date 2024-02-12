@@ -1,7 +1,9 @@
 import {
-  addMovieAndUser,
+  createUserMovieAndStatus,
+  addUserMovieStatus,
   getAllMovies,
-  updateMovieAndUser,
+  getUserMovies,
+  updateUserMovieStatus,
 } from "@/libs/sanity/api/movie";
 import { authOptions } from "@/libs/sanity/auth";
 import { getServerSession } from "next-auth";
@@ -10,8 +12,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
-  const { tmdbId, title, releaseDate, genres, posterPath, overview } =
-    await req.json();
+  const { tmdbId, status } = await req.json();
 
   if (!session) {
     return new NextResponse("Authentication required", { status: 500 });
@@ -21,35 +22,38 @@ export async function POST(req: Request) {
 
   try {
     const allMovies = await getAllMovies();
-    const movieExists = allMovies.find(
+    const movieId = allMovies.find(
       (movie) => movie.tmdb_id === Number(tmdbId),
-    );
+    )?._id;
+    if (!movieId) {
+      return new NextResponse("Failed to retrieve movie Id", { status: 400 });
+    }
+
+    const userMovies = await getUserMovies(userId);
 
     let data;
 
-    if (movieExists) {
-      const checkUserExists = movieExists.users.find(
-        (user) => user._ref === userId,
+    if (userMovies) {
+      const movieExists = userMovies.movies.find(
+        (movie) => movie.movie.tmdb_id === Number(tmdbId),
       );
-      if (checkUserExists) {
-        return new NextResponse("Movie already exists", { status: 200 });
+      if (movieExists) {
+        data = await updateUserMovieStatus({
+          userMovieId: userMovies._id,
+          movieId,
+          status,
+        });
       } else {
-        data = await updateMovieAndUser({
-          movieId: movieExists._id,
-          userId,
+        data = await addUserMovieStatus({
+          userMovieId: userMovies._id,
+          movieId,
+          status,
         });
       }
     } else {
-      data = await addMovieAndUser({
-        tmdbId: Number(tmdbId),
-        title,
-        releaseDate,
-        genres,
-        posterPath,
-        overview,
-        userId,
-      });
+      data = await createUserMovieAndStatus({ movieId, userId, status });
     }
+
     return NextResponse.json(data, { status: 200, statusText: "Successful" });
   } catch (error) {
     return new NextResponse("Unable to fetch", {

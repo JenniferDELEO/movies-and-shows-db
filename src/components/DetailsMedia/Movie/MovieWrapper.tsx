@@ -1,6 +1,10 @@
 import { FC } from "react";
 
-import { MovieDetails } from "@/models/movies";
+import {
+  InternalMovie,
+  InternalMovieUser,
+  MovieDetails,
+} from "@/models/movies";
 import TopContent from "@/components/DetailsMedia/TopContent";
 import CrewBanner from "@/components/DetailsMedia/Banners/CrewBanner";
 import CollectionCard from "@/components/DetailsMedia/Movie/CollectionCard";
@@ -8,49 +12,41 @@ import SimilarsBanner from "@/components/DetailsMedia/Banners/SimilarsBanner";
 import RecommendationsBanner from "@/components/DetailsMedia/Banners/RecommendationsBanner";
 
 type Props = {
-  movieDetail: MovieDetails;
+  movieDetails: MovieDetails;
   movieUrl: string;
+  userMovies: InternalMovieUser[];
+  userMoviesId: string;
+  internalMovies: InternalMovie[];
 };
 
 const MovieWrapper: FC<Props> = (props) => {
-  const { movieDetail, movieUrl } = props;
+  const { movieDetails, movieUrl, userMovies, userMoviesId, internalMovies } =
+    props;
 
   return (
     <div className="size-full">
       <TopContent
-        accountStates={movieDetail?.account_states}
-        backdropPath={movieDetail?.backdrop_path}
-        creditsMovies={movieDetail?.credits}
-        genresMedia={movieDetail?.genres}
-        id={movieDetail?.id}
-        originalLanguage={movieDetail?.original_language}
-        overview={movieDetail?.overview}
-        posterPath={movieDetail?.poster_path}
-        releaseDate={movieDetail?.release_date}
-        runtime={movieDetail?.runtime}
-        tagline={movieDetail?.tagline}
-        title={movieDetail?.title}
+        movieDetails={movieDetails}
         type="movie"
-        videos={movieDetail?.videos}
-        voteAverage={movieDetail?.vote_average}
-        voteCount={movieDetail?.vote_count}
-        watchProvidersFr={movieDetail?.watch_providers_fr}
+        userMovies={userMovies}
+        userMoviesId={userMoviesId}
+        internalMovies={internalMovies}
       />
       <CrewBanner
-        castMovie={movieDetail?.credits?.cast}
+        castMovie={movieDetails?.credits?.cast}
         mediaUrl={movieUrl}
         type="movie"
       />
-      {movieDetail?.belongs_to_collection && (
+      {movieDetails?.belongs_to_collection && (
         <CollectionCard
-          belongsToCollection={movieDetail?.belongs_to_collection}
+          belongsToCollection={movieDetails?.belongs_to_collection}
         />
       )}
-      {movieDetail?.recommendations?.results.length > 0 ? (
+      {movieDetails?.recommendations?.results.length > 0 ? (
         <RecommendationsBanner
-          recommendationsMovies={movieDetail?.recommendations.results}
-          totalPages={movieDetail?.recommendations?.total_pages}
-          totalResults={movieDetail?.recommendations?.total_results}
+          recommendationsMovies={movieDetails?.recommendations.results}
+          totalPages={movieDetails?.recommendations?.total_pages}
+          totalResults={movieDetails?.recommendations?.total_results}
         />
       ) : (
         <section className="p-4 md:px-[2.5%] lg:px-[5%] 2xl:px-[10%]">
@@ -64,11 +60,11 @@ const MovieWrapper: FC<Props> = (props) => {
           </p>
         </section>
       )}
-      {movieDetail?.similar?.results.length > 0 && (
+      {movieDetails?.similar?.results.length > 0 && (
         <SimilarsBanner
-          similarsMovies={movieDetail?.similar?.results}
-          totalPages={movieDetail?.similar?.total_pages}
-          totalResults={movieDetail?.similar?.total_results}
+          similarsMovies={movieDetails?.similar?.results}
+          totalPages={movieDetails?.similar?.total_pages}
+          totalResults={movieDetails?.similar?.total_results}
         />
       )}
     </div>

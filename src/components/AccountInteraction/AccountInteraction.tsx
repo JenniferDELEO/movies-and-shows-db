@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, Key, useState } from "react";
+import { FC, Key, useContext, useState } from "react";
 
 import AddToListModal from "@/components/Modals/AddToListModal";
 import RatingModal from "@/components/Modals/RatingModal";
@@ -8,21 +8,32 @@ import { toggleFavorite, toggleWatchlist } from "@/libs/api/user";
 import { toggleUserDatas } from "@/libs/helpers/userDatas";
 import { User } from "@/models/user";
 import { List } from "@/models/lists";
-import { Movie } from "@/models/movies";
+import {
+  Genre,
+  InternalMovie,
+  InternalMovieUser,
+  Movie,
+} from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
 import DropdownCard from "@/components/AccountInteraction/DropdownCard";
 import IconsInteraction from "./IconsInteraction";
 import { Tooltip } from "@nextui-org/react";
 import { FaStar } from "react-icons/fa";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { getUserMovies } from "@/libs/sanity/api/movie";
+import { InternalUserContext } from "@/context/internalUserContext";
 
 type Props = {
   item: {
     id: number;
+    genres?: Genre[];
+    genre_ids?: number[];
+    poster_path: string;
+    overview: string;
     release_date?: string;
-    first_air_date?: string;
     title?: string;
     name?: string;
-    character?: string;
   };
   type: "tvshow" | "movie" | "episode";
   user: User;
@@ -36,7 +47,7 @@ type Props = {
     tvShowId: number;
     userRatingApi: number;
   };
-  homePageProps?: {
+  listsPageProps?: {
     favoriteMoviesIds: number[];
     favoriteTvShowsIds: number[];
     watchlistMoviesIds: number[];
@@ -45,19 +56,26 @@ type Props = {
     ratedTvShows: TvShow[];
     ratedMoviesIds: number[];
     ratedTvShowsIds: number[];
-    classNames: {
+    classNames?: {
       container: string;
       title: string;
       items: string;
       image: string;
       dropdownContainer: string;
     };
+    internalMovies?: InternalMovie[];
+    genresMovies: Genre[];
+    userMovies?: InternalMovieUser[];
+    userMoviesId?: string;
   };
   mediaDetailsPageProps?: {
     isFavorite: boolean;
     isInWatchlist: boolean;
     isRated: boolean;
     userRatingApi: number;
+    userMovies?: InternalMovieUser[];
+    userMoviesId?: string;
+    internalMovies?: InternalMovie[];
   };
 };
 
@@ -70,7 +88,7 @@ const AccountInteraction: FC<Props> = (props) => {
     userLists,
 
     episodeDetailsProps,
-    homePageProps,
+    listsPageProps,
     mediaDetailsPageProps,
   } = props;
   const [modalAddToListIsOpen, setModalAddToListIsOpen] =
@@ -78,24 +96,115 @@ const AccountInteraction: FC<Props> = (props) => {
   const [modalRateIsOpen, setModalRateIsOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>("");
   const [selectedItemId, setSelectedItemId] = useState<number>(0);
+  const [moviesAccount, setMoviesAccount] = useState<InternalMovieUser[]>(
+    listsPageProps?.userMovies || mediaDetailsPageProps?.userMovies || [],
+  );
 
-  const handleClick = async (item: Key) => {
-    const category = item.toString().split("-")[0];
-    const id = item.toString().split("-")[1];
+  const { internalUser } = useContext(InternalUserContext);
+
+  const movieGenres =
+    item?.genre_ids?.map((genreId) => {
+      const genre = listsPageProps?.genresMovies?.find(
+        (genre) => genre.id === genreId,
+      );
+      return genre?.name;
+    }) ||
+    item?.genres?.map((genre) => genre.name) ||
+    [];
+
+  const _movieId =
+    listsPageProps?.internalMovies?.find((movie) => movie.tmdb_id === item.id)
+      ?._id ||
+    mediaDetailsPageProps?.internalMovies?.find(
+      (movie) => movie.tmdb_id === item.id,
+    )?._id;
+
+  const handleClick = async (media: Key) => {
+    const category = media.toString().split("-")[0];
+    const id = media.toString().split("-")[1];
     setSelectedItemId(parseInt(id));
 
-    if (user) {
-      if (homePageProps) {
+    if (user && internalUser && internalUser.user_id) {
+      if (category === "watched" && type === "movie") {
+        const responseAddMovie = await axios.post("/api/movies", {
+          tmdbId: id,
+          title: item.title,
+          releaseDate: item.release_date,
+          genres: movieGenres,
+          posterPath: item.poster_path,
+          overview: item.overview,
+        });
+        if (responseAddMovie.status === 200) {
+          const responseAddStatus = await axios.post("/api/user-movies", {
+            tmdbId: id,
+            status: "watched",
+          });
+          if (responseAddStatus.status === 200)
+            toast.success("Film marqué comme vu avec succès");
+          const result = await getUserMovies(internalUser.user_id);
+          setMoviesAccount(result.movies);
+        }
+      }
+
+      if (category === "toWatch" && type === "movie") {
+        const responseAddMovie = await axios.post("/api/movies", {
+          tmdbId: id,
+          title: item.title,
+          releaseDate: item.release_date,
+          genres: movieGenres,
+          posterPath: item.poster_path,
+          overview: item.overview,
+        });
+        if (responseAddMovie.status === 200) {
+          const responseAddStatus = await axios.post("/api/user-movies", {
+            tmdbId: id,
+            status: "to_watch",
+          });
+          if (responseAddStatus.status === 200)
+            toast.success("Film marqué comme à voir avec succès");
+          const result = await getUserMovies(internalUser.user_id);
+          setMoviesAccount(result.movies);
+        }
+      }
+
+      if (category === "note") {
+        const name = media.toString().split("-")[2];
+        setModalTitle(`Mettre une note à ${name}`);
+        setModalRateIsOpen(true);
+      }
+
+      if (listsPageProps) {
+        if (category === "delete" && type === "movie") {
+          const responseUserMovieAndStatus = await axios.post(
+            `/api/user-movies/${listsPageProps.userMoviesId}`,
+            { userMovieId: listsPageProps.userMoviesId, movieId: _movieId },
+          );
+          if (responseUserMovieAndStatus.status === 200) {
+            const responseMovieAndUser = await axios.post(
+              `/api/movies/${_movieId}`,
+              {
+                movieId: _movieId,
+              },
+            );
+
+            if (responseMovieAndUser.status === 200) {
+              toast.success("Film supprimé du compte avec succès");
+              const result = await getUserMovies(internalUser.user_id);
+              setMoviesAccount(result.movies);
+            }
+          }
+        }
+
         if (category === "addToList") {
-          const name = item.toString().split("-")[2];
+          const name = media.toString().split("-")[2];
           setModalTitle(`Ajouter ${name} à une liste`);
           setModalAddToListIsOpen(true);
         }
 
         if (
           category === "favorite" &&
-          homePageProps.favoriteMoviesIds &&
-          homePageProps.favoriteTvShowsIds
+          listsPageProps.favoriteMoviesIds &&
+          listsPageProps.favoriteTvShowsIds
         ) {
           await toggleUserDatas(
             category,
@@ -104,15 +213,15 @@ const AccountInteraction: FC<Props> = (props) => {
             user,
             toggleFavorite,
             fetchUserDatas,
-            homePageProps.favoriteMoviesIds,
-            homePageProps.favoriteTvShowsIds,
+            listsPageProps.favoriteMoviesIds,
+            listsPageProps.favoriteTvShowsIds,
           );
         }
 
         if (
           category === "watchlist" &&
-          homePageProps.watchlistMoviesIds &&
-          homePageProps.watchlistTvShowsIds
+          listsPageProps.watchlistMoviesIds &&
+          listsPageProps.watchlistTvShowsIds
         ) {
           await toggleUserDatas(
             category,
@@ -121,14 +230,38 @@ const AccountInteraction: FC<Props> = (props) => {
             user,
             toggleWatchlist,
             fetchUserDatas,
-            homePageProps.watchlistMoviesIds,
-            homePageProps.watchlistTvShowsIds,
+            listsPageProps.watchlistMoviesIds,
+            listsPageProps.watchlistTvShowsIds,
           );
         }
       }
       if (mediaDetailsPageProps) {
+        if (category === "delete" && type === "movie") {
+          const responseUserMovieAndStatus = await axios.post(
+            `/api/user-movies/${mediaDetailsPageProps.userMoviesId}`,
+            {
+              userMovieId: mediaDetailsPageProps.userMoviesId,
+              movieId: _movieId,
+            },
+          );
+          if (responseUserMovieAndStatus.status === 200) {
+            const responseMovieAndUser = await axios.post(
+              `/api/movies/${_movieId}`,
+              {
+                movieId: _movieId,
+              },
+            );
+
+            if (responseMovieAndUser.status === 200) {
+              toast.success("Film supprimé du compte avec succès");
+              const result = await getUserMovies(internalUser.user_id);
+              setMoviesAccount(result.movies);
+            }
+          }
+        }
+
         if (category === "addToList") {
-          const name = item.toString().split("-")[2];
+          const name = media.toString().split("-")[2];
           setModalTitle(`Ajouter ${name} à une liste`);
           setModalAddToListIsOpen(true);
         }
@@ -163,12 +296,6 @@ const AccountInteraction: FC<Props> = (props) => {
         }
       }
     }
-
-    if (category === "note") {
-      const name = item.toString().split("-")[2];
-      setModalTitle(`Mettre une note à ${name}`);
-      setModalRateIsOpen(true);
-    }
   };
 
   return type !== "episode" ? (
@@ -184,24 +311,25 @@ const AccountInteraction: FC<Props> = (props) => {
       <RatingModal
         modalIsOpen={modalRateIsOpen}
         setModalIsOpen={setModalRateIsOpen}
-        ratedMovies={homePageProps?.ratedMovies}
-        ratedTvShows={homePageProps?.ratedTvShows}
+        ratedMovies={listsPageProps?.ratedMovies}
+        ratedTvShows={listsPageProps?.ratedTvShows}
         fetchUserDatas={fetchUserDatas}
         itemId={selectedItemId}
         itemType={type}
         title={modalTitle}
         userRatingApi={mediaDetailsPageProps?.userRatingApi}
       />
-      {homePageProps && (
+      {listsPageProps && (
         <DropdownCard
           item={item}
-          favoriteMoviesIds={homePageProps.favoriteMoviesIds}
-          favoriteTvShowsIds={homePageProps.favoriteTvShowsIds}
-          watchlistMoviesIds={homePageProps.watchlistMoviesIds}
-          watchlistTvShowsIds={homePageProps.watchlistTvShowsIds}
-          ratedMoviesIds={homePageProps.ratedMoviesIds}
-          ratedTvShowsIds={homePageProps.ratedTvShowsIds}
-          classNames={homePageProps.classNames}
+          favoriteMoviesIds={listsPageProps.favoriteMoviesIds}
+          favoriteTvShowsIds={listsPageProps.favoriteTvShowsIds}
+          watchlistMoviesIds={listsPageProps.watchlistMoviesIds}
+          watchlistTvShowsIds={listsPageProps.watchlistTvShowsIds}
+          ratedMoviesIds={listsPageProps.ratedMoviesIds}
+          ratedTvShowsIds={listsPageProps.ratedTvShowsIds}
+          classNames={listsPageProps?.classNames}
+          userMovies={moviesAccount}
           handleClick={handleClick}
         />
       )}
@@ -212,7 +340,7 @@ const AccountInteraction: FC<Props> = (props) => {
           isFavorite={mediaDetailsPageProps.isFavorite}
           isRated={mediaDetailsPageProps.isRated}
           isInWatchlist={mediaDetailsPageProps.isInWatchlist}
-          userRatingApi={mediaDetailsPageProps.userRatingApi}
+          userMovies={moviesAccount}
         />
       )}
     </>
