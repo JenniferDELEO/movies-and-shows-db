@@ -105,8 +105,6 @@ const Infos: FC<Props> = (props) => {
     : 0;
   const runtimeMinutes = movieDetails?.runtime ? movieDetails.runtime % 60 : 0;
 
-  console.log(episodeDetails);
-
   const directors =
     movieDetails?.credits?.crew?.filter((crew) => crew.job === "Director") ||
     (type === "tvshow" && tvShowDetails?.aggregate_credits?.crew)
