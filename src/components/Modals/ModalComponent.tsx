@@ -6,12 +6,12 @@ import {
   ModalFooter,
   Button,
 } from "@nextui-org/react";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 
 type Props = {
   modalIsOpen: boolean;
   title: string;
-  children: React.ReactNode;
+  children: ReactNode;
   onValidate: () => Promise<void>;
   onClose: () => void;
 };

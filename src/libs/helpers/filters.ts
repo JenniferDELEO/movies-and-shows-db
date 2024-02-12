@@ -1,5 +1,3 @@
-import dayjs from "dayjs";
-
 export const defaultMoviesFilters = {
   certification_country: "FR",
   include_adult: false,

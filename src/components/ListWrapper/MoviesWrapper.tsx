@@ -7,7 +7,12 @@ import { usePathname } from "next/navigation";
 
 import Filters from "@/components/Filters/Filters";
 import Cards from "@/components/Cards/Cards";
-import { Movie } from "@/models/movies";
+import {
+  Genre,
+  InternalMovie,
+  InternalMovieUser,
+  Movie,
+} from "@/models/movies";
 import OrderingSelect from "@/components/Filters/OrderingSelect";
 import { Watcher } from "@/models/watchers";
 import FiltersModal from "@/components/Modals/FiltersModal";
@@ -17,12 +22,14 @@ import { defaultMoviesFilters } from "@/libs/helpers/filters";
 import { MoviesFilters } from "@/models/filters";
 
 type Props = {
-  genresMovies: { id: number; name: string }[];
+  genresMovies: Genre[];
   movies: Movie[];
   providersMovies: Watcher[];
   title: string;
   totalPagesMovies: number;
-  totalResultsMovies: number;
+  userMovies: InternalMovieUser[];
+  userMoviesId: string;
+  internalMovies: InternalMovie[];
 
   defaultFilters?: MoviesFilters;
 };
@@ -34,7 +41,9 @@ const MoviesWrapper: FC<Props> = (props) => {
     providersMovies,
     title,
     totalPagesMovies,
-    totalResultsMovies,
+    userMovies,
+    userMoviesId,
+    internalMovies,
 
     defaultFilters,
   } = props;
@@ -44,7 +53,6 @@ const MoviesWrapper: FC<Props> = (props) => {
     defaultFilters || defaultMoviesFilters,
   );
   const [openFilters, setOpenFilters] = useState<boolean>(false);
-  const [totalResults, setTotalResults] = useState<number>(totalResultsMovies);
   const [totalPages, setTotalPages] = useState<number>(totalPagesMovies);
   const [filterType, setFilterType] = useState("popularity.desc");
   const [currentPage, setCurrentPage] = useState(
@@ -89,7 +97,6 @@ const MoviesWrapper: FC<Props> = (props) => {
       ...filters,
     });
     setMoviesList(result.results);
-    setTotalResults(result.total_results);
     setTotalPages(result.total_pages);
     scrollToTop();
   };
@@ -100,7 +107,6 @@ const MoviesWrapper: FC<Props> = (props) => {
       ...defaultMoviesFilters,
     });
     setMoviesList(result.results);
-    setTotalResults(result.total_results);
     setTotalPages(result.total_pages);
     setIsResetting(true);
   };
@@ -171,6 +177,9 @@ const MoviesWrapper: FC<Props> = (props) => {
                 movies={moviesList}
                 filterType="movie"
                 genres={genresMovies}
+                internalMovies={internalMovies}
+                userMovies={userMovies}
+                userMoviesId={userMoviesId}
               />
               <Pagination
                 total={totalPages}
@@ -205,7 +214,14 @@ const MoviesWrapper: FC<Props> = (props) => {
           setIsResetting={setIsResetting}
         />
         <div className="w-full">
-          <Cards movies={moviesList} filterType="movie" genres={genresMovies} />
+          <Cards
+            movies={moviesList}
+            filterType="movie"
+            genres={genresMovies}
+            internalMovies={internalMovies}
+            userMovies={userMovies}
+            userMoviesId={userMoviesId}
+          />
           <Pagination
             total={totalPages}
             currentPage={currentPage}

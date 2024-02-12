@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { UserContext } from "@/context/userContext";
 import { useRouter, usePathname } from "next/navigation";
 import { useContext, useState } from "react";
 import {
@@ -34,28 +33,16 @@ const Header = () => {
 
   const { status } = useSession();
 
-  const { setUser } = useContext(UserContext);
   const {
     internalUser: { user_name },
     setInternalUser,
   } = useContext(InternalUserContext);
 
   const handleLogOut = () => {
-    localStorage.removeItem("tmdb_account_username");
-    localStorage.removeItem("tmdb_account_id_v3");
-    localStorage.removeItem("tmdb_account_id_v4");
-    localStorage.removeItem("tmdb_session_id");
-    localStorage.removeItem("tmdb_access_token");
     localStorage.removeItem("user_id");
     localStorage.removeItem("user_name");
     localStorage.removeItem("user_email");
     localStorage.removeItem("user_image");
-    setUser({
-      tmdb_username: null,
-      tmdb_accountIdV3: null,
-      tmdb_accountIdV4: null,
-      tmdb_sessionId: null,
-    });
     setInternalUser({
       user_id: null,
       user_name: null,
@@ -205,12 +192,12 @@ const Header = () => {
               </Button>
             </NavbarItem>
             {status !== "authenticated" ? (
-              <NavbarItem className="ml-2 hidden cursor-pointer text-sm md:block lg:text-lg">
+              <NavbarItem className="ml-2 cursor-pointer">
                 <div
                   onClick={() => router.replace("/auth")}
-                  className="text-sm  lg:text-lg"
+                  className="text-sm lg:text-lg"
                 >
-                  Inscription
+                  Se connecter
                 </div>
               </NavbarItem>
             ) : (

@@ -1,5 +1,4 @@
 import CreditsWrapper from "@/components/DetailsMedia/Wrappers/CreditsWrapper";
-import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
 import { getCreditsTvShow } from "@/libs/api/tvshows";
 
 type Props = {

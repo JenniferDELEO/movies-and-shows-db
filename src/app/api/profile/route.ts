@@ -1,9 +1,9 @@
-import { getUserData } from "@/libs/apis";
-import { authOptions } from "@/libs/auth";
+import { getUserData } from "@/libs/sanity/api/user";
+import { authOptions } from "@/libs/sanity/auth";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request, res: Response) {
+export async function GET() {
   const session = await getServerSession(authOptions);
 
   if (!session) {

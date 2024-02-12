@@ -36,7 +36,12 @@ import {
 } from "@/components/Banner/reactSlickSettings";
 import { User } from "@/models/user";
 import { List } from "@/models/lists";
-import { Movie } from "@/models/movies";
+import {
+  Genre,
+  InternalMovie,
+  InternalMovieUser,
+  Movie,
+} from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
 import AccountInteraction from "../AccountInteraction/AccountInteraction";
 
@@ -44,6 +49,8 @@ type Props = {
   items: {
     id: number;
     poster_path: string;
+    genre_ids: number[];
+    overview: string;
     release_date?: string;
     first_air_date?: string;
     title?: string;
@@ -71,6 +78,10 @@ type Props = {
   };
   title: string;
   userLists: List[];
+  internalMovies?: InternalMovie[];
+  genresMovies?: Genre[];
+  userMovies?: InternalMovieUser[];
+  userMoviesId?: string;
 };
 
 const Banner: FC<Props> = ({
@@ -89,6 +100,10 @@ const Banner: FC<Props> = ({
   userLists,
   ratedMovies,
   ratedTvShows,
+  internalMovies,
+  genresMovies,
+  userMovies,
+  userMoviesId,
 }) => {
   const router = useRouter();
   const settings =
@@ -142,7 +157,7 @@ const Banner: FC<Props> = ({
                   type={type}
                   user={user}
                   fetchUserDatas={fetchUserDatas}
-                  homePageProps={{
+                  listsPageProps={{
                     favoriteMoviesIds,
                     favoriteTvShowsIds,
                     watchlistMoviesIds,
@@ -152,6 +167,10 @@ const Banner: FC<Props> = ({
                     ratedMoviesIds,
                     ratedTvShowsIds,
                     classNames,
+                    internalMovies: internalMovies || [],
+                    genresMovies: genresMovies || [],
+                    userMovies: userMovies || [],
+                    userMoviesId: userMoviesId || "",
                   }}
                   userLists={userLists}
                 />

@@ -1,81 +1,120 @@
 "use client";
 
+import { InternalMovieUser } from "@/models/movies";
 import { Tooltip } from "@nextui-org/react";
 import { FC, Key } from "react";
-import { FaListUl, FaBookmark } from "react-icons/fa";
+import { FaListUl, FaBookmark, FaBan } from "react-icons/fa";
 import { FaHeart, FaStar } from "react-icons/fa6";
+import {
+  MdOutlineCheckBox,
+  MdOutlineCheckBoxOutlineBlank,
+} from "react-icons/md";
 
 type Props = {
   item: {
     id: number;
+    release_date?: string;
+    first_air_date?: string;
     title?: string;
+    name?: string;
+    character?: string;
   };
+  // eslint-disable-next-line no-unused-vars
   handleClick: (item: Key) => Promise<void>;
   isFavorite: boolean;
   isInWatchlist: boolean;
   isRated: boolean;
-  userRatingApi: number;
+  userMovies: InternalMovieUser[];
 };
 
 const IconsInteraction: FC<Props> = (props) => {
-  const {
-    item,
-    handleClick,
-    isFavorite,
-    isInWatchlist,
-    isRated,
-    userRatingApi,
-  } = props;
+  const { item, handleClick, isFavorite, isInWatchlist, isRated, userMovies } =
+    props;
+
+  const internalUserMoviesIds = userMovies?.map((movie) => movie.movie.tmdb_id);
+  const watchedMovies = userMovies?.filter(
+    (movie) => movie.account_states.status === "watched",
+  );
+  const watchedMoviesIds = watchedMovies?.map((movie) => movie.movie.tmdb_id);
+
+  const dropdownItems = [
+    {
+      key: `addToList-${item.id}-${item.title || item.name}`,
+      startContent: <FaListUl />,
+      content: "Ajouter à une liste",
+    },
+    {
+      key: `favorite-${item.id}`,
+      startContent: (
+        <FaHeart className={`${isFavorite ? "text-red-600" : ""}`} />
+      ),
+      content: "Favoris",
+    },
+    {
+      key: `watchlist-${item.id}`,
+      startContent: (
+        <FaBookmark className={`${isInWatchlist ? "text-orange-600" : ""}`} />
+      ),
+      content: "Liste de suivi",
+    },
+    {
+      key: `note-${item.id}-${item.title || item.name}`,
+      startContent: (
+        <FaStar className={`${isRated ? "text-yellow-400" : ""}`} />
+      ),
+      content: "Votre note",
+    },
+  ];
+
+  if (internalUserMoviesIds.includes(item.id)) {
+    dropdownItems.unshift({
+      key: `delete-${item.id}-${item.title || item.name}`,
+      startContent: <FaBan />,
+      content: "Supprimer du compte",
+    });
+    if (watchedMoviesIds.includes(item.id)) {
+      dropdownItems.unshift({
+        key: `toWatch-${item.id}-${item.title || item.name}`,
+        startContent: <MdOutlineCheckBoxOutlineBlank />,
+        content: "Marquer comme à voir",
+      });
+    } else {
+      dropdownItems.unshift({
+        key: `watched-${item.id}-${item.title || item.name}`,
+        startContent: <MdOutlineCheckBox />,
+        content: "Marquer comme vu",
+      });
+    }
+  } else {
+    dropdownItems.unshift({
+      key: `toWatch-${item.id}-${item.title || item.name}`,
+      startContent: <MdOutlineCheckBoxOutlineBlank />,
+      content: "Marquer comme à voir",
+    });
+    dropdownItems.unshift({
+      key: `watched-${item.id}-${item.title || item.name}`,
+      startContent: <MdOutlineCheckBox />,
+      content: "Marquer comme vu",
+    });
+  }
 
   return (
     <>
-      <Tooltip content="Ajouter à une liste" placement="bottom">
-        <button
-          value={`addToList-${item.id}-${item.title}`}
-          onClick={(e) => handleClick(e.currentTarget.value)}
-          className="mr-1 rounded-full bg-primary p-3 lg:mr-3"
+      {dropdownItems.map((dropdownItem) => (
+        <Tooltip
+          key={dropdownItem.key}
+          content={dropdownItem.content}
+          placement="bottom"
         >
-          <FaListUl size={16} />
-        </button>
-      </Tooltip>
-      <Tooltip content="Marquer comme favoris" placement="bottom">
-        <button
-          value={`favorite-${item.id}`}
-          onClick={(e) => handleClick(e.currentTarget.value)}
-          className="mr-1 rounded-full bg-primary p-3 lg:mr-3"
-        >
-          <FaHeart
-            size={16}
-            className={`${isFavorite ? "text-red-600" : ""}`}
-          />
-        </button>
-      </Tooltip>
-      <Tooltip content="Ajouter à la liste de suivi" placement="bottom">
-        <button
-          value={`watchlist-${item.id}`}
-          onClick={(e) => handleClick(e.currentTarget.value)}
-          className="mr-1 rounded-full bg-primary p-3 lg:mr-3"
-        >
-          <FaBookmark
-            size={16}
-            className={`${isInWatchlist ? "text-orange-600" : ""}`}
-          />
-        </button>
-      </Tooltip>
-      <Tooltip
-        content={
-          isRated ? `Votre note : ${userRatingApi / 2}` : "Mettre une note"
-        }
-        placement="bottom"
-      >
-        <button
-          value={`note-${item.id}-${item.title}`}
-          onClick={(e) => handleClick(e.currentTarget.value)}
-          className="rounded-full bg-primary p-3"
-        >
-          <FaStar size={16} className={`${isRated ? "text-yellow-400" : ""}`} />
-        </button>
-      </Tooltip>
+          <button
+            value={dropdownItem.key}
+            onClick={(e) => handleClick(e.currentTarget.value)}
+            className="mr-1 rounded-full bg-primary p-3 lg:mr-3"
+          >
+            {dropdownItem.startContent}
+          </button>
+        </Tooltip>
+      ))}
     </>
   );
 };

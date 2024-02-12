@@ -21,7 +21,6 @@ type Props = {
   providersTvShows: Watcher[];
   title: string;
   totalPagesTvShows: number;
-  totalResultsTvShows: number;
 
   defaultFilters?: TvShowsFilters;
 };
@@ -33,7 +32,6 @@ const TvShowsWrapper: FC<Props> = (props) => {
     providersTvShows,
     title,
     totalPagesTvShows,
-    totalResultsTvShows,
 
     defaultFilters,
   } = props;
@@ -43,7 +41,6 @@ const TvShowsWrapper: FC<Props> = (props) => {
     defaultFilters || defaultTvShowsFilters,
   );
   const [openFilters, setOpenFilters] = useState<boolean>(false);
-  const [totalResults, setTotalResults] = useState<number>(totalResultsTvShows);
   const [totalPages, setTotalPages] = useState<number>(totalPagesTvShows);
   const [filterType, setFilterType] = useState("popularity.desc");
   const [currentPage, setCurrentPage] = useState(
@@ -88,7 +85,6 @@ const TvShowsWrapper: FC<Props> = (props) => {
       ...filters,
     });
     setTvShowsList(result.results);
-    setTotalResults(result.total_results);
     setTotalPages(result.total_pages);
     scrollToTop();
   };
@@ -99,7 +95,6 @@ const TvShowsWrapper: FC<Props> = (props) => {
       ...defaultTvShowsFilters,
     });
     setTvShowsList(result.results);
-    setTotalResults(result.total_results);
     setTotalPages(result.total_pages);
     setIsResetting(true);
   };

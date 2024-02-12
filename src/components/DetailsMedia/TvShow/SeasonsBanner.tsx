@@ -33,7 +33,7 @@ const SeasonsBanner: FC<Props> = (props) => {
                   onPress={() => setSelectedSeason(season)}
                 >
                   <CardBody
-                    className="flex flex-col items-center justify-center"
+                    className="flex flex-col items-center justify-center overflow-y-hidden"
                     style={{
                       width: 150,
                       height: 215,
@@ -50,6 +50,7 @@ const SeasonsBanner: FC<Props> = (props) => {
                         width={0}
                         height={0}
                         style={{
+                          overflow: "hidden",
                           width: "100%",
                           height: "100%",
                           borderRadius: 5,

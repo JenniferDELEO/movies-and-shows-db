@@ -1,6 +1,6 @@
 import { InternalUser } from "@/models/user";
-import sanityClient from "./sanity";
-import * as queries from "./sanityQueries";
+import sanityClient from "../sanity";
+import * as queries from "../queries/userQueries";
 
 export async function getUserData(userId: string) {
   const result = await sanityClient.fetch<InternalUser>(

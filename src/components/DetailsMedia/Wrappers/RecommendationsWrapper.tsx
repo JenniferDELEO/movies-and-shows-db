@@ -1,14 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { Genre, Movie } from "@/models/movies";
-import { TvShow } from "@/models/tvShows";
+import { useParams } from "next/navigation";
 import React, { FC, useEffect, useState } from "react";
+
+import {
+  Genre,
+  InternalMovie,
+  InternalMovieUser,
+  Movie,
+} from "@/models/movies";
+import { TvShow } from "@/models/tvShows";
 import Card from "../../Cards/Card";
 import Pagination from "../../Pagination/Pagination";
-import { useParams } from "next/navigation";
 import { getRecommendationsMovie } from "@/libs/api/movies";
 import { getRecommendationsTvShow } from "@/libs/api/tvshows";
+import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 
 type Props = {
   mediaId: string;
@@ -21,6 +28,9 @@ type Props = {
   recommendationsTvShows?: TvShow[];
   totalPagesRecommendationsTvShows?: number;
   totalResultsRecommendationsTvShows?: number;
+  userMovies?: InternalMovieUser[];
+  userMoviesId?: string;
+  internalMovies?: InternalMovie[];
 };
 
 const RecommendationsWrapper: FC<Props> = (props) => {
@@ -35,6 +45,9 @@ const RecommendationsWrapper: FC<Props> = (props) => {
     recommendationsTvShows,
     totalPagesRecommendationsTvShows,
     totalResultsRecommendationsTvShows,
+    userMovies,
+    userMoviesId,
+    internalMovies,
   } = props;
   const params = useParams();
 
@@ -55,6 +68,19 @@ const RecommendationsWrapper: FC<Props> = (props) => {
   const [currentPage, setCurrentPage] = useState<number>(Number(params.page));
 
   const genres = genresMovies || genresTvShows || [];
+
+  const {
+    fetchUserDatas,
+    favoriteMoviesIds,
+    watchlistMoviesIds,
+    favoriteTvShowsIds,
+    watchlistTvShowsIds,
+    ratedMovies,
+    ratedTvShows,
+    ratedMoviesIds,
+    ratedTvShowsIds,
+    userLists,
+  } = TmdbFetcher();
 
   async function getRecommendationssNextPages() {
     if (recommendationsMovies) {
@@ -105,12 +131,28 @@ const RecommendationsWrapper: FC<Props> = (props) => {
         <div>
           <div className="mx-auto md:w-[90%] 2xl:grid 2xl:grid-cols-2 2xl:gap-4">
             {recommendationsMovies &&
+              userMovies &&
+              userMoviesId &&
+              internalMovies &&
               moviesList.map((movie) => (
                 <Card
                   key={movie.id}
                   movie={movie}
                   filterType="movie"
                   genres={genres}
+                  fetchUserDatas={fetchUserDatas}
+                  favoriteMoviesIds={favoriteMoviesIds}
+                  watchlistMoviesIds={watchlistMoviesIds}
+                  favoriteTvShowsIds={favoriteTvShowsIds}
+                  watchlistTvShowsIds={watchlistTvShowsIds}
+                  ratedMovies={ratedMovies}
+                  ratedTvShows={ratedTvShows}
+                  ratedMoviesIds={ratedMoviesIds}
+                  ratedTvShowsIds={ratedTvShowsIds}
+                  userLists={userLists}
+                  userMovies={userMovies}
+                  userMoviesId={userMoviesId}
+                  internalMovies={internalMovies}
                 />
               ))}
             {recommendationsTvShows &&
@@ -120,6 +162,16 @@ const RecommendationsWrapper: FC<Props> = (props) => {
                   tvShow={tvShow}
                   filterType="tvshow"
                   genres={genres}
+                  fetchUserDatas={fetchUserDatas}
+                  favoriteMoviesIds={favoriteMoviesIds}
+                  watchlistMoviesIds={watchlistMoviesIds}
+                  favoriteTvShowsIds={favoriteTvShowsIds}
+                  watchlistTvShowsIds={watchlistTvShowsIds}
+                  ratedMovies={ratedMovies}
+                  ratedTvShows={ratedTvShows}
+                  ratedMoviesIds={ratedMoviesIds}
+                  ratedTvShowsIds={ratedTvShowsIds}
+                  userLists={userLists}
                 />
               ))}
           </div>

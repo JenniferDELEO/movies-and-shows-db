@@ -1,27 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, useContext } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { usePathname, useRouter } from "next/navigation";
+import { Tab, Tabs, Tooltip } from "@nextui-org/react";
 
 import Banner from "@/components/Banner/Banner";
-import { Movie } from "@/models/movies";
+import {
+  Genre,
+  InternalMovie,
+  InternalMovieUser,
+  Movie,
+} from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
 import { UserContext } from "@/context/userContext";
-import {
-  getUserFavoriteMovies,
-  getUserRatedMovies,
-  getUserWatchListMovies,
-} from "@/libs/api/movies";
-import {
-  getUserFavoriteTvShows,
-  getUserRatedTvShows,
-  getUserWatchlistTvShows,
-} from "@/libs/api/tvshows";
-import { List } from "@/models/lists";
-import { getLists } from "@/libs/api/lists";
-import { Tab, Tabs, Tooltip } from "@nextui-org/react";
+import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 
 type Props = {
   homeProps?: {
@@ -33,6 +27,10 @@ type Props = {
     trendingMoviesThisWeek: Movie[];
     trendingTvShowsToday: TvShow[];
     trendingTvShowsThisWeek: TvShow[];
+    internalMovies: InternalMovie[];
+    genresMovies: Genre[];
+    userMovies: InternalMovieUser[];
+    userMoviesId: string;
   };
   personDetailProps?: {
     actingMovies: Movie[];
@@ -65,60 +63,22 @@ const BannerWrapper: FC<Props> = ({
   movieDetailsProps,
   tvshowsDetailsProps,
 }) => {
-  const [favoriteMoviesIds, setFavoriteMoviesIds] = useState<number[]>([]);
-  const [favoriteTvShowsIds, setFavoriteTvShowsIds] = useState<number[]>([]);
-
-  const [watchlistMoviesIds, setWatchlistMoviesIds] = useState<number[]>([]);
-  const [watchlistTvShowsIds, setWatchlistTvShowsIds] = useState<number[]>([]);
-
-  const [ratedMovies, setRatedMovies] = useState<Movie[]>([]);
-  const [ratedTvShows, setRatedTvShows] = useState<TvShow[]>([]);
-  const [ratedMoviesIds, setRatedMoviesIds] = useState<number[]>([]);
-  const [ratedTvShowsIds, setRatedTvShowsIds] = useState<number[]>([]);
-
-  const [userLists, setUserLists] = useState<List[]>([]);
-
   const { user } = useContext(UserContext);
   const pathname = usePathname();
   const router = useRouter();
 
-  async function fetchUserDatas() {
-    if (user && user.tmdb_accountIdV4) {
-      const responses = await Promise.all([
-        getUserFavoriteMovies(user.tmdb_accountIdV4),
-        getUserFavoriteTvShows(user.tmdb_accountIdV4),
-        getUserWatchListMovies(user.tmdb_accountIdV4),
-        getUserWatchlistTvShows(user.tmdb_accountIdV4),
-        getUserRatedMovies(user.tmdb_accountIdV4),
-        getUserRatedTvShows(user.tmdb_accountIdV4),
-      ]);
-      setFavoriteMoviesIds(responses[0].results.map((movie) => movie.id));
-      setFavoriteTvShowsIds(responses[1].results.map((tv) => tv.id));
-      setWatchlistMoviesIds(responses[2].results.map((movie) => movie.id));
-      setWatchlistTvShowsIds(responses[3].results.map((tv) => tv.id));
-      setRatedMovies(responses[4].results);
-      setRatedTvShows(responses[5].results);
-      setRatedMoviesIds(responses[4].results.map((movie) => movie.id));
-      setRatedTvShowsIds(responses[5].results.map((tv) => tv.id));
-    }
-  }
-
-  async function getUserList() {
-    const res = await getLists();
-    const listsResponse = res.results;
-    listsResponse.unshift({
-      id: "1",
-      name: "Créer une nouvelle liste",
-    });
-    setUserLists(listsResponse);
-  }
-
-  useEffect(() => {
-    if (user && user.tmdb_accountIdV4) {
-      fetchUserDatas();
-      getUserList();
-    }
-  }, [user]);
+  const {
+    fetchUserDatas,
+    favoriteMoviesIds,
+    watchlistMoviesIds,
+    favoriteTvShowsIds,
+    watchlistTvShowsIds,
+    ratedMovies,
+    ratedTvShows,
+    ratedMoviesIds,
+    ratedTvShowsIds,
+    userLists,
+  } = TmdbFetcher();
 
   const classNames = {
     container: "mx-auto w-full md:w-[80%] lg:w[90%] mb-20 pb-16",
@@ -165,6 +125,10 @@ const BannerWrapper: FC<Props> = ({
               classNames={classNames}
               title="Les 20 Films dans les tendances"
               userLists={userLists}
+              internalMovies={homeProps.internalMovies}
+              genresMovies={homeProps.genresMovies}
+              userMovies={homeProps.userMovies}
+              userMoviesId={homeProps.userMoviesId}
             />
           </Tab>
           <Tab
@@ -190,6 +154,10 @@ const BannerWrapper: FC<Props> = ({
               classNames={classNames}
               title="Les 20 Films dans les tendances"
               userLists={userLists}
+              internalMovies={homeProps.internalMovies}
+              genresMovies={homeProps.genresMovies}
+              userMovies={homeProps.userMovies}
+              userMoviesId={homeProps.userMoviesId}
             />
           </Tab>
         </Tabs>
@@ -209,6 +177,10 @@ const BannerWrapper: FC<Props> = ({
           classNames={classNames}
           title="Les 20 Films les plus populaires"
           userLists={userLists}
+          internalMovies={homeProps.internalMovies}
+          genresMovies={homeProps.genresMovies}
+          userMovies={homeProps.userMovies}
+          userMoviesId={homeProps.userMoviesId}
         />
         <Banner
           items={homeProps.topRatedMovies}
@@ -226,6 +198,10 @@ const BannerWrapper: FC<Props> = ({
           classNames={classNames}
           title="Les 20 Films les mieux notés"
           userLists={userLists}
+          internalMovies={homeProps.internalMovies}
+          genresMovies={homeProps.genresMovies}
+          userMovies={homeProps.userMovies}
+          userMoviesId={homeProps.userMoviesId}
         />
         <Tabs
           aria-label="Onglets Séries TV"

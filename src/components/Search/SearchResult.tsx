@@ -1,13 +1,13 @@
-import Card from "@/components/Cards/Card";
 import { getGenresMovies, getSearchMovies } from "@/libs/api/movies";
 import { getGenresTvShows, getSearchTvShows } from "@/libs/api/tvshows";
 import Pagination from "@/components/Pagination/Pagination";
 import { getSearchPeople } from "@/libs/api/people";
-import PeopleCard from "@/components/People/PeopleCard";
-import { People } from "@/models/people";
-import { TvShow } from "@/models/tvShows";
-import { Movie } from "@/models/movies";
+import { InternalMovieUser } from "@/models/movies";
 import Loading from "@/components/Loading/Loading";
+import SearchResultCards from "./SearchResultCards";
+import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/libs/sanity/auth";
 
 type Props = {
   query: string;
@@ -16,6 +16,7 @@ type Props = {
 };
 
 const SearchResult = async (props: Props) => {
+  const session = await getServerSession(authOptions);
   const { query, currentPage, filterType } = props;
   const {
     results: searchResultsMovies,
@@ -35,6 +36,16 @@ const SearchResult = async (props: Props) => {
 
   const { genres: genresMovies } = await getGenresMovies();
   const { genres: genresTvShows } = await getGenresTvShows();
+
+  let userMovies: InternalMovieUser[] = [];
+  let userMoviesId: string = "";
+  if (session) {
+    const results = await getUserMovies(session.user.id);
+    userMovies = results?.movies || [];
+    userMoviesId = results?._id;
+  }
+
+  const internalMovies = await getAllMovies();
 
   return (
     <div className="md:col-span-3">
@@ -60,35 +71,17 @@ const SearchResult = async (props: Props) => {
               )
             </span>
           </h3>
-          {filterType === "movie" ? (
-            <div className="2xl:grid 2xl:grid-cols-2 2xl:gap-4">
-              {searchResultsMovies.map((movie: Movie) => (
-                <Card
-                  key={movie.id}
-                  movie={movie}
-                  filterType={filterType}
-                  genres={genresMovies}
-                />
-              ))}
-            </div>
-          ) : filterType === "tv" ? (
-            <div className="2xl:grid 2xl:grid-cols-2 2xl:gap-4">
-              {searchResultsTvShows.map((tvShow: TvShow) => (
-                <Card
-                  key={tvShow.id}
-                  tvShow={tvShow}
-                  filterType={filterType}
-                  genres={genresTvShows}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="mx-auto grid grid-cols-2 gap-2 md:grid-cols-4 xl:grid-cols-5 xl:gap-4">
-              {searchResultsPeople.map((item: People) => (
-                <PeopleCard key={item.id} item={item} />
-              ))}
-            </div>
-          )}
+          <SearchResultCards
+            filterType={filterType}
+            searchResultsMovies={searchResultsMovies}
+            searchResultsTvShows={searchResultsTvShows}
+            searchResultsPeople={searchResultsPeople}
+            genresMovies={genresMovies}
+            genresTvShows={genresTvShows}
+            userMovies={userMovies}
+            userMoviesId={userMoviesId}
+            internalMovies={internalMovies}
+          />
 
           <Pagination
             total={

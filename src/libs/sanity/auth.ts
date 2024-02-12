@@ -24,6 +24,12 @@ export const authOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV === "development",
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
+    jwt: async ({ user, token }) => {
+      if (user) {
+        token.user = user;
+      }
+      return token;
+    },
     session: async ({ session, token }) => {
       const userEmail = token.email;
       const userIdObject = await sanityClient.fetch<{ _id: string }>(

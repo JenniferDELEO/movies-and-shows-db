@@ -1,14 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { Genre, Movie } from "@/models/movies";
-import { TvShow } from "@/models/tvShows";
 import React, { FC, useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+
+import {
+  Genre,
+  InternalMovie,
+  InternalMovieUser,
+  Movie,
+} from "@/models/movies";
+import { TvShow } from "@/models/tvShows";
 import Card from "../../Cards/Card";
 import Pagination from "../../Pagination/Pagination";
-import { useParams } from "next/navigation";
 import { getSimilarsMovie } from "@/libs/api/movies";
 import { getSimilarsTvShow } from "@/libs/api/tvshows";
+import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 
 type Props = {
   mediaId: string;
@@ -21,6 +28,9 @@ type Props = {
   similarsTvShows?: TvShow[];
   totalPagesSimilarsTvShows?: number;
   totalResultsSimilarsTvShows?: number;
+  userMovies?: InternalMovieUser[];
+  userMoviesId?: string;
+  internalMovies?: InternalMovie[];
 };
 
 const SimilarsWrapper: FC<Props> = (props) => {
@@ -35,6 +45,9 @@ const SimilarsWrapper: FC<Props> = (props) => {
     similarsTvShows,
     totalPagesSimilarsTvShows,
     totalResultsSimilarsTvShows,
+    userMovies,
+    userMoviesId,
+    internalMovies,
   } = props;
   const params = useParams();
 
@@ -51,6 +64,19 @@ const SimilarsWrapper: FC<Props> = (props) => {
   const [currentPage, setCurrentPage] = useState<number>(Number(params.page));
 
   const genres = genresMovies || genresTvShows || [];
+
+  const {
+    fetchUserDatas,
+    favoriteMoviesIds,
+    watchlistMoviesIds,
+    favoriteTvShowsIds,
+    watchlistTvShowsIds,
+    ratedMovies,
+    ratedTvShows,
+    ratedMoviesIds,
+    ratedTvShowsIds,
+    userLists,
+  } = TmdbFetcher();
 
   async function getSimilarsNextPages() {
     if (similarsMovies) {
@@ -95,12 +121,28 @@ const SimilarsWrapper: FC<Props> = (props) => {
       </h1>
       <div className="mx-auto md:w-[90%] 2xl:grid 2xl:grid-cols-2 2xl:gap-4">
         {similarsMovies &&
+          userMovies &&
+          userMoviesId &&
+          internalMovies &&
           moviesList.map((movie) => (
             <Card
               key={movie.id}
               movie={movie}
               filterType="movie"
               genres={genres}
+              fetchUserDatas={fetchUserDatas}
+              favoriteMoviesIds={favoriteMoviesIds}
+              watchlistMoviesIds={watchlistMoviesIds}
+              favoriteTvShowsIds={favoriteTvShowsIds}
+              watchlistTvShowsIds={watchlistTvShowsIds}
+              ratedMovies={ratedMovies}
+              ratedTvShows={ratedTvShows}
+              ratedMoviesIds={ratedMoviesIds}
+              ratedTvShowsIds={ratedTvShowsIds}
+              userLists={userLists}
+              userMovies={userMovies}
+              userMoviesId={userMoviesId}
+              internalMovies={internalMovies}
             />
           ))}
         {similarsTvShows &&
@@ -110,6 +152,16 @@ const SimilarsWrapper: FC<Props> = (props) => {
               tvShow={tvShow}
               filterType="tvshow"
               genres={genres}
+              fetchUserDatas={fetchUserDatas}
+              favoriteMoviesIds={favoriteMoviesIds}
+              watchlistMoviesIds={watchlistMoviesIds}
+              favoriteTvShowsIds={favoriteTvShowsIds}
+              watchlistTvShowsIds={watchlistTvShowsIds}
+              ratedMovies={ratedMovies}
+              ratedTvShows={ratedTvShows}
+              ratedMoviesIds={ratedMoviesIds}
+              ratedTvShowsIds={ratedTvShowsIds}
+              userLists={userLists}
             />
           ))}
       </div>

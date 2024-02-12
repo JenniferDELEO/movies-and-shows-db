@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
+import { Card, CardBody, CardFooter } from "@nextui-org/react";
 import { FC } from "react";
 import { useRouter } from "next/navigation";
 

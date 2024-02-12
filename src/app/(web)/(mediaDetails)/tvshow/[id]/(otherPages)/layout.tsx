@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 import OtherPagesHeader from "@/components/Headers/OtherPagesHeader";
 import { getTvShowDetail } from "@/libs/api/tvshows";
 
@@ -6,7 +8,7 @@ export default async function TvShowsDetailsLayout({
   children,
 }: {
   params: { id: string };
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const id = params.id.split("-")[0];
 
