@@ -62,9 +62,9 @@ type Props = {
   ratedMoviesIds: number[];
   ratedTvShowsIds: number[];
   userLists: List[];
-  userMovies: InternalMovieUser[];
-  userMoviesId: string;
-  internalMovies: InternalMovie[];
+  userMovies?: InternalMovieUser[];
+  userMoviesId?: string;
+  internalMovies?: InternalMovie[];
 };
 
 const Card: FC<Props> = ({
@@ -179,6 +179,9 @@ const Card: FC<Props> = ({
           user.tmdb_username &&
           internalUser &&
           internalUser.user_id &&
+          userMovies &&
+          userMoviesId &&
+          internalMovies &&
           movie && (
             <div className="absolute -right-2 top-0 md:top-2">
               <AccountInteraction
@@ -196,10 +199,10 @@ const Card: FC<Props> = ({
                   ratedMoviesIds,
                   ratedTvShowsIds,
                   classNames,
-                  internalMovies: internalMovies || [],
+                  internalMovies: internalMovies,
                   genresMovies: genres,
-                  userMovies: userMovies || [],
-                  userMoviesId: userMoviesId || "",
+                  userMovies: userMovies,
+                  userMoviesId: userMoviesId,
                 }}
                 userLists={userLists}
               />
@@ -226,10 +229,7 @@ const Card: FC<Props> = ({
                   ratedMoviesIds,
                   ratedTvShowsIds,
                   classNames,
-                  internalMovies: internalMovies || [],
                   genresMovies: genres,
-                  userMovies: userMovies || [],
-                  userMoviesId: userMoviesId || "",
                 }}
                 userLists={userLists}
               />

@@ -6,6 +6,7 @@ import { Button } from "@nextui-org/react";
 import { FaPlay } from "react-icons/fa";
 
 import {
+  Genre,
   InternalMovie,
   InternalMovieUser,
   MovieDetails,
@@ -20,11 +21,15 @@ import { List } from "@/models/lists";
 import { getLists } from "@/libs/api/lists";
 import { getTvShowDetail } from "@/libs/api/tvshows";
 import { Episode, EpisodeDetails, TvShowDetails } from "@/models/tvShows";
+import { Collection } from "@/models/collections";
 
 type Props = {
   movieDetails?: MovieDetails;
   tvShowDetails?: TvShowDetails;
   episodeDetails?: EpisodeDetails;
+  collectionDetails?: Collection;
+  genresCollection?: Genre[];
+  voteAverageCollection?: number;
   type: "episode" | "movie" | "tvshow";
   episodePrecedent?: Episode | undefined;
   episodeNumber?: number;
@@ -41,6 +46,9 @@ const Infos: FC<Props> = (props) => {
     movieDetails,
     tvShowDetails,
     episodeDetails,
+    collectionDetails,
+    genresCollection,
+    voteAverageCollection,
     type,
     episodeNumber,
     episodePrecedent,
@@ -129,13 +137,15 @@ const Infos: FC<Props> = (props) => {
     episodeDetails?.air_date ||
     tvShowDetails?.first_air_date;
 
-  const genres = movieDetails?.genres || tvShowDetails?.genres;
+  const genres =
+    movieDetails?.genres || tvShowDetails?.genres || genresCollection;
 
   const overview =
     (type === "movie" && movieDetails?.overview) ||
     (type === "episode" && episodeDetails?.overview) ||
     (type === "tvshow" && tvShowDetails?.overview) ||
-    "";
+    (isCollection && collectionDetails?.overview);
+  ("");
 
   useEffect(() => {
     if (user && user.tmdb_accountIdV4) {
@@ -221,7 +231,8 @@ const Infos: FC<Props> = (props) => {
         {isFavorite !== undefined &&
           isInWatchlist !== undefined &&
           isRated !== undefined &&
-          type !== "episode" && (
+          type !== "episode" &&
+          !isCollection && (
             <div className="flex flex-row items-center justify-evenly">
               <AccountInteraction
                 item={{
@@ -263,7 +274,8 @@ const Infos: FC<Props> = (props) => {
         <h1 className="text-xl font-bold md:text-3xl">
           {movieDetails?.title ||
             episodeDetails?.name ||
-            (type === "tvshow" && tvShowDetails?.name)}
+            (type === "tvshow" && tvShowDetails?.name) ||
+            collectionDetails?.name}
           <span className="text-base font-normal text-gray-400 md:text-2xl">
             {" "}
             {!isCollection && type !== "episode"
@@ -357,10 +369,11 @@ const Infos: FC<Props> = (props) => {
             </div>
           )}
           <div className="flex flex-row flex-wrap items-center justify-start">
-            <p className="pr-3 pt-2">
-              <span className="font-bold">Genres : </span>
-              {genres &&
-                genres.map((genre, index) => {
+            {genres && (
+              <p className="pr-3 pt-2">
+                <span className="font-bold">Genres : </span>
+
+                {genres.map((genre, index) => {
                   if (index === genres.length - 1) {
                     return (
                       <span key={genre.id} className="text-gray-400">
@@ -374,7 +387,8 @@ const Infos: FC<Props> = (props) => {
                     </span>
                   );
                 })}
-            </p>
+              </p>
+            )}
             {originalLanguageName && (
               <p className="pr-3 pt-2 text-gray-400">
                 <span className="font-bold text-white">Langue : </span>
@@ -470,7 +484,9 @@ const Infos: FC<Props> = (props) => {
                     ? episodeDetails.vote_average / 2
                     : tvShowDetails?.vote_average
                       ? tvShowDetails.vote_average / 2
-                      : 0
+                      : voteAverageCollection
+                        ? voteAverageCollection / 2
+                        : 0
               }
               size={20}
               edit={false}
@@ -526,7 +542,8 @@ const Infos: FC<Props> = (props) => {
             {isFavorite !== undefined &&
               isInWatchlist !== undefined &&
               isRated !== undefined &&
-              type !== "episode" && (
+              type !== "episode" &&
+              !isCollection && (
                 <div className="hidden md:mr-10 md:block">
                   <AccountInteraction
                     item={{
@@ -665,16 +682,17 @@ const Infos: FC<Props> = (props) => {
             </div>
           </div>
         )}
-        <p className="pt-2 text-center">
-          <span className="font-bold text-white">Genres : </span>
-          {genres &&
-            genres.map((genre, index) => {
+        {genres && (
+          <p className="pt-2 text-center">
+            <span className="font-bold text-white">Genres : </span>
+            {genres.map((genre, index) => {
               if (index === genres.length - 1) {
                 return <span key={genre.id}>{genre?.name}</span>;
               }
               return <span key={genre.id}>{genre?.name}, </span>;
             })}
-        </p>
+          </p>
+        )}
         {type === "tvshow" &&
           tvShowDetails?.number_of_episodes &&
           tvShowDetails?.number_of_seasons && (

@@ -63,10 +63,10 @@ type Props = {
       image: string;
       dropdownContainer: string;
     };
-    internalMovies: InternalMovie[];
+    internalMovies?: InternalMovie[];
     genresMovies: Genre[];
-    userMovies: InternalMovieUser[];
-    userMoviesId: string;
+    userMovies?: InternalMovieUser[];
+    userMoviesId?: string;
   };
   mediaDetailsPageProps?: {
     isFavorite: boolean;

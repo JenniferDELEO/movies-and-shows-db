@@ -39,9 +39,9 @@ type Props = {
   similarsTvShows?: TvShow[];
   totalPagesSimilarsTvShows?: number;
   totalResultsSimilarsTvShows?: number;
-  userMovies: InternalMovieUser[];
-  userMoviesId: string;
-  internalMovies: InternalMovie[];
+  userMovies?: InternalMovieUser[];
+  userMoviesId?: string;
+  internalMovies?: InternalMovie[];
 };
 
 const SimilarsWrapper: FC<Props> = (props) => {
@@ -172,6 +172,9 @@ const SimilarsWrapper: FC<Props> = (props) => {
       </h1>
       <div className="mx-auto md:w-[90%] 2xl:grid 2xl:grid-cols-2 2xl:gap-4">
         {similarsMovies &&
+          userMovies &&
+          userMoviesId &&
+          internalMovies &&
           moviesList.map((movie) => (
             <Card
               key={movie.id}
@@ -210,9 +213,6 @@ const SimilarsWrapper: FC<Props> = (props) => {
               ratedMoviesIds={ratedMoviesIds}
               ratedTvShowsIds={ratedTvShowsIds}
               userLists={userLists}
-              userMovies={userMovies}
-              userMoviesId={userMoviesId}
-              internalMovies={internalMovies}
             />
           ))}
       </div>

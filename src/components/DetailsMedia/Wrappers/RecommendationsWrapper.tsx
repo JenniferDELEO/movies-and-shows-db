@@ -39,9 +39,9 @@ type Props = {
   recommendationsTvShows?: TvShow[];
   totalPagesRecommendationsTvShows?: number;
   totalResultsRecommendationsTvShows?: number;
-  userMovies: InternalMovieUser[];
-  userMoviesId: string;
-  internalMovies: InternalMovie[];
+  userMovies?: InternalMovieUser[];
+  userMoviesId?: string;
+  internalMovies?: InternalMovie[];
 };
 
 const RecommendationsWrapper: FC<Props> = (props) => {
@@ -182,6 +182,9 @@ const RecommendationsWrapper: FC<Props> = (props) => {
         <div>
           <div className="mx-auto md:w-[90%] 2xl:grid 2xl:grid-cols-2 2xl:gap-4">
             {recommendationsMovies &&
+              userMovies &&
+              userMoviesId &&
+              internalMovies &&
               moviesList.map((movie) => (
                 <Card
                   key={movie.id}
@@ -220,9 +223,6 @@ const RecommendationsWrapper: FC<Props> = (props) => {
                   ratedMoviesIds={ratedMoviesIds}
                   ratedTvShowsIds={ratedTvShowsIds}
                   userLists={userLists}
-                  userMovies={userMovies}
-                  userMoviesId={userMoviesId}
-                  internalMovies={internalMovies}
                 />
               ))}
           </div>
