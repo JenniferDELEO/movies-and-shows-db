@@ -1,7 +1,7 @@
 import { defineField } from "sanity";
 
 const userTvShow = {
-  name: "user_tvshows",
+  name: "user_tv_show",
   title: "User TV Shows",
   type: "document",
   fields: [
@@ -13,7 +13,7 @@ const userTvShow = {
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "tvshows",
+      name: "tv_shows",
       title: "TV Shows",
       type: "array",
       of: [
@@ -21,10 +21,10 @@ const userTvShow = {
           type: "object",
           fields: [
             {
-              name: "tvshow",
+              name: "tv_show",
               title: "TV Show",
               type: "reference",
-              to: [{ type: "tvshow" }],
+              to: [{ type: "tv_show" }],
             },
             {
               name: "account_states",

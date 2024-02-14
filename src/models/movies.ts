@@ -150,7 +150,7 @@ export type InternalMovie = {
   tmdb_id: number;
   title: string;
   release_date: string;
-  runtime: number;
+  genres: string[];
   poster_path: string;
   overview: string;
   users: {
@@ -183,7 +183,7 @@ export type UpdateMovieAndUser = {
   movieId: string;
 };
 
-export type CreateUserStatus = {
+export type CreateMovieStatus = {
   movieId: string;
   userId: string;
   status: "watched" | "to_watch";

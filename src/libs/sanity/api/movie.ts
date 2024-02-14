@@ -5,7 +5,7 @@ import {
   AddMovieStatus,
   UpdateMovieAndUser,
   UpdateMovieStatus,
-  CreateUserStatus,
+  CreateMovieStatus,
 } from "@/models/movies";
 import sanityClient from "../sanity";
 import * as queries from "../queries/movieQueries";
@@ -109,7 +109,7 @@ export async function createUserMovieAndStatus({
   movieId,
   userId,
   status,
-}: CreateUserStatus) {
+}: CreateMovieStatus) {
   const mutation = {
     mutations: [
       {

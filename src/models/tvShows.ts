@@ -182,3 +182,73 @@ export interface TvShowDetails extends TvShow {
   };
   watch_providers_fr: WatchProviderFr[];
 }
+
+/* ----------------------- Internal Models TV Shows ----------------------- */
+
+export type InternalTvShow = {
+  _id: string;
+  tmdb_id: number;
+  title: string;
+  number_of_seasons: number;
+  number_of_episodes: number;
+  release_date: string;
+  total_runtime: number;
+  genres: string[];
+  poster_path: string;
+  overview: string;
+  users: {
+    _key: string;
+    _type: "reference";
+    _ref: string;
+  }[];
+};
+
+export type InternalTvShowAndUser = {
+  _id: string;
+  tv_show: InternalTvShow;
+  account_states: {
+    status: "active" | "archived" | "to_discover";
+    watch_state: "started" | "finished" | "to_watch";
+  };
+};
+
+export type AddTvShowAndUser = {
+  tmdbId: number;
+  title: string;
+  numberOfSeasons: number;
+  numberOfEpisodes: number;
+  releaseDate: string;
+  totalRuntime: number;
+  genres: string[];
+  posterPath: string;
+  overview: string;
+  userId: string;
+};
+
+export type UpdateTvShowAndUser = {
+  userId: string;
+  tvShowId: string;
+};
+
+export type CreateTvShowStatus = {
+  tvshowId: string;
+  userId: string;
+  status: "active" | "archived" | "to_discover";
+  watchState: "started" | "finished" | "to_watch";
+};
+
+export type AddTvShowStatus = {
+  userTvshowId: string;
+  tvShowId: string;
+  status: "active" | "archived" | "to_discover";
+  watchState: "started" | "finished" | "to_watch";
+};
+
+export type UpdateTvShowStatus = {
+  userTvshowId: string;
+  tvShowId: string;
+  status: "active" | "archived" | "to_discover";
+  watchState: "started" | "finished" | "to_watch";
+};
+
+/* ----------------------- Internal Models TV Shows Seasons ----------------------- */
