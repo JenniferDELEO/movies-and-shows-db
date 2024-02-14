@@ -20,7 +20,7 @@ type Props = {
   collectionDetails?: Collection;
   genresCollection?: Genre[];
   voteAverageCollection?: number;
-  type: "episode" | "movie" | "tvshow";
+  type: "episode" | "movie" | "tvShow";
   episodePrecedent?: Episode | undefined;
   episodeNumber?: number;
   isCollection?: boolean;

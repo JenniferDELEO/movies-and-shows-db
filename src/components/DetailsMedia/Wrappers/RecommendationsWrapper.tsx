@@ -14,7 +14,7 @@ import { TvShow } from "@/models/tvShows";
 import Card from "../../Cards/Card";
 import Pagination from "../../Pagination/Pagination";
 import { getRecommendationsMovie } from "@/libs/api/movies";
-import { getRecommendationsTvShow } from "@/libs/api/tvshows";
+import { getRecommendationsTvShow } from "@/libs/api/tvShows";
 import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 
 type Props = {
@@ -160,7 +160,7 @@ const RecommendationsWrapper: FC<Props> = (props) => {
                 <Card
                   key={tvShow.id}
                   tvShow={tvShow}
-                  filterType="tvshow"
+                  filterType="tvShow"
                   genres={genres}
                   fetchUserDatas={fetchUserDatas}
                   favoriteMoviesIds={favoriteMoviesIds}

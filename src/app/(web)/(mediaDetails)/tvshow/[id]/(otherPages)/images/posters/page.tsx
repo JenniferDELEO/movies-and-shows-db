@@ -1,5 +1,5 @@
 import ImagesWrapper from "@/components/DetailsMedia/Wrappers/ImagesWrapper";
-import { getImagesTvShow } from "@/libs/api/tvshows";
+import { getImagesTvShow } from "@/libs/api/tvShows";
 
 type Props = {
   params: { id: string };

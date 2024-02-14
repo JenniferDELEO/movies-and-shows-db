@@ -7,7 +7,7 @@ import {
   getDiscoverTvShows,
   getGenresTvShows,
   getTvShowsProviders,
-} from "@/libs/api/tvshows";
+} from "@/libs/api/tvShows";
 import { defaultTvShowsFilters } from "@/libs/helpers/filters";
 
 dayjs.extend(weekdayPlugin);

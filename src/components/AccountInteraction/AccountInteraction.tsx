@@ -35,7 +35,7 @@ type Props = {
     title?: string;
     name?: string;
   };
-  type: "tvshow" | "movie" | "episode";
+  type: "tvShow" | "movie" | "episode";
   user: User;
   fetchUserDatas: () => Promise<void>;
   userLists: List[];
@@ -336,6 +336,7 @@ const AccountInteraction: FC<Props> = (props) => {
       {mediaDetailsPageProps && (
         <IconsInteraction
           item={item}
+          type={type}
           handleClick={handleClick}
           isFavorite={mediaDetailsPageProps.isFavorite}
           isRated={mediaDetailsPageProps.isRated}

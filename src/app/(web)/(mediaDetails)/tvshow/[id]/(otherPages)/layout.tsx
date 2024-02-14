@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 import OtherPagesHeader from "@/components/Headers/OtherPagesHeader";
-import { getTvShowDetail } from "@/libs/api/tvshows";
+import { getTvShowDetail } from "@/libs/api/tvShows";
 
 export default async function TvShowsDetailsLayout({
   params,

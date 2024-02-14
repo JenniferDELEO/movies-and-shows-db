@@ -13,7 +13,7 @@ import {
   addRateTvShowEpisode,
   deleteRateTvShow,
   deleteRateTvShowEpisode,
-} from "@/libs/api/tvshows";
+} from "@/libs/api/tvShows";
 import StarRating from "@/components/StarRate/StarRating";
 import { Movie } from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
@@ -23,7 +23,7 @@ type Props = {
   setModalIsOpen: Dispatch<SetStateAction<boolean>>;
   fetchUserDatas: () => Promise<void>;
   itemId: number;
-  itemType: "movie" | "tvshow" | "episode";
+  itemType: "movie" | "tvShow" | "episode";
   title: string;
 
   episodeNumber?: number;
@@ -55,7 +55,7 @@ const RatingModal: FC<Props> = ({
         if (userRating) setUserRate(userRating.account_rating.value / 2);
       } else if (userRatingApi) setUserRate(userRatingApi / 2);
     }
-    if (itemType === "tvshow") {
+    if (itemType === "tvShow") {
       if (ratedTvShows && ratedTvShows.length > 0) {
         const userRating = ratedTvShows.find((tv) => tv.id === itemId);
         if (userRating) setUserRate(userRating.account_rating.value / 2);
@@ -75,7 +75,7 @@ const RatingModal: FC<Props> = ({
         setUserRate(0);
         toast.success("Note ajoutée avec succès !");
       } else toast.error("Une erreur est survenue");
-    } else if (itemType === "tvshow" && userRate > 0) {
+    } else if (itemType === "tvShow" && userRate > 0) {
       const response = await addRateTvShow(itemId, userRate * 2);
       if (response.success) {
         await fetchUserDatas();
@@ -116,7 +116,7 @@ const RatingModal: FC<Props> = ({
         toast.success("Note supprimée avec succès !");
       } else toast.error("Une erreur est survenue");
     }
-    if (itemType === "tvshow") {
+    if (itemType === "tvShow") {
       const response = await deleteRateTvShow(itemId);
       if (response.success) {
         await fetchUserDatas();

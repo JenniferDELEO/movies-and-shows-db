@@ -109,7 +109,7 @@ const Card: FC<Props> = ({
       className={styleContainer}
       onClick={() =>
         router.push(
-          `/${filterType === "movie" ? "movie" : "tvshow"}/${movie?.id || tvShow?.id}-${title?.toLowerCase().replace(/[\W_]+/g, "-")}`,
+          `/${filterType === "movie" ? "movie" : "tvShow"}/${movie?.id || tvShow?.id}-${title?.toLowerCase().replace(/[\W_]+/g, "-")}`,
         )
       }
     >
@@ -216,7 +216,7 @@ const Card: FC<Props> = ({
             <div className="absolute -right-2 top-0 md:top-2">
               <AccountInteraction
                 item={tvShow}
-                type="tvshow"
+                type="tvShow"
                 user={user}
                 fetchUserDatas={fetchUserDatas}
                 listsPageProps={{

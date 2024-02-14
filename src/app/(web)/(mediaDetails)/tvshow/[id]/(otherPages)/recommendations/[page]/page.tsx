@@ -1,5 +1,5 @@
 import RecommendationsWrapper from "@/components/DetailsMedia/Wrappers/RecommendationsWrapper";
-import { getGenresTvShows, getRecommendationsTvShow } from "@/libs/api/tvshows";
+import { getGenresTvShows, getRecommendationsTvShow } from "@/libs/api/tvShows";
 
 type Props = {
   params: { id: string };

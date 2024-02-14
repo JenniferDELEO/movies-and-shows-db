@@ -12,7 +12,7 @@ type Props = {
   setModalIsOpen: Dispatch<SetStateAction<boolean>>;
   moviesFilters?: MoviesFilters;
   setMoviesFilters?: Dispatch<SetStateAction<MoviesFilters>>;
-  tvshowsFilters?: TvShowsFilters;
+  tvShowsFilters?: TvShowsFilters;
   setTvShowsFilters?: Dispatch<SetStateAction<TvShowsFilters>>;
   genres: { id: number; name: string }[];
   providers: Watcher[];
@@ -28,7 +28,7 @@ const FiltersModal: FC<Props> = (props) => {
     setModalIsOpen,
     moviesFilters,
     setMoviesFilters,
-    tvshowsFilters,
+    tvShowsFilters,
     setTvShowsFilters,
     genres,
     providers,
@@ -57,7 +57,7 @@ const FiltersModal: FC<Props> = (props) => {
       <Filters
         moviesFilters={moviesFilters}
         setMoviesFilters={setMoviesFilters}
-        tvshowsFilters={tvshowsFilters}
+        tvShowsFilters={tvShowsFilters}
         setTvShowsFilters={setTvShowsFilters}
         genres={genres}
         providers={providers}

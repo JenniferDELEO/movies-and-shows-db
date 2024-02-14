@@ -30,8 +30,8 @@ const SimilarsBanner: FC<Props> = (props) => {
       ) : similarsTvShows ? (
         <section className="p-4 md:px-[2.5%] lg:px-[5%] 2xl:px-[10%]">
           <BannerWrapper
-            tvshowsDetailsProps={{
-              tvshows: similarsTvShows,
+            tvShowsDetailsProps={{
+              tvShows: similarsTvShows,
               title: "Séries TV similaires",
               totalPages,
               totalResults,

@@ -39,7 +39,7 @@ import { extraLanguages, topLanguages } from "@/libs/helpers/languages";
 type Props = {
   moviesFilters?: MoviesFilters;
   setMoviesFilters?: Dispatch<SetStateAction<MoviesFilters>>;
-  tvshowsFilters?: TvShowsFilters;
+  tvShowsFilters?: TvShowsFilters;
   setTvShowsFilters?: Dispatch<SetStateAction<TvShowsFilters>>;
   genres: {
     id: number;
@@ -55,7 +55,7 @@ const Filters: FC<Props> = (props) => {
   const {
     moviesFilters,
     setMoviesFilters,
-    tvshowsFilters,
+    tvShowsFilters,
     setTvShowsFilters,
     genres,
     providers,
@@ -68,66 +68,66 @@ const Filters: FC<Props> = (props) => {
       ? new Date(moviesFilters["primary_release_date.gte"] as string)
       : moviesFilters && moviesFilters?.["release_date.gte"]
         ? new Date(moviesFilters["release_date.gte"] as string)
-        : tvshowsFilters && tvshowsFilters?.["first_air_date.gte"]
-          ? new Date(tvshowsFilters["first_air_date.gte"] as string)
-          : tvshowsFilters && tvshowsFilters?.["air_date.gte"]
-            ? new Date(tvshowsFilters["air_date.gte"] as string)
+        : tvShowsFilters && tvShowsFilters?.["first_air_date.gte"]
+          ? new Date(tvShowsFilters["first_air_date.gte"] as string)
+          : tvShowsFilters && tvShowsFilters?.["air_date.gte"]
+            ? new Date(tvShowsFilters["air_date.gte"] as string)
             : null,
     moviesFilters && moviesFilters?.["primary_release_date.lte"]
       ? new Date(moviesFilters["primary_release_date.lte"] as string)
       : moviesFilters && moviesFilters?.["release_date.lte"]
         ? new Date(moviesFilters["release_date.lte"] as string)
-        : tvshowsFilters && tvshowsFilters?.["air_date.lte"]
-          ? new Date(tvshowsFilters["air_date.lte"] as string)
-          : tvshowsFilters && tvshowsFilters?.["first_air_date.lte"]
-            ? new Date(tvshowsFilters["first_air_date.lte"] as string)
+        : tvShowsFilters && tvShowsFilters?.["air_date.lte"]
+          ? new Date(tvShowsFilters["air_date.lte"] as string)
+          : tvShowsFilters && tvShowsFilters?.["first_air_date.lte"]
+            ? new Date(tvShowsFilters["first_air_date.lte"] as string)
             : null,
   ]);
   const [startDate, endDate] = dateRange;
   const [voteAverage, setVoteAverage] = useState<number[]>([
     moviesFilters?.["vote_average.gte"] ||
-      tvshowsFilters?.["vote_average.gte"] ||
+      tvShowsFilters?.["vote_average.gte"] ||
       0,
     moviesFilters?.["vote_average.lte"] ||
-      tvshowsFilters?.["vote_average.lte"] ||
+      tvShowsFilters?.["vote_average.lte"] ||
       10,
   ]);
   const [voteCount, setVoteCount] = useState<number>(
     moviesFilters?.["vote_count.gte"] ||
-      tvshowsFilters?.["vote_count.gte"] ||
+      tvShowsFilters?.["vote_count.gte"] ||
       0,
   );
   const [runtime, setRuntime] = useState<number[]>([
     moviesFilters?.["with_runtime.gte"] ||
-      tvshowsFilters?.["with_runtime.gte"] ||
+      tvShowsFilters?.["with_runtime.gte"] ||
       0,
     moviesFilters?.["with_runtime.lte"] ||
-      tvshowsFilters?.["with_runtime.lte"] ||
+      tvShowsFilters?.["with_runtime.lte"] ||
       400,
   ]);
   const [selectedWatchers, setSelectedWatchers] = useState<string[]>(
     moviesFilters?.with_watch_providers?.split("|") ||
-      tvshowsFilters?.with_watch_providers?.split("|") ||
+      tvShowsFilters?.with_watch_providers?.split("|") ||
       [],
   );
   const [selectedWatchList, setSelectedWatchList] = useState<string>(
     moviesFilters?.show_me.toString() ||
-      tvshowsFilters?.show_me.toString() ||
+      tvShowsFilters?.show_me.toString() ||
       "0",
   );
   const [selectedGenres, setSelectedGenres] = useState<string[]>(
     moviesFilters?.with_genres?.split(",") ||
-      tvshowsFilters?.with_genres?.split(",") ||
+      tvShowsFilters?.with_genres?.split(",") ||
       [],
   );
   const [unselectedGenres, setUnselectedGenres] = useState<string[]>(
     moviesFilters?.without_genres?.split(",") ||
-      tvshowsFilters?.without_genres?.split(",") ||
+      tvShowsFilters?.without_genres?.split(",") ||
       [],
   );
   const [selectedLanguage, setSelectedLanguage] = useState<string>(
     moviesFilters?.with_original_language ||
-      tvshowsFilters?.with_original_language ||
+      tvShowsFilters?.with_original_language ||
       "all",
   );
 
@@ -139,10 +139,10 @@ const Filters: FC<Props> = (props) => {
         ...moviesFilters,
         with_original_language: e.target.value !== "all" ? e.target.value : "",
       });
-    tvshowsFilters &&
+    tvShowsFilters &&
       setTvShowsFilters &&
       setTvShowsFilters({
-        ...tvshowsFilters,
+        ...tvShowsFilters,
         with_original_language: e.target.value !== "all" ? e.target.value : "",
       });
   };
@@ -151,9 +151,9 @@ const Filters: FC<Props> = (props) => {
     moviesFilters &&
       setMoviesFilters &&
       setMoviesFilters({ ...moviesFilters, show_me: Number(e.target.value) });
-    tvshowsFilters &&
+    tvShowsFilters &&
       setTvShowsFilters &&
-      setTvShowsFilters({ ...tvshowsFilters, show_me: Number(e.target.value) });
+      setTvShowsFilters({ ...tvShowsFilters, show_me: Number(e.target.value) });
   };
 
   useEffect(() => {
@@ -210,34 +210,34 @@ const Filters: FC<Props> = (props) => {
       setSelectedLanguage(moviesFilters?.with_original_language || "all");
       setIsResetting(false);
     }
-    if (isResetting && tvshowsFilters) {
+    if (isResetting && tvShowsFilters) {
       setDateRange([
-        tvshowsFilters["first_air_date.gte"]
-          ? new Date(tvshowsFilters["first_air_date.gte"] as string)
+        tvShowsFilters["first_air_date.gte"]
+          ? new Date(tvShowsFilters["first_air_date.gte"] as string)
           : null,
-        tvshowsFilters["first_air_date.lte"]
-          ? new Date(tvshowsFilters["first_air_date.lte"] as string)
+        tvShowsFilters["first_air_date.lte"]
+          ? new Date(tvShowsFilters["first_air_date.lte"] as string)
           : null,
       ]);
       setVoteAverage([
-        tvshowsFilters?.["vote_average.gte"] || 0,
-        tvshowsFilters?.["vote_average.lte"] || 10,
+        tvShowsFilters?.["vote_average.gte"] || 0,
+        tvShowsFilters?.["vote_average.lte"] || 10,
       ]);
-      setVoteCount(tvshowsFilters?.["vote_count.gte"] || 0);
+      setVoteCount(tvShowsFilters?.["vote_count.gte"] || 0);
       setRuntime([
-        tvshowsFilters?.["with_runtime.gte"] || 0,
-        tvshowsFilters?.["with_runtime.lte"] || 400,
+        tvShowsFilters?.["with_runtime.gte"] || 0,
+        tvShowsFilters?.["with_runtime.lte"] || 400,
       ]);
       setSelectedWatchers(
-        tvshowsFilters?.with_watch_providers?.split("|") || [],
+        tvShowsFilters?.with_watch_providers?.split("|") || [],
       );
-      setSelectedWatchList(tvshowsFilters?.show_me.toString() || "0");
-      setSelectedGenres(tvshowsFilters?.with_genres?.split(",") || []);
-      setUnselectedGenres(tvshowsFilters?.without_genres?.split(",") || []);
-      setSelectedLanguage(tvshowsFilters?.with_original_language || "all");
+      setSelectedWatchList(tvShowsFilters?.show_me.toString() || "0");
+      setSelectedGenres(tvShowsFilters?.with_genres?.split(",") || []);
+      setUnselectedGenres(tvShowsFilters?.without_genres?.split(",") || []);
+      setSelectedLanguage(tvShowsFilters?.with_original_language || "all");
       setIsResetting(false);
     }
-  }, [isResetting, moviesFilters, tvshowsFilters]);
+  }, [isResetting, moviesFilters, tvShowsFilters]);
 
   return (
     <div className="lg:mr-4 lg:w-[25%] lg:min-w-[350px]">
@@ -346,9 +346,9 @@ const Filters: FC<Props> = (props) => {
                         : null,
                     });
                   }
-                  if (tvshowsFilters && setTvShowsFilters) {
+                  if (tvShowsFilters && setTvShowsFilters) {
                     setTvShowsFilters({
-                      ...tvshowsFilters,
+                      ...tvShowsFilters,
                       "first_air_date.gte": date[0]
                         ? `${dayjs(date[0]).format("YYYY-MM-DD")}`
                         : null,
@@ -389,9 +389,9 @@ const Filters: FC<Props> = (props) => {
                         with_genres: [...selectedGenres, genre.id].join(","),
                       });
                     }
-                    if (tvshowsFilters && setTvShowsFilters) {
+                    if (tvShowsFilters && setTvShowsFilters) {
                       setTvShowsFilters({
-                        ...tvshowsFilters,
+                        ...tvShowsFilters,
                         with_genres: [...selectedGenres, genre.id].join(","),
                       });
                     }
@@ -415,9 +415,9 @@ const Filters: FC<Props> = (props) => {
                         ),
                       });
                     }
-                    if (tvshowsFilters && setTvShowsFilters) {
+                    if (tvShowsFilters && setTvShowsFilters) {
                       setTvShowsFilters({
-                        ...tvshowsFilters,
+                        ...tvShowsFilters,
                         with_genres: selectedGenres
                           .filter((g) => g !== genre.id.toString())
                           .join(","),
@@ -439,9 +439,9 @@ const Filters: FC<Props> = (props) => {
                           .join(","),
                       });
                     }
-                    if (tvshowsFilters && setTvShowsFilters) {
+                    if (tvShowsFilters && setTvShowsFilters) {
                       setTvShowsFilters({
-                        ...tvshowsFilters,
+                        ...tvShowsFilters,
                         without_genres: unselectedGenres
                           .filter((g) => g !== genre.id.toString())
                           .join(","),
@@ -493,9 +493,9 @@ const Filters: FC<Props> = (props) => {
                                 ].join("|"),
                               });
                             }
-                            if (tvshowsFilters && setTvShowsFilters) {
+                            if (tvShowsFilters && setTvShowsFilters) {
                               setTvShowsFilters({
-                                ...tvshowsFilters,
+                                ...tvShowsFilters,
                                 with_watch_providers: [
                                   ...selectedWatchers,
                                   provider.provider_id,
@@ -520,9 +520,9 @@ const Filters: FC<Props> = (props) => {
                                   .join("|"),
                               });
                             }
-                            if (tvshowsFilters && setTvShowsFilters) {
+                            if (tvShowsFilters && setTvShowsFilters) {
                               setTvShowsFilters({
-                                ...tvshowsFilters,
+                                ...tvShowsFilters,
                                 with_watch_providers: selectedWatchers
                                   .filter(
                                     (w) =>
@@ -609,9 +609,9 @@ const Filters: FC<Props> = (props) => {
                       "vote_average.lte": e[1],
                     });
                   }
-                  if (tvshowsFilters && setTvShowsFilters) {
+                  if (tvShowsFilters && setTvShowsFilters) {
                     setTvShowsFilters({
-                      ...tvshowsFilters,
+                      ...tvShowsFilters,
                       "vote_average.gte": e[0],
                       "vote_average.lte": e[1],
                     });
@@ -670,9 +670,9 @@ const Filters: FC<Props> = (props) => {
                       "vote_count.gte": e,
                     });
                   }
-                  if (tvshowsFilters && setTvShowsFilters) {
+                  if (tvShowsFilters && setTvShowsFilters) {
                     setTvShowsFilters({
-                      ...tvshowsFilters,
+                      ...tvShowsFilters,
                       "vote_count.gte": e,
                     });
                   }
@@ -729,9 +729,9 @@ const Filters: FC<Props> = (props) => {
                       "with_runtime.lte": e[1],
                     });
                   }
-                  if (tvshowsFilters && setTvShowsFilters) {
+                  if (tvShowsFilters && setTvShowsFilters) {
                     setTvShowsFilters({
-                      ...tvshowsFilters,
+                      ...tvShowsFilters,
                       "with_runtime.gte": e[0],
                       "with_runtime.lte": e[1],
                     });

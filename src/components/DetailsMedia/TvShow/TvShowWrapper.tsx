@@ -17,11 +17,11 @@ const TvShowWrapper: FC<Props> = (props) => {
 
   return (
     <div className="size-full">
-      <TopContent tvShowDetails={tvShowDetails} type="tvshow" />
+      <TopContent tvShowDetails={tvShowDetails} type="tvShow" />
       <CrewBanner
         castTvShow={tvShowDetails?.aggregate_credits?.cast}
         mediaUrl={tvShowUrl}
-        type="tvshow"
+        type="tvShow"
       />
       {tvShowDetails?.seasons?.length > 0 && (
         <SeasonsAndEpisodesWrapper

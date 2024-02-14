@@ -1,5 +1,5 @@
 import SimilarsWrapper from "@/components/DetailsMedia/Wrappers/SimilarsWrapper";
-import { getGenresTvShows, getSimilarsTvShow } from "@/libs/api/tvshows";
+import { getGenresTvShows, getSimilarsTvShow } from "@/libs/api/tvShows";
 
 type Props = {
   params: { id: string };

@@ -1,5 +1,5 @@
 import VideosTabs from "@/components/DetailsMedia/Videos/VideosTabs";
-import { getVideosTvShow } from "@/libs/api/tvshows";
+import { getVideosTvShow } from "@/libs/api/tvShows";
 
 type Props = {
   params: { id: string };

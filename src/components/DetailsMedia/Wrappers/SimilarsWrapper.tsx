@@ -14,7 +14,7 @@ import { TvShow } from "@/models/tvShows";
 import Card from "../../Cards/Card";
 import Pagination from "../../Pagination/Pagination";
 import { getSimilarsMovie } from "@/libs/api/movies";
-import { getSimilarsTvShow } from "@/libs/api/tvshows";
+import { getSimilarsTvShow } from "@/libs/api/tvShows";
 import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 
 type Props = {
@@ -150,7 +150,7 @@ const SimilarsWrapper: FC<Props> = (props) => {
             <Card
               key={tvShow.id}
               tvShow={tvShow}
-              filterType="tvshow"
+              filterType="tvShow"
               genres={genres}
               fetchUserDatas={fetchUserDatas}
               favoriteMoviesIds={favoriteMoviesIds}

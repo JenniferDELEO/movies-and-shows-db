@@ -11,7 +11,7 @@ import { TvShow } from "@/models/tvShows";
 import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 
 type Props = {
-  filterType: "movie" | "tvshow";
+  filterType: "movie" | "tvShow";
   genres: Genre[];
   movies?: Movie[];
   tvShows?: TvShow[];

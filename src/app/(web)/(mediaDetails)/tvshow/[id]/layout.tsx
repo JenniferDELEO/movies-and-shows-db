@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ReactNode } from "react";
 
 import MediaHeader from "@/components/Headers/MediaHeader";
-import { getTvShowDetail } from "@/libs/api/tvshows";
+import { getTvShowDetail } from "@/libs/api/tvShows";
 
 type Props = {
   params: { id: string };

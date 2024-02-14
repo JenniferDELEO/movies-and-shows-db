@@ -1,5 +1,5 @@
 import CreditsWrapper from "@/components/DetailsMedia/Wrappers/CreditsWrapper";
-import { getCreditsTvShow } from "@/libs/api/tvshows";
+import { getCreditsTvShow } from "@/libs/api/tvShows";
 
 type Props = {
   params: { id: string };

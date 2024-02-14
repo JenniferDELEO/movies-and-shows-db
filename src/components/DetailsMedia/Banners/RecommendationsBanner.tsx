@@ -36,8 +36,8 @@ const RecommendationsBanner: FC<Props> = (props) => {
       ) : recommendationsTvShows ? (
         <section className="p-4 md:px-[2.5%] lg:px-[5%] 2xl:px-[10%]">
           <BannerWrapper
-            tvshowsDetailsProps={{
-              tvshows: recommendationsTvShows,
+            tvShowsDetailsProps={{
+              tvShows: recommendationsTvShows,
               title: "Séries TV recommandées",
               totalPages,
               totalResults,

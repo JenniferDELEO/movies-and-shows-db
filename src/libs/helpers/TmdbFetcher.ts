@@ -13,7 +13,7 @@ import {
   getUserFavoriteTvShows,
   getUserRatedTvShows,
   getUserWatchlistTvShows,
-} from "@/libs/api/tvshows";
+} from "@/libs/api/tvShows";
 import { List } from "@/models/lists";
 import { getLists } from "@/libs/api/lists";
 

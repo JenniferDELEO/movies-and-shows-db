@@ -19,6 +19,7 @@ type Props = {
     name?: string;
     character?: string;
   };
+  type: "tvShow" | "movie" | "episode";
   // eslint-disable-next-line no-unused-vars
   handleClick: (item: Key) => Promise<void>;
   isFavorite: boolean;
@@ -28,8 +29,15 @@ type Props = {
 };
 
 const IconsInteraction: FC<Props> = (props) => {
-  const { item, handleClick, isFavorite, isInWatchlist, isRated, userMovies } =
-    props;
+  const {
+    item,
+    type,
+    handleClick,
+    isFavorite,
+    isInWatchlist,
+    isRated,
+    userMovies,
+  } = props;
 
   const internalUserMoviesIds = userMovies?.map((movie) => movie.movie.tmdb_id);
   const watchedMovies = userMovies?.filter(
@@ -65,37 +73,38 @@ const IconsInteraction: FC<Props> = (props) => {
       content: "Votre note",
     },
   ];
-
-  if (internalUserMoviesIds.includes(item.id)) {
-    dropdownItems.unshift({
-      key: `delete-${item.id}-${item.title || item.name}`,
-      startContent: <FaBan />,
-      content: "Supprimer du compte",
-    });
-    if (watchedMoviesIds.includes(item.id)) {
+  if (type === "movie") {
+    if (internalUserMoviesIds.includes(item.id)) {
+      dropdownItems.unshift({
+        key: `delete-${item.id}-${item.title || item.name}`,
+        startContent: <FaBan />,
+        content: "Supprimer du compte",
+      });
+      if (watchedMoviesIds.includes(item.id)) {
+        dropdownItems.unshift({
+          key: `toWatch-${item.id}-${item.title || item.name}`,
+          startContent: <MdOutlineCheckBoxOutlineBlank />,
+          content: "Marquer comme à voir",
+        });
+      } else {
+        dropdownItems.unshift({
+          key: `watched-${item.id}-${item.title || item.name}`,
+          startContent: <MdOutlineCheckBox />,
+          content: "Marquer comme vu",
+        });
+      }
+    } else {
       dropdownItems.unshift({
         key: `toWatch-${item.id}-${item.title || item.name}`,
         startContent: <MdOutlineCheckBoxOutlineBlank />,
         content: "Marquer comme à voir",
       });
-    } else {
       dropdownItems.unshift({
         key: `watched-${item.id}-${item.title || item.name}`,
         startContent: <MdOutlineCheckBox />,
         content: "Marquer comme vu",
       });
     }
-  } else {
-    dropdownItems.unshift({
-      key: `toWatch-${item.id}-${item.title || item.name}`,
-      startContent: <MdOutlineCheckBoxOutlineBlank />,
-      content: "Marquer comme à voir",
-    });
-    dropdownItems.unshift({
-      key: `watched-${item.id}-${item.title || item.name}`,
-      startContent: <MdOutlineCheckBox />,
-      content: "Marquer comme vu",
-    });
   }
 
   return (

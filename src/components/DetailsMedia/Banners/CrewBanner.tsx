@@ -9,7 +9,7 @@ type Props = {
   castMovie?: CastMovies[];
   castTvShow?: CastTvShows[];
   mediaUrl: string;
-  type: "tvshow" | "movie";
+  type: "tvShow" | "movie";
 };
 
 const CrewBanner: FC<Props> = (props) => {
@@ -31,7 +31,7 @@ const CrewBanner: FC<Props> = (props) => {
               <PeopleCard itemCastMovie={item} />
             </div>
           ))}
-        {type === "tvshow" &&
+        {type === "tvShow" &&
           castTvShow &&
           castTvShow.slice(0, 9).map((item) => (
             <div

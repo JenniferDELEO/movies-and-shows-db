@@ -48,11 +48,11 @@ type Props = {
     totalPages: number;
     totalResults: number;
   };
-  tvshowsDetailsProps?: {
+  tvShowsDetailsProps?: {
     title: "Séries TV similaires" | "Séries TV recommandées";
     totalPages: number;
     totalResults: number;
-    tvshows: TvShow[];
+    tvShows: TvShow[];
   };
 };
 
@@ -61,7 +61,7 @@ const BannerWrapper: FC<Props> = ({
   personDetailProps,
   movieCollectionProps,
   movieDetailsProps,
-  tvshowsDetailsProps,
+  tvShowsDetailsProps,
 }) => {
   const { user } = useContext(UserContext);
   const pathname = usePathname();
@@ -217,7 +217,7 @@ const BannerWrapper: FC<Props> = ({
           >
             <Banner
               items={homeProps.trendingTvShowsToday}
-              type="tvshow"
+              type="tvShow"
               user={user}
               fetchUserDatas={fetchUserDatas}
               favoriteMoviesIds={favoriteMoviesIds}
@@ -261,7 +261,7 @@ const BannerWrapper: FC<Props> = ({
         </Tabs>
         <Banner
           items={homeProps.popularTvShows}
-          type="tvshow"
+          type="tvShow"
           user={user}
           fetchUserDatas={fetchUserDatas}
           favoriteTvShowsIds={favoriteTvShowsIds}
@@ -278,7 +278,7 @@ const BannerWrapper: FC<Props> = ({
         />
         <Banner
           items={homeProps.topRatedTvShows}
-          type="tvshow"
+          type="tvShow"
           user={user}
           fetchUserDatas={fetchUserDatas}
           favoriteTvShowsIds={favoriteTvShowsIds}
@@ -395,7 +395,7 @@ const BannerWrapper: FC<Props> = ({
               items={personDetailProps.actingTvShows.sort((a, b) =>
                 b.first_air_date.localeCompare(a.first_air_date),
               )}
-              type="tvshow"
+              type="tvShow"
               user={user}
               fetchUserDatas={fetchUserDatas}
               favoriteMoviesIds={favoriteMoviesIds}
@@ -443,7 +443,7 @@ const BannerWrapper: FC<Props> = ({
               items={personDetailProps.runningTvShows.sort((a, b) =>
                 b.first_air_date.localeCompare(a.first_air_date),
               )}
-              type="tvshow"
+              type="tvShow"
               user={user}
               fetchUserDatas={fetchUserDatas}
               favoriteTvShowsIds={favoriteTvShowsIds}
@@ -465,19 +465,19 @@ const BannerWrapper: FC<Props> = ({
     );
   }
 
-  if (tvshowsDetailsProps) {
+  if (tvShowsDetailsProps) {
     return (
       <div className="mx-auto py-4 text-xl font-bold">
-        {tvshowsDetailsProps?.tvshows?.length > 0 && (
+        {tvShowsDetailsProps?.tvShows?.length > 0 && (
           <div className="relative mt-4 size-full">
-            {tvshowsDetailsProps.totalPages > 1 && (
+            {tvShowsDetailsProps.totalPages > 1 && (
               <div className="absolute right-3 top-0">
                 <Tooltip content="Voir plus" placement="top">
                   <button
                     className="rounded-full bg-white p-2 text-base font-normal text-primary"
                     onClick={() =>
                       router.push(
-                        `${pathname}/${tvshowsDetailsProps.title === "Séries TV similaires" ? "similars" : "recommendations"}/1`,
+                        `${pathname}/${tvShowsDetailsProps.title === "Séries TV similaires" ? "similars" : "recommendations"}/1`,
                       )
                     }
                   >
@@ -488,8 +488,8 @@ const BannerWrapper: FC<Props> = ({
             )}
 
             <Banner
-              items={tvshowsDetailsProps.tvshows}
-              type="tvshow"
+              items={tvShowsDetailsProps.tvShows}
+              type="tvShow"
               user={user}
               fetchUserDatas={fetchUserDatas}
               favoriteMoviesIds={favoriteMoviesIds}
@@ -501,7 +501,7 @@ const BannerWrapper: FC<Props> = ({
               ratedMoviesIds={ratedMoviesIds}
               ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNamesPagesDetails}
-              title={`${tvshowsDetailsProps.title} (${tvshowsDetailsProps.totalResults})`}
+              title={`${tvShowsDetailsProps.title} (${tvShowsDetailsProps.totalResults})`}
               userLists={userLists}
             />
           </div>

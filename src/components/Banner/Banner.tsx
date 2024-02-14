@@ -58,7 +58,7 @@ type Props = {
     original_name?: string;
     character?: string;
   }[];
-  type: "tvshow" | "movie";
+  type: "tvShow" | "movie";
   user: User;
   fetchUserDatas: () => Promise<void>;
   favoriteMoviesIds: number[];

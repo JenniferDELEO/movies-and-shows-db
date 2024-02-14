@@ -1,7 +1,7 @@
 "use client";
 
 import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
-import { getAllTvShows, getUserTvShows } from "@/libs/sanity/api/tvshow";
+import { getAllTvShows, getUserTvShows } from "@/libs/sanity/api/tvShow";
 import { InternalTvShow, InternalTvShowAndUser } from "@/models/tvShows";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -13,6 +13,8 @@ const ProfileTvShows = () => {
   const [tvShowsUserList, setTvShowsUserList] = useState<
     InternalTvShowAndUser[]
   >([]);
+
+  console.log(tvShowsList, tvShowsUserList);
 
   const fetchAllTvShows = async () => {
     const results = await getAllTvShows();

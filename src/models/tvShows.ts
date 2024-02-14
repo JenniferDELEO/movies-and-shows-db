@@ -231,7 +231,7 @@ export type UpdateTvShowAndUser = {
 };
 
 export type CreateTvShowStatus = {
-  tvshowId: string;
+  tvShowId: string;
   userId: string;
   status: "active" | "archived" | "to_discover";
   watchState: "started" | "finished" | "to_watch";

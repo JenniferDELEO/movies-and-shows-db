@@ -5,7 +5,7 @@ import {
   getDiscoverTvShows,
   getGenresTvShows,
   getTvShowsProviders,
-} from "@/libs/api/tvshows";
+} from "@/libs/api/tvShows";
 
 export const metadata: Metadata = {
   title: "Séries TV - Films & Séries TV DB",

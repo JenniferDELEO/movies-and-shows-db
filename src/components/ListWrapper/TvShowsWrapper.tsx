@@ -11,7 +11,7 @@ import OrderingSelect from "@/components/Filters/OrderingSelect";
 import { Watcher } from "@/models/watchers";
 import FiltersModal from "@/components/Modals/FiltersModal";
 import Pagination from "@/components/Pagination/Pagination";
-import { getDiscoverTvShows } from "@/libs/api/tvshows";
+import { getDiscoverTvShows } from "@/libs/api/tvShows";
 import { defaultTvShowsFilters } from "@/libs/helpers/filters";
 import { TvShowsFilters } from "@/models/filters";
 
@@ -150,7 +150,7 @@ const TvShowsWrapper: FC<Props> = (props) => {
       </div>
       <div className="hidden lg:flex lg:flex-row">
         <Filters
-          tvshowsFilters={filters}
+          tvShowsFilters={filters}
           setTvShowsFilters={setFilters}
           genres={genresTvShows}
           providers={providersTvShows}
@@ -163,7 +163,7 @@ const TvShowsWrapper: FC<Props> = (props) => {
             <>
               <Cards
                 tvShows={tvShowsList}
-                filterType="tvshow"
+                filterType="tvShow"
                 genres={genresTvShows}
               />
               <Pagination
@@ -189,7 +189,7 @@ const TvShowsWrapper: FC<Props> = (props) => {
         <FiltersModal
           modalIsOpen={openFilters}
           setModalIsOpen={setOpenFilters}
-          tvshowsFilters={filters}
+          tvShowsFilters={filters}
           setTvShowsFilters={setFilters}
           genres={genresTvShows}
           providers={providersTvShows}
@@ -201,7 +201,7 @@ const TvShowsWrapper: FC<Props> = (props) => {
         <div className="w-full">
           <Cards
             tvShows={tvShowsList}
-            filterType="tvshow"
+            filterType="tvShow"
             genres={genresTvShows}
           />
           <Pagination

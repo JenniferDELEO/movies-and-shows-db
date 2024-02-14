@@ -3,7 +3,7 @@ import {
   getEpisodeDetails,
   getSeasonDetails,
   getTvShowDetail,
-} from "@/libs/api/tvshows";
+} from "@/libs/api/tvShows";
 
 type Props = {
   params: { id: string; episodeNumber: string };

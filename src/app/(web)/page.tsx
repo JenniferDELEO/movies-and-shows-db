@@ -10,7 +10,7 @@ import {
   getDiscoverTvShows,
   getTopRatedTvShows,
   getTrendingTvShows,
-} from "@/libs/api/tvshows";
+} from "@/libs/api/tvShows";
 import { defaultTvShowsFilters } from "@/libs/helpers/filters";
 import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
 import { authOptions } from "@/libs/sanity/auth";

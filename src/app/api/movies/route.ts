@@ -32,7 +32,7 @@ export async function POST(req: Request) {
         (user) => user._ref === userId,
       );
       if (checkUserExists) {
-        return new NextResponse("Movie already exists", { status: 200 });
+        return new NextResponse("User already exists", { status: 200 });
       } else {
         data = await updateMovieAndUser({
           movieId: movieExists._id,

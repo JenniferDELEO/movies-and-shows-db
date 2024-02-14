@@ -1,5 +1,5 @@
 import { getGenresMovies, getSearchMovies } from "@/libs/api/movies";
-import { getGenresTvShows, getSearchTvShows } from "@/libs/api/tvshows";
+import { getGenresTvShows, getSearchTvShows } from "@/libs/api/tvShows";
 import Pagination from "@/components/Pagination/Pagination";
 import { getSearchPeople } from "@/libs/api/people";
 import { InternalMovieUser } from "@/models/movies";

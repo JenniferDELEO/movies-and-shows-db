@@ -6,7 +6,7 @@ import { FC, useEffect, useState } from "react";
 import { Season, SeasonDetails } from "@/models/tvShows";
 import SeasonsBanner from "@/components/DetailsMedia/TvShow/SeasonsBanner";
 import EpisodesBanner from "@/components/DetailsMedia/TvShow/EpisodesBanner";
-import { getSeasonDetails } from "@/libs/api/tvshows";
+import { getSeasonDetails } from "@/libs/api/tvShows";
 
 type Props = {
   seasons: Season[];
