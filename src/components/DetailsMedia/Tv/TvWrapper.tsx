@@ -38,6 +38,7 @@ const TvWrapper: FC<Props> = (props) => {
             (season) => season.season_number !== 0,
           )}
           tvId={tvDetails.id}
+          userTvs={userTvs}
         />
       )}
       {tvDetails?.recommendations?.results?.length > 0 ? (

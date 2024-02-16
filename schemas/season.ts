@@ -46,12 +46,6 @@ const season = {
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "episodes",
-      title: "Episodes",
-      type: "array",
-      of: [{ type: "episode" }],
-    }),
-    defineField({
       name: "account_states",
       title: "Account States",
       type: "object",

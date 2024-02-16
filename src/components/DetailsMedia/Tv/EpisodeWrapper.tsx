@@ -1,4 +1,9 @@
-import { EpisodeDetails, SeasonDetails, TvDetails } from "@/models/tvs";
+import {
+  EpisodeDetails,
+  InternalTvAndUser,
+  SeasonDetails,
+  TvDetails,
+} from "@/models/tvs";
 import { FC } from "react";
 import TopContent from "../TopContent";
 import SeasonsAndEpisodesWrapper from "./SeasonsAndEpisodesWrapper";
@@ -14,6 +19,7 @@ type Props = {
   seasonPrecedentDetails: SeasonDetails | undefined;
   tvDetails: TvDetails;
   tvId: number;
+  userTvs: InternalTvAndUser[];
 };
 
 const EpisodeWrapper: FC<Props> = (props) => {
@@ -25,6 +31,7 @@ const EpisodeWrapper: FC<Props> = (props) => {
     seasonPrecedentDetails,
     tvDetails,
     tvId,
+    userTvs,
   } = props;
 
   let episodePrecedent = seasonDetails?.episodes.filter((episode) => {
@@ -67,6 +74,7 @@ const EpisodeWrapper: FC<Props> = (props) => {
           tvId={tvId}
           isEpisodePage={true}
           selectedSeasonDefault={selectedSeasonDefault}
+          userTvs={userTvs}
         />
       )}
       {episodeDetails?.credits?.cast.length > 0 && (

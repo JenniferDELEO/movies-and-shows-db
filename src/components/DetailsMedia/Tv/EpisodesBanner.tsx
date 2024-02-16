@@ -1,21 +1,31 @@
 "use client";
 
 import dayjs from "dayjs";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Card, CardBody, CardFooter } from "@nextui-org/react";
 
-import { SeasonDetails } from "@/models/tvs";
+import { InternalTvAndUser, SeasonDetails } from "@/models/tvs";
 import { usePathname, useRouter } from "next/navigation";
 
 type Props = {
   seasonDetails: SeasonDetails;
+  userTvs: InternalTvAndUser[];
 };
 
 const EpisodesBanner: FC<Props> = (props) => {
-  const { seasonDetails } = props;
+  const { seasonDetails, userTvs } = props;
 
   const router = useRouter();
   const pathname = usePathname();
+
+  const userHasTv = userTvs.filter(
+    (userTv) => userTv.tv.tmdb_id === seasonDetails.episodes[0].show_id,
+  )[0];
+  const [blur, setBlur] = useState(false);
+
+  useEffect(() => {
+    if (userHasTv) setBlur(true);
+  }, [userHasTv]);
 
   const pathUrlArray = pathname.split("/").slice(0, 3).join("/");
   const pathUrl = pathUrlArray === "" ? "/" : pathUrlArray;
@@ -45,7 +55,7 @@ const EpisodesBanner: FC<Props> = (props) => {
                     height: 208,
                   }}
                 >
-                  <picture>
+                  <picture className="relative">
                     <img
                       alt={`poster de l'épisode ${episode.episode_number} de la saison ${seasonDetails.season_number}`}
                       src={
@@ -59,9 +69,18 @@ const EpisodesBanner: FC<Props> = (props) => {
                         width: "100%",
                         height: "100%",
                         borderRadius: 5,
+                        backdropFilter: blur ? "blur(15px)" : "none",
                       }}
                       sizes="100vw"
                     />
+                    {blur && (
+                      <div
+                        className="absolute left-0 top-0 size-full backdrop-blur-sm"
+                        style={{
+                          borderRadius: 5,
+                        }}
+                      ></div>
+                    )}
                   </picture>
                 </CardBody>
                 <CardFooter className="h-[120px] flex-col items-center justify-start px-4 pb-4">
