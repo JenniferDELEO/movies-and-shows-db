@@ -42,11 +42,7 @@ import {
   InternalMovieUser,
   Movie,
 } from "@/models/movies";
-import {
-  InternalTvShow,
-  InternalTvShowAndUser,
-  TvShow,
-} from "@/models/tvShows";
+import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
 import AccountInteraction from "../AccountInteraction/AccountInteraction";
 import { useSession } from "next-auth/react";
 
@@ -63,17 +59,17 @@ type Props = {
     original_name?: string;
     character?: string;
   }[];
-  type: "tvShow" | "movie";
+  type: "tv" | "movie";
   user: User;
   fetchUserDatas: () => Promise<void>;
   favoriteMoviesIds: number[];
-  favoriteTvShowsIds: number[];
+  favoriteTvsIds: number[];
   watchlistMoviesIds: number[];
-  watchlistTvShowsIds: number[];
+  watchlistTvsIds: number[];
   ratedMovies: Movie[];
-  ratedTvShows: TvShow[];
+  ratedTvs: Tv[];
   ratedMoviesIds: number[];
-  ratedTvShowsIds: number[];
+  ratedTvsIds: number[];
   classNames: {
     container: string;
     title: string;
@@ -87,10 +83,10 @@ type Props = {
   genresMovies?: Genre[];
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
-  internalTvShows?: InternalTvShow[];
-  genresTvShows?: Genre[];
-  userTvShows?: InternalTvShowAndUser[];
-  userTvShowsId?: string;
+  internalTvs?: InternalTv[];
+  genresTvs?: Genre[];
+  userTvs?: InternalTvAndUser[];
+  userTvsId?: string;
 };
 
 const Banner: FC<Props> = ({
@@ -99,24 +95,24 @@ const Banner: FC<Props> = ({
   user,
   fetchUserDatas,
   favoriteMoviesIds,
-  favoriteTvShowsIds,
+  favoriteTvsIds,
   watchlistMoviesIds,
-  watchlistTvShowsIds,
+  watchlistTvsIds,
   ratedMoviesIds,
-  ratedTvShowsIds,
+  ratedTvsIds,
   classNames,
   title,
   userLists,
   ratedMovies,
-  ratedTvShows,
+  ratedTvs,
   internalMovies,
   genresMovies,
   userMovies,
   userMoviesId,
-  internalTvShows,
-  userTvShows,
-  userTvShowsId,
-  genresTvShows,
+  internalTvs,
+  userTvs,
+  userTvsId,
+  genresTvs,
 }) => {
   const router = useRouter();
   const { status } = useSession();
@@ -173,22 +169,22 @@ const Banner: FC<Props> = ({
                   fetchUserDatas={fetchUserDatas}
                   listsPageProps={{
                     favoriteMoviesIds,
-                    favoriteTvShowsIds,
+                    favoriteTvsIds,
                     watchlistMoviesIds,
-                    watchlistTvShowsIds,
+                    watchlistTvsIds,
                     ratedMovies,
-                    ratedTvShows,
+                    ratedTvs,
                     ratedMoviesIds,
-                    ratedTvShowsIds,
+                    ratedTvsIds,
                     classNames,
                     internalMovies: internalMovies || [],
                     genresMovies: genresMovies || [],
                     userMovies: userMovies || [],
                     userMoviesId: userMoviesId || "",
-                    internalTvShows: internalTvShows || [],
-                    genresTvShows: genresTvShows || [],
-                    userTvShows: userTvShows || [],
-                    userTvShowsId: userTvShowsId || "",
+                    internalTvs: internalTvs || [],
+                    genresTvs: genresTvs || [],
+                    userTvs: userTvs || [],
+                    userTvsId: userTvsId || "",
                   }}
                   userLists={userLists}
                 />

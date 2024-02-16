@@ -119,9 +119,7 @@ const Header = () => {
             </Dropdown>
             <Dropdown>
               <NavbarItem
-                isActive={
-                  pathname.includes("/tvshows") || pathname.includes("/tvshow")
-                }
+                isActive={pathname.includes("/tvs") || pathname.includes("/tv")}
               >
                 <DropdownTrigger>
                   <Button
@@ -144,11 +142,11 @@ const Header = () => {
                   base: "bg-primary border-primary border-2 rounded-lg shadow-primary outline-none",
                 }}
               >
-                <DropdownItem href="/tvshows/1" textValue="Liste">
+                <DropdownItem href="/tvs/1" textValue="Liste">
                   <span>Liste</span>
                 </DropdownItem>
                 <DropdownItem
-                  href="/tvshows/on-the-air/1"
+                  href="/tvs/on-the-air/1"
                   textValue="En cours de diffusion"
                 >
                   <span>En cours de diffusion</span>

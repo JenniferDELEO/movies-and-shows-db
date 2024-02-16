@@ -5,15 +5,15 @@ import { Dispatch, FC, SetStateAction } from "react";
 import ModalComponent from "@/components/Modals/ModalComponent";
 import Filters from "@/components/Filters/Filters";
 import { Watcher } from "@/models/watchers";
-import { MoviesFilters, TvShowsFilters } from "@/models/filters";
+import { MoviesFilters, TvsFilters } from "@/models/filters";
 
 type Props = {
   modalIsOpen: boolean;
   setModalIsOpen: Dispatch<SetStateAction<boolean>>;
   moviesFilters?: MoviesFilters;
   setMoviesFilters?: Dispatch<SetStateAction<MoviesFilters>>;
-  tvShowsFilters?: TvShowsFilters;
-  setTvShowsFilters?: Dispatch<SetStateAction<TvShowsFilters>>;
+  tvsFilters?: TvsFilters;
+  setTvsFilters?: Dispatch<SetStateAction<TvsFilters>>;
   genres: { id: number; name: string }[];
   providers: Watcher[];
   setIsFiltering: Dispatch<SetStateAction<boolean>>;
@@ -28,8 +28,8 @@ const FiltersModal: FC<Props> = (props) => {
     setModalIsOpen,
     moviesFilters,
     setMoviesFilters,
-    tvShowsFilters,
-    setTvShowsFilters,
+    tvsFilters,
+    setTvsFilters,
     genres,
     providers,
     setIsFiltering,
@@ -57,8 +57,8 @@ const FiltersModal: FC<Props> = (props) => {
       <Filters
         moviesFilters={moviesFilters}
         setMoviesFilters={setMoviesFilters}
-        tvShowsFilters={tvShowsFilters}
-        setTvShowsFilters={setTvShowsFilters}
+        tvsFilters={tvsFilters}
+        setTvsFilters={setTvsFilters}
         genres={genres}
         providers={providers}
         setIsFiltering={setIsFiltering}

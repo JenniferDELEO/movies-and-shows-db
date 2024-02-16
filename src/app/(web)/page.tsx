@@ -7,17 +7,17 @@ import {
   getTrendingMovies,
 } from "@/libs/api/movies";
 import {
-  getDiscoverTvShows,
-  getGenresTvShows,
-  getTopRatedTvShows,
-  getTrendingTvShows,
-} from "@/libs/api/tvShows";
-import { defaultTvShowsFilters } from "@/libs/helpers/filters";
+  getDiscoverTvs,
+  getGenresTvs,
+  getTopRatedTvs,
+  getTrendingTvs,
+} from "@/libs/api/tvs";
+import { defaultTvsFilters } from "@/libs/helpers/filters";
 import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
-import { getAllTvShows, getUserTvShows } from "@/libs/sanity/api/tvShow";
+import { getAllTvs, getUserTvs } from "@/libs/sanity/api/tv";
 import { authOptions } from "@/libs/sanity/auth";
 import { InternalMovieUser } from "@/models/movies";
-import { InternalTvShowAndUser } from "@/models/tvShows";
+import { InternalTvAndUser } from "@/models/tvs";
 import { getServerSession } from "next-auth";
 
 export default async function Home() {
@@ -28,15 +28,13 @@ export default async function Home() {
   const { results: trendingMoviesToday } = await getTrendingMovies("day");
   const { results: trendingMoviesThisWeek } = await getTrendingMovies("week");
 
-  const { results: popularTvShows } = await getDiscoverTvShows(
-    defaultTvShowsFilters,
-  );
-  const { results: topRatedTvShows } = await getTopRatedTvShows();
-  const { results: trendingTvShowsToday } = await getTrendingTvShows("day");
-  const { results: trendingTvShowsThisWeek } = await getTrendingTvShows("week");
+  const { results: popularTvs } = await getDiscoverTvs(defaultTvsFilters);
+  const { results: topRatedTvs } = await getTopRatedTvs();
+  const { results: trendingTvsToday } = await getTrendingTvs("day");
+  const { results: trendingTvsThisWeek } = await getTrendingTvs("week");
 
   const { genres: genresMovies } = await getGenresMovies();
-  const { genres: genresTvShows } = await getGenresTvShows();
+  const { genres: genresTvs } = await getGenresTvs();
 
   let userMovies: InternalMovieUser[] = [];
   let userMoviesId: string = "";
@@ -46,16 +44,16 @@ export default async function Home() {
     userMoviesId = results?._id;
   }
 
-  let userTvShows: InternalTvShowAndUser[] = [];
-  let userTvShowsId: string = "";
+  let userTvs: InternalTvAndUser[] = [];
+  let userTvsId: string = "";
   if (session) {
-    const results = await getUserTvShows(session.user.id);
-    userTvShows = results?.tv_shows || [];
-    userTvShowsId = results?._id;
+    const results = await getUserTvs(session.user.id);
+    userTvs = results?.tvs || [];
+    userTvsId = results?._id;
   }
 
   const internalMovies = await getAllMovies();
-  const internalTvShows = await getAllTvShows();
+  const internalTvs = await getAllTvs();
 
   return (
     <div className="size-full">
@@ -66,21 +64,21 @@ export default async function Home() {
       <BannerWrapper
         homeProps={{
           popularMovies,
-          popularTvShows,
+          popularTvs,
           topRatedMovies,
-          topRatedTvShows,
+          topRatedTvs,
           trendingMoviesToday,
           trendingMoviesThisWeek,
-          trendingTvShowsToday,
-          trendingTvShowsThisWeek,
+          trendingTvsToday,
+          trendingTvsThisWeek,
           internalMovies,
           genresMovies,
           userMovies,
           userMoviesId,
-          internalTvShows,
-          genresTvShows,
-          userTvShows,
-          userTvShowsId,
+          internalTvs,
+          genresTvs,
+          userTvs,
+          userTvsId,
         }}
       />
     </div>

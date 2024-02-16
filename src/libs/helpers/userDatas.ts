@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { User } from "@/models/user";
 import toast from "react-hot-toast";
 
@@ -17,12 +18,12 @@ export async function toggleUserDatas(
   }>,
   fetchDataFunction: () => Promise<void>,
   moviesIds?: number[],
-  tvShowsIds?: number[],
+  tvsIds?: number[],
   isFavorite?: boolean,
   isInWatchlist?: boolean,
 ) {
   const item = {
-    media_type: type === "movie" ? "movie" : "tv",
+    media_type: type,
     media_id: parseInt(id),
   };
 
@@ -58,7 +59,7 @@ export async function toggleUserDatas(
         );
       }
     }
-    if (moviesIds && tvShowsIds) {
+    if (moviesIds && tvsIds) {
       if (moviesIds.includes(parseInt(id))) {
         const responseToggle = await toggleFunction(
           user.tmdb_accountIdV3,
@@ -73,7 +74,7 @@ export async function toggleUserDatas(
             `Film ${category === "favorite" ? "supprimé des favoris" : "supprimé de la liste de suivi"} avec succès`,
           );
         }
-      } else if (tvShowsIds.includes(parseInt(id))) {
+      } else if (tvsIds.includes(parseInt(id))) {
         const responseToggle = await toggleFunction(
           user.tmdb_accountIdV3,
           user.tmdb_sessionId,

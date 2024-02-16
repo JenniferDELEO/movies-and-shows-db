@@ -4,13 +4,13 @@ import BannerWrapper from "@/components/Banner/BannerWrapper";
 import Infos from "@/components/People/PeopleDetails/Infos";
 import { getPeopleDetail } from "@/libs/api/people";
 import { InternalMovieUser, Movie } from "@/models/movies";
-import { InternalTvShowAndUser, TvShow } from "@/models/tvShows";
+import { InternalTvAndUser, Tv } from "@/models/tvs";
 import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
-import { getAllTvShows, getUserTvShows } from "@/libs/sanity/api/tvShow";
+import { getAllTvs, getUserTvs } from "@/libs/sanity/api/tv";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/sanity/auth";
 import { getGenresMovies } from "@/libs/api/movies";
-import { getGenresTvShows } from "@/libs/api/tvShows";
+import { getGenresTvs } from "@/libs/api/tvs";
 
 type Props = {
   params: { id: string[] };
@@ -34,8 +34,8 @@ const Person = async ({ params }: Props) => {
 
   const actingMovies: Movie[] = peopleDetail?.movie_credits?.cast;
   const runningMovies: Movie[] = peopleDetail?.movie_credits?.crew;
-  const actingTvShows: TvShow[] = peopleDetail?.tv_credits?.cast;
-  const runningTvShows: TvShow[] = peopleDetail?.tv_credits?.crew;
+  const actingTvs: Tv[] = peopleDetail?.tv_credits?.cast;
+  const runningTvs: Tv[] = peopleDetail?.tv_credits?.crew;
 
   let userMovies: InternalMovieUser[] = [];
   let userMoviesId: string = "";
@@ -45,19 +45,19 @@ const Person = async ({ params }: Props) => {
     userMoviesId = results?._id;
   }
 
-  let userTvShows: InternalTvShowAndUser[] = [];
-  let userTvShowsId: string = "";
+  let userTvs: InternalTvAndUser[] = [];
+  let userTvsId: string = "";
   if (session) {
-    const results = await getUserTvShows(session.user.id);
-    userTvShows = results?.tv_shows || [];
-    userTvShowsId = results?._id;
+    const results = await getUserTvs(session.user.id);
+    userTvs = results?.tvs || [];
+    userTvsId = results?._id;
   }
 
   const { genres: genresMovies } = await getGenresMovies();
-  const { genres: genresTvShows } = await getGenresTvShows();
+  const { genres: genresTvs } = await getGenresTvs();
 
   const internalMovies = await getAllMovies();
-  const internalTvShows = await getAllTvShows();
+  const internalTvs = await getAllTvs();
 
   return (
     <div className="mx-auto w-full md:w-[95%] lg:w-[90%]">
@@ -66,16 +66,16 @@ const Person = async ({ params }: Props) => {
         personDetailProps={{
           actingMovies,
           runningMovies,
-          actingTvShows,
-          runningTvShows,
+          actingTvs,
+          runningTvs,
           genresMovies,
           userMovies,
           userMoviesId,
           internalMovies,
-          genresTvShows,
-          userTvShows,
-          userTvShowsId,
-          internalTvShows,
+          genresTvs,
+          userTvs,
+          userTvsId,
+          internalTvs,
         }}
       />
     </div>

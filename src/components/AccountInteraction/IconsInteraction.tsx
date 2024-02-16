@@ -1,7 +1,7 @@
 "use client";
 
 import { InternalMovieUser } from "@/models/movies";
-import { InternalTvShowAndUser } from "@/models/tvShows";
+import { InternalTvAndUser } from "@/models/tvs";
 import { Tooltip } from "@nextui-org/react";
 import { FC, Key } from "react";
 import { FaListUl, FaBookmark, FaBan } from "react-icons/fa";
@@ -20,14 +20,14 @@ type Props = {
     name?: string;
     character?: string;
   };
-  type: "tvShow" | "movie" | "episode";
+  type: "tv" | "movie" | "episode";
   // eslint-disable-next-line no-unused-vars
   handleClick: (item: Key) => Promise<void>;
   isFavorite: boolean;
   isInWatchlist: boolean;
   isRated: boolean;
   userMovies: InternalMovieUser[];
-  userTvShows: InternalTvShowAndUser[];
+  userTvs: InternalTvAndUser[];
 };
 
 const IconsInteraction: FC<Props> = (props) => {
@@ -39,7 +39,7 @@ const IconsInteraction: FC<Props> = (props) => {
     isInWatchlist,
     isRated,
     userMovies,
-    userTvShows,
+    userTvs,
   } = props;
 
   const internalUserMoviesIds = userMovies?.map((movie) => movie.movie.tmdb_id);
@@ -48,9 +48,7 @@ const IconsInteraction: FC<Props> = (props) => {
   );
   const watchedMoviesIds = watchedMovies?.map((movie) => movie.movie.tmdb_id);
 
-  const internalUserTvShowsIds = userTvShows?.map(
-    (tvShow) => tvShow.tv_show.tmdb_id,
-  );
+  const internalUserTvsIds = userTvs?.map((tv) => tv.tv.tmdb_id);
 
   const dropdownItems = [
     {
@@ -115,8 +113,8 @@ const IconsInteraction: FC<Props> = (props) => {
     }
   }
 
-  if (type === "tvShow") {
-    if (internalUserTvShowsIds.includes(item.id)) {
+  if (type === "tv") {
+    if (internalUserTvsIds.includes(item.id)) {
       dropdownItems.unshift({
         key: `delete-${item.id}-${item.name}`,
         startContent: <FaBan />,

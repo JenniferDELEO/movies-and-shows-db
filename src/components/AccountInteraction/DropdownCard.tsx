@@ -17,7 +17,7 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 import { InternalMovieUser } from "@/models/movies";
-import { InternalTvShowAndUser } from "@/models/tvShows";
+import { InternalTvAndUser } from "@/models/tvs";
 
 type Props = {
   item: {
@@ -28,13 +28,13 @@ type Props = {
     name?: string;
     character?: string;
   };
-  type: "tvShow" | "movie" | "episode";
+  type: "tv" | "movie" | "episode";
   favoriteMoviesIds: number[];
-  favoriteTvShowsIds: number[];
+  favoriteTvsIds: number[];
   watchlistMoviesIds: number[];
-  watchlistTvShowsIds: number[];
+  watchlistTvsIds: number[];
   ratedMoviesIds: number[];
-  ratedTvShowsIds: number[];
+  ratedTvsIds: number[];
   classNames?: {
     container: string;
     title: string;
@@ -43,7 +43,7 @@ type Props = {
     dropdownContainer: string;
   };
   userMovies: InternalMovieUser[];
-  userTvShows: InternalTvShowAndUser[];
+  userTvs: InternalTvAndUser[];
   // eslint-disable-next-line no-unused-vars
   handleClick: (item: Key) => Promise<void>;
 };
@@ -53,14 +53,14 @@ const DropdownCard: FC<Props> = (props) => {
     item,
     type,
     favoriteMoviesIds,
-    favoriteTvShowsIds,
+    favoriteTvsIds,
     watchlistMoviesIds,
-    watchlistTvShowsIds,
+    watchlistTvsIds,
     ratedMoviesIds,
-    ratedTvShowsIds,
+    ratedTvsIds,
     classNames,
     userMovies,
-    userTvShows,
+    userTvs,
     handleClick,
   } = props;
 
@@ -70,9 +70,7 @@ const DropdownCard: FC<Props> = (props) => {
   );
   const watchedMoviesIds = watchedMovies?.map((movie) => movie.movie.tmdb_id);
 
-  const internalUserTvShowsIds = userTvShows?.map(
-    (tvShow) => tvShow.tv_show.tmdb_id,
-  );
+  const internalUserTvsIds = userTvs?.map((tv) => tv.tv.tmdb_id);
 
   const dropdownItems = [
     {
@@ -86,7 +84,7 @@ const DropdownCard: FC<Props> = (props) => {
         <FaHeart
           className={`${
             (item?.release_date && favoriteMoviesIds?.includes(item.id)) ||
-            (item?.first_air_date && favoriteTvShowsIds?.includes(item.id))
+            (item?.first_air_date && favoriteTvsIds?.includes(item.id))
               ? "text-red-600"
               : ""
           }`}
@@ -100,7 +98,7 @@ const DropdownCard: FC<Props> = (props) => {
         <FaBookmark
           className={`${
             (item?.release_date && watchlistMoviesIds?.includes(item.id)) ||
-            (item?.first_air_date && watchlistTvShowsIds?.includes(item.id))
+            (item?.first_air_date && watchlistTvsIds?.includes(item.id))
               ? "text-orange-600"
               : ""
           }`}
@@ -114,7 +112,7 @@ const DropdownCard: FC<Props> = (props) => {
         <FaStar
           className={`${
             (item?.release_date && ratedMoviesIds?.includes(item.id)) ||
-            (item?.first_air_date && ratedTvShowsIds?.includes(item.id))
+            (item?.first_air_date && ratedTvsIds?.includes(item.id))
               ? "text-yellow-400"
               : ""
           }`}
@@ -158,8 +156,8 @@ const DropdownCard: FC<Props> = (props) => {
     }
   }
 
-  if (type === "tvShow") {
-    if (internalUserTvShowsIds.includes(item.id)) {
+  if (type === "tv") {
+    if (internalUserTvsIds.includes(item.id)) {
       dropdownItems.unshift({
         key: `delete-${item.id}-${item.name}`,
         startContent: <FaBan />,

@@ -7,14 +7,14 @@ import {
   InternalMovieUser,
   Movie,
 } from "@/models/movies";
-import { TvShow } from "@/models/tvShows";
+import { Tv } from "@/models/tvs";
 import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 
 type Props = {
-  filterType: "movie" | "tvShow";
+  filterType: "movie" | "tv";
   genres: Genre[];
   movies?: Movie[];
-  tvShows?: TvShow[];
+  tvs?: Tv[];
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
@@ -22,7 +22,7 @@ type Props = {
 
 const Cards: FC<Props> = ({
   movies,
-  tvShows,
+  tvs,
   filterType,
   genres,
   userMovies,
@@ -33,12 +33,12 @@ const Cards: FC<Props> = ({
     fetchUserDatas,
     favoriteMoviesIds,
     watchlistMoviesIds,
-    favoriteTvShowsIds,
-    watchlistTvShowsIds,
+    favoriteTvsIds,
+    watchlistTvsIds,
     ratedMovies,
-    ratedTvShows,
+    ratedTvs,
     ratedMoviesIds,
-    ratedTvShowsIds,
+    ratedTvsIds,
     userLists,
   } = TmdbFetcher();
 
@@ -55,12 +55,12 @@ const Cards: FC<Props> = ({
               fetchUserDatas={fetchUserDatas}
               favoriteMoviesIds={favoriteMoviesIds}
               watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
+              favoriteTvsIds={favoriteTvsIds}
+              watchlistTvsIds={watchlistTvsIds}
               ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
+              ratedTvs={ratedTvs}
               ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
+              ratedTvsIds={ratedTvsIds}
               userLists={userLists}
               userMovies={userMovies}
               userMoviesId={userMoviesId}
@@ -69,23 +69,23 @@ const Cards: FC<Props> = ({
           ))}
         </div>
       )}
-      {tvShows && (
+      {tvs && (
         <div className="2xl:grid 2xl:grid-cols-2 2xl:gap-2">
-          {tvShows.map((tvShow) => (
+          {tvs.map((tv) => (
             <Card
-              key={tvShow.id}
-              tvShow={tvShow}
+              key={tv.id}
+              tv={tv}
               filterType={filterType}
               genres={genres}
               fetchUserDatas={fetchUserDatas}
               favoriteMoviesIds={favoriteMoviesIds}
               watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
+              favoriteTvsIds={favoriteTvsIds}
+              watchlistTvsIds={watchlistTvsIds}
               ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
+              ratedTvs={ratedTvs}
               ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
+              ratedTvsIds={ratedTvsIds}
               userLists={userLists}
             />
           ))}

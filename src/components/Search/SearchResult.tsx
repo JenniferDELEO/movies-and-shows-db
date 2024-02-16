@@ -1,5 +1,5 @@
 import { getGenresMovies, getSearchMovies } from "@/libs/api/movies";
-import { getGenresTvShows, getSearchTvShows } from "@/libs/api/tvShows";
+import { getGenresTvs, getSearchTvs } from "@/libs/api/tvs";
 import Pagination from "@/components/Pagination/Pagination";
 import { getSearchPeople } from "@/libs/api/people";
 import { InternalMovieUser } from "@/models/movies";
@@ -24,10 +24,10 @@ const SearchResult = async (props: Props) => {
     total_results: totalSearchResultsMovies,
   } = await getSearchMovies(query, currentPage);
   const {
-    results: searchResultsTvShows,
-    total_pages: totalSearchPagesTvShows,
-    total_results: totalSearchResultsTvShows,
-  } = await getSearchTvShows(query, currentPage);
+    results: searchResultsTvs,
+    total_pages: totalSearchPagesTvs,
+    total_results: totalSearchResultsTvs,
+  } = await getSearchTvs(query, currentPage);
   const {
     results: searchResultsPeople,
     total_pages: totalSearchPagesPeople,
@@ -35,7 +35,7 @@ const SearchResult = async (props: Props) => {
   } = await getSearchPeople(query, currentPage);
 
   const { genres: genresMovies } = await getGenresMovies();
-  const { genres: genresTvShows } = await getGenresTvShows();
+  const { genres: genresTvs } = await getGenresTvs();
 
   let userMovies: InternalMovieUser[] = [];
   let userMoviesId: string = "";
@@ -50,11 +50,11 @@ const SearchResult = async (props: Props) => {
   return (
     <div className="md:col-span-3">
       {(filterType === "movie" && !searchResultsMovies && !genresMovies) ||
-      (filterType === "tv" && !searchResultsTvShows && !genresTvShows) ||
+      (filterType === "tv" && !searchResultsTvs && !genresTvs) ||
       (filterType === "people" && !searchResultsPeople) ? (
         <Loading />
       ) : (filterType === "movie" && searchResultsMovies.length === 0) ||
-        (filterType === "tv" && searchResultsTvShows.length === 0) ||
+        (filterType === "tv" && searchResultsTvs.length === 0) ||
         (filterType === "people" && searchResultsPeople.length === 0) ? (
         <div className="text-center text-lg md:text-xl">Aucun résultat</div>
       ) : (
@@ -66,7 +66,7 @@ const SearchResult = async (props: Props) => {
               {filterType === "movie"
                 ? totalSearchResultsMovies
                 : filterType === "tv"
-                  ? totalSearchResultsTvShows
+                  ? totalSearchResultsTvs
                   : totalSearchResultsPeople}
               )
             </span>
@@ -74,10 +74,10 @@ const SearchResult = async (props: Props) => {
           <SearchResultCards
             filterType={filterType}
             searchResultsMovies={searchResultsMovies}
-            searchResultsTvShows={searchResultsTvShows}
+            searchResultsTvs={searchResultsTvs}
             searchResultsPeople={searchResultsPeople}
             genresMovies={genresMovies}
-            genresTvShows={genresTvShows}
+            genresTvs={genresTvs}
             userMovies={userMovies}
             userMoviesId={userMoviesId}
             internalMovies={internalMovies}
@@ -88,7 +88,7 @@ const SearchResult = async (props: Props) => {
               filterType === "movie"
                 ? totalSearchPagesMovies
                 : filterType === "tv"
-                  ? totalSearchPagesTvShows
+                  ? totalSearchPagesTvs
                   : totalSearchPagesPeople
             }
             fromSearch={true}

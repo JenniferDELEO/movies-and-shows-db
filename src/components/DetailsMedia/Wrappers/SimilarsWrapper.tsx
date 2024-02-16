@@ -10,11 +10,11 @@ import {
   InternalMovieUser,
   Movie,
 } from "@/models/movies";
-import { TvShow } from "@/models/tvShows";
+import { Tv } from "@/models/tvs";
 import Card from "../../Cards/Card";
 import Pagination from "../../Pagination/Pagination";
 import { getSimilarsMovie } from "@/libs/api/movies";
-import { getSimilarsTvShow } from "@/libs/api/tvShows";
+import { getSimilarsTv } from "@/libs/api/tvs";
 import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 
 type Props = {
@@ -24,10 +24,10 @@ type Props = {
   similarsMovies?: Movie[];
   totalPagesSimilarsMovies?: number;
   totalResultsSimilarsMovies?: number;
-  genresTvShows?: Genre[];
-  similarsTvShows?: TvShow[];
-  totalPagesSimilarsTvShows?: number;
-  totalResultsSimilarsTvShows?: number;
+  genresTvs?: Genre[];
+  similarsTvs?: Tv[];
+  totalPagesSimilarsTvs?: number;
+  totalResultsSimilarsTvs?: number;
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
@@ -41,10 +41,10 @@ const SimilarsWrapper: FC<Props> = (props) => {
     similarsMovies,
     totalPagesSimilarsMovies,
     totalResultsSimilarsMovies,
-    genresTvShows,
-    similarsTvShows,
-    totalPagesSimilarsTvShows,
-    totalResultsSimilarsTvShows,
+    genresTvs,
+    similarsTvs,
+    totalPagesSimilarsTvs,
+    totalResultsSimilarsTvs,
     userMovies,
     userMoviesId,
     internalMovies,
@@ -52,29 +52,27 @@ const SimilarsWrapper: FC<Props> = (props) => {
   const params = useParams();
 
   const [moviesList, setMoviesList] = useState<Movie[]>(similarsMovies || []);
-  const [tvShowsList, setTvShowsList] = useState<TvShow[]>(
-    similarsTvShows || [],
-  );
+  const [tvsList, setTvsList] = useState<Tv[]>(similarsTvs || []);
   const [totalPages, setTotalPages] = useState<number>(
-    totalPagesSimilarsMovies || totalPagesSimilarsTvShows || 0,
+    totalPagesSimilarsMovies || totalPagesSimilarsTvs || 0,
   );
   const [totalResults, setTotalResults] = useState<number>(
-    totalResultsSimilarsMovies || totalResultsSimilarsTvShows || 0,
+    totalResultsSimilarsMovies || totalResultsSimilarsTvs || 0,
   );
   const [currentPage, setCurrentPage] = useState<number>(Number(params.page));
 
-  const genres = genresMovies || genresTvShows || [];
+  const genres = genresMovies || genresTvs || [];
 
   const {
     fetchUserDatas,
     favoriteMoviesIds,
     watchlistMoviesIds,
-    favoriteTvShowsIds,
-    watchlistTvShowsIds,
+    favoriteTvsIds,
+    watchlistTvsIds,
     ratedMovies,
-    ratedTvShows,
+    ratedTvs,
     ratedMoviesIds,
-    ratedTvShowsIds,
+    ratedTvsIds,
     userLists,
   } = TmdbFetcher();
 
@@ -88,12 +86,12 @@ const SimilarsWrapper: FC<Props> = (props) => {
       setTotalPages(total_pages);
       setTotalResults(total_results);
     }
-    if (similarsTvShows) {
-      const { results, total_pages, total_results } = await getSimilarsTvShow(
+    if (similarsTvs) {
+      const { results, total_pages, total_results } = await getSimilarsTv(
         mediaId,
         currentPage,
       );
-      setTvShowsList(results);
+      setTvsList(results);
       setTotalPages(total_pages);
       setTotalResults(total_results);
     }
@@ -133,34 +131,34 @@ const SimilarsWrapper: FC<Props> = (props) => {
               fetchUserDatas={fetchUserDatas}
               favoriteMoviesIds={favoriteMoviesIds}
               watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
+              favoriteTvsIds={favoriteTvsIds}
+              watchlistTvsIds={watchlistTvsIds}
               ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
+              ratedTvs={ratedTvs}
               ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
+              ratedTvsIds={ratedTvsIds}
               userLists={userLists}
               userMovies={userMovies}
               userMoviesId={userMoviesId}
               internalMovies={internalMovies}
             />
           ))}
-        {similarsTvShows &&
-          tvShowsList.map((tvShow) => (
+        {similarsTvs &&
+          tvsList.map((tv) => (
             <Card
-              key={tvShow.id}
-              tvShow={tvShow}
-              filterType="tvShow"
+              key={tv.id}
+              tv={tv}
+              filterType="tv"
               genres={genres}
               fetchUserDatas={fetchUserDatas}
               favoriteMoviesIds={favoriteMoviesIds}
               watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
+              favoriteTvsIds={favoriteTvsIds}
+              watchlistTvsIds={watchlistTvsIds}
               ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
+              ratedTvs={ratedTvs}
               ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
+              ratedTvsIds={ratedTvsIds}
               userLists={userLists}
             />
           ))}

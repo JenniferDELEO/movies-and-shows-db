@@ -102,7 +102,7 @@ const ProfileHeader = () => {
           </Link>
         </NavbarItem>
         <NavbarItem className="hidden md:block">
-          <Link href="/profile/tvshows" className="flex flex-row items-center">
+          <Link href="/profile/tvs" className="flex flex-row items-center">
             <PiTelevisionSimpleFill />
             <span className="ml-2 text-sm lg:text-lg">Mes Séries TV</span>
           </Link>
@@ -151,7 +151,7 @@ const ProfileHeader = () => {
         </NavbarMenuItem>
         <NavbarMenuItem className="ml-2 mt-4">
           <Link
-            href="/profile/tvshows"
+            href="/profile/tvs"
             onClick={() => setIsMenuOpen(false)}
             className="flex flex-row items-center"
           >

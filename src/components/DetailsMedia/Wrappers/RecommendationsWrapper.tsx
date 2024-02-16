@@ -10,11 +10,11 @@ import {
   InternalMovieUser,
   Movie,
 } from "@/models/movies";
-import { TvShow } from "@/models/tvShows";
+import { Tv } from "@/models/tvs";
 import Card from "../../Cards/Card";
 import Pagination from "../../Pagination/Pagination";
 import { getRecommendationsMovie } from "@/libs/api/movies";
-import { getRecommendationsTvShow } from "@/libs/api/tvShows";
+import { getRecommendationsTv } from "@/libs/api/tvs";
 import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 
 type Props = {
@@ -24,10 +24,10 @@ type Props = {
   recommendationsMovies?: Movie[];
   totalPagesRecommendationsMovies?: number;
   totalResultsRecommendationsMovies?: number;
-  genresTvShows?: Genre[];
-  recommendationsTvShows?: TvShow[];
-  totalPagesRecommendationsTvShows?: number;
-  totalResultsRecommendationsTvShows?: number;
+  genresTvs?: Genre[];
+  recommendationsTvs?: Tv[];
+  totalPagesRecommendationsTvs?: number;
+  totalResultsRecommendationsTvs?: number;
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
@@ -41,10 +41,10 @@ const RecommendationsWrapper: FC<Props> = (props) => {
     recommendationsMovies,
     totalPagesRecommendationsMovies,
     totalResultsRecommendationsMovies,
-    genresTvShows,
-    recommendationsTvShows,
-    totalPagesRecommendationsTvShows,
-    totalResultsRecommendationsTvShows,
+    genresTvs,
+    recommendationsTvs,
+    totalPagesRecommendationsTvs,
+    totalResultsRecommendationsTvs,
     userMovies,
     userMoviesId,
     internalMovies,
@@ -54,31 +54,27 @@ const RecommendationsWrapper: FC<Props> = (props) => {
   const [moviesList, setMoviesList] = useState<Movie[]>(
     recommendationsMovies || [],
   );
-  const [tvShowsList, setTvShowsList] = useState<TvShow[]>(
-    recommendationsTvShows || [],
-  );
+  const [tvsList, setTvsList] = useState<Tv[]>(recommendationsTvs || []);
   const [totalPages, setTotalPages] = useState<number>(
-    totalPagesRecommendationsMovies || totalPagesRecommendationsTvShows || 0,
+    totalPagesRecommendationsMovies || totalPagesRecommendationsTvs || 0,
   );
   const [totalResults, setTotalResults] = useState<number>(
-    totalResultsRecommendationsMovies ||
-      totalResultsRecommendationsTvShows ||
-      0,
+    totalResultsRecommendationsMovies || totalResultsRecommendationsTvs || 0,
   );
   const [currentPage, setCurrentPage] = useState<number>(Number(params.page));
 
-  const genres = genresMovies || genresTvShows || [];
+  const genres = genresMovies || genresTvs || [];
 
   const {
     fetchUserDatas,
     favoriteMoviesIds,
     watchlistMoviesIds,
-    favoriteTvShowsIds,
-    watchlistTvShowsIds,
+    favoriteTvsIds,
+    watchlistTvsIds,
     ratedMovies,
-    ratedTvShows,
+    ratedTvs,
     ratedMoviesIds,
-    ratedTvShowsIds,
+    ratedTvsIds,
     userLists,
   } = TmdbFetcher();
 
@@ -90,10 +86,10 @@ const RecommendationsWrapper: FC<Props> = (props) => {
       setTotalPages(total_pages);
       setTotalResults(total_results);
     }
-    if (recommendationsTvShows) {
+    if (recommendationsTvs) {
       const { results, total_pages, total_results } =
-        await getRecommendationsTvShow(mediaId, currentPage);
-      setTvShowsList(results);
+        await getRecommendationsTv(mediaId, currentPage);
+      setTvsList(results);
       setTotalPages(total_pages);
       setTotalResults(total_results);
     }
@@ -143,34 +139,34 @@ const RecommendationsWrapper: FC<Props> = (props) => {
                   fetchUserDatas={fetchUserDatas}
                   favoriteMoviesIds={favoriteMoviesIds}
                   watchlistMoviesIds={watchlistMoviesIds}
-                  favoriteTvShowsIds={favoriteTvShowsIds}
-                  watchlistTvShowsIds={watchlistTvShowsIds}
+                  favoriteTvsIds={favoriteTvsIds}
+                  watchlistTvsIds={watchlistTvsIds}
                   ratedMovies={ratedMovies}
-                  ratedTvShows={ratedTvShows}
+                  ratedTvs={ratedTvs}
                   ratedMoviesIds={ratedMoviesIds}
-                  ratedTvShowsIds={ratedTvShowsIds}
+                  ratedTvsIds={ratedTvsIds}
                   userLists={userLists}
                   userMovies={userMovies}
                   userMoviesId={userMoviesId}
                   internalMovies={internalMovies}
                 />
               ))}
-            {recommendationsTvShows &&
-              tvShowsList.map((tvShow) => (
+            {recommendationsTvs &&
+              tvsList.map((tv) => (
                 <Card
-                  key={tvShow.id}
-                  tvShow={tvShow}
-                  filterType="tvShow"
+                  key={tv.id}
+                  tv={tv}
+                  filterType="tv"
                   genres={genres}
                   fetchUserDatas={fetchUserDatas}
                   favoriteMoviesIds={favoriteMoviesIds}
                   watchlistMoviesIds={watchlistMoviesIds}
-                  favoriteTvShowsIds={favoriteTvShowsIds}
-                  watchlistTvShowsIds={watchlistTvShowsIds}
+                  favoriteTvsIds={favoriteTvsIds}
+                  watchlistTvsIds={watchlistTvsIds}
                   ratedMovies={ratedMovies}
-                  ratedTvShows={ratedTvShows}
+                  ratedTvs={ratedTvs}
                   ratedMoviesIds={ratedMoviesIds}
-                  ratedTvShowsIds={ratedTvShowsIds}
+                  ratedTvsIds={ratedTvsIds}
                   userLists={userLists}
                 />
               ))}

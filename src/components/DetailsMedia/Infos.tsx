@@ -19,32 +19,41 @@ import AccountInteraction from "@/components/AccountInteraction/AccountInteracti
 import { UserContext } from "@/context/userContext";
 import { List } from "@/models/lists";
 import { getLists } from "@/libs/api/lists";
-import { getTvShowDetail } from "@/libs/api/tvShows";
-import { Episode, EpisodeDetails, TvShowDetails } from "@/models/tvShows";
+import { getTvDetail } from "@/libs/api/tvs";
+import {
+  Episode,
+  EpisodeDetails,
+  InternalTv,
+  InternalTvAndUser,
+  TvDetails,
+} from "@/models/tvs";
 import { Collection } from "@/models/collections";
 
 type Props = {
   movieDetails?: MovieDetails;
-  tvShowDetails?: TvShowDetails;
+  tvDetails?: TvDetails;
   episodeDetails?: EpisodeDetails;
   collectionDetails?: Collection;
   genresCollection?: Genre[];
   voteAverageCollection?: number;
-  type: "episode" | "movie" | "tvShow";
+  type: "episode" | "movie" | "tv";
   episodePrecedent?: Episode | undefined;
   episodeNumber?: number;
   isCollection?: boolean;
   seasonNumber?: number;
-  tvShowId?: number;
+  tvId?: number;
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
+  internalTvs?: InternalTv[];
+  userTvs?: InternalTvAndUser[];
+  userTvsId?: string;
 };
 
 const Infos: FC<Props> = (props) => {
   const {
     movieDetails,
-    tvShowDetails,
+    tvDetails,
     episodeDetails,
     collectionDetails,
     genresCollection,
@@ -54,10 +63,13 @@ const Infos: FC<Props> = (props) => {
     episodePrecedent,
     isCollection,
     seasonNumber,
-    tvShowId,
+    tvId,
     userMovies,
     userMoviesId,
     internalMovies,
+    userTvs,
+    userTvsId,
+    internalTvs,
   } = props;
 
   const { user } = useContext(UserContext);
@@ -68,16 +80,15 @@ const Infos: FC<Props> = (props) => {
 
   const [isFavorite, setIsFavorite] = useState(
     movieDetails?.account_states?.favorite ||
-      (type === "tvShow" && tvShowDetails?.account_states?.favorite),
+      (type === "tv" && tvDetails?.account_states?.favorite),
   );
   const [isInWatchlist, setIsInWatchlist] = useState(
     movieDetails?.account_states?.watchlist ||
-      (type === "tvShow" && tvShowDetails?.account_states?.watchlist),
+      (type === "tv" && tvDetails?.account_states?.watchlist),
   );
   const [isRated, setIsRated] = useState(
     typeof movieDetails?.account_states?.rated === "object" ||
-      (typeof tvShowDetails?.account_states?.rated === "object" &&
-        type === "tvShow") ||
+      (typeof tvDetails?.account_states?.rated === "object" && type === "tv") ||
       typeof episodeDetails?.account_states?.rated === "object"
       ? true
       : false,
@@ -85,9 +96,8 @@ const Infos: FC<Props> = (props) => {
   const [userRatingApi, setUserRatingApi] = useState<number>(
     typeof movieDetails?.account_states?.rated === "object"
       ? movieDetails?.account_states.rated.value
-      : type === "tvShow" &&
-          typeof tvShowDetails?.account_states?.rated === "object"
-        ? tvShowDetails?.account_states.rated.value
+      : type === "tv" && typeof tvDetails?.account_states?.rated === "object"
+        ? tvDetails?.account_states.rated.value
         : typeof episodeDetails?.account_states?.rated === "object"
           ? episodeDetails.account_states.rated.value
           : 0,
@@ -95,10 +105,8 @@ const Infos: FC<Props> = (props) => {
 
   const trailer =
     movieDetails?.videos?.results?.find((video) => video.type === "Trailer") ||
-    (type === "tvShow" &&
-      tvShowDetails?.videos?.results?.find(
-        (video) => video.type === "Trailer",
-      ));
+    (type === "tv" &&
+      tvDetails?.videos?.results?.find((video) => video.type === "Trailer"));
 
   const runtimeHours = movieDetails?.runtime
     ? Math.floor(movieDetails.runtime / 60)
@@ -107,8 +115,8 @@ const Infos: FC<Props> = (props) => {
 
   const directors =
     movieDetails?.credits?.crew?.filter((crew) => crew.job === "Director") ||
-    (type === "tvShow" && tvShowDetails?.aggregate_credits?.crew)
-      ? tvShowDetails?.aggregate_credits?.crew
+    (type === "tv" && tvDetails?.aggregate_credits?.crew)
+      ? tvDetails?.aggregate_credits?.crew
           ?.filter((crew) => crew.department === "Directing")
           .slice(0, 3)
       : episodeDetails?.crew
@@ -122,26 +130,24 @@ const Infos: FC<Props> = (props) => {
     languages.find(
       (language) => language.code === movieDetails?.original_language,
     )?.name ||
-    languages.find(
-      (language) => language.code === tvShowDetails?.original_language,
-    )?.name;
+    languages.find((language) => language.code === tvDetails?.original_language)
+      ?.name;
 
   const watchProvidersFr =
     movieDetails?.watch_providers_fr ||
-    (type === "tvShow" && tvShowDetails?.watch_providers_fr);
+    (type === "tv" && tvDetails?.watch_providers_fr);
 
   const releaseDate =
     movieDetails?.release_date ||
     episodeDetails?.air_date ||
-    tvShowDetails?.first_air_date;
+    tvDetails?.first_air_date;
 
-  const genres =
-    movieDetails?.genres || tvShowDetails?.genres || genresCollection;
+  const genres = movieDetails?.genres || tvDetails?.genres || genresCollection;
 
   const overview =
     (type === "movie" && movieDetails?.overview) ||
     (type === "episode" && episodeDetails?.overview) ||
-    (type === "tvShow" && tvShowDetails?.overview) ||
+    (type === "tv" && tvDetails?.overview) ||
     (isCollection && collectionDetails?.overview);
   ("");
 
@@ -173,8 +179,8 @@ const Infos: FC<Props> = (props) => {
       }
       if (typeof userRating === "boolean") setIsRated(userRating);
     }
-    if (type === "tvShow" && tvShowDetails) {
-      const response = await getTvShowDetail(tvShowDetails.id.toString());
+    if (type === "tv" && tvDetails) {
+      const response = await getTvDetail(tvDetails.id.toString());
       setIsFavorite(response.account_states.favorite);
       setIsInWatchlist(response.account_states.watchlist);
       const userRating = response.account_states.rated;
@@ -234,14 +240,12 @@ const Infos: FC<Props> = (props) => {
             <div className="flex flex-row items-center justify-evenly">
               <AccountInteraction
                 item={{
-                  id: movieDetails?.id || tvShowDetails?.id || 0,
-                  name: tvShowDetails?.name,
+                  id: movieDetails?.id || tvDetails?.id || 0,
+                  name: tvDetails?.name,
                   title: movieDetails?.title,
                   genres: genres,
                   poster_path:
-                    movieDetails?.poster_path ||
-                    tvShowDetails?.poster_path ||
-                    "",
+                    movieDetails?.poster_path || tvDetails?.poster_path || "",
                   overview: overview || "",
                   release_date: releaseDate || "",
                 }}
@@ -256,6 +260,9 @@ const Infos: FC<Props> = (props) => {
                   userMovies,
                   userMoviesId,
                   internalMovies,
+                  userTvs,
+                  userTvsId,
+                  internalTvs,
                 }}
                 userLists={userLists}
               />
@@ -272,7 +279,7 @@ const Infos: FC<Props> = (props) => {
         <h1 className="text-xl font-bold md:text-3xl">
           {movieDetails?.title ||
             episodeDetails?.name ||
-            (type === "tvShow" && tvShowDetails?.name) ||
+            (type === "tv" && tvDetails?.name) ||
             collectionDetails?.name}
           <span className="text-base font-normal text-gray-400 md:text-2xl">
             {" "}
@@ -305,7 +312,7 @@ const Infos: FC<Props> = (props) => {
               </div>
             </div>
           ) : null}
-          {(type === "tvShow" || type === "episode") && (
+          {(type === "tv" || type === "episode") && (
             <div className="flex flex-row items-center justify-start">
               <p className="pr-3 text-gray-400">
                 <span className="font-bold text-white">Date de sortie : </span>
@@ -314,17 +321,14 @@ const Infos: FC<Props> = (props) => {
                   : "Non sortie"}{" "}
                 (FR)
               </p>
-              {type === "tvShow" &&
-                tvShowDetails?.episode_run_time &&
-                tvShowDetails.episode_run_time.length > 0 && (
+              {type === "tv" &&
+                tvDetails?.episode_run_time &&
+                tvDetails.episode_run_time.length > 0 && (
                   <div className="flex flex-row items-center justify-start">
                     <p className="pr-3 font-bold text-white">
                       Durée d&apos;un épisode :{" "}
-                      {tvShowDetails.episode_run_time.map((runtime, index) => {
-                        if (
-                          index ===
-                          tvShowDetails.episode_run_time.length - 1
-                        ) {
+                      {tvDetails.episode_run_time.map((runtime, index) => {
+                        if (index === tvDetails.episode_run_time.length - 1) {
                           return (
                             <span
                               key={index}
@@ -352,12 +356,12 @@ const Infos: FC<Props> = (props) => {
                   {episodeDetails?.runtime} min
                 </p>
               )}
-              {tvShowDetails?.status && (
+              {tvDetails?.status && (
                 <p className="text-gray-400">
                   <span className="font-bold text-white">Statut : </span>
-                  {tvShowDetails.status === "Ended" ? (
+                  {tvDetails.status === "Ended" ? (
                     <span className="text-gray-400">Terminée</span>
-                  ) : tvShowDetails.status === "Canceled" ? (
+                  ) : tvDetails.status === "Canceled" ? (
                     <span className="text-gray-400">Annulée</span>
                   ) : (
                     <span className="text-gray-400">En cours</span>
@@ -393,11 +397,11 @@ const Infos: FC<Props> = (props) => {
                 {originalLanguageName}
               </p>
             )}
-            {type === "tvShow" && tvShowDetails?.number_of_seasons && (
+            {type === "tv" && tvDetails?.number_of_seasons && (
               <div className="flex flex-row items-center justify-start">
                 <p className="pr-3 pt-2 text-gray-400">
                   <span className="font-bold text-white">Saisons : </span>
-                  {tvShowDetails.number_of_seasons}
+                  {tvDetails.number_of_seasons}
                 </p>
               </div>
             )}
@@ -409,11 +413,11 @@ const Infos: FC<Props> = (props) => {
                 </p>
               </div>
             )}
-            {type === "tvShow" && tvShowDetails?.number_of_episodes && (
+            {type === "tv" && tvDetails?.number_of_episodes && (
               <div className="flex flex-row items-center justify-start">
                 <p className="pr-3 pt-2 text-gray-400">
                   <span className="font-bold text-white">Episodes : </span>
-                  {tvShowDetails.number_of_episodes}
+                  {tvDetails.number_of_episodes}
                 </p>
               </div>
             )}
@@ -443,22 +447,22 @@ const Infos: FC<Props> = (props) => {
                 </p>
               </div>
             )}
-            {type === "tvShow" && tvShowDetails?.next_episode_to_air && (
+            {type === "tv" && tvDetails?.next_episode_to_air && (
               <div className="flex flex-row items-center justify-start">
                 <p className="pr-3 pt-2 text-gray-400">
                   <span className="font-bold text-white">
                     Prochaine sortie :{" "}
                   </span>
                   S
-                  {tvShowDetails.next_episode_to_air.season_number > 9
-                    ? tvShowDetails.next_episode_to_air.season_number
-                    : `0${tvShowDetails.next_episode_to_air.season_number}`}
+                  {tvDetails.next_episode_to_air.season_number > 9
+                    ? tvDetails.next_episode_to_air.season_number
+                    : `0${tvDetails.next_episode_to_air.season_number}`}
                   E
-                  {tvShowDetails.next_episode_to_air.episode_number > 9
-                    ? tvShowDetails.next_episode_to_air.episode_number
-                    : `0${tvShowDetails.next_episode_to_air.episode_number}`}{" "}
-                  - {tvShowDetails.next_episode_to_air.name} - Le{" "}
-                  {dayjs(tvShowDetails.next_episode_to_air.air_date).format(
+                  {tvDetails.next_episode_to_air.episode_number > 9
+                    ? tvDetails.next_episode_to_air.episode_number
+                    : `0${tvDetails.next_episode_to_air.episode_number}`}{" "}
+                  - {tvDetails.next_episode_to_air.name} - Le{" "}
+                  {dayjs(tvDetails.next_episode_to_air.air_date).format(
                     "DD MMMM YYYY",
                   )}
                 </p>
@@ -480,8 +484,8 @@ const Infos: FC<Props> = (props) => {
                   ? movieDetails.vote_average / 2
                   : episodeDetails?.vote_average
                     ? episodeDetails.vote_average / 2
-                    : tvShowDetails?.vote_average
-                      ? tvShowDetails.vote_average / 2
+                    : tvDetails?.vote_average
+                      ? tvDetails.vote_average / 2
                       : voteAverageCollection
                         ? voteAverageCollection / 2
                         : 0
@@ -494,14 +498,14 @@ const Infos: FC<Props> = (props) => {
                 (
                 {movieDetails?.vote_count ||
                   episodeDetails?.vote_count ||
-                  tvShowDetails?.vote_count}{" "}
+                  tvDetails?.vote_count}{" "}
                 vote
                 {movieDetails?.vote_count && movieDetails.vote_count > 1
                   ? "s"
                   : ""}
-                {type === "tvShow" &&
-                tvShowDetails?.vote_count &&
-                tvShowDetails.vote_count > 1
+                {type === "tv" &&
+                tvDetails?.vote_count &&
+                tvDetails.vote_count > 1
                   ? "s"
                   : ""}
                 {episodeDetails?.vote_count && episodeDetails.vote_count > 1
@@ -515,7 +519,7 @@ const Infos: FC<Props> = (props) => {
             episodeDetails?.account_states &&
             episodeNumber &&
             seasonNumber &&
-            tvShowId && (
+            tvId && (
               <div className="ml-6">
                 <AccountInteraction
                   item={episodeDetails}
@@ -527,7 +531,7 @@ const Infos: FC<Props> = (props) => {
                     id: episodeDetails.id,
                     isRated,
                     seasonNumber,
-                    tvShowId,
+                    tvId,
                     userRatingApi,
                   }}
                   userLists={userLists}
@@ -545,13 +549,13 @@ const Infos: FC<Props> = (props) => {
                 <div className="hidden md:mr-10 md:block">
                   <AccountInteraction
                     item={{
-                      id: movieDetails?.id || tvShowDetails?.id || 0,
-                      name: tvShowDetails?.name,
+                      id: movieDetails?.id || tvDetails?.id || 0,
+                      name: tvDetails?.name,
                       title: movieDetails?.title,
                       genres: genres,
                       poster_path:
                         movieDetails?.poster_path ||
-                        tvShowDetails?.poster_path ||
+                        tvDetails?.poster_path ||
                         "",
                       overview: overview || "",
                       release_date: releaseDate || "",
@@ -567,6 +571,9 @@ const Infos: FC<Props> = (props) => {
                       userMovies,
                       userMoviesId,
                       internalMovies,
+                      userTvs,
+                      userTvsId,
+                      internalTvs,
                     }}
                     userLists={userLists}
                   />
@@ -607,7 +614,7 @@ const Infos: FC<Props> = (props) => {
             </div>
           </>
         )}
-        {(type === "tvShow" || type === "episode") && (
+        {(type === "tv" || type === "episode") && (
           <div className="flex flex-col items-center justify-start md:flex-row">
             <p className="text-gray-400">
               <span className="font-bold text-white">Date de sortie : </span>
@@ -618,37 +625,32 @@ const Infos: FC<Props> = (props) => {
             </p>
             <div className="flex flex-row flex-wrap items-center justify-center pt-2">
               <>
-                {type === "tvShow" &&
-                  tvShowDetails?.episode_run_time &&
-                  tvShowDetails.episode_run_time?.length > 0 && (
+                {type === "tv" &&
+                  tvDetails?.episode_run_time &&
+                  tvDetails.episode_run_time?.length > 0 && (
                     <div className="flex flex-row items-center justify-start">
                       <p className="pr-3 font-bold text-white">
                         Durée d&apos;un épisode :{" "}
-                        {tvShowDetails.episode_run_time.map(
-                          (runtime, index) => {
-                            if (
-                              index ===
-                              tvShowDetails.episode_run_time.length - 1
-                            ) {
-                              return (
-                                <span
-                                  key={index}
-                                  className="pt-2 font-normal text-gray-400"
-                                >
-                                  {runtime} min
-                                </span>
-                              );
-                            }
+                        {tvDetails.episode_run_time.map((runtime, index) => {
+                          if (index === tvDetails.episode_run_time.length - 1) {
                             return (
                               <span
                                 key={index}
                                 className="pt-2 font-normal text-gray-400"
                               >
-                                {runtime},{" "}
+                                {runtime} min
                               </span>
                             );
-                          },
-                        )}
+                          }
+                          return (
+                            <span
+                              key={index}
+                              className="pt-2 font-normal text-gray-400"
+                            >
+                              {runtime},{" "}
+                            </span>
+                          );
+                        })}
                       </p>
                     </div>
                   )}
@@ -658,12 +660,12 @@ const Infos: FC<Props> = (props) => {
                     {episodeDetails?.runtime} min
                   </p>
                 )}
-                {tvShowDetails?.status && (
+                {tvDetails?.status && (
                   <p className="pr-3 pt-2 text-gray-400">
                     <span className="font-bold text-white">Statut : </span>
-                    {tvShowDetails.status === "Ended" ? (
+                    {tvDetails.status === "Ended" ? (
                       <span className="text-gray-400">Terminée</span>
-                    ) : tvShowDetails.status === "Canceled" ? (
+                    ) : tvDetails.status === "Canceled" ? (
                       <span className="text-gray-400">Annulée</span>
                     ) : (
                       <span className="text-gray-400">En cours</span>
@@ -691,20 +693,20 @@ const Infos: FC<Props> = (props) => {
             })}
           </p>
         )}
-        {type === "tvShow" &&
-          tvShowDetails?.number_of_episodes &&
-          tvShowDetails?.number_of_seasons && (
+        {type === "tv" &&
+          tvDetails?.number_of_episodes &&
+          tvDetails?.number_of_seasons && (
             <div className="flex flex-row flex-wrap items-center justify-center">
               <div className="flex flex-row items-center justify-start">
                 <p className="pr-3 pt-2 text-gray-400">
                   <span className="font-bold text-white">Saisons : </span>
-                  {tvShowDetails.number_of_seasons}
+                  {tvDetails.number_of_seasons}
                 </p>
               </div>
               <div className="flex flex-row items-center justify-start">
                 <p className="pr-3 pt-2 text-gray-400">
                   <span className="font-bold text-white">Episodes : </span>
-                  {tvShowDetails.number_of_episodes}
+                  {tvDetails.number_of_episodes}
                 </p>
               </div>
             </div>
@@ -741,19 +743,19 @@ const Infos: FC<Props> = (props) => {
             </p>
           </div>
         )}
-        {type === "tvShow" && tvShowDetails?.next_episode_to_air && (
+        {type === "tv" && tvDetails?.next_episode_to_air && (
           <div className="flex flex-row items-center justify-start">
             <p className="pr-3 pt-8 text-center text-gray-400">
               <span className="font-bold text-white">Prochaine sortie : </span>S
-              {tvShowDetails.next_episode_to_air.season_number > 9
-                ? tvShowDetails.next_episode_to_air.season_number
-                : `0${tvShowDetails.next_episode_to_air.season_number}`}
+              {tvDetails.next_episode_to_air.season_number > 9
+                ? tvDetails.next_episode_to_air.season_number
+                : `0${tvDetails.next_episode_to_air.season_number}`}
               E
-              {tvShowDetails.next_episode_to_air.episode_number > 9
-                ? tvShowDetails.next_episode_to_air.episode_number
-                : `0${tvShowDetails.next_episode_to_air.episode_number}`}{" "}
-              - {tvShowDetails.next_episode_to_air.name} - Le{" "}
-              {dayjs(tvShowDetails.next_episode_to_air.air_date).format(
+              {tvDetails.next_episode_to_air.episode_number > 9
+                ? tvDetails.next_episode_to_air.episode_number
+                : `0${tvDetails.next_episode_to_air.episode_number}`}{" "}
+              - {tvDetails.next_episode_to_air.name} - Le{" "}
+              {dayjs(tvDetails.next_episode_to_air.air_date).format(
                 "DD MMMM YYYY",
               )}
             </p>
@@ -763,9 +765,9 @@ const Infos: FC<Props> = (props) => {
 
       {/* All screen sizes */}
       <div className="m-4 ml-10">
-        {(movieDetails?.tagline || tvShowDetails?.tagline) && (
+        {(movieDetails?.tagline || tvDetails?.tagline) && (
           <p className="italic text-gray-400">
-            {movieDetails?.tagline || tvShowDetails?.tagline}
+            {movieDetails?.tagline || tvDetails?.tagline}
           </p>
         )}
         <div className="my-4">

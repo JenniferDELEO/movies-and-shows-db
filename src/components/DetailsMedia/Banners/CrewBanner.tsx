@@ -2,18 +2,18 @@ import { FC } from "react";
 import Link from "next/link";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-import { CastMovies, CastTvShows } from "@/models/people";
+import { CastMovies, CastTvs } from "@/models/people";
 import PeopleCard from "@/components/People/PeopleCard";
 
 type Props = {
   castMovie?: CastMovies[];
-  castTvShow?: CastTvShows[];
+  castTv?: CastTvs[];
   mediaUrl: string;
-  type: "tvShow" | "movie";
+  type: "tv" | "movie";
 };
 
 const CrewBanner: FC<Props> = (props) => {
-  const { castMovie, castTvShow, mediaUrl, type } = props;
+  const { castMovie, castTv, mediaUrl, type } = props;
 
   return (
     <section className="p-4 md:px-[2.5%] lg:px-[5%] 2xl:px-[10%]">
@@ -31,14 +31,14 @@ const CrewBanner: FC<Props> = (props) => {
               <PeopleCard itemCastMovie={item} />
             </div>
           ))}
-        {type === "tvShow" &&
-          castTvShow &&
-          castTvShow.slice(0, 9).map((item) => (
+        {type === "tv" &&
+          castTv &&
+          castTv.slice(0, 9).map((item) => (
             <div
               key={item.id}
               className="mx-2 my-4 max-h-[350px] min-w-[150px]"
             >
-              <PeopleCard itemCastTvShow={item} />
+              <PeopleCard itemCastTv={item} />
             </div>
           ))}
         <Link

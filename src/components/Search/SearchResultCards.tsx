@@ -9,7 +9,7 @@ import {
   InternalMovieUser,
   Movie,
 } from "@/models/movies";
-import { TvShow } from "@/models/tvShows";
+import { Tv } from "@/models/tvs";
 import { People } from "@/models/people";
 import PeopleCard from "../People/PeopleCard";
 import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
@@ -17,10 +17,10 @@ import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 type Props = {
   filterType: string;
   searchResultsMovies?: Movie[];
-  searchResultsTvShows?: TvShow[];
+  searchResultsTvs?: Tv[];
   searchResultsPeople?: People[];
   genresMovies?: Genre[];
-  genresTvShows?: Genre[];
+  genresTvs?: Genre[];
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
@@ -30,10 +30,10 @@ const SearchResultCards: FC<Props> = (props) => {
   const {
     filterType,
     searchResultsMovies,
-    searchResultsTvShows,
+    searchResultsTvs,
     searchResultsPeople,
     genresMovies,
-    genresTvShows,
+    genresTvs,
     userMovies,
     userMoviesId,
     internalMovies,
@@ -43,12 +43,12 @@ const SearchResultCards: FC<Props> = (props) => {
     fetchUserDatas,
     favoriteMoviesIds,
     watchlistMoviesIds,
-    favoriteTvShowsIds,
-    watchlistTvShowsIds,
+    favoriteTvsIds,
+    watchlistTvsIds,
     ratedMovies,
-    ratedTvShows,
+    ratedTvs,
     ratedMoviesIds,
-    ratedTvShowsIds,
+    ratedTvsIds,
     userLists,
   } = TmdbFetcher();
 
@@ -65,12 +65,12 @@ const SearchResultCards: FC<Props> = (props) => {
               fetchUserDatas={fetchUserDatas}
               favoriteMoviesIds={favoriteMoviesIds}
               watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
+              favoriteTvsIds={favoriteTvsIds}
+              watchlistTvsIds={watchlistTvsIds}
               ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
+              ratedTvs={ratedTvs}
               ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
+              ratedTvsIds={ratedTvsIds}
               userLists={userLists}
               userMovies={userMovies}
               userMoviesId={userMoviesId}
@@ -78,23 +78,23 @@ const SearchResultCards: FC<Props> = (props) => {
             />
           ))}
         </div>
-      ) : filterType === "tv" && searchResultsTvShows && genresTvShows ? (
+      ) : filterType === "tv" && searchResultsTvs && genresTvs ? (
         <div className="2xl:grid 2xl:grid-cols-2 2xl:gap-4">
-          {searchResultsTvShows.map((tvShow: TvShow) => (
+          {searchResultsTvs.map((tv: Tv) => (
             <Card
-              key={tvShow.id}
-              tvShow={tvShow}
+              key={tv.id}
+              tv={tv}
               filterType={filterType}
-              genres={genresTvShows}
+              genres={genresTvs}
               fetchUserDatas={fetchUserDatas}
               favoriteMoviesIds={favoriteMoviesIds}
               watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
+              favoriteTvsIds={favoriteTvsIds}
+              watchlistTvsIds={watchlistTvsIds}
               ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
+              ratedTvs={ratedTvs}
               ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
+              ratedTvsIds={ratedTvsIds}
               userLists={userLists}
             />
           ))}
