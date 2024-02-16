@@ -1,11 +1,6 @@
 import {
-  createUserMovieAndStatus,
-  addUserMovieStatus,
-  getAllMovies,
-  getUserMovies,
-  updateUserMovieStatus,
-} from "@/libs/sanity/api/movie";
-import {
+  addUserTvShowStatus,
+  createUserTvShowAndStatus,
   getAllTvShows,
   getUserTvShows,
   updateUserTvShowStatus,
@@ -50,14 +45,20 @@ export async function POST(req: Request) {
           watchState,
         });
       } else {
-        data = await addUserMovieStatus({
-          userMovieId: userMovies._id,
-          movieId,
+        data = await addUserTvShowStatus({
+          userTvshowId: userTvShows._id,
+          tvShowId,
           status,
+          watchState,
         });
       }
     } else {
-      data = await createUserMovieAndStatus({ movieId, userId, status });
+      data = await createUserTvShowAndStatus({
+        tvShowId,
+        userId,
+        status,
+        watchState,
+      });
     }
 
     return NextResponse.json(data, { status: 200, statusText: "Successful" });

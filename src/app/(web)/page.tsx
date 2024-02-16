@@ -8,13 +8,16 @@ import {
 } from "@/libs/api/movies";
 import {
   getDiscoverTvShows,
+  getGenresTvShows,
   getTopRatedTvShows,
   getTrendingTvShows,
 } from "@/libs/api/tvShows";
 import { defaultTvShowsFilters } from "@/libs/helpers/filters";
 import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
+import { getAllTvShows, getUserTvShows } from "@/libs/sanity/api/tvShow";
 import { authOptions } from "@/libs/sanity/auth";
 import { InternalMovieUser } from "@/models/movies";
+import { InternalTvShowAndUser } from "@/models/tvShows";
 import { getServerSession } from "next-auth";
 
 export default async function Home() {
@@ -33,6 +36,7 @@ export default async function Home() {
   const { results: trendingTvShowsThisWeek } = await getTrendingTvShows("week");
 
   const { genres: genresMovies } = await getGenresMovies();
+  const { genres: genresTvShows } = await getGenresTvShows();
 
   let userMovies: InternalMovieUser[] = [];
   let userMoviesId: string = "";
@@ -42,7 +46,16 @@ export default async function Home() {
     userMoviesId = results?._id;
   }
 
+  let userTvShows: InternalTvShowAndUser[] = [];
+  let userTvShowsId: string = "";
+  if (session) {
+    const results = await getUserTvShows(session.user.id);
+    userTvShows = results?.tv_shows || [];
+    userTvShowsId = results?._id;
+  }
+
   const internalMovies = await getAllMovies();
+  const internalTvShows = await getAllTvShows();
 
   return (
     <div className="size-full">
@@ -64,6 +77,10 @@ export default async function Home() {
           genresMovies,
           userMovies,
           userMoviesId,
+          internalTvShows,
+          genresTvShows,
+          userTvShows,
+          userTvShowsId,
         }}
       />
     </div>

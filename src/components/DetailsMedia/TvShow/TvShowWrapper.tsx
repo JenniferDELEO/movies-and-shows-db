@@ -4,16 +4,29 @@ import TopContent from "@/components/DetailsMedia/TopContent";
 import CrewBanner from "@/components/DetailsMedia/Banners/CrewBanner";
 import SimilarsBanner from "@/components/DetailsMedia/Banners/SimilarsBanner";
 import RecommendationsBanner from "@/components/DetailsMedia/Banners/RecommendationsBanner";
-import { TvShowDetails } from "@/models/tvShows";
+import {
+  InternalTvShow,
+  InternalTvShowAndUser,
+  TvShowDetails,
+} from "@/models/tvShows";
 import SeasonsAndEpisodesWrapper from "@/components/DetailsMedia/TvShow/SeasonsAndEpisodesWrapper";
 
 type Props = {
   tvShowDetails: TvShowDetails;
   tvShowUrl: string;
+  internalTvShows: InternalTvShow[];
+  userTvShows: InternalTvShowAndUser[];
+  userTvShowsId: string;
 };
 
 const TvShowWrapper: FC<Props> = (props) => {
-  const { tvShowDetails, tvShowUrl } = props;
+  const {
+    tvShowDetails,
+    tvShowUrl,
+    internalTvShows,
+    userTvShows,
+    userTvShowsId,
+  } = props;
 
   return (
     <div className="size-full">
@@ -36,6 +49,9 @@ const TvShowWrapper: FC<Props> = (props) => {
           recommendationsTvShows={tvShowDetails.recommendations.results}
           totalPages={tvShowDetails.recommendations.total_pages}
           totalResults={tvShowDetails.recommendations.total_results}
+          internalTvShows={internalTvShows}
+          userTvShows={userTvShows}
+          userTvShowsId={userTvShowsId}
         />
       ) : (
         <section className="p-4 md:px-[2.5%] lg:px-[5%] 2xl:px-[10%]">
@@ -54,6 +70,9 @@ const TvShowWrapper: FC<Props> = (props) => {
           similarsTvShows={tvShowDetails.similar.results}
           totalPages={tvShowDetails.similar.total_pages}
           totalResults={tvShowDetails.similar.total_results}
+          internalTvShows={internalTvShows}
+          userTvShows={userTvShows}
+          userTvShowsId={userTvShowsId}
         />
       )}
     </div>

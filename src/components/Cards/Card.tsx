@@ -15,9 +15,9 @@ import {
   Movie,
 } from "@/models/movies";
 import { UserContext } from "@/context/userContext";
-import { InternalUserContext } from "@/context/internalUserContext";
 import AccountInteraction from "../AccountInteraction/AccountInteraction";
 import { List } from "@/models/lists";
+import { useSession } from "next-auth/react";
 
 dayjs.locale("fr");
 
@@ -89,7 +89,8 @@ const Card: FC<Props> = ({
 }) => {
   const router = useRouter();
   const { user } = useContext(UserContext);
-  const { internalUser } = useContext(InternalUserContext);
+
+  const { status } = useSession();
 
   const overviewRest =
     movie?.overview?.split(" ")?.filter(Boolean) ||
@@ -177,8 +178,7 @@ const Card: FC<Props> = ({
         </p>
         {user &&
           user.tmdb_username &&
-          internalUser &&
-          internalUser.user_id &&
+          status === "authenticated" &&
           userMovies &&
           userMoviesId &&
           internalMovies &&
@@ -208,33 +208,29 @@ const Card: FC<Props> = ({
               />
             </div>
           )}
-        {user &&
-          user.tmdb_username &&
-          internalUser &&
-          internalUser.user_id &&
-          tvShow && (
-            <div className="absolute -right-2 top-0 md:top-2">
-              <AccountInteraction
-                item={tvShow}
-                type="tvShow"
-                user={user}
-                fetchUserDatas={fetchUserDatas}
-                listsPageProps={{
-                  favoriteMoviesIds,
-                  favoriteTvShowsIds,
-                  watchlistMoviesIds,
-                  watchlistTvShowsIds,
-                  ratedMovies,
-                  ratedTvShows,
-                  ratedMoviesIds,
-                  ratedTvShowsIds,
-                  classNames,
-                  genresMovies: genres,
-                }}
-                userLists={userLists}
-              />
-            </div>
-          )}
+        {user && user.tmdb_username && status === "authenticated" && tvShow && (
+          <div className="absolute -right-2 top-0 md:top-2">
+            <AccountInteraction
+              item={tvShow}
+              type="tvShow"
+              user={user}
+              fetchUserDatas={fetchUserDatas}
+              listsPageProps={{
+                favoriteMoviesIds,
+                favoriteTvShowsIds,
+                watchlistMoviesIds,
+                watchlistTvShowsIds,
+                ratedMovies,
+                ratedTvShows,
+                ratedMoviesIds,
+                ratedTvShowsIds,
+                classNames,
+                genresMovies: genres,
+              }}
+              userLists={userLists}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

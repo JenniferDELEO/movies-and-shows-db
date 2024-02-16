@@ -47,6 +47,9 @@ const MovieWrapper: FC<Props> = (props) => {
           recommendationsMovies={movieDetails?.recommendations.results}
           totalPages={movieDetails?.recommendations?.total_pages}
           totalResults={movieDetails?.recommendations?.total_results}
+          userMovies={userMovies}
+          userMoviesId={userMoviesId}
+          internalMovies={internalMovies}
         />
       ) : (
         <section className="p-4 md:px-[2.5%] lg:px-[5%] 2xl:px-[10%]">
@@ -65,6 +68,9 @@ const MovieWrapper: FC<Props> = (props) => {
           similarsMovies={movieDetails?.similar?.results}
           totalPages={movieDetails?.similar?.total_pages}
           totalResults={movieDetails?.similar?.total_results}
+          userMovies={userMovies}
+          userMoviesId={userMoviesId}
+          internalMovies={internalMovies}
         />
       )}
     </div>

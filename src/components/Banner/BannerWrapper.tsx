@@ -13,7 +13,11 @@ import {
   InternalMovieUser,
   Movie,
 } from "@/models/movies";
-import { TvShow } from "@/models/tvShows";
+import {
+  InternalTvShow,
+  InternalTvShowAndUser,
+  TvShow,
+} from "@/models/tvShows";
 import { UserContext } from "@/context/userContext";
 import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 
@@ -31,28 +35,50 @@ type Props = {
     genresMovies: Genre[];
     userMovies: InternalMovieUser[];
     userMoviesId: string;
+    internalTvShows: InternalTvShow[];
+    genresTvShows: Genre[];
+    userTvShows: InternalTvShowAndUser[];
+    userTvShowsId: string;
   };
   personDetailProps?: {
     actingMovies: Movie[];
     actingTvShows: TvShow[];
     runningMovies: Movie[];
     runningTvShows: TvShow[];
+    genresMovies: Genre[];
+    userMovies: InternalMovieUser[];
+    userMoviesId: string;
+    internalMovies: InternalMovie[];
+    internalTvShows: InternalTvShow[];
+    genresTvShows: Genre[];
+    userTvShows: InternalTvShowAndUser[];
+    userTvShowsId: string;
   };
   movieCollectionProps?: {
     movies: Movie[];
     title: string;
+    genresMovies: Genre[];
+    userMovies: InternalMovieUser[];
+    userMoviesId: string;
+    internalMovies: InternalMovie[];
   };
   movieDetailsProps?: {
     movies: Movie[];
     title: "Films similaires" | "Films recommandés";
     totalPages: number;
     totalResults: number;
+    userMovies: InternalMovieUser[];
+    userMoviesId: string;
+    internalMovies: InternalMovie[];
   };
   tvShowsDetailsProps?: {
     title: "Séries TV similaires" | "Séries TV recommandées";
     totalPages: number;
     totalResults: number;
     tvShows: TvShow[];
+    userTvShows: InternalTvShowAndUser[];
+    userTvShowsId: string;
+    internalTvShows: InternalTvShow[];
   };
 };
 
@@ -231,6 +257,10 @@ const BannerWrapper: FC<Props> = ({
               classNames={classNames}
               title="Les 20 Séries TV dans les tendances"
               userLists={userLists}
+              internalTvShows={homeProps.internalTvShows}
+              genresTvShows={homeProps.genresTvShows}
+              userTvShows={homeProps.userTvShows}
+              userTvShowsId={homeProps.userTvShowsId}
             />
           </Tab>
           <Tab
@@ -242,7 +272,7 @@ const BannerWrapper: FC<Props> = ({
           >
             <Banner
               items={homeProps.trendingTvShowsThisWeek}
-              type="movie"
+              type="tvShow"
               user={user}
               fetchUserDatas={fetchUserDatas}
               favoriteMoviesIds={favoriteMoviesIds}
@@ -256,6 +286,10 @@ const BannerWrapper: FC<Props> = ({
               classNames={classNames}
               title="Les 20 Séries TV dans les tendances"
               userLists={userLists}
+              internalTvShows={homeProps.internalTvShows}
+              genresTvShows={homeProps.genresTvShows}
+              userTvShows={homeProps.userTvShows}
+              userTvShowsId={homeProps.userTvShowsId}
             />
           </Tab>
         </Tabs>
@@ -275,6 +309,10 @@ const BannerWrapper: FC<Props> = ({
           classNames={classNames}
           title="Les 20 Séries TV les plus populaires"
           userLists={userLists}
+          internalTvShows={homeProps.internalTvShows}
+          genresTvShows={homeProps.genresTvShows}
+          userTvShows={homeProps.userTvShows}
+          userTvShowsId={homeProps.userTvShowsId}
         />
         <Banner
           items={homeProps.topRatedTvShows}
@@ -292,6 +330,10 @@ const BannerWrapper: FC<Props> = ({
           classNames={classNames}
           title="Les 20 Séries TV les mieux notées"
           userLists={userLists}
+          internalTvShows={homeProps.internalTvShows}
+          genresTvShows={homeProps.genresTvShows}
+          userTvShows={homeProps.userTvShows}
+          userTvShowsId={homeProps.userTvShowsId}
         />
       </div>
     );
@@ -316,6 +358,10 @@ const BannerWrapper: FC<Props> = ({
         classNames={classNamesPagesDetails}
         title={movieCollectionProps.title}
         userLists={userLists}
+        internalMovies={movieCollectionProps.internalMovies}
+        genresMovies={movieCollectionProps.genresMovies}
+        userMovies={movieCollectionProps.userMovies}
+        userMoviesId={movieCollectionProps.userMoviesId}
       />
     );
   }
@@ -356,6 +402,9 @@ const BannerWrapper: FC<Props> = ({
               classNames={classNamesPagesDetails}
               title={`${movieDetailsProps.title} (${movieDetailsProps.totalResults})`}
               userLists={userLists}
+              internalMovies={movieDetailsProps.internalMovies}
+              userMovies={movieDetailsProps.userMovies}
+              userMoviesId={movieDetailsProps.userMoviesId}
             />
           </div>
         )}
@@ -385,6 +434,10 @@ const BannerWrapper: FC<Props> = ({
               classNames={classNamesPagesDetails}
               title={`Films (${personDetailProps.actingMovies.length})`}
               userLists={userLists}
+              internalMovies={personDetailProps.internalMovies}
+              genresMovies={personDetailProps.genresMovies}
+              userMovies={personDetailProps.userMovies}
+              userMoviesId={personDetailProps.userMoviesId}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
@@ -409,6 +462,10 @@ const BannerWrapper: FC<Props> = ({
               classNames={classNamesPagesDetails}
               title={`Séries TV (${personDetailProps.actingTvShows.length})`}
               userLists={userLists}
+              internalTvShows={personDetailProps.internalTvShows}
+              genresTvShows={personDetailProps.genresTvShows}
+              userTvShows={personDetailProps.userTvShows}
+              userTvShowsId={personDetailProps.userTvShowsId}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
@@ -433,6 +490,10 @@ const BannerWrapper: FC<Props> = ({
               classNames={classNamesPagesDetails}
               title={`Films réalisés (${personDetailProps.runningMovies.length})`}
               userLists={userLists}
+              internalMovies={personDetailProps.internalMovies}
+              genresMovies={personDetailProps.genresMovies}
+              userMovies={personDetailProps.userMovies}
+              userMoviesId={personDetailProps.userMoviesId}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
@@ -457,6 +518,10 @@ const BannerWrapper: FC<Props> = ({
               classNames={classNamesPagesDetails}
               title={`Séries TV réalisées (${personDetailProps.runningTvShows.length})`}
               userLists={userLists}
+              internalTvShows={personDetailProps.internalTvShows}
+              genresTvShows={personDetailProps.genresTvShows}
+              userTvShows={personDetailProps.userTvShows}
+              userTvShowsId={personDetailProps.userTvShowsId}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
@@ -503,6 +568,9 @@ const BannerWrapper: FC<Props> = ({
               classNames={classNamesPagesDetails}
               title={`${tvShowsDetailsProps.title} (${tvShowsDetailsProps.totalResults})`}
               userLists={userLists}
+              internalTvShows={tvShowsDetailsProps.internalTvShows}
+              userTvShows={tvShowsDetailsProps.userTvShows}
+              userTvShowsId={tvShowsDetailsProps.userTvShowsId}
             />
           </div>
         )}

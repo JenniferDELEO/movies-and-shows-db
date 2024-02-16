@@ -11,16 +11,8 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
-  const {
-    tmdbId,
-    title,
-    numberOfSeasons,
-    numberOfEpisodes,
-    releaseDate,
-    genres,
-    posterPath,
-    overview,
-  } = await req.json();
+  const { tmdbId, title, releaseDate, genres, posterPath, overview } =
+    await req.json();
 
   if (!session) {
     return new NextResponse("Authentication required", { status: 500 });
@@ -35,10 +27,11 @@ export async function POST(req: Request) {
 
     if (tvShowDetails) {
       const seasonDetails = await getSeasonDetails(tmdbId, 1);
-      const totalEpisodes = tvShowDetails.number_of_episodes;
+      const numberOfSeasons = tvShowDetails.number_of_seasons;
+      const numberOfEpisodes = tvShowDetails.number_of_episodes;
       const episodeRuntime = seasonDetails.episodes[0].runtime;
 
-      totalRuntime = totalEpisodes * episodeRuntime;
+      totalRuntime = numberOfEpisodes * episodeRuntime;
 
       const allTvShows = await getAllTvShows();
       const tvShowExists = allTvShows.find(

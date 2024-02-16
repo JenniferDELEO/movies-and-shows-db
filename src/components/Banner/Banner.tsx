@@ -42,8 +42,13 @@ import {
   InternalMovieUser,
   Movie,
 } from "@/models/movies";
-import { TvShow } from "@/models/tvShows";
+import {
+  InternalTvShow,
+  InternalTvShowAndUser,
+  TvShow,
+} from "@/models/tvShows";
 import AccountInteraction from "../AccountInteraction/AccountInteraction";
+import { useSession } from "next-auth/react";
 
 type Props = {
   items: {
@@ -82,6 +87,10 @@ type Props = {
   genresMovies?: Genre[];
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
+  internalTvShows?: InternalTvShow[];
+  genresTvShows?: Genre[];
+  userTvShows?: InternalTvShowAndUser[];
+  userTvShowsId?: string;
 };
 
 const Banner: FC<Props> = ({
@@ -104,8 +113,13 @@ const Banner: FC<Props> = ({
   genresMovies,
   userMovies,
   userMoviesId,
+  internalTvShows,
+  userTvShows,
+  userTvShowsId,
+  genresTvShows,
 }) => {
   const router = useRouter();
+  const { status } = useSession();
   const settings =
     items.length > 4
       ? settingsMinFiveSlides
@@ -151,7 +165,7 @@ const Banner: FC<Props> = ({
                 />
               </picture>
 
-              {user && user.tmdb_username && (
+              {user && user.tmdb_username && status === "authenticated" && (
                 <AccountInteraction
                   item={item}
                   type={type}
@@ -171,6 +185,10 @@ const Banner: FC<Props> = ({
                     genresMovies: genresMovies || [],
                     userMovies: userMovies || [],
                     userMoviesId: userMoviesId || "",
+                    internalTvShows: internalTvShows || [],
+                    genresTvShows: genresTvShows || [],
+                    userTvShows: userTvShows || [],
+                    userTvShowsId: userTvShowsId || "",
                   }}
                   userLists={userLists}
                 />

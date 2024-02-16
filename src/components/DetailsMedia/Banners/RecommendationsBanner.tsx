@@ -1,14 +1,24 @@
 import { FC } from "react";
 
-import { Movie } from "@/models/movies";
+import { InternalMovie, InternalMovieUser, Movie } from "@/models/movies";
 import BannerWrapper from "@/components/Banner/BannerWrapper";
-import { TvShow } from "@/models/tvShows";
+import {
+  InternalTvShow,
+  InternalTvShowAndUser,
+  TvShow,
+} from "@/models/tvShows";
 
 type Props = {
   totalPages: number;
   totalResults: number;
   recommendationsMovies?: Movie[];
   recommendationsTvShows?: TvShow[];
+  userMovies?: InternalMovieUser[];
+  userMoviesId?: string;
+  internalMovies?: InternalMovie[];
+  internalTvShows?: InternalTvShow[];
+  userTvShows?: InternalTvShowAndUser[];
+  userTvShowsId?: string;
 };
 
 const RecommendationsBanner: FC<Props> = (props) => {
@@ -17,6 +27,12 @@ const RecommendationsBanner: FC<Props> = (props) => {
     totalResults,
     recommendationsMovies,
     recommendationsTvShows,
+    userMovies,
+    userMoviesId,
+    internalMovies,
+    userTvShows,
+    userTvShowsId,
+    internalTvShows,
   } = props;
 
   return (
@@ -29,6 +45,9 @@ const RecommendationsBanner: FC<Props> = (props) => {
               title: "Films recommandés",
               totalPages,
               totalResults,
+              userMovies: userMovies || [],
+              userMoviesId: userMoviesId || "",
+              internalMovies: internalMovies || [],
             }}
           />
           <div className="mx-auto mb-0 mt-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
@@ -41,6 +60,9 @@ const RecommendationsBanner: FC<Props> = (props) => {
               title: "Séries TV recommandées",
               totalPages,
               totalResults,
+              userTvShows: userTvShows || [],
+              userTvShowsId: userTvShowsId || "",
+              internalTvShows: internalTvShows || [],
             }}
           />
           <div className="mx-auto mb-0 mt-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />

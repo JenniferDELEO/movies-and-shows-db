@@ -12,6 +12,7 @@ interface RatingProps {
   size?: number;
   edit?: boolean;
   isHalf?: boolean;
+  // eslint-disable-next-line no-unused-vars
   onChange?: (value: number) => void;
   emptyIcon?: ReactElement;
   halfIcon?: ReactElement;

@@ -17,6 +17,7 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 import { InternalMovieUser } from "@/models/movies";
+import { InternalTvShowAndUser } from "@/models/tvShows";
 
 type Props = {
   item: {
@@ -27,6 +28,7 @@ type Props = {
     name?: string;
     character?: string;
   };
+  type: "tvShow" | "movie" | "episode";
   favoriteMoviesIds: number[];
   favoriteTvShowsIds: number[];
   watchlistMoviesIds: number[];
@@ -41,6 +43,7 @@ type Props = {
     dropdownContainer: string;
   };
   userMovies: InternalMovieUser[];
+  userTvShows: InternalTvShowAndUser[];
   // eslint-disable-next-line no-unused-vars
   handleClick: (item: Key) => Promise<void>;
 };
@@ -48,6 +51,7 @@ type Props = {
 const DropdownCard: FC<Props> = (props) => {
   const {
     item,
+    type,
     favoriteMoviesIds,
     favoriteTvShowsIds,
     watchlistMoviesIds,
@@ -56,6 +60,7 @@ const DropdownCard: FC<Props> = (props) => {
     ratedTvShowsIds,
     classNames,
     userMovies,
+    userTvShows,
     handleClick,
   } = props;
 
@@ -64,6 +69,10 @@ const DropdownCard: FC<Props> = (props) => {
     (movie) => movie.account_states.status === "watched",
   );
   const watchedMoviesIds = watchedMovies?.map((movie) => movie.movie.tmdb_id);
+
+  const internalUserTvShowsIds = userTvShows?.map(
+    (tvShow) => tvShow.tv_show.tmdb_id,
+  );
 
   const dropdownItems = [
     {
@@ -115,36 +124,54 @@ const DropdownCard: FC<Props> = (props) => {
     },
   ];
 
-  if (internalUserMoviesIds.includes(item.id)) {
-    dropdownItems.unshift({
-      key: `delete-${item.id}-${item.title || item.name}`,
-      startContent: <FaBan />,
-      content: "Supprimer du compte",
-    });
-    if (watchedMoviesIds.includes(item.id)) {
+  if (type === "movie") {
+    if (internalUserMoviesIds.includes(item.id)) {
       dropdownItems.unshift({
-        key: `toWatch-${item.id}-${item.title || item.name}`,
+        key: `delete-${item.id}-${item.title}`,
+        startContent: <FaBan />,
+        content: "Supprimer du compte",
+      });
+      if (watchedMoviesIds.includes(item.id)) {
+        dropdownItems.unshift({
+          key: `toWatch-${item.id}-${item.title}`,
+          startContent: <MdOutlineCheckBoxOutlineBlank />,
+          content: "Marquer comme à voir",
+        });
+      } else {
+        dropdownItems.unshift({
+          key: `watched-${item.id}-${item.title}`,
+          startContent: <MdOutlineCheckBox />,
+          content: "Marquer comme vu",
+        });
+      }
+    } else {
+      dropdownItems.unshift({
+        key: `toWatch-${item.id}-${item.title}`,
         startContent: <MdOutlineCheckBoxOutlineBlank />,
         content: "Marquer comme à voir",
       });
-    } else {
       dropdownItems.unshift({
-        key: `watched-${item.id}-${item.title || item.name}`,
+        key: `watched-${item.id}-${item.title}`,
         startContent: <MdOutlineCheckBox />,
         content: "Marquer comme vu",
       });
     }
-  } else {
-    dropdownItems.unshift({
-      key: `toWatch-${item.id}-${item.title || item.name}`,
-      startContent: <MdOutlineCheckBoxOutlineBlank />,
-      content: "Marquer comme à voir",
-    });
-    dropdownItems.unshift({
-      key: `watched-${item.id}-${item.title || item.name}`,
-      startContent: <MdOutlineCheckBox />,
-      content: "Marquer comme vu",
-    });
+  }
+
+  if (type === "tvShow") {
+    if (internalUserTvShowsIds.includes(item.id)) {
+      dropdownItems.unshift({
+        key: `delete-${item.id}-${item.name}`,
+        startContent: <FaBan />,
+        content: "Supprimer du compte",
+      });
+    } else {
+      dropdownItems.unshift({
+        key: `add-${item.id}-${item.name}`,
+        startContent: <MdOutlineCheckBox />,
+        content: "Ajouter la série",
+      });
+    }
   }
 
   return (

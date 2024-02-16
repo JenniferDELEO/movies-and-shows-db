@@ -5,6 +5,7 @@ import { ChangeEvent, FC } from "react";
 
 type Props = {
   filterType: string;
+  // eslint-disable-next-line no-unused-vars
   handleSelectionChange: (e: ChangeEvent<HTMLSelectElement>) => Promise<void>;
 };
 

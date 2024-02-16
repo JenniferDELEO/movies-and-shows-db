@@ -1,6 +1,7 @@
 "use client";
 
 import { InternalMovieUser } from "@/models/movies";
+import { InternalTvShowAndUser } from "@/models/tvShows";
 import { Tooltip } from "@nextui-org/react";
 import { FC, Key } from "react";
 import { FaListUl, FaBookmark, FaBan } from "react-icons/fa";
@@ -26,6 +27,7 @@ type Props = {
   isInWatchlist: boolean;
   isRated: boolean;
   userMovies: InternalMovieUser[];
+  userTvShows: InternalTvShowAndUser[];
 };
 
 const IconsInteraction: FC<Props> = (props) => {
@@ -37,6 +39,7 @@ const IconsInteraction: FC<Props> = (props) => {
     isInWatchlist,
     isRated,
     userMovies,
+    userTvShows,
   } = props;
 
   const internalUserMoviesIds = userMovies?.map((movie) => movie.movie.tmdb_id);
@@ -44,6 +47,10 @@ const IconsInteraction: FC<Props> = (props) => {
     (movie) => movie.account_states.status === "watched",
   );
   const watchedMoviesIds = watchedMovies?.map((movie) => movie.movie.tmdb_id);
+
+  const internalUserTvShowsIds = userTvShows?.map(
+    (tvShow) => tvShow.tv_show.tmdb_id,
+  );
 
   const dropdownItems = [
     {
@@ -73,6 +80,7 @@ const IconsInteraction: FC<Props> = (props) => {
       content: "Votre note",
     },
   ];
+
   if (type === "movie") {
     if (internalUserMoviesIds.includes(item.id)) {
       dropdownItems.unshift({
@@ -103,6 +111,22 @@ const IconsInteraction: FC<Props> = (props) => {
         key: `watched-${item.id}-${item.title || item.name}`,
         startContent: <MdOutlineCheckBox />,
         content: "Marquer comme vu",
+      });
+    }
+  }
+
+  if (type === "tvShow") {
+    if (internalUserTvShowsIds.includes(item.id)) {
+      dropdownItems.unshift({
+        key: `delete-${item.id}-${item.name}`,
+        startContent: <FaBan />,
+        content: "Supprimer du compte",
+      });
+    } else {
+      dropdownItems.unshift({
+        key: `add-${item.id}-${item.name}`,
+        startContent: <MdOutlineCheckBox />,
+        content: "Ajouter la série",
       });
     }
   }

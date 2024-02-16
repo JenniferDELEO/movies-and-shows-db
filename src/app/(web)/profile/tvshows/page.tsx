@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
@@ -13,8 +14,6 @@ const ProfileTvShows = () => {
   const [tvShowsUserList, setTvShowsUserList] = useState<
     InternalTvShowAndUser[]
   >([]);
-
-  console.log(tvShowsList, tvShowsUserList);
 
   const fetchAllTvShows = async () => {
     const results = await getAllTvShows();

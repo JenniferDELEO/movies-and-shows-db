@@ -31,12 +31,12 @@ const Auth = () => {
   const { user } = useContext(UserContext);
 
   useEffect(() => {
-    if (session && session.user && !user.tmdb_username) {
-      localStorage.setItem("user_id", session.user.id);
-      localStorage.setItem("user_name", session.user?.name || "");
-      localStorage.setItem("user_email", session.user?.email || "");
-      localStorage.setItem("user_image", session.user?.image || "");
-      router.push("/redirection-to-tmdb");
+    if (session && session.user) {
+      if (!user.tmdb_username) {
+        router.push("/redirection-to-tmdb");
+      } else {
+        router.push("/profile");
+      }
     }
   }, [router, session, user.tmdb_username]);
 
@@ -54,11 +54,11 @@ const Auth = () => {
     try {
       const user = await signUp(formData);
       if (user) {
-        toast.success("Success. Please sign in");
+        toast.success("Inscription réussie. Veuillez vous identifier");
+        await signIn();
       }
     } catch (error) {
-      console.log(error);
-      toast.error("Something wen't wrong");
+      toast.error("Erreur lors de l'inscription");
     } finally {
       setFormData(defaultFormData);
     }
