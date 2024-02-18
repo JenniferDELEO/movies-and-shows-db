@@ -5,6 +5,7 @@ import season from "./season";
 import tv from "./tv";
 import user from "./user";
 import userMovie from "./userMovie";
+import userSeason from "./userSeason";
 import userTv from "./userTv";
 
 export const schemaTypes = [
@@ -15,5 +16,6 @@ export const schemaTypes = [
   tv,
   userTv,
   season,
+  userSeason,
   episode,
 ];

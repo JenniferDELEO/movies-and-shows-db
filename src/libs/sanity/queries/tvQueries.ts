@@ -20,5 +20,4 @@ export const getAllTvsQuery = groq`*[_type == "tv"] {
         genres,
         poster_path,
         overview,
-        users[]
     }`;

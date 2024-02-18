@@ -39,13 +39,6 @@ const movie = {
       title: "Overview",
       type: "text",
     }),
-    defineField({
-      name: "users",
-      title: "Users",
-      type: "array",
-      of: [{ type: "reference", to: [{ type: "user" }] }],
-      validation: (Rule) => Rule.required(),
-    }),
   ],
 };
 

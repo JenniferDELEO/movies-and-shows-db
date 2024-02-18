@@ -6,9 +6,10 @@ const season = {
   type: "document",
   fields: [
     defineField({
-      name: "tmdb_id",
-      title: "TMDB ID",
-      type: "number",
+      name: "title",
+      title: "Title",
+      type: "reference",
+      to: [{ type: "tv" }],
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -26,55 +27,49 @@ const season = {
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "season_runtime",
-      title: "Season Runtime",
+      name: "tmdb_id",
+      title: "TMDB ID",
       type: "number",
-      initialValue: 0,
-    }),
-    defineField({
-      name: "user",
-      title: "User",
-      type: "reference",
-      to: [{ type: "user" }],
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "tv",
-      title: "TV",
-      type: "reference",
-      to: [{ type: "tv" }],
+      name: "release_date",
+      title: "Release Date",
+      type: "date",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "account_states",
-      title: "Account States",
-      type: "object",
-      fields: [
+      name: "episodes",
+      title: "Episodes",
+      type: "array",
+      of: [
         {
-          name: "all_watched",
-          title: "All Watched",
-          type: "boolean",
-          initialValue: false,
-        },
-        {
-          name: "results",
-          title: "Results",
-          type: "array",
-          of: [
+          type: "object",
+          fields: [
             {
-              type: "object",
-              fields: [
-                {
-                  name: "episode_number",
-                  title: "Episode Number",
-                  type: "number",
-                },
-                {
-                  name: "watched",
-                  title: "Watched",
-                  type: "boolean",
-                },
-              ],
+              name: "episode_name",
+              title: "Episode Name",
+              type: "string",
+            },
+            {
+              name: "episode_number",
+              title: "Episode Number",
+              type: "number",
+            },
+            {
+              name: "episode_total_number",
+              title: "Episode Total Number",
+              type: "number",
+            },
+            {
+              name: "episode_runtime",
+              title: "Episode Runtime",
+              type: "number",
+            },
+            {
+              name: "episode_release_date",
+              title: "Episode Release Date",
+              type: "string",
             },
           ],
         },

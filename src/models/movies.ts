@@ -153,11 +153,6 @@ export type InternalMovie = {
   genres: string[];
   poster_path: string;
   overview: string;
-  users: {
-    _key: string;
-    _type: "reference";
-    _ref: string;
-  }[];
 };
 
 export type InternalMovieUser = {
@@ -168,19 +163,13 @@ export type InternalMovieUser = {
   };
 };
 
-export type AddMovieAndUser = {
+export type AddMovie = {
   tmdbId: number;
   title: string;
   releaseDate: string;
   genres: string[];
   posterPath: string;
   overview: string;
-  userId: string;
-};
-
-export type UpdateMovieAndUser = {
-  userId: string;
-  movieId: string;
 };
 
 export type CreateMovieStatus = {
@@ -190,12 +179,6 @@ export type CreateMovieStatus = {
 };
 
 export type AddMovieStatus = {
-  userMovieId: string;
-  movieId: string;
-  status: "watched" | "to_watch";
-};
-
-export type UpdateMovieStatus = {
   userMovieId: string;
   movieId: string;
   status: "watched" | "to_watch";

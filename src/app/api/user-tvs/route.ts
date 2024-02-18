@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     const allTvs = await getAllTvs();
     const tvId = allTvs.find((movie) => movie.tmdb_id === Number(tmdbId))?._id;
     if (!tvId) {
-      return new NextResponse("Failed to retrieve tv Id", { status: 400 });
+      return new NextResponse("Failed to retrieve tv id", { status: 400 });
     }
 
     const userTvs = await getUserTvs(userId);

@@ -144,6 +144,23 @@ export async function getTvDetail(id: string): Promise<TvDetails> {
   }
 }
 
+export async function getTvDetailForDb(id: string): Promise<TvDetails> {
+  try {
+    const result = await axios.request({
+      ...optionsGET,
+      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/${id}`,
+      params: {
+        language: "fr-FR",
+      },
+    });
+
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 export async function getCreditsTv(
   id: string,
 ): Promise<{ id: number; cast: CastTvs[]; crew: CrewTvs[] }> {

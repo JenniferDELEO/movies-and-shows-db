@@ -7,7 +7,7 @@ import "dayjs/locale/fr";
 import updateLocale from "dayjs/plugin/updateLocale";
 
 import StarRating from "@/components/StarRate/StarRating";
-import { Tv } from "@/models/tvs";
+import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
 import {
   Genre,
   InternalMovie,
@@ -65,6 +65,9 @@ type Props = {
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
+  userTvs?: InternalTvAndUser[];
+  userTvsId?: string;
+  internalTvs?: InternalTv[];
 };
 
 const Card: FC<Props> = ({
@@ -86,11 +89,23 @@ const Card: FC<Props> = ({
   userMovies,
   userMoviesId,
   internalMovies,
+  userTvs,
+  userTvsId,
+  internalTvs,
 }) => {
   const router = useRouter();
   const { user } = useContext(UserContext);
 
   const { status } = useSession();
+
+  /*   console.log(
+    "userTvs",
+    userTvs,
+    "userTvsId",
+    userTvsId,
+    "internalTvs",
+    internalTvs,
+  ); */
 
   const overviewRest =
     movie?.overview?.split(" ")?.filter(Boolean) ||
@@ -208,29 +223,38 @@ const Card: FC<Props> = ({
               />
             </div>
           )}
-        {user && user.tmdb_username && status === "authenticated" && tv && (
-          <div className="absolute -right-2 top-0 md:top-2">
-            <AccountInteraction
-              item={tv}
-              type="tv"
-              user={user}
-              fetchUserDatas={fetchUserDatas}
-              listsPageProps={{
-                favoriteMoviesIds,
-                favoriteTvsIds,
-                watchlistMoviesIds,
-                watchlistTvsIds,
-                ratedMovies,
-                ratedTvs,
-                ratedMoviesIds,
-                ratedTvsIds,
-                classNames,
-                genresMovies: genres,
-              }}
-              userLists={userLists}
-            />
-          </div>
-        )}
+        {user &&
+          user.tmdb_username &&
+          status === "authenticated" &&
+          tv &&
+          userTvs &&
+          userTvsId &&
+          internalTvs && (
+            <div className="absolute -right-2 top-0 md:top-2">
+              <AccountInteraction
+                item={tv}
+                type="tv"
+                user={user}
+                fetchUserDatas={fetchUserDatas}
+                listsPageProps={{
+                  favoriteMoviesIds,
+                  favoriteTvsIds,
+                  watchlistMoviesIds,
+                  watchlistTvsIds,
+                  ratedMovies,
+                  ratedTvs,
+                  ratedMoviesIds,
+                  ratedTvsIds,
+                  classNames,
+                  genresTvs: genres,
+                  userTvs,
+                  userTvsId,
+                  internalTvs,
+                }}
+                userLists={userLists}
+              />
+            </div>
+          )}
       </div>
     </div>
   );

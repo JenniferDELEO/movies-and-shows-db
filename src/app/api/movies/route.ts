@@ -1,8 +1,4 @@
-import {
-  addMovieAndUser,
-  getAllMovies,
-  updateMovieAndUser,
-} from "@/libs/sanity/api/movie";
+import { addMovie, getAllMovies } from "@/libs/sanity/api/movie";
 import { authOptions } from "@/libs/sanity/auth";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
@@ -17,8 +13,6 @@ export async function POST(req: Request) {
     return new NextResponse("Authentication required", { status: 500 });
   }
 
-  const userId = session.user.id;
-
   try {
     const allMovies = await getAllMovies();
     const movieExists = allMovies.find(
@@ -28,26 +22,15 @@ export async function POST(req: Request) {
     let data;
 
     if (movieExists) {
-      const checkUserExists = movieExists.users.find(
-        (user) => user._ref === userId,
-      );
-      if (checkUserExists) {
-        return new NextResponse("User already exists", { status: 200 });
-      } else {
-        data = await updateMovieAndUser({
-          movieId: movieExists._id,
-          userId,
-        });
-      }
+      return new NextResponse("Movie already exists", { status: 200 });
     } else {
-      data = await addMovieAndUser({
+      data = await addMovie({
         tmdbId: Number(tmdbId),
         title,
         releaseDate,
         genres,
         posterPath,
         overview,
-        userId,
       });
     }
     return NextResponse.json(data, { status: 200, statusText: "Successful" });

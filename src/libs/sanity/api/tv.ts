@@ -1,13 +1,12 @@
 import sanityClient from "../sanity";
 import * as queries from "../queries/tvQueries";
 import {
-  AddTvAndUser,
+  AddTv,
   AddTvStatus,
   CreateTvStatus,
   InternalTv,
   InternalTvAndUser,
-  UpdateTvAndUser,
-  UpdateTvStatus,
+  UpdateTv,
 } from "@/models/tvs";
 import axios from "axios";
 
@@ -32,7 +31,7 @@ export async function getUserTvs(userId: string) {
 
 /*-------------------- POST / PATCH --------------------*/
 
-export async function addTvAndUser({
+export async function addTv({
   tmdbId,
   title,
   numberOfSeasons,
@@ -42,8 +41,7 @@ export async function addTvAndUser({
   genres,
   posterPath,
   overview,
-  userId,
-}: AddTvAndUser) {
+}: AddTv) {
   const mutation = {
     mutations: [
       {
@@ -58,13 +56,6 @@ export async function addTvAndUser({
           genres,
           poster_path: posterPath,
           overview,
-          users: [
-            {
-              _key: userId,
-              _type: "reference",
-              _ref: userId,
-            },
-          ],
         },
       },
     ],
@@ -78,22 +69,20 @@ export async function addTvAndUser({
   return data;
 }
 
-export async function updateTvAndUser({ tvId, userId }: UpdateTvAndUser) {
+export async function updateTv({
+  tvId,
+  numberOfSeasons,
+  numberOfEpisodes,
+  totalRuntime,
+}: UpdateTv) {
   const mutation = {
     mutations: [
       {
         patch: {
           id: tvId,
-          insert: {
-            after: "users[-1]",
-            items: [
-              {
-                _key: userId,
-                _type: "reference",
-                _ref: userId,
-              },
-            ],
-          },
+          number_of_seasons: numberOfSeasons,
+          number_of_episodes: numberOfEpisodes,
+          total_runtime: totalRuntime,
         },
       },
     ],
@@ -104,7 +93,6 @@ export async function updateTvAndUser({ tvId, userId }: UpdateTvAndUser) {
     mutation,
     { headers: { Authorization: `Bearer ${process.env.SANITY_STUDIO_TOKEN}` } },
   );
-
   return data;
 }
 
@@ -195,7 +183,7 @@ export async function updateUserTvStatus({
   tvId,
   status,
   watchState,
-}: UpdateTvStatus) {
+}: AddTvStatus) {
   const mutation = {
     mutations: [
       {
@@ -220,27 +208,6 @@ export async function updateUserTvStatus({
 }
 
 /*-------------------- DELETE --------------------*/
-
-export async function deleteTvAndUser(tvId: string, userId: string) {
-  const mutation = {
-    mutations: [
-      {
-        patch: {
-          id: tvId,
-          unset: [`users[_key=="${userId}"]`],
-        },
-      },
-    ],
-  };
-
-  const { data } = await axios.post(
-    `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${process.env.NEXT_PUBLIC_SANITY_DATASET}`,
-    mutation,
-    { headers: { Authorization: `Bearer ${process.env.SANITY_STUDIO_TOKEN}` } },
-  );
-
-  return data;
-}
 
 export async function deleteUserTvAndStatus(userTvId: string, tvId: string) {
   const mutation = {

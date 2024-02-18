@@ -18,5 +18,4 @@ export const getAllMoviesQuery = groq`*[_type == "movie"] {
     genres,
     poster_path,
     overview,
-    users[]
 }`;

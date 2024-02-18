@@ -66,7 +66,7 @@ type Props = {
       dropdownContainer: string;
     };
     internalMovies?: InternalMovie[];
-    genresMovies: Genre[];
+    genresMovies?: Genre[];
     userMovies?: InternalMovieUser[];
     userMoviesId?: string;
     internalTvs?: InternalTv[];
@@ -113,6 +113,14 @@ const AccountInteraction: FC<Props> = (props) => {
   );
 
   const { data: session, status } = useSession();
+  console.log(
+    "userTvs",
+    mediaDetailsPageProps?.userTvs,
+    "userTvsId",
+    mediaDetailsPageProps?.userTvsId,
+    "internalTvs",
+    mediaDetailsPageProps?.internalTvs,
+  );
 
   const movieGenres =
     item?.genre_ids?.map((genreId) => {
@@ -212,7 +220,12 @@ const AccountInteraction: FC<Props> = (props) => {
           if (responseAddStatus.status === 200)
             toast.success("Série ajoutée avec succès");
           const result = await getUserTvs(session.user.id);
+          const tvAdded = result.tvs.find((tv) => tv.tv.tmdb_id === Number(id));
           setTvsAccount(result.tvs);
+          const responseAddSeasons = await axios.post("/api/tvs/seasons", {
+            tvTmdbId: Number(id),
+            tvId: tvAdded?.tv._id,
+          });
         }
       }
 
@@ -229,18 +242,9 @@ const AccountInteraction: FC<Props> = (props) => {
             { userMovieId: listsPageProps.userMoviesId, movieId: _movieId },
           );
           if (responseUserMovieAndStatus.status === 200) {
-            const responseMovieAndUser = await axios.post(
-              `/api/movies/${_movieId}`,
-              {
-                movieId: _movieId,
-              },
-            );
-
-            if (responseMovieAndUser.status === 200) {
-              toast.success("Film supprimé du compte avec succès");
-              const result = await getUserMovies(session.user.id);
-              setMoviesAccount(result.movies);
-            }
+            toast.success("Film supprimé du compte avec succès");
+            const result = await getUserMovies(session.user.id);
+            setMoviesAccount(result.movies);
           }
         }
 
@@ -250,15 +254,9 @@ const AccountInteraction: FC<Props> = (props) => {
             { userTvId: listsPageProps.userTvsId, tvId: _tvId },
           );
           if (responseUserTvAndStatus.status === 200) {
-            const responseTvAndUser = await axios.post(`/api/tvs/${_tvId}`, {
-              tvId: _tvId,
-            });
-
-            if (responseTvAndUser.status === 200) {
-              toast.success("Série supprimée du compte avec succès");
-              const result = await getUserTvs(session.user.id);
-              setTvsAccount(result.tvs);
-            }
+            toast.success("Série supprimée du compte avec succès");
+            const result = await getUserTvs(session.user.id);
+            setTvsAccount(result.tvs);
           }
         }
 
@@ -312,18 +310,9 @@ const AccountInteraction: FC<Props> = (props) => {
             },
           );
           if (responseUserMovieAndStatus.status === 200) {
-            const responseMovieAndUser = await axios.post(
-              `/api/movies/${_movieId}`,
-              {
-                movieId: _movieId,
-              },
-            );
-
-            if (responseMovieAndUser.status === 200) {
-              toast.success("Film supprimé du compte avec succès");
-              const result = await getUserMovies(session.user.id);
-              setMoviesAccount(result.movies);
-            }
+            toast.success("Film supprimé du compte avec succès");
+            const result = await getUserMovies(session.user.id);
+            setMoviesAccount(result.movies);
           }
         }
 
@@ -333,15 +322,9 @@ const AccountInteraction: FC<Props> = (props) => {
             { userTvId: mediaDetailsPageProps.userTvsId, tvId: _tvId },
           );
           if (responseUserTvAndStatus.status === 200) {
-            const responseTvAndUser = await axios.post(`/api/tvs/${_tvId}`, {
-              tvId: _tvId,
-            });
-
-            if (responseTvAndUser.status === 200) {
-              toast.success("Série supprimée du compte avec succès");
-              const result = await getUserTvs(session.user.id);
-              setTvsAccount(result.tvs);
-            }
+            toast.success("Série supprimée du compte avec succès");
+            const result = await getUserTvs(session.user.id);
+            setTvsAccount(result.tvs);
           }
         }
 

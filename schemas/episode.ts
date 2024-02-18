@@ -6,21 +6,28 @@ const episode = {
   type: "document",
   fields: [
     defineField({
+      name: "title",
+      title: "Title",
+      type: "string",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
       name: "tmdb_id",
       title: "TMDB ID",
       type: "number",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "episode_number",
-      title: "Episode Number",
+      name: "season_number",
+      title: "Season Number",
       type: "number",
+      initialValue: 1,
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "title",
-      title: "Title",
-      type: "string",
+      name: "episode_number",
+      title: "Episode Number",
+      type: "number",
       validation: (Rule) => Rule.required(),
     }),
     defineField({

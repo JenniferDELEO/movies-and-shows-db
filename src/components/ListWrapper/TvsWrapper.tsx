@@ -6,7 +6,7 @@ import { Button } from "@nextui-org/react";
 
 import Filters from "@/components/Filters/Filters";
 import Cards from "@/components/Cards/Cards";
-import { Tv } from "@/models/tvs";
+import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
 import OrderingSelect from "@/components/Filters/OrderingSelect";
 import { Watcher } from "@/models/watchers";
 import FiltersModal from "@/components/Modals/FiltersModal";
@@ -21,6 +21,9 @@ type Props = {
   providersTvs: Watcher[];
   title: string;
   totalPagesTvs: number;
+  userTvs: InternalTvAndUser[];
+  userTvsId: string;
+  internalTvs: InternalTv[];
 
   defaultFilters?: TvsFilters;
 };
@@ -32,6 +35,9 @@ const TvsWrapper: FC<Props> = (props) => {
     providersTvs,
     title,
     totalPagesTvs,
+    userTvs,
+    userTvsId,
+    internalTvs,
 
     defaultFilters,
   } = props;
@@ -156,7 +162,14 @@ const TvsWrapper: FC<Props> = (props) => {
         <div className="w-full lg:w-[75%]" ref={ref}>
           {tvsList.length > 0 ? (
             <>
-              <Cards tvs={tvsList} filterType="tv" genres={genresTvs} />
+              <Cards
+                tvs={tvsList}
+                filterType="tv"
+                genres={genresTvs}
+                userTvs={userTvs}
+                userTvsId={userTvsId}
+                internalTvs={internalTvs}
+              />
               <Pagination
                 total={totalPages}
                 currentPage={currentPage}

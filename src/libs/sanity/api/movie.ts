@@ -1,10 +1,8 @@
 import {
-  AddMovieAndUser,
+  AddMovie,
   InternalMovie,
   InternalMovieUser,
   AddMovieStatus,
-  UpdateMovieAndUser,
-  UpdateMovieStatus,
   CreateMovieStatus,
 } from "@/models/movies";
 import sanityClient from "../sanity";
@@ -32,15 +30,14 @@ export async function getUserMovies(userId: string) {
 
 /*-------------------- POST / PATCH --------------------*/
 
-export async function addMovieAndUser({
+export async function addMovie({
   tmdbId,
   title,
   releaseDate,
   genres,
   posterPath,
   overview,
-  userId,
-}: AddMovieAndUser) {
+}: AddMovie) {
   const mutation = {
     mutations: [
       {
@@ -52,13 +49,6 @@ export async function addMovieAndUser({
           genres,
           poster_path: posterPath,
           overview,
-          users: [
-            {
-              _key: userId,
-              _type: "reference",
-              _ref: userId,
-            },
-          ],
         },
       },
     ],
@@ -69,39 +59,6 @@ export async function addMovieAndUser({
     mutation,
     { headers: { Authorization: `Bearer ${process.env.SANITY_STUDIO_TOKEN}` } },
   );
-  return data;
-}
-
-export async function updateMovieAndUser({
-  movieId,
-  userId,
-}: UpdateMovieAndUser) {
-  const mutation = {
-    mutations: [
-      {
-        patch: {
-          id: movieId,
-          insert: {
-            after: "users[-1]",
-            items: [
-              {
-                _key: userId,
-                _type: "reference",
-                _ref: userId,
-              },
-            ],
-          },
-        },
-      },
-    ],
-  };
-
-  const { data } = await axios.post(
-    `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${process.env.NEXT_PUBLIC_SANITY_DATASET}`,
-    mutation,
-    { headers: { Authorization: `Bearer ${process.env.SANITY_STUDIO_TOKEN}` } },
-  );
-
   return data;
 }
 
@@ -187,7 +144,7 @@ export async function updateUserMovieStatus({
   userMovieId,
   movieId,
   status,
-}: UpdateMovieStatus) {
+}: AddMovieStatus) {
   const mutation = {
     mutations: [
       {
@@ -211,27 +168,6 @@ export async function updateUserMovieStatus({
 }
 
 /*-------------------- DELETE --------------------*/
-
-export async function deleteMovieAndUser(movieId: string, userId: string) {
-  const mutation = {
-    mutations: [
-      {
-        patch: {
-          id: movieId,
-          unset: [`users[_key=="${userId}"]`],
-        },
-      },
-    ],
-  };
-
-  const { data } = await axios.post(
-    `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${process.env.NEXT_PUBLIC_SANITY_DATASET}`,
-    mutation,
-    { headers: { Authorization: `Bearer ${process.env.SANITY_STUDIO_TOKEN}` } },
-  );
-
-  return data;
-}
 
 export async function deleteUserMovieAndStatus(
   userMovieId: string,

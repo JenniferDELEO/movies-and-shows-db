@@ -196,11 +196,6 @@ export type InternalTv = {
   genres: string[];
   poster_path: string;
   overview: string;
-  users: {
-    _key: string;
-    _type: "reference";
-    _ref: string;
-  }[];
 };
 
 export type InternalTvAndUser = {
@@ -212,7 +207,7 @@ export type InternalTvAndUser = {
   };
 };
 
-export type AddTvAndUser = {
+export type AddTv = {
   tmdbId: number;
   title: string;
   numberOfSeasons: number;
@@ -222,12 +217,13 @@ export type AddTvAndUser = {
   genres: string[];
   posterPath: string;
   overview: string;
-  userId: string;
 };
 
-export type UpdateTvAndUser = {
-  userId: string;
+export type UpdateTv = {
   tvId: string;
+  numberOfSeasons: number;
+  numberOfEpisodes: number;
+  totalRuntime: number;
 };
 
 export type CreateTvStatus = {
@@ -244,11 +240,96 @@ export type AddTvStatus = {
   watchState: "started" | "finished" | "to_watch";
 };
 
-export type UpdateTvStatus = {
-  userTvId: string;
-  tvId: string;
-  status: "active" | "archived" | "to_discover";
-  watchState: "started" | "finished" | "to_watch";
+/* ----------------------- Internal Models TV Seasons ----------------------- */
+
+export type InternalEpisode = {
+  _id: string;
+  episode_name: string;
+  episode_number: number;
+  episode_release_date: string;
+  episode_runtime: number;
+  episode_total_number: number;
 };
 
-/* ----------------------- Internal Models TV Seasons ----------------------- */
+export type InternalSeason = {
+  _id: string;
+  tmdb_id: number;
+  number_of_episodes: number;
+  release_date: string;
+  season_number: number;
+  episodes: InternalEpisode[];
+};
+
+export type InternalSeasonAndUser = {
+  _id: string;
+  season: InternalSeason;
+  account_states: {
+    all_watched: boolean;
+    episodes: {
+      episode_id: string;
+      episode_number: number;
+      watched: boolean;
+    }[];
+  };
+};
+
+export type AddSeason = {
+  tmdbId: number;
+  tvId: string;
+  numberOfEpisodes: number;
+  releaseDate: string;
+  seasonNumber: number;
+  episodes: {
+    episodeName: string;
+    episodeNumber: number;
+    episodeReleaseDate: string;
+    episodeRuntime: number;
+    episodeTotalNumber: number;
+  }[];
+};
+
+export type UpdateSeason = {
+  seasonId: string;
+  tmdbId: number;
+  episodes: {
+    episodeName: string;
+    episodeNumber: number;
+    episodeReleaseDate: string;
+    episodeRuntime: number;
+    episodeTotalNumber: number;
+  }[];
+};
+
+export type CreateSeasonStatus = {
+  userId: string;
+  tvId: string;
+  seasonId: string;
+  allWatched: boolean;
+  episodes: {
+    episodeId: string;
+    episodeNumber: number;
+    watched: boolean;
+  }[];
+};
+
+export type AddSeasonStatus = {
+  userSeasonId: string;
+  seasonId: string;
+  allWatched: boolean;
+  episodes: {
+    episodeId: string;
+    episodeNumber: number;
+    watched: boolean;
+  }[];
+};
+
+export type UpdateSeasonEpisodeStatus = {
+  userSeasonId: string;
+  seasonId: string;
+  allWatched: boolean;
+  episodes: {
+    episodeId: string;
+    episodeNumber: number;
+    watched: boolean;
+  }[];
+};

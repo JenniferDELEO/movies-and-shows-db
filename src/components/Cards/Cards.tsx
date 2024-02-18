@@ -7,7 +7,7 @@ import {
   InternalMovieUser,
   Movie,
 } from "@/models/movies";
-import { Tv } from "@/models/tvs";
+import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
 import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 
 type Props = {
@@ -18,6 +18,9 @@ type Props = {
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
+  userTvs?: InternalTvAndUser[];
+  userTvsId?: string;
+  internalTvs?: InternalTv[];
 };
 
 const Cards: FC<Props> = ({
@@ -28,6 +31,9 @@ const Cards: FC<Props> = ({
   userMovies,
   userMoviesId,
   internalMovies,
+  userTvs,
+  userTvsId,
+  internalTvs,
 }) => {
   const {
     fetchUserDatas,
@@ -87,6 +93,9 @@ const Cards: FC<Props> = ({
               ratedMoviesIds={ratedMoviesIds}
               ratedTvsIds={ratedTvsIds}
               userLists={userLists}
+              userTvs={userTvs}
+              userTvsId={userTvsId}
+              internalTvs={internalTvs}
             />
           ))}
         </div>

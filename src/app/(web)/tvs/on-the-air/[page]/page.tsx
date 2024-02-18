@@ -5,6 +5,10 @@ import weekdayPlugin from "dayjs/plugin/weekday";
 import TvsWrapper from "@/components/ListWrapper/TvsWrapper";
 import { getDiscoverTvs, getGenresTvs, getTvsProviders } from "@/libs/api/tvs";
 import { defaultTvsFilters } from "@/libs/helpers/filters";
+import { InternalTvAndUser } from "@/models/tvs";
+import { getAllTvs, getUserTvs } from "@/libs/sanity/api/tv";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/libs/sanity/auth";
 
 dayjs.extend(weekdayPlugin);
 
@@ -13,6 +17,8 @@ export const metadata: Metadata = {
 };
 
 const Tvs = async () => {
+  const session = await getServerSession(authOptions);
+
   const nextWeek = dayjs().add(1, "week").format("YYYY-MM-DD");
 
   const onTheAirFilters = {
@@ -29,6 +35,16 @@ const Tvs = async () => {
   } = await getDiscoverTvs(onTheAirFilters);
   const { results: providersTvs } = await getTvsProviders();
 
+  let userTvs: InternalTvAndUser[] = [];
+  let userTvsId: string = "";
+  if (session) {
+    const results = await getUserTvs(session.user.id);
+    userTvs = results?.tvs || [];
+    userTvsId = results?._id;
+  }
+
+  const internalTvs = await getAllTvs();
+
   const title = `Séries TV en cours de diffusion (${totalResultsTvs})`;
 
   return (
@@ -39,6 +55,9 @@ const Tvs = async () => {
       providersTvs={providersTvs}
       title={title}
       totalPagesTvs={totalPagesTvs}
+      userTvs={userTvs}
+      userTvsId={userTvsId}
+      internalTvs={internalTvs}
     />
   );
 };
