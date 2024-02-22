@@ -20,6 +20,15 @@ export async function getAllMovies() {
   return result;
 }
 
+export async function getMovieById(movieId: string) {
+  const result = await sanityClient.fetch<InternalMovie>(
+    queries.getMovieByIdQuery,
+    { movieId },
+    { cache: "no-cache" },
+  );
+  return result;
+}
+
 export async function getUserMovies(userId: string) {
   const result = await sanityClient.fetch<{
     _id: string;
@@ -31,24 +40,26 @@ export async function getUserMovies(userId: string) {
 /*-------------------- POST / PATCH --------------------*/
 
 export async function addMovie({
-  tmdbId,
   title,
+  runtime,
   releaseDate,
   genres,
   posterPath,
   overview,
+  tmdbId,
 }: AddMovie) {
   const mutation = {
     mutations: [
       {
         create: {
           _type: "movie",
-          tmdb_id: tmdbId,
+          runtime,
           title,
           release_date: releaseDate,
           genres,
           poster_path: posterPath,
           overview,
+          tmdb_id: tmdbId,
         },
       },
     ],
@@ -64,6 +75,7 @@ export async function addMovie({
 
 export async function createUserMovieAndStatus({
   movieId,
+  userName,
   userId,
   status,
 }: CreateMovieStatus) {
@@ -72,7 +84,8 @@ export async function createUserMovieAndStatus({
       {
         create: {
           _type: "user_movie",
-          title: {
+          user_name: userName,
+          user: {
             _type: "reference",
             _ref: userId,
           },

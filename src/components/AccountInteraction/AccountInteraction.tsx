@@ -72,7 +72,6 @@ type Props = {
     internalTvs?: InternalTv[];
     genresTvs?: Genre[];
     userTvs?: InternalTvAndUser[];
-    userTvsId?: string;
   };
   mediaDetailsPageProps?: {
     isFavorite: boolean;
@@ -84,7 +83,6 @@ type Props = {
     internalMovies?: InternalMovie[];
     internalTvs?: InternalTv[];
     userTvs?: InternalTvAndUser[];
-    userTvsId?: string;
   };
 };
 
@@ -113,14 +111,6 @@ const AccountInteraction: FC<Props> = (props) => {
   );
 
   const { data: session, status } = useSession();
-  console.log(
-    "userTvs",
-    mediaDetailsPageProps?.userTvs,
-    "userTvsId",
-    mediaDetailsPageProps?.userTvsId,
-    "internalTvs",
-    mediaDetailsPageProps?.internalTvs,
-  );
 
   const movieGenres =
     item?.genre_ids?.map((genreId) => {
@@ -202,7 +192,7 @@ const AccountInteraction: FC<Props> = (props) => {
         }
       }
 
-      if (category === "add" && type === "tv") {
+      /* if (category === "add" && type === "tv") {
         const responseAddTv = await axios.post("/api/tvs", {
           tmdbId: id,
           title: item.name,
@@ -227,7 +217,7 @@ const AccountInteraction: FC<Props> = (props) => {
             tvId: tvAdded?.tv._id,
           });
         }
-      }
+      } */
 
       if (category === "note") {
         const name = media.toString().split("-")[2];
@@ -248,7 +238,7 @@ const AccountInteraction: FC<Props> = (props) => {
           }
         }
 
-        if (category === "delete" && type === "tv") {
+        /* if (category === "delete" && type === "tv") {
           const responseUserTvAndStatus = await axios.post(
             `/api/user-tvs/${listsPageProps.userTvsId}`,
             { userTvId: listsPageProps.userTvsId, tvId: _tvId },
@@ -258,7 +248,7 @@ const AccountInteraction: FC<Props> = (props) => {
             const result = await getUserTvs(session.user.id);
             setTvsAccount(result.tvs);
           }
-        }
+        } */
 
         if (category === "addToList") {
           const name = media.toString().split("-")[2];
@@ -316,7 +306,7 @@ const AccountInteraction: FC<Props> = (props) => {
           }
         }
 
-        if (category === "delete" && type === "tv") {
+        /* if (category === "delete" && type === "tv") {
           const responseUserTvAndStatus = await axios.post(
             `/api/user-tvs/${mediaDetailsPageProps.userTvsId}`,
             { userTvId: mediaDetailsPageProps.userTvsId, tvId: _tvId },
@@ -326,7 +316,7 @@ const AccountInteraction: FC<Props> = (props) => {
             const result = await getUserTvs(session.user.id);
             setTvsAccount(result.tvs);
           }
-        }
+        } */
 
         if (category === "addToList") {
           const name = media.toString().split("-")[2];

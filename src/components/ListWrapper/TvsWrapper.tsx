@@ -22,7 +22,6 @@ type Props = {
   title: string;
   totalPagesTvs: number;
   userTvs: InternalTvAndUser[];
-  userTvsId: string;
   internalTvs: InternalTv[];
 
   defaultFilters?: TvsFilters;
@@ -36,7 +35,6 @@ const TvsWrapper: FC<Props> = (props) => {
     title,
     totalPagesTvs,
     userTvs,
-    userTvsId,
     internalTvs,
 
     defaultFilters,
@@ -167,7 +165,6 @@ const TvsWrapper: FC<Props> = (props) => {
                 filterType="tv"
                 genres={genresTvs}
                 userTvs={userTvs}
-                userTvsId={userTvsId}
                 internalTvs={internalTvs}
               />
               <Pagination

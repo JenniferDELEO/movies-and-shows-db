@@ -12,6 +12,24 @@ import axios from "axios";
 
 /*-------------------- GET --------------------*/
 
+export async function getUserTvs(userId: string) {
+  const result = await sanityClient.fetch<InternalTvAndUser[]>(
+    queries.getUserTvsQuery,
+    { userId },
+    { cache: "no-cache" },
+  );
+  return result;
+}
+
+export async function getUserTvById(userId: string, tvId: string) {
+  const result = await sanityClient.fetch<InternalTvAndUser>(
+    queries.getUserTvByIdQuery,
+    { userId, tvId },
+    { cache: "no-cache" },
+  );
+  return result;
+}
+
 export async function getAllTvs() {
   const result = await sanityClient.fetch<InternalTv[]>(
     queries.getAllTvsQuery,
@@ -21,18 +39,18 @@ export async function getAllTvs() {
   return result;
 }
 
-export async function getUserTvs(userId: string) {
-  const result = await sanityClient.fetch<{
-    _id: string;
-    tvs: InternalTvAndUser[];
-  }>(queries.getUserTvsQuery, { userId }, { cache: "no-cache" });
+export async function getTvById(tvId: string) {
+  const result = await sanityClient.fetch<InternalTv>(
+    queries.getTvByIdQuery,
+    { tvId },
+    { cache: "no-cache" },
+  );
   return result;
 }
 
 /*-------------------- POST / PATCH --------------------*/
 
 export async function addTv({
-  tmdbId,
   title,
   numberOfSeasons,
   numberOfEpisodes,
@@ -41,13 +59,13 @@ export async function addTv({
   genres,
   posterPath,
   overview,
+  tmdbId,
 }: AddTv) {
   const mutation = {
     mutations: [
       {
         create: {
           _type: "tv",
-          tmdb_id: tmdbId,
           title,
           number_of_seasons: numberOfSeasons,
           number_of_episodes: numberOfEpisodes,
@@ -56,6 +74,7 @@ export async function addTv({
           genres,
           poster_path: posterPath,
           overview,
+          tmdb_id: tmdbId,
         },
       },
     ],
@@ -97,8 +116,10 @@ export async function updateTv({
 }
 
 export async function createUserTvAndStatus({
-  tvId,
   userId,
+  userName,
+  tvId,
+  tvTitle,
   status,
   watchState,
 }: CreateTvStatus) {
@@ -107,62 +128,19 @@ export async function createUserTvAndStatus({
       {
         create: {
           _type: "user_tv",
-          title: {
+          user_name: userName,
+          tvTitle,
+          user: {
             _type: "reference",
             _ref: userId,
           },
-          tvs: [
-            {
-              _key: tvId,
-              tv: {
-                _type: "reference",
-                _ref: tvId,
-              },
-              account_states: {
-                status,
-                watch_state: watchState,
-              },
-            },
-          ],
-        },
-      },
-    ],
-  };
-
-  const { data } = await axios.post(
-    `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${process.env.NEXT_PUBLIC_SANITY_DATASET}`,
-    mutation,
-    { headers: { Authorization: `Bearer ${process.env.SANITY_STUDIO_TOKEN}` } },
-  );
-  return data;
-}
-
-export async function addUserTvStatus({
-  userTvId,
-  tvId,
-  status,
-  watchState,
-}: AddTvStatus) {
-  const mutation = {
-    mutations: [
-      {
-        patch: {
-          id: userTvId,
-          insert: {
-            after: "tvs[-1]",
-            items: [
-              {
-                _key: tvId,
-                tv: {
-                  _type: "reference",
-                  _ref: tvId,
-                },
-                account_states: {
-                  status,
-                  watch_state: watchState,
-                },
-              },
-            ],
+          tv: {
+            _type: "reference",
+            _ref: tvId,
+          },
+          account_states: {
+            status,
+            watch_state: watchState,
           },
         },
       },
@@ -174,13 +152,11 @@ export async function addUserTvStatus({
     mutation,
     { headers: { Authorization: `Bearer ${process.env.SANITY_STUDIO_TOKEN}` } },
   );
-
   return data;
 }
 
 export async function updateUserTvStatus({
   userTvId,
-  tvId,
   status,
   watchState,
 }: AddTvStatus) {
@@ -189,9 +165,9 @@ export async function updateUserTvStatus({
       {
         patch: {
           id: userTvId,
-          set: {
-            [`tvs[_key=="${tvId}"].account_states.status`]: status,
-            [`tvs[_key=="${tvId}"].account_states.watch_state`]: watchState,
+          account_states: {
+            status,
+            watch_state: watchState,
           },
         },
       },
@@ -209,13 +185,12 @@ export async function updateUserTvStatus({
 
 /*-------------------- DELETE --------------------*/
 
-export async function deleteUserTvAndStatus(userTvId: string, tvId: string) {
+export async function deleteUserTvAndStatus(userTvId: string) {
   const mutation = {
     mutations: [
       {
-        patch: {
+        delete: {
           id: userTvId,
-          unset: [`tvs[_key=="${tvId}"]`],
         },
       },
     ],

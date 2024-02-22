@@ -1,8 +1,7 @@
 import {
-  addUserTvStatus,
   createUserTvAndStatus,
-  getAllTvs,
-  getUserTvs,
+  getTvById,
+  getUserTvById,
   updateUserTvStatus,
 } from "@/libs/sanity/api/tv";
 import { authOptions } from "@/libs/sanity/auth";
@@ -12,48 +11,39 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
-  const { tmdbId, status, watchState } = await req.json();
+  const { tvId, status, watchState } = await req.json();
 
   if (!session) {
     return new NextResponse("Authentication required", { status: 500 });
   }
-
   const userId = session.user.id;
+  const userName = session.user.name!;
+
+  if (!userId && !userName) {
+    return new NextResponse("User not found", { status: 400 });
+  }
 
   try {
-    const allTvs = await getAllTvs();
-    const tvId = allTvs.find((movie) => movie.tmdb_id === Number(tmdbId))?._id;
-    if (!tvId) {
-      return new NextResponse("Failed to retrieve tv id", { status: 400 });
+    const tv = await getTvById(tvId);
+    if (!tv) {
+      return new NextResponse("Failed to retrieve tv", { status: 400 });
     }
-
-    const userTvs = await getUserTvs(userId);
 
     let data;
 
-    if (userTvs) {
-      const tvExists = userTvs.tvs.find(
-        (tv) => tv.tv.tmdb_id === Number(tmdbId),
-      );
-      if (tvExists) {
-        data = await updateUserTvStatus({
-          userTvId: userTvs._id,
-          tvId,
-          status,
-          watchState,
-        });
-      } else {
-        data = await addUserTvStatus({
-          userTvId: userTvs._id,
-          tvId,
-          status,
-          watchState,
-        });
-      }
+    const userHasTv = await getUserTvById(userId, tvId);
+    if (userHasTv) {
+      data = await updateUserTvStatus({
+        userTvId: userHasTv._id,
+        status,
+        watchState,
+      });
     } else {
       data = await createUserTvAndStatus({
-        tvId,
         userId,
+        userName,
+        tvId,
+        tvTitle: tv.title,
         status,
         watchState,
       });

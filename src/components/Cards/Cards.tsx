@@ -19,7 +19,6 @@ type Props = {
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
   userTvs?: InternalTvAndUser[];
-  userTvsId?: string;
   internalTvs?: InternalTv[];
 };
 
@@ -32,7 +31,6 @@ const Cards: FC<Props> = ({
   userMoviesId,
   internalMovies,
   userTvs,
-  userTvsId,
   internalTvs,
 }) => {
   const {
@@ -94,7 +92,6 @@ const Cards: FC<Props> = ({
               ratedTvsIds={ratedTvsIds}
               userLists={userLists}
               userTvs={userTvs}
-              userTvsId={userTvsId}
               internalTvs={internalTvs}
             />
           ))}

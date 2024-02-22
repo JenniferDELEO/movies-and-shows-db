@@ -6,14 +6,14 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
-  const { userTvId, tvId } = await req.json();
+  const { userTvId } = await req.json();
 
   if (!session) {
     return new NextResponse("Authentication required", { status: 500 });
   }
 
   try {
-    const data = await deleteUserTvAndStatus(userTvId, tvId);
+    const data = await deleteUserTvAndStatus(userTvId);
     return NextResponse.json(data, { status: 200, statusText: "Successful" });
   } catch (error) {
     return new NextResponse("Unable to fetch", {

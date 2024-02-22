@@ -12,6 +12,13 @@ const movie = {
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: "runtime",
+      title: "Runtime",
+      type: "number",
+      initialValue: 0,
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
       name: "release_date",
       title: "Release Date",
       type: "date",

@@ -34,7 +34,6 @@ type Props = {
     internalTvs: InternalTv[];
     genresTvs: Genre[];
     userTvs: InternalTvAndUser[];
-    userTvsId: string;
   };
   personDetailProps?: {
     actingMovies: Movie[];
@@ -48,7 +47,6 @@ type Props = {
     internalTvs: InternalTv[];
     genresTvs: Genre[];
     userTvs: InternalTvAndUser[];
-    userTvsId: string;
   };
   movieCollectionProps?: {
     movies: Movie[];
@@ -73,7 +71,6 @@ type Props = {
     totalResults: number;
     tvs: Tv[];
     userTvs: InternalTvAndUser[];
-    userTvsId: string;
     internalTvs: InternalTv[];
   };
 };
@@ -256,7 +253,6 @@ const BannerWrapper: FC<Props> = ({
               internalTvs={homeProps.internalTvs}
               genresTvs={homeProps.genresTvs}
               userTvs={homeProps.userTvs}
-              userTvsId={homeProps.userTvsId}
             />
           </Tab>
           <Tab
@@ -285,7 +281,6 @@ const BannerWrapper: FC<Props> = ({
               internalTvs={homeProps.internalTvs}
               genresTvs={homeProps.genresTvs}
               userTvs={homeProps.userTvs}
-              userTvsId={homeProps.userTvsId}
             />
           </Tab>
         </Tabs>
@@ -308,7 +303,6 @@ const BannerWrapper: FC<Props> = ({
           internalTvs={homeProps.internalTvs}
           genresTvs={homeProps.genresTvs}
           userTvs={homeProps.userTvs}
-          userTvsId={homeProps.userTvsId}
         />
         <Banner
           items={homeProps.topRatedTvs}
@@ -329,7 +323,6 @@ const BannerWrapper: FC<Props> = ({
           internalTvs={homeProps.internalTvs}
           genresTvs={homeProps.genresTvs}
           userTvs={homeProps.userTvs}
-          userTvsId={homeProps.userTvsId}
         />
       </div>
     );
@@ -461,7 +454,6 @@ const BannerWrapper: FC<Props> = ({
               internalTvs={personDetailProps.internalTvs}
               genresTvs={personDetailProps.genresTvs}
               userTvs={personDetailProps.userTvs}
-              userTvsId={personDetailProps.userTvsId}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
@@ -517,7 +509,6 @@ const BannerWrapper: FC<Props> = ({
               internalTvs={personDetailProps.internalTvs}
               genresTvs={personDetailProps.genresTvs}
               userTvs={personDetailProps.userTvs}
-              userTvsId={personDetailProps.userTvsId}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
@@ -566,7 +557,6 @@ const BannerWrapper: FC<Props> = ({
               userLists={userLists}
               internalTvs={tvsDetailsProps.internalTvs}
               userTvs={tvsDetailsProps.userTvs}
-              userTvsId={tvsDetailsProps.userTvsId}
             />
           </div>
         )}

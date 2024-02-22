@@ -12,11 +12,10 @@ type Props = {
   tvUrl: string;
   internalTvs: InternalTv[];
   userTvs: InternalTvAndUser[];
-  userTvsId: string;
 };
 
 const TvWrapper: FC<Props> = (props) => {
-  const { tvDetails, tvUrl, internalTvs, userTvs, userTvsId } = props;
+  const { tvDetails, tvUrl, internalTvs, userTvs } = props;
 
   return (
     <div className="size-full">
@@ -25,7 +24,6 @@ const TvWrapper: FC<Props> = (props) => {
         type="tv"
         internalTvs={internalTvs}
         userTvs={userTvs}
-        userTvsId={userTvsId}
       />
       <CrewBanner
         castTv={tvDetails?.aggregate_credits?.cast}
@@ -48,7 +46,6 @@ const TvWrapper: FC<Props> = (props) => {
           totalResults={tvDetails.recommendations.total_results}
           internalTvs={internalTvs}
           userTvs={userTvs}
-          userTvsId={userTvsId}
         />
       ) : (
         <section className="p-4 md:px-[2.5%] lg:px-[5%] 2xl:px-[10%]">
@@ -69,7 +66,6 @@ const TvWrapper: FC<Props> = (props) => {
           totalResults={tvDetails.similar.total_results}
           internalTvs={internalTvs}
           userTvs={userTvs}
-          userTvsId={userTvsId}
         />
       )}
     </div>

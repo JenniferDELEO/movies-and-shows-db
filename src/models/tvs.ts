@@ -187,7 +187,6 @@ export interface TvDetails extends Tv {
 
 export type InternalTv = {
   _id: string;
-  tmdb_id: number;
   title: string;
   number_of_seasons: number;
   number_of_episodes: number;
@@ -196,10 +195,13 @@ export type InternalTv = {
   genres: string[];
   poster_path: string;
   overview: string;
+  tmdb_id: number;
 };
 
 export type InternalTvAndUser = {
   _id: string;
+  user_name: string;
+  tv_title: string;
   tv: InternalTv;
   account_states: {
     status: "active" | "archived" | "to_discover";
@@ -227,15 +229,16 @@ export type UpdateTv = {
 };
 
 export type CreateTvStatus = {
-  tvId: string;
   userId: string;
+  userName: string;
+  tvId: string;
+  tvTitle: string;
   status: "active" | "archived" | "to_discover";
   watchState: "started" | "finished" | "to_watch";
 };
 
 export type AddTvStatus = {
   userTvId: string;
-  tvId: string;
   status: "active" | "archived" | "to_discover";
   watchState: "started" | "finished" | "to_watch";
 };

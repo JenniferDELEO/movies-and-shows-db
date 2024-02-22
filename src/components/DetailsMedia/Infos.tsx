@@ -47,7 +47,6 @@ type Props = {
   internalMovies?: InternalMovie[];
   internalTvs?: InternalTv[];
   userTvs?: InternalTvAndUser[];
-  userTvsId?: string;
 };
 
 const Infos: FC<Props> = (props) => {
@@ -68,7 +67,6 @@ const Infos: FC<Props> = (props) => {
     userMoviesId,
     internalMovies,
     userTvs,
-    userTvsId,
     internalTvs,
   } = props;
 
@@ -261,7 +259,6 @@ const Infos: FC<Props> = (props) => {
                   userMoviesId,
                   internalMovies,
                   userTvs,
-                  userTvsId,
                   internalTvs,
                 }}
                 userLists={userLists}
@@ -572,7 +569,6 @@ const Infos: FC<Props> = (props) => {
                       userMoviesId,
                       internalMovies,
                       userTvs,
-                      userTvsId,
                       internalTvs,
                     }}
                     userLists={userLists}

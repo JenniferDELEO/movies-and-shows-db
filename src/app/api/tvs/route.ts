@@ -1,5 +1,5 @@
 import { getSeasonDetails, getTvDetail } from "@/libs/api/tvs";
-import { addTv, getAllTvs } from "@/libs/sanity/api/tv";
+import { addTv, getAllTvs, updateTv } from "@/libs/sanity/api/tv";
 import { authOptions } from "@/libs/sanity/auth";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
@@ -31,10 +31,31 @@ export async function POST(req: Request) {
       let data;
 
       if (tvExists) {
-        return new NextResponse("TV already exists", { status: 200 });
+        const isSameNumberOfSeasons =
+          tvExists.number_of_seasons === numberOfSeasons;
+        const isSameNumberOfEpisodes =
+          tvExists.number_of_episodes === numberOfEpisodes;
+        const isSameTotalRuntime = tvExists.total_runtime === totalRuntime;
+
+        if (
+          isSameNumberOfSeasons &&
+          isSameNumberOfEpisodes &&
+          isSameTotalRuntime
+        ) {
+          return new NextResponse(
+            "TV already exists & informations are correct",
+            { status: 200 },
+          );
+        } else {
+          data = await updateTv({
+            tvId: tvExists._id,
+            numberOfSeasons,
+            numberOfEpisodes,
+            totalRuntime,
+          });
+        }
       } else {
         data = await addTv({
-          tmdbId: Number(tmdbId),
           title,
           numberOfSeasons,
           numberOfEpisodes,
@@ -43,6 +64,7 @@ export async function POST(req: Request) {
           genres,
           posterPath,
           overview,
+          tmdbId: Number(tmdbId),
         });
       }
       return NextResponse.json(data, { status: 200, statusText: "Successful" });

@@ -14,7 +14,6 @@ type Props = {
   internalMovies?: InternalMovie[];
   internalTvs?: InternalTv[];
   userTvs?: InternalTvAndUser[];
-  userTvsId?: string;
 };
 
 const RecommendationsBanner: FC<Props> = (props) => {
@@ -27,7 +26,6 @@ const RecommendationsBanner: FC<Props> = (props) => {
     userMoviesId,
     internalMovies,
     userTvs,
-    userTvsId,
     internalTvs,
   } = props;
 
@@ -57,7 +55,6 @@ const RecommendationsBanner: FC<Props> = (props) => {
               totalPages,
               totalResults,
               userTvs: userTvs || [],
-              userTvsId: userTvsId || "",
               internalTvs: internalTvs || [],
             }}
           />

@@ -86,7 +86,6 @@ type Props = {
   internalTvs?: InternalTv[];
   genresTvs?: Genre[];
   userTvs?: InternalTvAndUser[];
-  userTvsId?: string;
 };
 
 const Banner: FC<Props> = ({
@@ -111,7 +110,6 @@ const Banner: FC<Props> = ({
   userMoviesId,
   internalTvs,
   userTvs,
-  userTvsId,
   genresTvs,
 }) => {
   const router = useRouter();
@@ -184,7 +182,6 @@ const Banner: FC<Props> = ({
                     internalTvs: internalTvs || [],
                     genresTvs: genresTvs || [],
                     userTvs: userTvs || [],
-                    userTvsId: userTvsId || "",
                   }}
                   userLists={userLists}
                 />

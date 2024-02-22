@@ -66,7 +66,6 @@ type Props = {
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
   userTvs?: InternalTvAndUser[];
-  userTvsId?: string;
   internalTvs?: InternalTv[];
 };
 
@@ -90,22 +89,12 @@ const Card: FC<Props> = ({
   userMoviesId,
   internalMovies,
   userTvs,
-  userTvsId,
   internalTvs,
 }) => {
   const router = useRouter();
   const { user } = useContext(UserContext);
 
   const { status } = useSession();
-
-  /*   console.log(
-    "userTvs",
-    userTvs,
-    "userTvsId",
-    userTvsId,
-    "internalTvs",
-    internalTvs,
-  ); */
 
   const overviewRest =
     movie?.overview?.split(" ")?.filter(Boolean) ||
@@ -228,7 +217,6 @@ const Card: FC<Props> = ({
           status === "authenticated" &&
           tv &&
           userTvs &&
-          userTvsId &&
           internalTvs && (
             <div className="absolute -right-2 top-0 md:top-2">
               <AccountInteraction
@@ -248,7 +236,6 @@ const Card: FC<Props> = ({
                   classNames,
                   genresTvs: genres,
                   userTvs,
-                  userTvsId,
                   internalTvs,
                 }}
                 userLists={userLists}

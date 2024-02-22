@@ -13,7 +13,6 @@ type Props = {
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
   userTvs?: InternalTvAndUser[];
-  userTvsId?: string;
   internalTvs?: InternalTv[];
 };
 
@@ -27,7 +26,6 @@ const SimilarsBanner: FC<Props> = (props) => {
     userMoviesId,
     internalMovies,
     userTvs,
-    userTvsId,
     internalTvs,
   } = props;
   return (
@@ -56,7 +54,6 @@ const SimilarsBanner: FC<Props> = (props) => {
               totalPages,
               totalResults,
               userTvs: userTvs || [],
-              userTvsId: userTvsId || "",
               internalTvs: internalTvs || [],
             }}
           />

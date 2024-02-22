@@ -36,11 +36,9 @@ const Tvs = async () => {
   const { results: providersTvs } = await getTvsProviders();
 
   let userTvs: InternalTvAndUser[] = [];
-  let userTvsId: string = "";
+
   if (session) {
-    const results = await getUserTvs(session.user.id);
-    userTvs = results?.tvs || [];
-    userTvsId = results?._id;
+    userTvs = await getUserTvs(session.user.id);
   }
 
   const internalTvs = await getAllTvs();
@@ -56,7 +54,6 @@ const Tvs = async () => {
       title={title}
       totalPagesTvs={totalPagesTvs}
       userTvs={userTvs}
-      userTvsId={userTvsId}
       internalTvs={internalTvs}
     />
   );

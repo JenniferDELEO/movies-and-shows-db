@@ -39,18 +39,13 @@ const Person = async ({ params }: Props) => {
 
   let userMovies: InternalMovieUser[] = [];
   let userMoviesId: string = "";
-  if (session) {
-    const results = await getUserMovies(session.user.id);
-    userMovies = results?.movies || [];
-    userMoviesId = results?._id;
-  }
-
   let userTvs: InternalTvAndUser[] = [];
-  let userTvsId: string = "";
+
   if (session) {
-    const results = await getUserTvs(session.user.id);
-    userTvs = results?.tvs || [];
-    userTvsId = results?._id;
+    const responseUserMovies = await getUserMovies(session.user.id);
+    userMovies = responseUserMovies?.movies || [];
+    userMoviesId = responseUserMovies?._id;
+    userTvs = await getUserTvs(session.user.id);
   }
 
   const { genres: genresMovies } = await getGenresMovies();
@@ -74,7 +69,6 @@ const Person = async ({ params }: Props) => {
           internalMovies,
           genresTvs,
           userTvs,
-          userTvsId,
           internalTvs,
         }}
       />

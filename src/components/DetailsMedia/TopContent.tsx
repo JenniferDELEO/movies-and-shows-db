@@ -37,7 +37,6 @@ type Props = {
   internalMovies?: InternalMovie[];
   internalTvs?: InternalTv[];
   userTvs?: InternalTvAndUser[];
-  userTvsId?: string;
 };
 
 const TopContent: FC<Props> = (props) => {
@@ -59,7 +58,6 @@ const TopContent: FC<Props> = (props) => {
     internalMovies,
     internalTvs,
     userTvs,
-    userTvsId,
   } = props;
 
   const backgroundImage =
@@ -153,7 +151,6 @@ const TopContent: FC<Props> = (props) => {
             userMoviesId={userMoviesId}
             internalMovies={internalMovies}
             userTvs={userTvs}
-            userTvsId={userTvsId}
             internalTvs={internalTvs}
           />
         </div>
@@ -308,7 +305,6 @@ const TopContent: FC<Props> = (props) => {
                 userMoviesId={userMoviesId}
                 internalMovies={internalMovies}
                 userTvs={userTvs}
-                userTvsId={userTvsId}
                 internalTvs={internalTvs}
               />
             </div>
