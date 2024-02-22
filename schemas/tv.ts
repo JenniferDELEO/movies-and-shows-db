@@ -6,12 +6,6 @@ const tv = {
   type: "document",
   fields: [
     defineField({
-      name: "tmdb_id",
-      title: "TMDB ID",
-      type: "number",
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
       name: "title",
       title: "Title",
       type: "string",
@@ -56,6 +50,12 @@ const tv = {
       name: "overview",
       title: "Overview",
       type: "text",
+    }),
+    defineField({
+      name: "tmdb_id",
+      title: "TMDB ID",
+      type: "number",
+      validation: (Rule) => Rule.required(),
     }),
   ],
 };

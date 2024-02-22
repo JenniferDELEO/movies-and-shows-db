@@ -1,13 +1,11 @@
-import { getSeasonDetails, getTvDetailForDb } from "@/libs/api/tvs";
 import {
-  addSeason,
+  addUserSeasonAndStatus,
   createUserSeasonAndStatus,
   getAllSeasonsByTv,
   getUserSeasonsByTv,
-  updateSeason,
+  updateUserEpisodeAndStatus,
 } from "@/libs/sanity/api/tv-season";
 import { authOptions } from "@/libs/sanity/auth";
-import { InternalSeason } from "@/models/tvs";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -15,7 +13,6 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
   const {
-    tvTmdbId,
     tvId,
     seasons,
   }: {
@@ -24,8 +21,8 @@ export async function POST(req: Request) {
     seasons: {
       seasonNumber: number;
       episodes: {
-        id: string;
-        episodeNumber: number;
+        episode_id: string;
+        episode_number: number;
         watched: boolean;
       }[];
     }[];
@@ -52,37 +49,78 @@ export async function POST(req: Request) {
         });
       }
 
-      const episodesInDb = allSeasonsByTv.find(
+      const totalEpisodes = allSeasonsByTv.find(
         (season) => season.season_number === seasons[i].seasonNumber,
       )?.episodes;
 
-      if (!episodesInDb) {
+      if (!totalEpisodes) {
         return new NextResponse("Failed to retrieve episodes", { status: 404 });
       }
 
       const episodesToAdd = seasons[i].episodes;
-      /* const watchedEpisodes = episodesToAdd.filter(
+      const newWatchedEpisodes = episodesToAdd.filter(
         (episode) => episode.watched,
-      ); */
-      /* const allWatched = watchedEpisodes.length === episodesInDb.length; */
+      );
+      const oldEpisodes = userSeasonsByTv?.seasons?.find(
+        (season) => season.season.season_number === seasons[i].seasonNumber,
+      )?.account_states?.episodes;
+      const oldWatchedEpisodes = oldEpisodes?.filter(
+        (episode) => episode.watched,
+      );
+      const filteredOldWatchedEpisodes = oldWatchedEpisodes?.filter(
+        (episode) =>
+          !newWatchedEpisodes?.find(
+            (newEpisode) => newEpisode.episode_id === episode.episode_id,
+          ),
+      );
 
-      if (episodesInDb.length === episodesToAdd?.length) {
-        /* if (userSeasonsByTv) {
-        const seasonExists = userSeasonsByTv.seasons.find((season) => season.season.season_number === seasons[i].season_number);
+      let allWatched: boolean = false;
+      if (filteredOldWatchedEpisodes && newWatchedEpisodes) {
+        const watchedEpisodes = newWatchedEpisodes.concat(
+          filteredOldWatchedEpisodes,
+        );
+        allWatched = watchedEpisodes.length === totalEpisodes.length;
+      } else if (newWatchedEpisodes && !filteredOldWatchedEpisodes) {
+        allWatched = newWatchedEpisodes.length === totalEpisodes.length;
+      } else if (filteredOldWatchedEpisodes && !newWatchedEpisodes) {
+        allWatched = filteredOldWatchedEpisodes.length === totalEpisodes.length;
+      } else allWatched = false;
+
+      const episodes = episodesToAdd.map((episode) => ({
+        episodeId: episode.episode_id,
+        episodeNumber: episode.episode_number,
+        watched: episode.watched,
+      }));
+
+      if (userSeasonsByTv) {
+        const seasonExists = userSeasonsByTv.seasons.find(
+          (season) => season.season.season_number === seasons[i].seasonNumber,
+        );
+        const userSeasonsId = userSeasonsByTv._id;
         if (seasonExists) {
-
-        } else {
-
-        } */
-      } /* else {
-        await createUserSeasonAndStatus({
-            userId,
-            tvId,
+          await updateUserEpisodeAndStatus({
+            userSeasonsId,
             seasonId,
             allWatched,
-            episodes: episodesToAdd
-        })
-    } */
+            episodes,
+          });
+        } else {
+          await addUserSeasonAndStatus({
+            userSeasonsId,
+            seasonId,
+            allWatched,
+            episodes,
+          });
+        }
+      } else {
+        await createUserSeasonAndStatus({
+          userId,
+          tvId,
+          seasonId,
+          allWatched,
+          episodes,
+        });
+      }
     }
 
     return NextResponse.json({

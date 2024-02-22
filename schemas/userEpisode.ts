@@ -1,19 +1,13 @@
 import { defineField } from "sanity";
 
-const userTv = {
-  name: "user_tv",
-  title: "User TV",
+const userEpisode = {
+  name: "user_episode",
+  title: "User Episode",
   type: "document",
   fields: [
     defineField({
       name: "user_name",
       title: "User Name",
-      type: "string",
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: "tv_title",
-      title: "TV Title",
       type: "string",
       validation: (Rule) => Rule.required(),
     }),
@@ -29,6 +23,20 @@ const userTv = {
       title: "TV",
       type: "reference",
       to: [{ type: "tv" }],
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "season",
+      title: "Season",
+      type: "reference",
+      to: [{ type: "season" }],
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "episode",
+      title: "Episode",
+      type: "reference",
+      to: [{ type: "episode" }],
     }),
     defineField({
       name: "account_states",
@@ -36,24 +44,14 @@ const userTv = {
       type: "object",
       fields: [
         {
-          name: "status",
-          title: "Status",
-          type: "string",
-          options: {
-            list: ["active", "archived", "to_discover"],
-          },
-        },
-        {
-          name: "watch_state",
-          title: "Watch State",
-          type: "string",
-          options: {
-            list: ["started", "finished", "to_watch"],
-          },
+          name: "watched",
+          title: "Watched",
+          type: "boolean",
+          initialValue: false,
         },
       ],
     }),
   ],
 };
 
-export default userTv;
+export default userEpisode;

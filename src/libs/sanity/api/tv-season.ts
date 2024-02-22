@@ -163,7 +163,7 @@ export async function createUserSeasonAndStatus({
 }
 
 export async function addUserSeasonAndStatus({
-  userSeasonId,
+  userSeasonsId,
   seasonId,
   allWatched,
   episodes,
@@ -172,7 +172,7 @@ export async function addUserSeasonAndStatus({
     mutations: [
       {
         patch: {
-          id: userSeasonId,
+          id: userSeasonsId,
           insert: {
             after: "seasons[-1]",
             items: [
@@ -206,7 +206,7 @@ export async function addUserSeasonAndStatus({
   );
   return data;
 }
-
+/* 
 export async function addUserEpisodeAndStatus({
   userSeasonId,
   seasonId,
@@ -242,10 +242,10 @@ export async function addUserEpisodeAndStatus({
     { headers: { Authorization: `Bearer ${process.env.SANITY_STUDIO_TOKEN}` } },
   );
   return data;
-}
+} */
 
 export async function updateUserEpisodeAndStatus({
-  userSeasonId,
+  userSeasonsId,
   seasonId,
   allWatched,
   episodes,
@@ -254,16 +254,16 @@ export async function updateUserEpisodeAndStatus({
     mutations: [
       {
         patch: {
-          id: userSeasonId,
+          id: userSeasonsId,
           seasons: {
             _key: seasonId,
             all_watched: allWatched,
-            set: {
-              episodes: episodes.map((episode) => ({
-                _key: episode.episodeId,
-                watched: episode.watched,
-              })),
-            },
+            episodes: episodes.map((episode) => ({
+              _key: episode.episodeId,
+              episode_id: episode.episodeId,
+              episode_number: episode.episodeNumber,
+              watched: episode.watched,
+            })),
           },
         },
       },

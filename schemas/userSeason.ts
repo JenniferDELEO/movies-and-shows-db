@@ -2,12 +2,18 @@ import { defineField } from "sanity";
 
 const userSeason = {
   name: "user_season",
-  title: "User Seasons",
+  title: "User Season",
   type: "document",
   fields: [
     defineField({
-      name: "title",
-      title: "Title",
+      name: "user_name",
+      title: "User Name",
+      type: "string",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "user",
+      title: "User",
       type: "reference",
       to: [{ type: "user" }],
       validation: (Rule) => Rule.required(),
@@ -20,61 +26,21 @@ const userSeason = {
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "seasons",
-      title: "Seasons",
-      type: "array",
-      of: [
+      name: "season",
+      title: "Season",
+      type: "reference",
+      to: [{ type: "season" }],
+    }),
+    defineField({
+      name: "account_states",
+      title: "Account States",
+      type: "object",
+      fields: [
         {
-          type: "object",
-          fields: [
-            {
-              name: "season",
-              title: "Season",
-              type: "reference",
-              to: [{ type: "season" }],
-            },
-            {
-              name: "account_states",
-              title: "Account States",
-              type: "object",
-              fields: [
-                {
-                  name: "all_watched",
-                  title: "All Watched",
-                  type: "boolean",
-                  initialValue: false,
-                },
-                {
-                  name: "episodes",
-                  title: "Episodes",
-                  type: "array",
-                  of: [
-                    {
-                      type: "object",
-                      fields: [
-                        {
-                          name: "episode_id",
-                          title: "Episode Id",
-                          type: "string",
-                        },
-                        {
-                          name: "episode_number",
-                          title: "Episode Number",
-                          type: "number",
-                        },
-                        {
-                          name: "watched",
-                          title: "Watched",
-                          type: "boolean",
-                          initialValue: false,
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+          name: "all_watched",
+          title: "All Watched",
+          type: "boolean",
+          initialValue: false,
         },
       ],
     }),

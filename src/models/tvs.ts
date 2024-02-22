@@ -313,7 +313,7 @@ export type CreateSeasonStatus = {
 };
 
 export type AddSeasonStatus = {
-  userSeasonId: string;
+  userSeasonsId: string;
   seasonId: string;
   allWatched: boolean;
   episodes: {
@@ -324,7 +324,7 @@ export type AddSeasonStatus = {
 };
 
 export type UpdateSeasonEpisodeStatus = {
-  userSeasonId: string;
+  userSeasonsId: string;
   seasonId: string;
   allWatched: boolean;
   episodes: {
