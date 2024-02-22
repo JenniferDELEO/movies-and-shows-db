@@ -88,7 +88,7 @@ const IconsInteraction: FC<Props> = (props) => {
       });
       if (watchedMoviesIds.includes(item.id)) {
         dropdownItems.unshift({
-          key: `toWatch-${item.id}-${item.title || item.name}`,
+          key: `to_watch-${item.id}-${item.title || item.name}`,
           startContent: <MdOutlineCheckBoxOutlineBlank />,
           content: "Marquer comme à voir",
         });
@@ -101,7 +101,7 @@ const IconsInteraction: FC<Props> = (props) => {
       }
     } else {
       dropdownItems.unshift({
-        key: `toWatch-${item.id}-${item.title || item.name}`,
+        key: `to_watch-${item.id}-${item.title || item.name}`,
         startContent: <MdOutlineCheckBoxOutlineBlank />,
         content: "Marquer comme à voir",
       });

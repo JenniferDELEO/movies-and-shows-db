@@ -7,8 +7,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
-  const { tmdbId, title, releaseDate, genres, posterPath, overview } =
-    await req.json();
+  const { tmdbId } = await req.json();
 
   if (!session) {
     return new NextResponse("Authentication required", { status: 500 });
@@ -22,6 +21,7 @@ export async function POST(req: Request) {
       const numberOfSeasons = tvDetails.number_of_seasons;
       const numberOfEpisodes = tvDetails.number_of_episodes;
       const episodeRuntime = seasonDetails.episodes[0].runtime;
+      const genres = tvDetails.genres.map((genre) => genre.name);
 
       const totalRuntime = numberOfEpisodes * episodeRuntime;
 
@@ -56,14 +56,14 @@ export async function POST(req: Request) {
         }
       } else {
         data = await addTv({
-          title,
+          title: tvDetails.name,
           numberOfSeasons,
           numberOfEpisodes,
-          releaseDate,
+          releaseDate: tvDetails.first_air_date,
           totalRuntime,
           genres,
-          posterPath,
-          overview,
+          posterPath: tvDetails.poster_path,
+          overview: tvDetails.overview,
           tmdbId: Number(tmdbId),
         });
       }

@@ -36,12 +36,7 @@ import {
 } from "@/components/Banner/reactSlickSettings";
 import { User } from "@/models/user";
 import { List } from "@/models/lists";
-import {
-  Genre,
-  InternalMovie,
-  InternalMovieUser,
-  Movie,
-} from "@/models/movies";
+import { InternalMovie, InternalMovieUser, Movie } from "@/models/movies";
 import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
 import AccountInteraction from "../AccountInteraction/AccountInteraction";
 import { useSession } from "next-auth/react";
@@ -80,11 +75,9 @@ type Props = {
   title: string;
   userLists: List[];
   internalMovies?: InternalMovie[];
-  genresMovies?: Genre[];
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalTvs?: InternalTv[];
-  genresTvs?: Genre[];
   userTvs?: InternalTvAndUser[];
 };
 
@@ -105,12 +98,10 @@ const Banner: FC<Props> = ({
   ratedMovies,
   ratedTvs,
   internalMovies,
-  genresMovies,
   userMovies,
   userMoviesId,
   internalTvs,
   userTvs,
-  genresTvs,
 }) => {
   const router = useRouter();
   const { status } = useSession();
@@ -176,11 +167,9 @@ const Banner: FC<Props> = ({
                     ratedTvsIds,
                     classNames,
                     internalMovies: internalMovies || [],
-                    genresMovies: genresMovies || [],
                     userMovies: userMovies || [],
                     userMoviesId: userMoviesId || "",
                     internalTvs: internalTvs || [],
-                    genresTvs: genresTvs || [],
                     userTvs: userTvs || [],
                   }}
                   userLists={userLists}

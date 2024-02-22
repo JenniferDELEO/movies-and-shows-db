@@ -131,7 +131,7 @@ const DropdownCard: FC<Props> = (props) => {
       });
       if (watchedMoviesIds.includes(item.id)) {
         dropdownItems.unshift({
-          key: `toWatch-${item.id}-${item.title}`,
+          key: `to_watch-${item.id}-${item.title}`,
           startContent: <MdOutlineCheckBoxOutlineBlank />,
           content: "Marquer comme à voir",
         });
@@ -144,7 +144,7 @@ const DropdownCard: FC<Props> = (props) => {
       }
     } else {
       dropdownItems.unshift({
-        key: `toWatch-${item.id}-${item.title}`,
+        key: `to_watch-${item.id}-${item.title}`,
         startContent: <MdOutlineCheckBoxOutlineBlank />,
         content: "Marquer comme à voir",
       });

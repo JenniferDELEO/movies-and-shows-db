@@ -48,6 +48,15 @@ export async function getTvById(tvId: string) {
   return result;
 }
 
+export async function getTvByTmdbId(tmdbId: number) {
+  const result = await sanityClient.fetch<InternalTv>(
+    queries.getTvByTmdbIdQuery,
+    { tmdbId },
+    { cache: "no-cache" },
+  );
+  return result;
+}
+
 /*-------------------- POST / PATCH --------------------*/
 
 export async function addTv({

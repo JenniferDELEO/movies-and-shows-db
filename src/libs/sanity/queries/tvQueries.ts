@@ -43,3 +43,16 @@ export const getTvByIdQuery = groq`*[_type == "tv" && _id == $tvId][0] {
         overview,
         tmdb_id,
     }`;
+
+export const getTvByTmdbIdQuery = groq`*[_type == "tv" && tmdb_id == $tmdbId][0] {
+        _id,
+        title,
+        number_of_seasons,
+        number_of_episodes,
+        release_date,
+        total_runtime,
+        genres,
+        poster_path,
+        overview,
+        tmdb_id,
+    }`;

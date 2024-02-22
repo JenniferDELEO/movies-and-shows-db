@@ -204,7 +204,6 @@ const Card: FC<Props> = ({
                   ratedTvsIds,
                   classNames,
                   internalMovies: internalMovies,
-                  genresMovies: genres,
                   userMovies: userMovies,
                   userMoviesId: userMoviesId,
                 }}
@@ -234,7 +233,6 @@ const Card: FC<Props> = ({
                   ratedMoviesIds,
                   ratedTvsIds,
                   classNames,
-                  genresTvs: genres,
                   userTvs,
                   internalTvs,
                 }}

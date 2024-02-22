@@ -1,10 +1,9 @@
 import {
   createUserMovieAndStatus,
   addUserMovieStatus,
-  getAllMovies,
   getUserMovies,
   updateUserMovieStatus,
-  getMovieById,
+  getMovieByTmdbId,
 } from "@/libs/sanity/api/movie";
 import { authOptions } from "@/libs/sanity/auth";
 import { getServerSession } from "next-auth";
@@ -13,7 +12,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
-  const { tmdbId, movieId, status } = await req.json();
+  const { tmdbId, status } = await req.json();
 
   if (!session) {
     return new NextResponse("Authentication required", { status: 500 });
@@ -27,7 +26,8 @@ export async function POST(req: Request) {
   }
 
   try {
-    const movie = await getMovieById(movieId);
+    const movie = await getMovieByTmdbId(tmdbId);
+    const movieId = movie._id;
     if (!movie) {
       return new NextResponse("Failed to retrieve movie", { status: 400 });
     }

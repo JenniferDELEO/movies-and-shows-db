@@ -30,3 +30,14 @@ export const getMovieByIdQuery = groq`*[_type == "movie" && _id == $movieId][0] 
     overview,
     tmdb_id,
 }`;
+
+export const getMovieByTmdbIdQuery = groq`*[_type == "movie" && tmdb_id == $tmdbId][0] {
+    _id,
+    title,
+    runtime,
+    release_date,
+    genres,
+    poster_path,
+    overview,
+    tmdb_id,
+}`;

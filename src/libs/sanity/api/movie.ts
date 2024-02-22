@@ -29,6 +29,15 @@ export async function getMovieById(movieId: string) {
   return result;
 }
 
+export async function getMovieByTmdbId(tmdbId: number) {
+  const result = await sanityClient.fetch<InternalMovie>(
+    queries.getMovieByTmdbIdQuery,
+    { tmdbId },
+    { cache: "no-cache" },
+  );
+  return result;
+}
+
 export async function getUserMovies(userId: string) {
   const result = await sanityClient.fetch<{
     _id: string;

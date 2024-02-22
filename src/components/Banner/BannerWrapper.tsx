@@ -7,12 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Tab, Tabs, Tooltip } from "@nextui-org/react";
 
 import Banner from "@/components/Banner/Banner";
-import {
-  Genre,
-  InternalMovie,
-  InternalMovieUser,
-  Movie,
-} from "@/models/movies";
+import { InternalMovie, InternalMovieUser, Movie } from "@/models/movies";
 import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
 import { UserContext } from "@/context/userContext";
 import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
@@ -28,11 +23,9 @@ type Props = {
     trendingTvsToday: Tv[];
     trendingTvsThisWeek: Tv[];
     internalMovies: InternalMovie[];
-    genresMovies: Genre[];
     userMovies: InternalMovieUser[];
     userMoviesId: string;
     internalTvs: InternalTv[];
-    genresTvs: Genre[];
     userTvs: InternalTvAndUser[];
   };
   personDetailProps?: {
@@ -40,18 +33,15 @@ type Props = {
     actingTvs: Tv[];
     runningMovies: Movie[];
     runningTvs: Tv[];
-    genresMovies: Genre[];
     userMovies: InternalMovieUser[];
     userMoviesId: string;
     internalMovies: InternalMovie[];
     internalTvs: InternalTv[];
-    genresTvs: Genre[];
     userTvs: InternalTvAndUser[];
   };
   movieCollectionProps?: {
     movies: Movie[];
     title: string;
-    genresMovies: Genre[];
     userMovies: InternalMovieUser[];
     userMoviesId: string;
     internalMovies: InternalMovie[];
@@ -145,7 +135,6 @@ const BannerWrapper: FC<Props> = ({
               title="Les 20 Films dans les tendances"
               userLists={userLists}
               internalMovies={homeProps.internalMovies}
-              genresMovies={homeProps.genresMovies}
               userMovies={homeProps.userMovies}
               userMoviesId={homeProps.userMoviesId}
             />
@@ -174,7 +163,6 @@ const BannerWrapper: FC<Props> = ({
               title="Les 20 Films dans les tendances"
               userLists={userLists}
               internalMovies={homeProps.internalMovies}
-              genresMovies={homeProps.genresMovies}
               userMovies={homeProps.userMovies}
               userMoviesId={homeProps.userMoviesId}
             />
@@ -197,7 +185,6 @@ const BannerWrapper: FC<Props> = ({
           title="Les 20 Films les plus populaires"
           userLists={userLists}
           internalMovies={homeProps.internalMovies}
-          genresMovies={homeProps.genresMovies}
           userMovies={homeProps.userMovies}
           userMoviesId={homeProps.userMoviesId}
         />
@@ -218,7 +205,6 @@ const BannerWrapper: FC<Props> = ({
           title="Les 20 Films les mieux notés"
           userLists={userLists}
           internalMovies={homeProps.internalMovies}
-          genresMovies={homeProps.genresMovies}
           userMovies={homeProps.userMovies}
           userMoviesId={homeProps.userMoviesId}
         />
@@ -251,7 +237,6 @@ const BannerWrapper: FC<Props> = ({
               title="Les 20 Séries TV dans les tendances"
               userLists={userLists}
               internalTvs={homeProps.internalTvs}
-              genresTvs={homeProps.genresTvs}
               userTvs={homeProps.userTvs}
             />
           </Tab>
@@ -279,7 +264,6 @@ const BannerWrapper: FC<Props> = ({
               title="Les 20 Séries TV dans les tendances"
               userLists={userLists}
               internalTvs={homeProps.internalTvs}
-              genresTvs={homeProps.genresTvs}
               userTvs={homeProps.userTvs}
             />
           </Tab>
@@ -301,7 +285,6 @@ const BannerWrapper: FC<Props> = ({
           title="Les 20 Séries TV les plus populaires"
           userLists={userLists}
           internalTvs={homeProps.internalTvs}
-          genresTvs={homeProps.genresTvs}
           userTvs={homeProps.userTvs}
         />
         <Banner
@@ -321,7 +304,6 @@ const BannerWrapper: FC<Props> = ({
           title="Les 20 Séries TV les mieux notées"
           userLists={userLists}
           internalTvs={homeProps.internalTvs}
-          genresTvs={homeProps.genresTvs}
           userTvs={homeProps.userTvs}
         />
       </div>
@@ -348,7 +330,6 @@ const BannerWrapper: FC<Props> = ({
         title={movieCollectionProps.title}
         userLists={userLists}
         internalMovies={movieCollectionProps.internalMovies}
-        genresMovies={movieCollectionProps.genresMovies}
         userMovies={movieCollectionProps.userMovies}
         userMoviesId={movieCollectionProps.userMoviesId}
       />
@@ -424,7 +405,6 @@ const BannerWrapper: FC<Props> = ({
               title={`Films (${personDetailProps.actingMovies.length})`}
               userLists={userLists}
               internalMovies={personDetailProps.internalMovies}
-              genresMovies={personDetailProps.genresMovies}
               userMovies={personDetailProps.userMovies}
               userMoviesId={personDetailProps.userMoviesId}
             />
@@ -452,7 +432,6 @@ const BannerWrapper: FC<Props> = ({
               title={`Séries TV (${personDetailProps.actingTvs.length})`}
               userLists={userLists}
               internalTvs={personDetailProps.internalTvs}
-              genresTvs={personDetailProps.genresTvs}
               userTvs={personDetailProps.userTvs}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
@@ -479,7 +458,6 @@ const BannerWrapper: FC<Props> = ({
               title={`Films réalisés (${personDetailProps.runningMovies.length})`}
               userLists={userLists}
               internalMovies={personDetailProps.internalMovies}
-              genresMovies={personDetailProps.genresMovies}
               userMovies={personDetailProps.userMovies}
               userMoviesId={personDetailProps.userMoviesId}
             />
@@ -507,7 +485,6 @@ const BannerWrapper: FC<Props> = ({
               title={`Séries TV réalisées (${personDetailProps.runningTvs.length})`}
               userLists={userLists}
               internalTvs={personDetailProps.internalTvs}
-              genresTvs={personDetailProps.genresTvs}
               userTvs={personDetailProps.userTvs}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />

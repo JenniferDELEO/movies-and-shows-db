@@ -1,6 +1,6 @@
 import {
   createUserTvAndStatus,
-  getTvById,
+  getTvByTmdbId,
   getUserTvById,
   updateUserTvStatus,
 } from "@/libs/sanity/api/tv";
@@ -11,7 +11,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
-  const { tvId, status, watchState } = await req.json();
+  const { tmdbId, status, watchState } = await req.json();
 
   if (!session) {
     return new NextResponse("Authentication required", { status: 500 });
@@ -24,7 +24,8 @@ export async function POST(req: Request) {
   }
 
   try {
-    const tv = await getTvById(tvId);
+    const tv = await getTvByTmdbId(tmdbId);
+    const tvId = tv._id;
     if (!tv) {
       return new NextResponse("Failed to retrieve tv", { status: 400 });
     }
