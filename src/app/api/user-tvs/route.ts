@@ -20,11 +20,11 @@ export async function POST(req: Request) {
   const userName = session.user.name!;
 
   if (!userId && !userName) {
-    return new NextResponse("User not found", { status: 400 });
+    return new NextResponse("User not found", { status: 404 });
   }
 
   try {
-    const tv = await getTvByTmdbId(tmdbId);
+    const tv = await getTvByTmdbId(Number(tmdbId));
     const tvId = tv._id;
     if (!tv) {
       return new NextResponse("Failed to retrieve tv", { status: 400 });

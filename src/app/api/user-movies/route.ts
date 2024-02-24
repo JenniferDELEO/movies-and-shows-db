@@ -26,7 +26,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const movie = await getMovieByTmdbId(tmdbId);
+    const movie = await getMovieByTmdbId(Number(tmdbId));
     const movieId = movie._id;
     if (!movie) {
       return new NextResponse("Failed to retrieve movie", { status: 400 });

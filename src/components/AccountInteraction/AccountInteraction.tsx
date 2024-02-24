@@ -135,15 +135,19 @@ const AccountInteraction: FC<Props> = (props) => {
         type === "movie"
       ) {
         const responseAddMovie = await axios.post("/api/movies", {
-          tmdbId: id,
+          tmdbId: Number(id),
         });
         if (responseAddMovie.status === 200) {
           const responseAddStatus = await axios.post("/api/user-movies", {
-            tmdbId: id,
+            tmdbId: Number(id),
             status: category,
           });
           if (responseAddStatus.status === 200)
-            toast.success("Film marqué comme à voir avec succès");
+            toast.success(
+              category === "to_watch"
+                ? "Film marqué comme à voir avec succès"
+                : "Film marqué comme vu avec succès",
+            );
           const result = await getUserMovies(session.user.id);
           setMoviesAccount(result.movies);
         }
@@ -151,23 +155,27 @@ const AccountInteraction: FC<Props> = (props) => {
 
       if (category === "add" && type === "tv") {
         const responseAddTv = await axios.post("/api/tvs", {
-          tmdbId: id,
+          tmdbId: Number(id),
         });
         if (responseAddTv.status === 200) {
           const responseAddStatus = await axios.post("/api/user-tvs", {
-            tmdbId: id,
+            tmdbId: Number(id),
             status: "active",
             watchState: "to_watch",
           });
           if (responseAddStatus.status === 200)
             toast.success("Série ajoutée avec succès");
           const result = await getUserTvs(session.user.id);
-          /*           const tvAdded = result.find((tv) => tv.tv.tmdb_id === Number(id));
-           */ setTvsAccount(result);
-          /*  const responseAddSeasons = await axios.post("/api/tvs/seasons", {
+          const tvAdded = result.find((tv) => tv.tv.tmdb_id === Number(id));
+          setTvsAccount(result);
+          const responseAddSeasons = await axios.post("/api/tvs/seasons", {
             tvTmdbId: Number(id),
             tvId: tvAdded?.tv._id,
-          }); */
+          });
+          if (responseAddSeasons.status === 200)
+            await axios.post("/api/user-tvs/seasons", {
+              tvId: tvAdded?.tv._id,
+            });
         }
       }
 

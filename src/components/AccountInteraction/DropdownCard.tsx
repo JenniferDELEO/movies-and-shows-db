@@ -63,7 +63,6 @@ const DropdownCard: FC<Props> = (props) => {
     userTvs,
     handleClick,
   } = props;
-
   const internalUserMoviesIds = userMovies?.map((movie) => movie.movie.tmdb_id);
   const watchedMovies = userMovies?.filter(
     (movie) => movie.account_states.status === "watched",

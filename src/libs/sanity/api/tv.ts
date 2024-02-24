@@ -138,7 +138,7 @@ export async function createUserTvAndStatus({
         create: {
           _type: "user_tv",
           user_name: userName,
-          tvTitle,
+          tv_title: tvTitle,
           user: {
             _type: "reference",
             _ref: userId,

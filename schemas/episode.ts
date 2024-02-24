@@ -18,14 +18,14 @@ const episode = {
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "season_number",
-      title: "Season Number",
+      name: "episode_total_number",
+      title: "Episode Total Number",
       type: "number",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "episode_total_number",
-      title: "Episode Total Number",
+      name: "season_number",
+      title: "Season Number",
       type: "number",
       validation: (Rule) => Rule.required(),
     }),

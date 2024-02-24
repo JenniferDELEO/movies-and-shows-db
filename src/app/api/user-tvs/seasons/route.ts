@@ -1,9 +1,7 @@
 import {
-  addUserSeasonAndStatus,
   createUserSeasonAndStatus,
-  getAllSeasonsByTv,
+  getAllSeasonsByTvId,
   getUserSeasonsByTv,
-  updateUserEpisodeAndStatus,
 } from "@/libs/sanity/api/tv-season";
 import { authOptions } from "@/libs/sanity/auth";
 import { getServerSession } from "next-auth";
@@ -12,44 +10,51 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
-  const {
-    tvId,
-    seasons,
-  }: {
-    tvTmdbId: number;
-    tvId: string;
-    seasons: {
-      seasonNumber: number;
-      episodes: {
-        episode_id: string;
-        episode_number: number;
-        watched: boolean;
-      }[];
-    }[];
-  } = await req.json();
+  const { tvId } = await req.json();
 
   if (!session) {
     return new NextResponse("Authentication required", { status: 500 });
   }
 
   const userId = session.user.id;
+  const userName = session.user.name!;
+
+  if (!userId && !userName) {
+    return new NextResponse("User not found", { status: 404 });
+  }
 
   try {
-    const allSeasonsByTv = await getAllSeasonsByTv(tvId);
+    const allSeasonsByTv = await getAllSeasonsByTvId(tvId);
+    const sortedAllSeasonsByTv = allSeasonsByTv.sort(
+      (a, b) => a.season_number - b.season_number,
+    );
     const userSeasonsByTv = await getUserSeasonsByTv(tvId, userId);
+    const sortedUserSeasonsByTv = userSeasonsByTv?.sort(
+      (a, b) => a.season.season_number - b.season.season_number,
+    );
 
-    for (let i = 0; i < seasons.length; i++) {
-      const seasonId = allSeasonsByTv.find(
-        (season) => season.season_number === seasons[i].seasonNumber,
-      )?._id;
-
-      if (!seasonId) {
-        return new NextResponse("Failed to retrieve season id", {
-          status: 404,
-        });
+    if (
+      sortedUserSeasonsByTv &&
+      sortedAllSeasonsByTv.length === userSeasonsByTv.length
+    ) {
+      return new NextResponse("User already has all seasons", { status: 200 });
+    } else {
+      for (let i = 0; i < sortedAllSeasonsByTv.length; i++) {
+        const seasonExists = sortedUserSeasonsByTv?.find(
+          (season) => season.season._id === sortedAllSeasonsByTv[i]._id,
+        );
+        if (!seasonExists) {
+          await createUserSeasonAndStatus({
+            userName,
+            userId,
+            tvId,
+            seasonId: sortedAllSeasonsByTv[i]._id,
+            allWatched: false,
+          });
+        }
       }
-
-      const totalEpisodes = allSeasonsByTv.find(
+    }
+    /*       const totalEpisodes = allSeasonsByTv.find(
         (season) => season.season_number === seasons[i].seasonNumber,
       )?.episodes;
 
@@ -72,9 +77,9 @@ export async function POST(req: Request) {
           !newWatchedEpisodes?.find(
             (newEpisode) => newEpisode.episode_id === episode.episode_id,
           ),
-      );
+      ); */
 
-      let allWatched: boolean = false;
+    /* let allWatched: boolean = false;
       if (filteredOldWatchedEpisodes && newWatchedEpisodes) {
         const watchedEpisodes = newWatchedEpisodes.concat(
           filteredOldWatchedEpisodes,
@@ -84,44 +89,13 @@ export async function POST(req: Request) {
         allWatched = newWatchedEpisodes.length === totalEpisodes.length;
       } else if (filteredOldWatchedEpisodes && !newWatchedEpisodes) {
         allWatched = filteredOldWatchedEpisodes.length === totalEpisodes.length;
-      } else allWatched = false;
+      } else allWatched = false; */
 
-      const episodes = episodesToAdd.map((episode) => ({
+    /* const episodes = episodesToAdd.map((episode) => ({
         episodeId: episode.episode_id,
         episodeNumber: episode.episode_number,
         watched: episode.watched,
-      }));
-
-      if (userSeasonsByTv) {
-        const seasonExists = userSeasonsByTv.seasons.find(
-          (season) => season.season.season_number === seasons[i].seasonNumber,
-        );
-        const userSeasonsId = userSeasonsByTv._id;
-        if (seasonExists) {
-          await updateUserEpisodeAndStatus({
-            userSeasonsId,
-            seasonId,
-            allWatched,
-            episodes,
-          });
-        } else {
-          await addUserSeasonAndStatus({
-            userSeasonsId,
-            seasonId,
-            allWatched,
-            episodes,
-          });
-        }
-      } else {
-        await createUserSeasonAndStatus({
-          userId,
-          tvId,
-          seasonId,
-          allWatched,
-          episodes,
-        });
-      }
-    }
+      })); */
 
     return NextResponse.json({
       status: 200,

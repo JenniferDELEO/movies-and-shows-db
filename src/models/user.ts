@@ -16,10 +16,11 @@ export type AccountDetail = {
 };
 
 export type InternalUser = {
-  user_id: string | null;
-  user_name: string | null;
-  user_email: string | null;
-  user_image: string | null;
+  _id: string;
+  email: string;
+  image: string;
+  name: string;
+  isAdmin: boolean;
 };
 
 export type User = {

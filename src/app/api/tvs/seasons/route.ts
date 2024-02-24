@@ -1,7 +1,7 @@
 import { getSeasonDetails, getTvDetailForDb } from "@/libs/api/tvs";
 import {
   addSeason,
-  getAllSeasonsByTv,
+  getAllSeasonsByTvId,
   updateSeason,
 } from "@/libs/sanity/api/tv-season";
 import { authOptions } from "@/libs/sanity/auth";
@@ -19,60 +19,38 @@ export async function POST(req: Request) {
 
   try {
     const tvDetails = await getTvDetailForDb(tvTmdbId);
+    const allSeasonsByTv = await getAllSeasonsByTvId(tvId);
 
     if (tvDetails) {
       for (let i = 1; i <= tvDetails.number_of_seasons; i++) {
-        const allSeasonsByTv = await getAllSeasonsByTv(tvId);
-        const seasonExists = allSeasonsByTv.find(
+        const seasonDetails = await getSeasonDetails(tvTmdbId, i);
+        const seasonExists = allSeasonsByTv?.find(
           (season) => season.season_number === i,
         );
 
-        const seasonDetails = await getSeasonDetails(tvTmdbId, i);
-        const previousSeasonsEpisodesToAdd = tvDetails.seasons
-          .filter((season) => season.season_number !== 0)
-          .slice(0, i - 1)
-          .reduce((acc, season) => acc + season.episode_count, 0);
-
         if (seasonExists) {
-          const numberOfEpisodesDb = seasonExists.episodes.length;
+          const numberOfEpisodesDb = seasonExists.number_of_episodes;
           const numberOfEpisodesApi = seasonDetails.episodes.length;
 
           if (numberOfEpisodesDb !== numberOfEpisodesApi) {
-            const episodesToAdd =
-              seasonDetails.episodes.slice(numberOfEpisodesDb);
-
             await updateSeason({
               seasonId: seasonExists._id,
-              tmdbId: seasonDetails.id,
-              episodes: episodesToAdd.map((episode) => ({
-                episodeName: episode.name,
-                episodeNumber: episode.episode_number,
-                episodeReleaseDate: episode.air_date,
-                episodeRuntime: episode.runtime,
-                episodeTotalNumber:
-                  i === 1
-                    ? episode.episode_number
-                    : previousSeasonsEpisodesToAdd + episode.episode_number,
-              })),
+              numberOfEpisodes: numberOfEpisodesApi,
             });
+          } else {
+            return new NextResponse(
+              "Season already exists & informations are correct",
+              { status: 200 },
+            );
           }
         } else {
           await addSeason({
-            tmdbId: seasonDetails.id,
+            tvName: tvDetails.name,
+            seasonNumber: i,
             tvId,
             numberOfEpisodes: seasonDetails.episodes.length,
             releaseDate: seasonDetails.air_date,
-            seasonNumber: i,
-            episodes: seasonDetails.episodes.map((episode) => ({
-              episodeName: episode.name,
-              episodeNumber: episode.episode_number,
-              episodeReleaseDate: episode.air_date,
-              episodeRuntime: episode.runtime,
-              episodeTotalNumber:
-                i === 1
-                  ? episode.episode_number
-                  : previousSeasonsEpisodesToAdd + episode.episode_number,
-            })),
+            tmdbId: seasonDetails.id,
           });
         }
       }

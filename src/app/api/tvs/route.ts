@@ -1,4 +1,4 @@
-import { getSeasonDetails, getTvDetail } from "@/libs/api/tvs";
+import { getSeasonDetails, getTvDetailForDb } from "@/libs/api/tvs";
 import { addTv, getAllTvs, updateTv } from "@/libs/sanity/api/tv";
 import { authOptions } from "@/libs/sanity/auth";
 import { getServerSession } from "next-auth";
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const tvDetails = await getTvDetail(tmdbId);
+    const tvDetails = await getTvDetailForDb(tmdbId);
 
     if (tvDetails) {
       const seasonDetails = await getSeasonDetails(tmdbId, 1);

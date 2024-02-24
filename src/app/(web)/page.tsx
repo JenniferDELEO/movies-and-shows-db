@@ -1,17 +1,11 @@
 import BannerWrapper from "@/components/Banner/BannerWrapper";
 import SearchBar from "@/components/Search/SearchBar";
 import {
-  getGenresMovies,
   getPopularMovies,
   getTopRatedMovies,
   getTrendingMovies,
 } from "@/libs/api/movies";
-import {
-  getDiscoverTvs,
-  getGenresTvs,
-  getTopRatedTvs,
-  getTrendingTvs,
-} from "@/libs/api/tvs";
+import { getDiscoverTvs, getTopRatedTvs, getTrendingTvs } from "@/libs/api/tvs";
 import { defaultTvsFilters } from "@/libs/helpers/filters";
 import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
 import { getAllTvs, getUserTvs } from "@/libs/sanity/api/tv";
@@ -32,9 +26,6 @@ export default async function Home() {
   const { results: topRatedTvs } = await getTopRatedTvs();
   const { results: trendingTvsToday } = await getTrendingTvs("day");
   const { results: trendingTvsThisWeek } = await getTrendingTvs("week");
-
-  const { genres: genresMovies } = await getGenresMovies();
-  const { genres: genresTvs } = await getGenresTvs();
 
   let userMovies: InternalMovieUser[] = [];
   let userMoviesId: string = "";
@@ -67,11 +58,9 @@ export default async function Home() {
           trendingTvsToday,
           trendingTvsThisWeek,
           internalMovies,
-          genresMovies,
           userMovies,
           userMoviesId,
           internalTvs,
-          genresTvs,
           userTvs,
         }}
       />
