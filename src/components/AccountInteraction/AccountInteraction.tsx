@@ -24,6 +24,7 @@ import toast from "react-hot-toast";
 import { getUserMovies } from "@/libs/sanity/api/movie";
 import { getUserTvs } from "@/libs/sanity/api/tv";
 import { useSession } from "next-auth/react";
+import AddEpisodeStatusModal from "../Modals/AddEpisodeStatusModal";
 
 type Props = {
   item: {
@@ -100,6 +101,8 @@ const AccountInteraction: FC<Props> = (props) => {
     useState<boolean>(false);
   const [modalRateIsOpen, setModalRateIsOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>("");
+  const [modalAddEpisodesStatus, setModalAddEpisodesStatus] =
+    useState<boolean>(false);
   const [selectedItemId, setSelectedItemId] = useState<number>(0);
   const [moviesAccount, setMoviesAccount] = useState<InternalMovieUser[]>(
     listsPageProps?.userMovies || mediaDetailsPageProps?.userMovies || [],
@@ -117,10 +120,10 @@ const AccountInteraction: FC<Props> = (props) => {
       (movie) => movie.tmdb_id === item.id,
     )?._id;
 
-  const _tvId =
-    listsPageProps?.internalTvs?.find((tv) => tv.tmdb_id === item.id)?._id ||
-    mediaDetailsPageProps?.internalTvs?.find((tv) => tv.tmdb_id === item.id)
-      ?._id;
+  const tvFromDb =
+    listsPageProps?.internalTvs?.find((tv) => tv.tmdb_id === item.id) ||
+    mediaDetailsPageProps?.internalTvs?.find((tv) => tv.tmdb_id === item.id);
+  const _tvId = tvFromDb?._id;
 
   const userTvId = tvsAccount?.find((tv) => tv.tv.tmdb_id === item.id)?._id;
 
@@ -172,11 +175,21 @@ const AccountInteraction: FC<Props> = (props) => {
             tvTmdbId: Number(id),
             tvId: tvAdded?.tv._id,
           });
-          if (responseAddSeasons.status === 200)
-            await axios.post("/api/user-tvs/seasons", {
-              tvId: tvAdded?.tv._id,
-            });
+          if (responseAddSeasons.status === 200) {
+            const responseAddSeasonStatus = await axios.post(
+              "/api/user-tvs/seasons",
+              {
+                tvId: tvAdded?.tv._id,
+              },
+            );
+            if (responseAddSeasonStatus.status === 200)
+              setModalAddEpisodesStatus(true);
+          }
         }
+      }
+
+      if (category === "episode") {
+        setModalAddEpisodesStatus(true);
       }
 
       if (category === "note") {
@@ -325,6 +338,15 @@ const AccountInteraction: FC<Props> = (props) => {
         title={modalTitle}
         userRatingApi={mediaDetailsPageProps?.userRatingApi}
       />
+      {_tvId && modalAddEpisodesStatus && (
+        <AddEpisodeStatusModal
+          modalIsOpen={modalAddEpisodesStatus}
+          setModalIsOpen={setModalAddEpisodesStatus}
+          tvFromDb={tvFromDb}
+          tvId={_tvId}
+          tvTmdbId={selectedItemId}
+        />
+      )}
       {listsPageProps && (
         <DropdownCard
           item={item}

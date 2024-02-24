@@ -120,6 +120,11 @@ const IconsInteraction: FC<Props> = (props) => {
         startContent: <FaBan />,
         content: "Supprimer du compte",
       });
+      dropdownItems.unshift({
+        key: `episode-${item.id}-${item.name}`,
+        startContent: <MdOutlineCheckBox />,
+        content: "Marquer les épisodes",
+      });
     } else {
       dropdownItems.unshift({
         key: `add-${item.id}-${item.name}`,
