@@ -1,5 +1,5 @@
 import { InternalSeason } from "./seasons";
-import { InternalTv } from "./tvs";
+import { Episode, InternalTv } from "./tvs";
 
 export type InternalEpisode = {
   _id: string;
@@ -38,7 +38,7 @@ export type AddEpisode = {
 };
 
 export type EpisodeFromUI = {
-  episode: InternalEpisode;
+  episode: Episode;
   watched: boolean;
 };
 

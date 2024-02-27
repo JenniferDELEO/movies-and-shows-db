@@ -33,21 +33,15 @@ export async function POST(req: Request) {
 
   try {
     const allEpisodesByTv = await getAllEpisodesByTvId(tvId);
-    const sortedAllEpisodesByTv = allEpisodesByTv.sort(
-      (a, b) => a.episode_number - b.episode_number,
-    );
     const userEpisodesByTv = await getUserEpisodesByTvId(tvId, userId);
-    const sortedUserEpisodesByTv = userEpisodesByTv?.sort(
-      (a, b) => a.episode.episode_number - b.episode.episode_number,
-    );
 
     if (
-      sortedUserEpisodesByTv &&
-      sortedAllEpisodesByTv.length === sortedUserEpisodesByTv.length
+      userEpisodesByTv &&
+      allEpisodesByTv.length === userEpisodesByTv.length
     ) {
       episodes.forEach(async (episode) => {
-        const userEpisodeId = sortedUserEpisodesByTv.find(
-          (userEpisode) => userEpisode.episode._id === episode.episode._id,
+        const userEpisodeId = userEpisodesByTv.find(
+          (userEpisode) => userEpisode.episode.tmdb_id === episode.episode.id,
         )?._id;
         if (userEpisodeId) {
           await updateUserEpisodeAndStatus({
@@ -58,8 +52,8 @@ export async function POST(req: Request) {
       });
     } else {
       episodes.forEach(async (episode) => {
-        const episodeExists = sortedUserEpisodesByTv?.find(
-          (userEpisode) => userEpisode.episode._id === episode.episode._id,
+        const episodeExists = userEpisodesByTv?.find(
+          (userEpisode) => userEpisode.episode.tmdb_id === episode.episode.id,
         );
         if (episodeExists) {
           await updateUserEpisodeAndStatus({
@@ -67,17 +61,33 @@ export async function POST(req: Request) {
             watched: episode.watched,
           });
         } else {
-          await createUserEpisodeAndStatus({
-            userName,
-            userId,
-            tvId,
-            seasonId: episode.episode.season._id,
-            episodeId: episode.episode._id,
-            watched: episode.watched,
-          });
+          const seasonId = allEpisodesByTv.find(
+            (ep) =>
+              ep.season_number === episode.episode.season_number &&
+              ep.episode_number === episode.episode.episode_number,
+          )?.season._id;
+          const episodeId = allEpisodesByTv.find(
+            (ep) =>
+              ep.season_number === episode.episode.season_number &&
+              ep.episode_number === episode.episode.episode_number,
+          )?._id;
+          if (seasonId && episodeId) {
+            await createUserEpisodeAndStatus({
+              userName,
+              userId,
+              tvId,
+              seasonId,
+              episodeId,
+              watched: episode.watched,
+            });
+          }
         }
       });
     }
+    return NextResponse.json({
+      status: 200,
+      statusText: "Successful",
+    });
   } catch (error) {
     return new NextResponse("Unable to fetch", {
       status: 400,
