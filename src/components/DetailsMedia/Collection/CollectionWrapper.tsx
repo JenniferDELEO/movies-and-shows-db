@@ -46,7 +46,6 @@ const CollectionWrapper: FC<Props> = (props) => {
       />
       <MoviesInCollection
         movies={collectionDetails?.parts}
-        genresMovies={genresMovies}
         userMovies={userMovies}
         userMoviesId={userMoviesId}
         internalMovies={internalMovies}

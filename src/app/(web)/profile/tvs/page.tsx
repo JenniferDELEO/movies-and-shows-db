@@ -21,7 +21,7 @@ const ProfileTvs = () => {
   const fetchUserTvs = async () => {
     if (session) {
       const results = await getUserTvs(session?.user.id);
-      setTvsUserList(results?.tvs);
+      setTvsUserList(results);
     }
   };
 

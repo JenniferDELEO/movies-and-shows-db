@@ -9,8 +9,6 @@ import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
 import { getAllTvs, getUserTvs } from "@/libs/sanity/api/tv";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/sanity/auth";
-import { getGenresMovies } from "@/libs/api/movies";
-import { getGenresTvs } from "@/libs/api/tvs";
 
 type Props = {
   params: { id: string[] };
@@ -48,9 +46,6 @@ const Person = async ({ params }: Props) => {
     userTvs = await getUserTvs(session.user.id);
   }
 
-  const { genres: genresMovies } = await getGenresMovies();
-  const { genres: genresTvs } = await getGenresTvs();
-
   const internalMovies = await getAllMovies();
   const internalTvs = await getAllTvs();
 
@@ -63,11 +58,9 @@ const Person = async ({ params }: Props) => {
           runningMovies,
           actingTvs,
           runningTvs,
-          genresMovies,
           userMovies,
           userMoviesId,
           internalMovies,
-          genresTvs,
           userTvs,
           internalTvs,
         }}

@@ -26,8 +26,7 @@ const Episode = async ({ params }: Props) => {
   let userTvs: InternalTvAndUser[] = [];
 
   if (session) {
-    const results = await getUserTvs(session.user.id);
-    userTvs = results?.tvs || [];
+    userTvs = await getUserTvs(session.user.id);
   }
 
   const episodeDetails = await getEpisodeDetails(

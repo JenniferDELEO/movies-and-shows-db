@@ -1,24 +1,17 @@
 import { FC } from "react";
 
-import {
-  Genre,
-  InternalMovie,
-  InternalMovieUser,
-  Movie,
-} from "@/models/movies";
+import { InternalMovie, InternalMovieUser, Movie } from "@/models/movies";
 import BannerWrapper from "@/components/Banner/BannerWrapper";
 
 type Props = {
   movies: Movie[];
-  genresMovies: Genre[];
   userMovies: InternalMovieUser[];
   userMoviesId: string;
   internalMovies: InternalMovie[];
 };
 
 const MoviesInCollection: FC<Props> = (props) => {
-  const { movies, genresMovies, userMovies, userMoviesId, internalMovies } =
-    props;
+  const { movies, userMovies, userMoviesId, internalMovies } = props;
   return (
     <div>
       {movies.length > 0 ? (
@@ -27,7 +20,6 @@ const MoviesInCollection: FC<Props> = (props) => {
             movieCollectionProps={{
               movies,
               title: `Films de la collection (${movies.length})`,
-              genresMovies,
               userMovies,
               userMoviesId,
               internalMovies,
