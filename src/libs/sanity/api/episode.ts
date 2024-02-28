@@ -50,6 +50,18 @@ export async function getUserEpisodesBySeasonId(
   return result;
 }
 
+export async function getUserEpisodesWatchedByTvId(
+  tvId: string,
+  userId: string,
+) {
+  const result = await sanityClient.fetch<InternalEpisode[]>(
+    queries.getUserEpisodesWatchedByTvQuery,
+    { tvId, userId },
+    { cache: "no-cache" },
+  );
+  return result;
+}
+
 /*-------------------- POST / PATCH --------------------*/
 
 export async function addEpisode({

@@ -2,10 +2,13 @@
 
 import dayjs from "dayjs";
 import { FC, useEffect, useState } from "react";
-import { Card, CardBody, CardFooter } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, user } from "@nextui-org/react";
 
 import { InternalTvAndUser, SeasonDetails } from "@/models/tvs";
 import { usePathname, useRouter } from "next/navigation";
+import { getUserEpisodesWatchedByTvId } from "@/libs/sanity/api/episode";
+import { useSession } from "next-auth/react";
+import { getTvByTmdbId } from "@/libs/sanity/api/tv";
 
 type Props = {
   seasonDetails: SeasonDetails;
@@ -14,14 +17,29 @@ type Props = {
 
 const EpisodesBanner: FC<Props> = (props) => {
   const { seasonDetails, userTvs } = props;
+  const session = useSession();
 
   const router = useRouter();
   const pathname = usePathname();
 
-  const userHasTv = userTvs.filter(
+  const userHasTv = userTvs.find(
     (userTv) => userTv.tv.tmdb_id === seasonDetails.episodes[0].show_id,
-  )[0];
+  );
   const [blur, setBlur] = useState(false);
+  console.log(userHasTv);
+  async function fetchUserEpisodesWatched() {
+    if (userHasTv && session && session?.data?.user) {
+      const userEpisodesWatched = await getUserEpisodesWatchedByTvId(
+        userHasTv.tv._id,
+        session.data.user.id,
+      );
+      console.log(userEpisodesWatched);
+    }
+  }
+
+  useEffect(() => {
+    fetchUserEpisodesWatched();
+  }, []);
 
   useEffect(() => {
     if (userHasTv) setBlur(true);

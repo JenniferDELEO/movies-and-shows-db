@@ -1,6 +1,6 @@
 import { groq } from "next-sanity";
 
-export const getUserEpisodesByTvQuery = groq`*[_type == "user_episode" && tv._ref == $tvId && user._ref == $userId][0] {
+export const getUserEpisodesByTvQuery = groq`*[_type == "user_episode" && tv._ref == $tvId && user._ref == $userId] {
     _id,              
     user_name,
     tv->,
@@ -9,7 +9,7 @@ export const getUserEpisodesByTvQuery = groq`*[_type == "user_episode" && tv._re
     account_states
 }`;
 
-export const getUserEpisodesBySeasonQuery = groq`*[_type == "user_episode" && season._ref == $seasonId && user._ref == $userId][0] {
+export const getUserEpisodesBySeasonQuery = groq`*[_type == "user_episode" && season._ref == $seasonId && user._ref == $userId] {
     _id,              
     user_name,
     tv->,
@@ -42,4 +42,13 @@ export const getAllEpisodesBySeasonIdQuery = groq`*[_type == "episode" && season
     tmdb_id,
     tv->,
     season->,
+}`;
+
+export const getUserEpisodesWatchedByTvQuery = groq`*[_type == "user_episode" && tv._ref == $tvId && user._ref == $userId && account_states.watched == true] {
+    _id,              
+    user_name,
+    tv->,
+    season->,
+    episode->,
+    account_states
 }`;
