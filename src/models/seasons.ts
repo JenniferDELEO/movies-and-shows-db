@@ -60,6 +60,7 @@ export type AddUserSeason = {
 
 export type AddEpisodesByUserSeason = {
   userSeasonId: string;
+  allWatched: boolean;
   episodes: {
     tmdbId: number;
     seasonNumber: number;

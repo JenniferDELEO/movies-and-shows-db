@@ -67,6 +67,7 @@ export async function POST(req: Request) {
               );
               await updateEpisodesByUserSeason({
                 userSeasonId: seasonExists._id,
+                allWatched: false,
                 episodes: episodesToAdd,
               });
             } catch (error: any) {
@@ -83,6 +84,7 @@ export async function POST(req: Request) {
             try {
               await addEpisodesByUserSeason({
                 userSeasonId: seasonExists._id,
+                allWatched: false,
                 episodes: episodesToAdd,
               });
             } catch (error: any) {

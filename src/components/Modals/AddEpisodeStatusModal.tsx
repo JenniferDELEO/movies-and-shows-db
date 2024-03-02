@@ -66,9 +66,9 @@ const AddEpisodeStatusModal: FC<Props> = ({
 
   const onValidate = async () => {
     const episodes = seasonsDetails.flatMap((season) => season.episodes);
-    const responseAddEpisodes = await axios.post("/api/tvs/seasons/episodes", {
+    const responseAddEpisodes = await axios.post("/api/tvs/seasons", {
+      tvTmdbId,
       tvId,
-      episodes,
     });
     if (responseAddEpisodes.status === 200) {
       let statusEpisodes;
@@ -107,6 +107,7 @@ const AddEpisodeStatusModal: FC<Props> = ({
       const responseAddEpisodesStatus = await axios.post(
         "/api/user-tvs/seasons/episodes",
         {
+          tvTmdbId,
           tvId,
           episodes: statusEpisodes,
         },
