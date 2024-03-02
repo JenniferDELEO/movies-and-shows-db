@@ -1,4 +1,4 @@
-import { InternalEpisode } from "./episode";
+import { InternalEpisode, UserEpisode } from "./episode";
 import { InternalTv } from "./tvs";
 
 export type InternalSeason = {
@@ -17,15 +17,8 @@ export type InternalSeasonAndUser = {
   user_name: string;
   tv: InternalTv;
   season: InternalSeason;
-  account_states: {
-    all_watched: boolean;
-  };
-  watched_episodes: {
-    _key: string;
-    season_number: number;
-    episode_number: number;
-    watched: boolean;
-  }[];
+  all_watched: boolean;
+  watched_episodes: UserEpisode[];
 };
 
 export type AddSeason = {

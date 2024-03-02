@@ -28,6 +28,7 @@ export async function getUserSeasonsByTv(tvId: string, userId: string) {
     { tvId, userId },
     { cache: "no-cache" },
   );
+  console.log("result", result);
   return result;
 }
 

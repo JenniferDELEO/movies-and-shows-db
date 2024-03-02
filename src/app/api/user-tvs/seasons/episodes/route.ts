@@ -54,11 +54,9 @@ export async function POST(req: Request) {
             episodeNumber: ep.episode.episode_number,
             watched: ep.watched,
           }));
-        console.log("episodesToAdd", episodesToAdd);
         const allWatched =
           episodesToAdd.filter((episode) => episode.watched)?.length ===
           episodesToAdd.length;
-        console.log(allWatched);
         if (seasonExists) {
           const numberOfEpisodesUser =
             seasonExists?.watched_episodes?.length || 0;

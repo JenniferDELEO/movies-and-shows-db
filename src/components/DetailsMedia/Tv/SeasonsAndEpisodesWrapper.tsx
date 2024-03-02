@@ -7,6 +7,8 @@ import { InternalTvAndUser, Season, SeasonDetails } from "@/models/tvs";
 import SeasonsBanner from "@/components/DetailsMedia/Tv/SeasonsBanner";
 import EpisodesBanner from "@/components/DetailsMedia/Tv/EpisodesBanner";
 import { getSeasonDetails } from "@/libs/api/tvs";
+import { useSession } from "next-auth/react";
+import { getUserSeasonsByTv } from "@/libs/sanity/api/tv-season";
 
 type Props = {
   seasons: Season[];
@@ -19,6 +21,7 @@ type Props = {
 const SeasonsAndEpisodesWrapper: FC<Props> = (props) => {
   const { seasons, tvId, isEpisodePage, selectedSeasonDefault, userTvs } =
     props;
+  const session = useSession();
   const [selectedSeason, setSelectedSeason] = useState<Season>(
     selectedSeasonDefault ||
       seasons.filter((season) => season.season_number === 1)[0],
@@ -26,6 +29,28 @@ const SeasonsAndEpisodesWrapper: FC<Props> = (props) => {
   const [seasonDetails, setSeasonDetails] = useState<SeasonDetails | null>(
     null,
   );
+
+  const userHasTv = userTvs.find(
+    (userTv) => userTv.tv.tmdb_id === seasonDetails?.episodes[0].show_id,
+  );
+
+  async function fetchUserSeasonsByTv() {
+    if (userHasTv && session && session?.data?.user) {
+      const result = await getUserSeasonsByTv(
+        userHasTv.tv._id,
+        session.data.user.id,
+      );
+      console.log(result);
+    }
+  }
+
+  useEffect(() => {
+    if (userHasTv) {
+      fetchUserSeasonsByTv();
+    }
+  }, [userHasTv, seasonDetails]);
+
+  console.log("season details", seasonDetails, "user has tv", userHasTv);
 
   async function fetchSeasonDetails() {
     const response = await getSeasonDetails(tvId, selectedSeason.season_number);
