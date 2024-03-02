@@ -1,7 +1,9 @@
 import {
-  createUserSeasonAndStatus,
+  addEpisodesByUserSeason,
+  addUserSeason,
   getAllSeasonsByTvId,
   getUserSeasonsByTv,
+  updateEpisodesByUserSeason,
 } from "@/libs/sanity/api/tv-season";
 import { authOptions } from "@/libs/sanity/auth";
 import { getServerSession } from "next-auth";
@@ -25,41 +27,95 @@ export async function POST(req: Request) {
 
   try {
     const allSeasonsByTv = await getAllSeasonsByTvId(tvId);
-    const sortedAllSeasonsByTv = allSeasonsByTv.sort(
-      (a, b) => a.season_number - b.season_number,
-    );
     const userSeasonsByTv = await getUserSeasonsByTv(tvId, userId);
 
-    if (userSeasonsByTv && userSeasonsByTv.length > 0) {
-      const sortedUserSeasonsByTv = userSeasonsByTv?.sort(
-        (a, b) => a.season.season_number - b.season.season_number,
-      );
+    if (allSeasonsByTv && allSeasonsByTv.length > 0) {
+      for (let i = 0; i < allSeasonsByTv.length; i++) {
+        const seasonExists = userSeasonsByTv?.find(
+          (season) =>
+            season.season.season_number === allSeasonsByTv[i].season_number,
+        );
+        let episodesToAdd = allSeasonsByTv[i].episodes.map((ep) => ({
+          tmdbId: ep.tmdb_id,
+          seasonNumber: ep.season_number,
+          episodeNumber: ep.episode_number,
+          watched: false,
+        }));
+        if (seasonExists) {
+          const numberOfEpisodesUser =
+            seasonExists?.watched_episodes?.length || 0;
+          const numberOfEpisodesSeason = allSeasonsByTv[i].episodes.length;
 
-      if (
-        sortedUserSeasonsByTv &&
-        sortedAllSeasonsByTv.length === userSeasonsByTv.length
-      ) {
-        return new NextResponse("User already has all seasons", {
-          status: 200,
-        });
-      } else {
-        for (let i = 0; i < sortedAllSeasonsByTv.length; i++) {
-          const seasonExists = sortedUserSeasonsByTv?.find(
-            (season) => season.season._id === sortedAllSeasonsByTv[i]._id,
-          );
-          if (!seasonExists) {
-            await createUserSeasonAndStatus({
+          if (numberOfEpisodesUser === numberOfEpisodesSeason) {
+            if (seasonExists.season.season_number === allSeasonsByTv.length) {
+              return new NextResponse(
+                "Season and episodes of the user already exist",
+                {
+                  status: 200,
+                },
+              );
+            } else {
+              continue;
+            }
+          } else if (numberOfEpisodesUser > 0) {
+            try {
+              episodesToAdd = episodesToAdd.filter(
+                (ep) =>
+                  !seasonExists?.watched_episodes?.find(
+                    (e) => e.episode_number === ep.episodeNumber,
+                  ),
+              );
+              await updateEpisodesByUserSeason({
+                userSeasonId: seasonExists._id,
+                episodes: episodesToAdd,
+              });
+            } catch (error: any) {
+              console.log(error.response.data);
+              return new NextResponse(
+                "Unable to update season with new episodes to the user",
+                {
+                  status: 400,
+                  statusText: `Unable to update season with new episodes to the user : ${error}`,
+                },
+              );
+            }
+          } else {
+            try {
+              await addEpisodesByUserSeason({
+                userSeasonId: seasonExists._id,
+                episodes: episodesToAdd,
+              });
+            } catch (error: any) {
+              console.log(error.response.data);
+              return new NextResponse(
+                "Unable to add episodes to the user's season",
+                {
+                  status: 400,
+                  statusText: `Unable to add episodes to the user's season : ${error}`,
+                },
+              );
+            }
+          }
+        } else {
+          try {
+            await addUserSeason({
               userName,
               userId,
               tvId,
-              seasonId: sortedAllSeasonsByTv[i]._id,
+              seasonId: allSeasonsByTv[i]._id,
               allWatched: false,
+              episodes: episodesToAdd,
+            });
+          } catch (error: any) {
+            console.log(error.response.data);
+            return new NextResponse("Unable to add season to the user", {
+              status: 400,
+              statusText: `Unable to add season to the user : ${error}`,
             });
           }
         }
       }
     }
-
     return NextResponse.json({
       status: 200,
       statusText: "Successful",

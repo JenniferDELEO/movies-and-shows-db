@@ -2,7 +2,7 @@ import { InternalSeason } from "./seasons";
 import { Episode, InternalTv } from "./tvs";
 
 export type InternalEpisode = {
-  _id: string;
+  _key?: string;
   episode_title: string;
   episode_number: number;
   episode_total_number: number;
@@ -10,8 +10,6 @@ export type InternalEpisode = {
   episode_release_date: string;
   episode_runtime: number;
   tmdb_id: number;
-  tv: InternalTv;
-  season: InternalSeason;
 };
 
 export type UserEpisode = {

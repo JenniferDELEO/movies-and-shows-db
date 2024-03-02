@@ -2,12 +2,13 @@ import sanityClient from "../sanity";
 import axios from "axios";
 import * as queries from "../queries/tvSeasonQueries";
 import {
+  AddEpisodesBySeason,
+  AddEpisodesByUserSeason,
   AddSeason,
-  CreateSeasonStatus,
+  AddUserSeason,
   InternalSeason,
   InternalSeasonAndUser,
-  UpdateSeason,
-  UpdateSeasonStatus,
+  UpdateEpisodeUserSeasonStatus,
 } from "@/models/seasons";
 
 /*-------------------- GET --------------------*/
@@ -39,6 +40,7 @@ export async function addSeason({
   numberOfEpisodes,
   releaseDate,
   tmdbId,
+  episodes,
 }: AddSeason) {
   const mutation = {
     mutations: [
@@ -54,6 +56,11 @@ export async function addSeason({
           number_of_episodes: numberOfEpisodes,
           release_date: releaseDate,
           tmdb_id: tmdbId,
+          episodes: episodes.map((ep) => ({
+            _key: ep.tmdb_id.toString(),
+            _type: "episode",
+            ...ep,
+          })),
         },
       },
     ],
@@ -67,16 +74,24 @@ export async function addSeason({
   return data;
 }
 
-export async function updateSeason({
+export async function addEpisodesBySeason({
   seasonId,
   numberOfEpisodes,
-}: UpdateSeason) {
+  episodes,
+}: AddEpisodesBySeason) {
   const mutation = {
     mutations: [
       {
         patch: {
           id: seasonId,
-          number_of_episodes: numberOfEpisodes,
+          set: {
+            "[number_of_episodes]": numberOfEpisodes,
+            episodes: episodes.map((ep) => ({
+              _key: ep.tmdb_id.toString(),
+              _type: "episode",
+              ...ep,
+            })),
+          },
         },
       },
     ],
@@ -90,13 +105,48 @@ export async function updateSeason({
   return data;
 }
 
-export async function createUserSeasonAndStatus({
+export async function updateEpisodesBySeason({
+  seasonId,
+  numberOfEpisodes,
+  episodes,
+}: AddEpisodesBySeason) {
+  const mutation = {
+    mutations: [
+      {
+        patch: {
+          id: seasonId,
+          set: {
+            "[number_of_episodes]": numberOfEpisodes,
+          },
+          insert: {
+            after: "episodes[-1]",
+            items: episodes.map((ep) => ({
+              _key: ep.tmdb_id.toString(),
+              _type: "episode",
+              ...ep,
+            })),
+          },
+        },
+      },
+    ],
+  };
+
+  const { data } = await axios.post(
+    `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${process.env.NEXT_PUBLIC_SANITY_DATASET}`,
+    mutation,
+    { headers: { Authorization: `Bearer ${process.env.SANITY_STUDIO_TOKEN}` } },
+  );
+  return data;
+}
+
+export async function addUserSeason({
   userName,
   userId,
   tvId,
   seasonId,
   allWatched,
-}: CreateSeasonStatus) {
+  episodes,
+}: AddUserSeason) {
   const mutation = {
     mutations: [
       {
@@ -115,8 +165,42 @@ export async function createUserSeasonAndStatus({
             _type: "reference",
             _ref: seasonId,
           },
-          account_states: {
-            all_watched: allWatched,
+          all_watched: allWatched,
+          watched_episodes: episodes.map((ep) => ({
+            _key: ep.tmdbId.toString(),
+            season_number: ep.seasonNumber,
+            episode_number: ep.episodeNumber,
+            watched: ep.watched,
+          })),
+        },
+      },
+    ],
+  };
+
+  const { data } = await axios.post(
+    `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${process.env.NEXT_PUBLIC_SANITY_DATASET}`,
+    mutation,
+    { headers: { Authorization: `Bearer ${process.env.SANITY_STUDIO_TOKEN}` } },
+  );
+  return data;
+}
+
+export async function addEpisodesByUserSeason({
+  userSeasonId,
+  episodes,
+}: AddEpisodesByUserSeason) {
+  const mutation = {
+    mutations: [
+      {
+        patch: {
+          id: userSeasonId,
+          set: {
+            watched_episodes: episodes.map((ep) => ({
+              _key: ep.tmdbId.toString(),
+              season_number: ep.seasonNumber,
+              episode_number: ep.episodeNumber,
+              watched: ep.watched,
+            })),
           },
         },
       },
@@ -131,17 +215,55 @@ export async function createUserSeasonAndStatus({
   return data;
 }
 
-export async function updateUserSeasonAndStatus({
+export async function updateEpisodesByUserSeason({
   userSeasonId,
-  allWatched,
-}: UpdateSeasonStatus) {
+  episodes,
+}: AddEpisodesByUserSeason) {
   const mutation = {
     mutations: [
       {
         patch: {
           id: userSeasonId,
-          account_states: {
+          insert: {
+            after: "watched_episodes[-1]",
+            items: episodes.map((ep) => ({
+              _key: ep.tmdbId.toString(),
+              season_number: ep.seasonNumber,
+              episode_number: ep.episodeNumber,
+              watched: ep.watched,
+            })),
+          },
+        },
+      },
+    ],
+  };
+
+  const { data } = await axios.post(
+    `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${process.env.NEXT_PUBLIC_SANITY_DATASET}`,
+    mutation,
+    { headers: { Authorization: `Bearer ${process.env.SANITY_STUDIO_TOKEN}` } },
+  );
+  return data;
+}
+
+export async function updateEpisodeUserSeasonStatus({
+  userSeasonId,
+  allWatched,
+  episodes,
+}: UpdateEpisodeUserSeasonStatus) {
+  const mutation = {
+    mutations: [
+      {
+        patch: {
+          id: userSeasonId,
+          set: {
             all_watched: allWatched,
+            watched_episodes: episodes.map((ep) => ({
+              _key: ep.tmdbId.toString(),
+              season_number: ep.seasonNumber,
+              episode_number: ep.episodeNumber,
+              watched: ep.watched,
+            })),
           },
         },
       },

@@ -44,6 +44,12 @@ const season = {
       type: "number",
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: "episodes",
+      title: "Episodes",
+      type: "array",
+      of: [{ type: "episode" }],
+    }),
   ],
 };
 

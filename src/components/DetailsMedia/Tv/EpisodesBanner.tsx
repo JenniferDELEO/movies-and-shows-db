@@ -26,14 +26,12 @@ const EpisodesBanner: FC<Props> = (props) => {
     (userTv) => userTv.tv.tmdb_id === seasonDetails.episodes[0].show_id,
   );
   const [blur, setBlur] = useState(false);
-  console.log(userHasTv);
   async function fetchUserEpisodesWatched() {
     if (userHasTv && session && session?.data?.user) {
       const userEpisodesWatched = await getUserEpisodesWatchedByTvId(
         userHasTv.tv._id,
         session.data.user.id,
       );
-      console.log(userEpisodesWatched);
     }
   }
 

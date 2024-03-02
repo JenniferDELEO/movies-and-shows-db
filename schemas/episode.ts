@@ -46,20 +46,6 @@ const episode = {
       type: "number",
       validation: (Rule) => Rule.required(),
     }),
-    defineField({
-      name: "tv",
-      title: "TV",
-      type: "reference",
-      to: [{ type: "tv" }],
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: "season",
-      title: "Season",
-      type: "reference",
-      to: [{ type: "season" }],
-      validation: (Rule) => Rule.required(),
-    }),
   ],
 };
 

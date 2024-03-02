@@ -30,19 +30,19 @@ const userSeason = {
       title: "Season",
       type: "reference",
       to: [{ type: "season" }],
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "account_states",
-      title: "Account States",
-      type: "object",
-      fields: [
-        {
-          name: "all_watched",
-          title: "All Watched",
-          type: "boolean",
-          initialValue: false,
-        },
-      ],
+      name: "all_watched",
+      title: "All Watched",
+      type: "boolean",
+      initialValue: false,
+    }),
+    defineField({
+      name: "watched_episodes",
+      title: "Watched Episodes",
+      type: "array",
+      of: [{ type: "user_episode" }],
     }),
   ],
 };
