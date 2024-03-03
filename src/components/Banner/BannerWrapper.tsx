@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import React, { FC, useContext } from "react";
+import React, { FC } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { usePathname, useRouter } from "next/navigation";
 import { Tab, Tabs, Tooltip } from "@nextui-org/react";
@@ -14,8 +14,6 @@ import {
   Movie,
 } from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
-import { UserContext } from "@/context/userContext";
-import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 
 type Props = {
   homeProps?: {
@@ -63,22 +61,8 @@ const BannerWrapper: FC<Props> = ({
   movieDetailsProps,
   tvshowsDetailsProps,
 }) => {
-  const { user } = useContext(UserContext);
   const pathname = usePathname();
   const router = useRouter();
-
-  const {
-    fetchUserDatas,
-    favoriteMoviesIds,
-    watchlistMoviesIds,
-    favoriteTvShowsIds,
-    watchlistTvShowsIds,
-    ratedMovies,
-    ratedTvShows,
-    ratedMoviesIds,
-    ratedTvShowsIds,
-    userLists,
-  } = TmdbFetcher();
 
   const classNames = {
     container: "mx-auto w-full md:w-[80%] lg:w[90%] mb-20 pb-16",
@@ -112,19 +96,8 @@ const BannerWrapper: FC<Props> = ({
             <Banner
               items={homeProps.trendingMoviesToday}
               type="movie"
-              user={user}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNames}
               title="Les 20 Films dans les tendances"
-              userLists={userLists}
               internalMovies={homeProps.internalMovies}
               genresMovies={homeProps.genresMovies}
               userMovies={homeProps.userMovies}
@@ -141,19 +114,8 @@ const BannerWrapper: FC<Props> = ({
             <Banner
               items={homeProps.trendingMoviesThisWeek}
               type="movie"
-              user={user}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNames}
               title="Les 20 Films dans les tendances"
-              userLists={userLists}
               internalMovies={homeProps.internalMovies}
               genresMovies={homeProps.genresMovies}
               userMovies={homeProps.userMovies}
@@ -164,19 +126,8 @@ const BannerWrapper: FC<Props> = ({
         <Banner
           items={homeProps.popularMovies}
           type="movie"
-          user={user}
-          fetchUserDatas={fetchUserDatas}
-          favoriteMoviesIds={favoriteMoviesIds}
-          watchlistMoviesIds={watchlistMoviesIds}
-          favoriteTvShowsIds={favoriteTvShowsIds}
-          watchlistTvShowsIds={watchlistTvShowsIds}
-          ratedMovies={ratedMovies}
-          ratedTvShows={ratedTvShows}
-          ratedMoviesIds={ratedMoviesIds}
-          ratedTvShowsIds={ratedTvShowsIds}
           classNames={classNames}
           title="Les 20 Films les plus populaires"
-          userLists={userLists}
           internalMovies={homeProps.internalMovies}
           genresMovies={homeProps.genresMovies}
           userMovies={homeProps.userMovies}
@@ -185,19 +136,8 @@ const BannerWrapper: FC<Props> = ({
         <Banner
           items={homeProps.topRatedMovies}
           type="movie"
-          user={user}
-          fetchUserDatas={fetchUserDatas}
-          favoriteMoviesIds={favoriteMoviesIds}
-          watchlistMoviesIds={watchlistMoviesIds}
-          favoriteTvShowsIds={favoriteTvShowsIds}
-          watchlistTvShowsIds={watchlistTvShowsIds}
-          ratedMovies={ratedMovies}
-          ratedTvShows={ratedTvShows}
-          ratedMoviesIds={ratedMoviesIds}
-          ratedTvShowsIds={ratedTvShowsIds}
           classNames={classNames}
           title="Les 20 Films les mieux notés"
-          userLists={userLists}
           internalMovies={homeProps.internalMovies}
           genresMovies={homeProps.genresMovies}
           userMovies={homeProps.userMovies}
@@ -218,19 +158,8 @@ const BannerWrapper: FC<Props> = ({
             <Banner
               items={homeProps.trendingTvShowsToday}
               type="tvshow"
-              user={user}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNames}
               title="Les 20 Séries TV dans les tendances"
-              userLists={userLists}
             />
           </Tab>
           <Tab
@@ -243,55 +172,22 @@ const BannerWrapper: FC<Props> = ({
             <Banner
               items={homeProps.trendingTvShowsThisWeek}
               type="movie"
-              user={user}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNames}
               title="Les 20 Séries TV dans les tendances"
-              userLists={userLists}
             />
           </Tab>
         </Tabs>
         <Banner
           items={homeProps.popularTvShows}
           type="tvshow"
-          user={user}
-          fetchUserDatas={fetchUserDatas}
-          favoriteTvShowsIds={favoriteTvShowsIds}
-          watchlistTvShowsIds={watchlistTvShowsIds}
-          favoriteMoviesIds={favoriteMoviesIds}
-          watchlistMoviesIds={watchlistMoviesIds}
-          ratedMovies={ratedMovies}
-          ratedTvShows={ratedTvShows}
-          ratedMoviesIds={ratedMoviesIds}
-          ratedTvShowsIds={ratedTvShowsIds}
           classNames={classNames}
           title="Les 20 Séries TV les plus populaires"
-          userLists={userLists}
         />
         <Banner
           items={homeProps.topRatedTvShows}
           type="tvshow"
-          user={user}
-          fetchUserDatas={fetchUserDatas}
-          favoriteTvShowsIds={favoriteTvShowsIds}
-          watchlistTvShowsIds={watchlistTvShowsIds}
-          favoriteMoviesIds={favoriteMoviesIds}
-          watchlistMoviesIds={watchlistMoviesIds}
-          ratedMovies={ratedMovies}
-          ratedTvShows={ratedTvShows}
-          ratedMoviesIds={ratedMoviesIds}
-          ratedTvShowsIds={ratedTvShowsIds}
           classNames={classNames}
           title="Les 20 Séries TV les mieux notées"
-          userLists={userLists}
         />
       </div>
     );
@@ -303,19 +199,8 @@ const BannerWrapper: FC<Props> = ({
           b.release_date.localeCompare(a.release_date),
         )}
         type="movie"
-        user={user}
-        fetchUserDatas={fetchUserDatas}
-        favoriteMoviesIds={favoriteMoviesIds}
-        watchlistMoviesIds={watchlistMoviesIds}
-        favoriteTvShowsIds={favoriteTvShowsIds}
-        watchlistTvShowsIds={watchlistTvShowsIds}
-        ratedMovies={ratedMovies}
-        ratedTvShows={ratedTvShows}
-        ratedMoviesIds={ratedMoviesIds}
-        ratedTvShowsIds={ratedTvShowsIds}
         classNames={classNamesPagesDetails}
         title={movieCollectionProps.title}
-        userLists={userLists}
       />
     );
   }
@@ -343,19 +228,8 @@ const BannerWrapper: FC<Props> = ({
             <Banner
               items={movieDetailsProps.movies}
               type="movie"
-              user={user}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNamesPagesDetails}
               title={`${movieDetailsProps.title} (${movieDetailsProps.totalResults})`}
-              userLists={userLists}
             />
           </div>
         )}
@@ -372,19 +246,8 @@ const BannerWrapper: FC<Props> = ({
                 b.release_date.localeCompare(a.release_date),
               )}
               type="movie"
-              user={user}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNamesPagesDetails}
               title={`Films (${personDetailProps.actingMovies.length})`}
-              userLists={userLists}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
@@ -396,19 +259,8 @@ const BannerWrapper: FC<Props> = ({
                 b.first_air_date.localeCompare(a.first_air_date),
               )}
               type="tvshow"
-              user={user}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNamesPagesDetails}
               title={`Séries TV (${personDetailProps.actingTvShows.length})`}
-              userLists={userLists}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
@@ -420,19 +272,8 @@ const BannerWrapper: FC<Props> = ({
                 b.release_date.localeCompare(a.release_date),
               )}
               type="movie"
-              user={user}
-              fetchUserDatas={fetchUserDatas}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNamesPagesDetails}
               title={`Films réalisés (${personDetailProps.runningMovies.length})`}
-              userLists={userLists}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
@@ -444,19 +285,8 @@ const BannerWrapper: FC<Props> = ({
                 b.first_air_date.localeCompare(a.first_air_date),
               )}
               type="tvshow"
-              user={user}
-              fetchUserDatas={fetchUserDatas}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNamesPagesDetails}
               title={`Séries TV réalisées (${personDetailProps.runningTvShows.length})`}
-              userLists={userLists}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
@@ -490,19 +320,8 @@ const BannerWrapper: FC<Props> = ({
             <Banner
               items={tvshowsDetailsProps.tvshows}
               type="tvshow"
-              user={user}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
               classNames={classNamesPagesDetails}
               title={`${tvshowsDetailsProps.title} (${tvshowsDetailsProps.totalResults})`}
-              userLists={userLists}
             />
           </div>
         )}

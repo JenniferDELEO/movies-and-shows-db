@@ -15,7 +15,6 @@ import Card from "../../Cards/Card";
 import Pagination from "../../Pagination/Pagination";
 import { getSimilarsMovie } from "@/libs/api/movies";
 import { getSimilarsTvShow } from "@/libs/api/tvshows";
-import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 
 type Props = {
   mediaId: string;
@@ -64,19 +63,6 @@ const SimilarsWrapper: FC<Props> = (props) => {
   const [currentPage, setCurrentPage] = useState<number>(Number(params.page));
 
   const genres = genresMovies || genresTvShows || [];
-
-  const {
-    fetchUserDatas,
-    favoriteMoviesIds,
-    watchlistMoviesIds,
-    favoriteTvShowsIds,
-    watchlistTvShowsIds,
-    ratedMovies,
-    ratedTvShows,
-    ratedMoviesIds,
-    ratedTvShowsIds,
-    userLists,
-  } = TmdbFetcher();
 
   async function getSimilarsNextPages() {
     if (similarsMovies) {
@@ -130,16 +116,6 @@ const SimilarsWrapper: FC<Props> = (props) => {
               movie={movie}
               filterType="movie"
               genres={genres}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
-              userLists={userLists}
               userMovies={userMovies}
               userMoviesId={userMoviesId}
               internalMovies={internalMovies}
@@ -152,16 +128,6 @@ const SimilarsWrapper: FC<Props> = (props) => {
               tvShow={tvShow}
               filterType="tvshow"
               genres={genres}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
-              userLists={userLists}
             />
           ))}
       </div>

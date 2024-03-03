@@ -29,10 +29,8 @@ const MediaHeader: FC<Props> = (props) => {
     props;
   const pathname = usePathname();
   const baseUrl = `/${pathname.split("/")[1]}/${pathname.split("/")[2]}`;
-  const type = pathname.split("/")[1];
   const dropdownItems = getItems(
     baseUrl,
-    type,
     numberOfBackdrops,
     numberOfLogos,
     numberOfPosters,

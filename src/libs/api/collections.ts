@@ -1,6 +1,14 @@
 import axios from "axios";
-import { optionsGET } from "./auth";
 import { Collection } from "@/models/collections";
+
+export const optionsGET = {
+  method: "GET",
+  url: "",
+  headers: {
+    accept: "application/json",
+    Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+  },
+};
 
 export async function getCollection(collectionId: number): Promise<Collection> {
   try {

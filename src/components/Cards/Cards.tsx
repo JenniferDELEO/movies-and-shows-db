@@ -8,7 +8,6 @@ import {
   Movie,
 } from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
-import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 
 type Props = {
   filterType: "movie" | "tvshow";
@@ -29,19 +28,6 @@ const Cards: FC<Props> = ({
   userMoviesId,
   internalMovies,
 }) => {
-  const {
-    fetchUserDatas,
-    favoriteMoviesIds,
-    watchlistMoviesIds,
-    favoriteTvShowsIds,
-    watchlistTvShowsIds,
-    ratedMovies,
-    ratedTvShows,
-    ratedMoviesIds,
-    ratedTvShowsIds,
-    userLists,
-  } = TmdbFetcher();
-
   return (
     <div className="w-full">
       {movies && userMovies && userMoviesId && internalMovies && (
@@ -52,16 +38,6 @@ const Cards: FC<Props> = ({
               movie={movie}
               filterType={filterType}
               genres={genres}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
-              userLists={userLists}
               userMovies={userMovies}
               userMoviesId={userMoviesId}
               internalMovies={internalMovies}
@@ -77,16 +53,6 @@ const Cards: FC<Props> = ({
               tvShow={tvShow}
               filterType={filterType}
               genres={genres}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
-              userLists={userLists}
             />
           ))}
         </div>

@@ -7,13 +7,6 @@ import { TiDelete } from "react-icons/ti";
 import toast from "react-hot-toast";
 
 import ModalComponent from "@/components/Modals/ModalComponent";
-import { addRateMovie, deleteRateMovie } from "@/libs/api/movies";
-import {
-  addRateTvShow,
-  addRateTvShowEpisode,
-  deleteRateTvShow,
-  deleteRateTvShowEpisode,
-} from "@/libs/api/tvshows";
 import StarRating from "@/components/StarRate/StarRating";
 import { Movie } from "@/models/movies";
 import { TvShow } from "@/models/tvShows";
@@ -48,26 +41,8 @@ const RatingModal: FC<Props> = ({
 }) => {
   const [userRate, setUserRate] = useState<number>(0);
 
-  useEffect(() => {
-    if (itemType === "movie") {
-      if (ratedMovies && ratedMovies.length > 0) {
-        const userRating = ratedMovies.find((movie) => movie.id === itemId);
-        if (userRating) setUserRate(userRating.account_rating.value / 2);
-      } else if (userRatingApi) setUserRate(userRatingApi / 2);
-    }
-    if (itemType === "tvshow") {
-      if (ratedTvShows && ratedTvShows.length > 0) {
-        const userRating = ratedTvShows.find((tv) => tv.id === itemId);
-        if (userRating) setUserRate(userRating.account_rating.value / 2);
-      } else if (userRatingApi) setUserRate(userRatingApi / 2);
-    }
-    if (itemType === "episode") {
-      if (userRatingApi) setUserRate(userRatingApi / 2);
-    }
-  }, [itemType, itemId, ratedMovies, ratedTvShows]);
-
   const onValidate = async () => {
-    if (itemType === "movie" && userRate > 0) {
+    /*  if (itemType === "movie" && userRate > 0) {
       const response = await addRateMovie(itemId, userRate * 2);
       if (response.success) {
         await fetchUserDatas();
@@ -104,11 +79,11 @@ const RatingModal: FC<Props> = ({
     } else {
       setUserRate(0);
       setModalIsOpen(false);
-    }
+    } */
   };
 
   const onDeleteRating = async () => {
-    if (itemType === "movie") {
+    /* if (itemType === "movie") {
       const response = await deleteRateMovie(itemId);
       if (response.success) {
         await fetchUserDatas();
@@ -135,7 +110,7 @@ const RatingModal: FC<Props> = ({
         setUserRate(0);
         toast.success("Note supprimée avec succès !");
       } else toast.error("Une erreur est survenue");
-    }
+    } */
   };
 
   const onClose = () => {
