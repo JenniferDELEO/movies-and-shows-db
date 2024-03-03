@@ -15,7 +15,6 @@ import Card from "../../Cards/Card";
 import Pagination from "../../Pagination/Pagination";
 import { getSimilarsMovie } from "@/libs/api/movies";
 import { getSimilarsTv } from "@/libs/api/tvs";
-import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 
 type Props = {
   mediaId: string;
@@ -62,19 +61,6 @@ const SimilarsWrapper: FC<Props> = (props) => {
   const [currentPage, setCurrentPage] = useState<number>(Number(params.page));
 
   const genres = genresMovies || genresTvs || [];
-
-  const {
-    fetchUserDatas,
-    favoriteMoviesIds,
-    watchlistMoviesIds,
-    favoriteTvsIds,
-    watchlistTvsIds,
-    ratedMovies,
-    ratedTvs,
-    ratedMoviesIds,
-    ratedTvsIds,
-    userLists,
-  } = TmdbFetcher();
 
   async function getSimilarsNextPages() {
     if (similarsMovies) {
@@ -128,16 +114,6 @@ const SimilarsWrapper: FC<Props> = (props) => {
               movie={movie}
               filterType="movie"
               genres={genres}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvsIds={favoriteTvsIds}
-              watchlistTvsIds={watchlistTvsIds}
-              ratedMovies={ratedMovies}
-              ratedTvs={ratedTvs}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvsIds={ratedTvsIds}
-              userLists={userLists}
               userMovies={userMovies}
               userMoviesId={userMoviesId}
               internalMovies={internalMovies}
@@ -145,22 +121,7 @@ const SimilarsWrapper: FC<Props> = (props) => {
           ))}
         {similarsTvs &&
           tvsList.map((tv) => (
-            <Card
-              key={tv.id}
-              tv={tv}
-              filterType="tv"
-              genres={genres}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvsIds={favoriteTvsIds}
-              watchlistTvsIds={watchlistTvsIds}
-              ratedMovies={ratedMovies}
-              ratedTvs={ratedTvs}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvsIds={ratedTvsIds}
-              userLists={userLists}
-            />
+            <Card key={tv.id} tv={tv} filterType="tv" genres={genres} />
           ))}
       </div>
       <Pagination

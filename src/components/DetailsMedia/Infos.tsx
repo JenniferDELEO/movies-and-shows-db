@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import dayjs from "dayjs";
 import { Button } from "@nextui-org/react";
 import { FaPlay } from "react-icons/fa";
@@ -14,11 +14,7 @@ import {
 import StarRating from "@/components/StarRate/StarRating";
 import YoutubeEmbed from "@/components/YoutubeEmbed/YoutubeEmbed";
 import { languages } from "@/libs/helpers/languages";
-import { getMovieDetail } from "@/libs/api/movies";
 import AccountInteraction from "@/components/AccountInteraction/AccountInteraction";
-import { UserContext } from "@/context/userContext";
-import { List } from "@/models/lists";
-import { getLists } from "@/libs/api/lists";
 import { getTvDetail } from "@/libs/api/tvs";
 import {
   Episode,
@@ -69,37 +65,7 @@ const Infos: FC<Props> = (props) => {
     userTvs,
     internalTvs,
   } = props;
-
-  const { user } = useContext(UserContext);
-
   const [openTrailer, setOpenTrailer] = useState(false);
-
-  const [userLists, setUserLists] = useState<List[]>([]);
-
-  const [isFavorite, setIsFavorite] = useState(
-    movieDetails?.account_states?.favorite ||
-      (type === "tv" && tvDetails?.account_states?.favorite),
-  );
-  const [isInWatchlist, setIsInWatchlist] = useState(
-    movieDetails?.account_states?.watchlist ||
-      (type === "tv" && tvDetails?.account_states?.watchlist),
-  );
-  const [isRated, setIsRated] = useState(
-    typeof movieDetails?.account_states?.rated === "object" ||
-      (typeof tvDetails?.account_states?.rated === "object" && type === "tv") ||
-      typeof episodeDetails?.account_states?.rated === "object"
-      ? true
-      : false,
-  );
-  const [userRatingApi, setUserRatingApi] = useState<number>(
-    typeof movieDetails?.account_states?.rated === "object"
-      ? movieDetails?.account_states.rated.value
-      : type === "tv" && typeof tvDetails?.account_states?.rated === "object"
-        ? tvDetails?.account_states.rated.value
-        : typeof episodeDetails?.account_states?.rated === "object"
-          ? episodeDetails.account_states.rated.value
-          : 0,
-  );
 
   const trailer =
     movieDetails?.videos?.results?.find((video) => video.type === "Trailer") ||
@@ -149,47 +115,6 @@ const Infos: FC<Props> = (props) => {
     (isCollection && collectionDetails?.overview);
   ("");
 
-  useEffect(() => {
-    if (user && user.tmdb_accountIdV4) {
-      getUserList();
-    }
-  }, [user]);
-
-  async function getUserList() {
-    const res = await getLists();
-    const listsResponse = res.results;
-    listsResponse.unshift({
-      id: "1",
-      name: "Créer une nouvelle liste",
-    });
-    setUserLists(listsResponse);
-  }
-
-  async function fetchUserAccountStates() {
-    if (type === "movie" && movieDetails) {
-      const response = await getMovieDetail(movieDetails.id.toString());
-      setIsFavorite(response.account_states.favorite);
-      setIsInWatchlist(response.account_states.watchlist);
-      const userRating = response.account_states.rated;
-      if (typeof userRating === "object" && userRating?.value) {
-        setIsRated(true);
-        setUserRatingApi(userRating.value);
-      }
-      if (typeof userRating === "boolean") setIsRated(userRating);
-    }
-    if (type === "tv" && tvDetails) {
-      const response = await getTvDetail(tvDetails.id.toString());
-      setIsFavorite(response.account_states.favorite);
-      setIsInWatchlist(response.account_states.watchlist);
-      const userRating = response.account_states.rated;
-      if (typeof userRating === "object" && userRating?.value) {
-        setIsRated(true);
-        setUserRatingApi(userRating.value);
-      }
-      if (typeof userRating === "boolean") setIsRated(userRating);
-    }
-  }
-
   return (
     <div className="md:flex md:size-full md:flex-col md:justify-center">
       {/* Screen size < md */}
@@ -230,41 +155,30 @@ const Infos: FC<Props> = (props) => {
             </div>
           </div>
         )}
-        {isFavorite !== undefined &&
-          isInWatchlist !== undefined &&
-          isRated !== undefined &&
-          type !== "episode" &&
-          !isCollection && (
-            <div className="flex flex-row items-center justify-evenly">
-              <AccountInteraction
-                item={{
-                  id: movieDetails?.id || tvDetails?.id || 0,
-                  name: tvDetails?.name,
-                  title: movieDetails?.title,
-                  genres: genres,
-                  poster_path:
-                    movieDetails?.poster_path || tvDetails?.poster_path || "",
-                  overview: overview || "",
-                  release_date: releaseDate || "",
-                }}
-                type={type}
-                user={user}
-                fetchUserDatas={fetchUserAccountStates}
-                mediaDetailsPageProps={{
-                  isFavorite,
-                  isInWatchlist,
-                  isRated,
-                  userRatingApi,
-                  userMovies,
-                  userMoviesId,
-                  internalMovies,
-                  userTvs,
-                  internalTvs,
-                }}
-                userLists={userLists}
-              />
-            </div>
-          )}
+        {type !== "episode" && !isCollection && (
+          <div className="flex flex-row items-center justify-evenly">
+            <AccountInteraction
+              item={{
+                id: movieDetails?.id || tvDetails?.id || 0,
+                name: tvDetails?.name,
+                title: movieDetails?.title,
+                genres: genres,
+                poster_path:
+                  movieDetails?.poster_path || tvDetails?.poster_path || "",
+                overview: overview || "",
+                release_date: releaseDate || "",
+              }}
+              type={type}
+              mediaDetailsPageProps={{
+                userMovies,
+                userMoviesId,
+                internalMovies,
+                userTvs,
+                internalTvs,
+              }}
+            />
+          </div>
+        )}
       </div>
 
       {openTrailer && trailer && (
@@ -513,68 +427,41 @@ const Infos: FC<Props> = (props) => {
             )}
           </div>
           {type === "episode" &&
-            episodeDetails?.account_states &&
+            episodeDetails &&
             episodeNumber &&
             seasonNumber &&
             tvId && (
               <div className="ml-6">
-                <AccountInteraction
-                  item={episodeDetails}
-                  type={type}
-                  user={user}
-                  fetchUserDatas={fetchUserAccountStates}
-                  episodeDetailsProps={{
-                    episodeNumber,
-                    id: episodeDetails.id,
-                    isRated,
-                    seasonNumber,
-                    tvId,
-                    userRatingApi,
-                  }}
-                  userLists={userLists}
-                />
+                <AccountInteraction item={episodeDetails} type={type} />
               </div>
             )}
         </div>
         <div className="flex flex-row items-center justify-evenly md:mx-10">
           <>
-            {isFavorite !== undefined &&
-              isInWatchlist !== undefined &&
-              isRated !== undefined &&
-              type !== "episode" &&
-              !isCollection && (
-                <div className="hidden md:mr-10 md:block">
-                  <AccountInteraction
-                    item={{
-                      id: movieDetails?.id || tvDetails?.id || 0,
-                      name: tvDetails?.name,
-                      title: movieDetails?.title,
-                      genres: genres,
-                      poster_path:
-                        movieDetails?.poster_path ||
-                        tvDetails?.poster_path ||
-                        "",
-                      overview: overview || "",
-                      release_date: releaseDate || "",
-                    }}
-                    type={type}
-                    user={user}
-                    fetchUserDatas={fetchUserAccountStates}
-                    mediaDetailsPageProps={{
-                      isFavorite,
-                      isInWatchlist,
-                      isRated,
-                      userRatingApi,
-                      userMovies,
-                      userMoviesId,
-                      internalMovies,
-                      userTvs,
-                      internalTvs,
-                    }}
-                    userLists={userLists}
-                  />
-                </div>
-              )}
+            {type !== "episode" && !isCollection && (
+              <div className="hidden md:mr-10 md:block">
+                <AccountInteraction
+                  item={{
+                    id: movieDetails?.id || tvDetails?.id || 0,
+                    name: tvDetails?.name,
+                    title: movieDetails?.title,
+                    genres: genres,
+                    poster_path:
+                      movieDetails?.poster_path || tvDetails?.poster_path || "",
+                    overview: overview || "",
+                    release_date: releaseDate || "",
+                  }}
+                  type={type}
+                  mediaDetailsPageProps={{
+                    userMovies,
+                    userMoviesId,
+                    internalMovies,
+                    userTvs,
+                    internalTvs,
+                  }}
+                />
+              </div>
+            )}
             {trailer && (
               <Button variant="light" onClick={() => setOpenTrailer(true)}>
                 <FaPlay size={12} className="text-white" />

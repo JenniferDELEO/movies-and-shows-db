@@ -29,12 +29,6 @@ type Props = {
     character?: string;
   };
   type: "tv" | "movie" | "episode";
-  favoriteMoviesIds: number[];
-  favoriteTvsIds: number[];
-  watchlistMoviesIds: number[];
-  watchlistTvsIds: number[];
-  ratedMoviesIds: number[];
-  ratedTvsIds: number[];
   classNames?: {
     container: string;
     title: string;
@@ -49,20 +43,7 @@ type Props = {
 };
 
 const DropdownCard: FC<Props> = (props) => {
-  const {
-    item,
-    type,
-    favoriteMoviesIds,
-    favoriteTvsIds,
-    watchlistMoviesIds,
-    watchlistTvsIds,
-    ratedMoviesIds,
-    ratedTvsIds,
-    classNames,
-    userMovies,
-    userTvs,
-    handleClick,
-  } = props;
+  const { item, type, classNames, userMovies, userTvs, handleClick } = props;
   const internalUserMoviesIds = userMovies?.map((movie) => movie.movie.tmdb_id);
   const watchedMovies = userMovies?.filter(
     (movie) => movie.account_states.status === "watched",
@@ -81,12 +62,12 @@ const DropdownCard: FC<Props> = (props) => {
       key: `favorite-${item.id}`,
       startContent: (
         <FaHeart
-          className={`${
+        /* className={`${
             (item?.release_date && favoriteMoviesIds?.includes(item.id)) ||
             (item?.first_air_date && favoriteTvsIds?.includes(item.id))
               ? "text-red-600"
               : ""
-          }`}
+          }`} */
         />
       ),
       content: "Favoris",
@@ -95,12 +76,12 @@ const DropdownCard: FC<Props> = (props) => {
       key: `watchlist-${item.id}`,
       startContent: (
         <FaBookmark
-          className={`${
+        /* className={`${
             (item?.release_date && watchlistMoviesIds?.includes(item.id)) ||
             (item?.first_air_date && watchlistTvsIds?.includes(item.id))
               ? "text-orange-600"
               : ""
-          }`}
+          }`} */
         />
       ),
       content: "Liste de suivi",
@@ -109,12 +90,12 @@ const DropdownCard: FC<Props> = (props) => {
       key: `note-${item.id}-${item.title || item.name}`,
       startContent: (
         <FaStar
-          className={`${
+        /* className={`${
             (item?.release_date && ratedMoviesIds?.includes(item.id)) ||
             (item?.first_air_date && ratedTvsIds?.includes(item.id))
               ? "text-yellow-400"
               : ""
-          }`}
+          }`} */
         />
       ),
       content: "Votre note",

@@ -9,13 +9,12 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@nextui-org/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import { FaListUl, FaStar, FaHeart } from "react-icons/fa";
 import { MdLocalMovies } from "react-icons/md";
 import { PiTelevisionSimpleFill } from "react-icons/pi";
-
-import { useSession } from "next-auth/react";
 
 const ProfileHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

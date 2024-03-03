@@ -23,24 +23,12 @@ type Props = {
   type: "tv" | "movie" | "episode";
   // eslint-disable-next-line no-unused-vars
   handleClick: (item: Key) => Promise<void>;
-  isFavorite: boolean;
-  isInWatchlist: boolean;
-  isRated: boolean;
   userMovies: InternalMovieUser[];
   userTvs: InternalTvAndUser[];
 };
 
 const IconsInteraction: FC<Props> = (props) => {
-  const {
-    item,
-    type,
-    handleClick,
-    isFavorite,
-    isInWatchlist,
-    isRated,
-    userMovies,
-    userTvs,
-  } = props;
+  const { item, type, handleClick, userMovies, userTvs } = props;
 
   const internalUserMoviesIds = userMovies?.map((movie) => movie.movie.tmdb_id);
   const watchedMovies = userMovies?.filter(
@@ -59,21 +47,22 @@ const IconsInteraction: FC<Props> = (props) => {
     {
       key: `favorite-${item.id}`,
       startContent: (
-        <FaHeart className={`${isFavorite ? "text-red-600" : ""}`} />
+        <FaHeart /* className={`${isFavorite ? "text-red-600" : ""}`} */ />
       ),
       content: "Favoris",
     },
     {
       key: `watchlist-${item.id}`,
       startContent: (
-        <FaBookmark className={`${isInWatchlist ? "text-orange-600" : ""}`} />
+        <FaBookmark /* className={`${isInWatchlist ? "text-orange-600" : ""}`} */
+        />
       ),
       content: "Liste de suivi",
     },
     {
       key: `note-${item.id}-${item.title || item.name}`,
       startContent: (
-        <FaStar className={`${isRated ? "text-yellow-400" : ""}`} />
+        <FaStar /* className={`${isRated ? "text-yellow-400" : ""}`} */ />
       ),
       content: "Votre note",
     },

@@ -1,6 +1,4 @@
 import {
-  AccountRating,
-  AccountStates,
   Genre,
   Image,
   ProductionCompany,
@@ -45,7 +43,6 @@ export type Episode = {
 };
 
 export interface EpisodeDetails extends Episode {
-  account_states: { id: number; rated: boolean | { value: number } };
   credits: {
     id: number;
     cast: CastTvs[];
@@ -97,13 +94,6 @@ export type Season = {
 
 export type SeasonDetails = {
   _id: string;
-  account_states: {
-    results: {
-      id: number;
-      episode_number: number;
-      rated: boolean | { value: number };
-    }[];
-  };
   aggregate_credits: {
     id: number;
     cast: CastTvs[];
@@ -133,11 +123,9 @@ export type Tv = {
   poster_path: string;
   vote_average: number;
   vote_count: number;
-  account_rating: AccountRating;
 };
 
 export interface TvDetails extends Tv {
-  account_states: AccountStates;
   aggregate_credits: CreditsTvs;
   created_by: CreatedBy[];
   episode_run_time: number[];

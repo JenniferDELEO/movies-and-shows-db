@@ -34,10 +34,8 @@ import {
   settingsMinFourSlides,
   settingsMinFiveSlides,
 } from "@/components/Banner/reactSlickSettings";
-import { User } from "@/models/user";
-import { List } from "@/models/lists";
-import { InternalMovie, InternalMovieUser, Movie } from "@/models/movies";
-import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
+import { InternalMovie, InternalMovieUser } from "@/models/movies";
+import { InternalTv, InternalTvAndUser } from "@/models/tvs";
 import AccountInteraction from "../AccountInteraction/AccountInteraction";
 import { useSession } from "next-auth/react";
 
@@ -55,16 +53,6 @@ type Props = {
     character?: string;
   }[];
   type: "tv" | "movie";
-  user: User;
-  fetchUserDatas: () => Promise<void>;
-  favoriteMoviesIds: number[];
-  favoriteTvsIds: number[];
-  watchlistMoviesIds: number[];
-  watchlistTvsIds: number[];
-  ratedMovies: Movie[];
-  ratedTvs: Tv[];
-  ratedMoviesIds: number[];
-  ratedTvsIds: number[];
   classNames: {
     container: string;
     title: string;
@@ -73,7 +61,6 @@ type Props = {
     dropdownContainer: string;
   };
   title: string;
-  userLists: List[];
   internalMovies?: InternalMovie[];
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
@@ -84,19 +71,8 @@ type Props = {
 const Banner: FC<Props> = ({
   items,
   type,
-  user,
-  fetchUserDatas,
-  favoriteMoviesIds,
-  favoriteTvsIds,
-  watchlistMoviesIds,
-  watchlistTvsIds,
-  ratedMoviesIds,
-  ratedTvsIds,
   classNames,
   title,
-  userLists,
-  ratedMovies,
-  ratedTvs,
   internalMovies,
   userMovies,
   userMoviesId,
@@ -150,21 +126,11 @@ const Banner: FC<Props> = ({
                 />
               </picture>
 
-              {user && user.tmdb_username && status === "authenticated" && (
+              {status === "authenticated" && (
                 <AccountInteraction
                   item={item}
                   type={type}
-                  user={user}
-                  fetchUserDatas={fetchUserDatas}
                   listsPageProps={{
-                    favoriteMoviesIds,
-                    favoriteTvsIds,
-                    watchlistMoviesIds,
-                    watchlistTvsIds,
-                    ratedMovies,
-                    ratedTvs,
-                    ratedMoviesIds,
-                    ratedTvsIds,
                     classNames,
                     internalMovies: internalMovies || [],
                     userMovies: userMovies || [],
@@ -172,7 +138,6 @@ const Banner: FC<Props> = ({
                     internalTvs: internalTvs || [],
                     userTvs: userTvs || [],
                   }}
-                  userLists={userLists}
                 />
               )}
             </div>

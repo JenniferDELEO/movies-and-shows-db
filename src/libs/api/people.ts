@@ -1,5 +1,5 @@
 import axios from "axios";
-import { optionsGET } from "./auth";
+import { optionsGET } from "./collections";
 import { ApiResultPeople, Person } from "@/models/people";
 
 export async function getPopularPeople(page: number): Promise<ApiResultPeople> {

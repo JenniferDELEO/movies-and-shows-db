@@ -8,7 +8,6 @@ import {
   Movie,
 } from "@/models/movies";
 import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
-import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 
 type Props = {
   filterType: "movie" | "tv";
@@ -33,19 +32,6 @@ const Cards: FC<Props> = ({
   userTvs,
   internalTvs,
 }) => {
-  const {
-    fetchUserDatas,
-    favoriteMoviesIds,
-    watchlistMoviesIds,
-    favoriteTvsIds,
-    watchlistTvsIds,
-    ratedMovies,
-    ratedTvs,
-    ratedMoviesIds,
-    ratedTvsIds,
-    userLists,
-  } = TmdbFetcher();
-
   return (
     <div className="w-full">
       {movies && userMovies && userMoviesId && internalMovies && (
@@ -56,16 +42,6 @@ const Cards: FC<Props> = ({
               movie={movie}
               filterType={filterType}
               genres={genres}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvsIds={favoriteTvsIds}
-              watchlistTvsIds={watchlistTvsIds}
-              ratedMovies={ratedMovies}
-              ratedTvs={ratedTvs}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvsIds={ratedTvsIds}
-              userLists={userLists}
               userMovies={userMovies}
               userMoviesId={userMoviesId}
               internalMovies={internalMovies}
@@ -81,16 +57,6 @@ const Cards: FC<Props> = ({
               tv={tv}
               filterType={filterType}
               genres={genres}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvsIds={favoriteTvsIds}
-              watchlistTvsIds={watchlistTvsIds}
-              ratedMovies={ratedMovies}
-              ratedTvs={ratedTvs}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvsIds={ratedTvsIds}
-              userLists={userLists}
               userTvs={userTvs}
               internalTvs={internalTvs}
             />

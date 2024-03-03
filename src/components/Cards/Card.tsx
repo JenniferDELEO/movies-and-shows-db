@@ -1,7 +1,7 @@
 "use client";
 
 import dayjs from "dayjs";
-import { FC, useContext } from "react";
+import { FC } from "react";
 import { useRouter } from "next/navigation";
 import "dayjs/locale/fr";
 import updateLocale from "dayjs/plugin/updateLocale";
@@ -14,9 +14,7 @@ import {
   InternalMovieUser,
   Movie,
 } from "@/models/movies";
-import { UserContext } from "@/context/userContext";
 import AccountInteraction from "../AccountInteraction/AccountInteraction";
-import { List } from "@/models/lists";
 import { useSession } from "next-auth/react";
 
 dayjs.locale("fr");
@@ -52,16 +50,6 @@ type Props = {
     image: string;
     dropdownContainer: string;
   };
-  fetchUserDatas: () => Promise<void>;
-  favoriteMoviesIds: number[];
-  favoriteTvsIds: number[];
-  watchlistMoviesIds: number[];
-  watchlistTvsIds: number[];
-  ratedMovies: Movie[];
-  ratedTvs: Tv[];
-  ratedMoviesIds: number[];
-  ratedTvsIds: number[];
-  userLists: List[];
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
@@ -75,16 +63,6 @@ const Card: FC<Props> = ({
   movie,
   tv,
   classNames,
-  fetchUserDatas,
-  favoriteMoviesIds,
-  favoriteTvsIds,
-  watchlistMoviesIds,
-  watchlistTvsIds,
-  ratedMovies,
-  ratedTvs,
-  ratedMoviesIds,
-  ratedTvsIds,
-  userLists,
   userMovies,
   userMoviesId,
   internalMovies,
@@ -92,9 +70,7 @@ const Card: FC<Props> = ({
   internalTvs,
 }) => {
   const router = useRouter();
-  const { user } = useContext(UserContext);
-
-  const { status } = useSession();
+  const session = useSession();
 
   const overviewRest =
     movie?.overview?.split(" ")?.filter(Boolean) ||
@@ -180,9 +156,8 @@ const Card: FC<Props> = ({
           {overviewShow}
           {overviewRest?.length ? "..." : ""}
         </p>
-        {user &&
-          user.tmdb_username &&
-          status === "authenticated" &&
+        {session &&
+          session.status === "authenticated" &&
           userMovies &&
           userMoviesId &&
           internalMovies &&
@@ -191,55 +166,26 @@ const Card: FC<Props> = ({
               <AccountInteraction
                 item={movie}
                 type="movie"
-                user={user}
-                fetchUserDatas={fetchUserDatas}
                 listsPageProps={{
-                  favoriteMoviesIds,
-                  favoriteTvsIds,
-                  watchlistMoviesIds,
-                  watchlistTvsIds,
-                  ratedMovies,
-                  ratedTvs,
-                  ratedMoviesIds,
-                  ratedTvsIds,
                   classNames,
                   internalMovies: internalMovies,
                   userMovies: userMovies,
                   userMoviesId: userMoviesId,
                 }}
-                userLists={userLists}
               />
             </div>
           )}
-        {user &&
-          user.tmdb_username &&
-          status === "authenticated" &&
-          tv &&
-          userTvs &&
-          internalTvs && (
-            <div className="absolute -right-2 top-0 md:top-2">
-              <AccountInteraction
-                item={tv}
-                type="tv"
-                user={user}
-                fetchUserDatas={fetchUserDatas}
-                listsPageProps={{
-                  favoriteMoviesIds,
-                  favoriteTvsIds,
-                  watchlistMoviesIds,
-                  watchlistTvsIds,
-                  ratedMovies,
-                  ratedTvs,
-                  ratedMoviesIds,
-                  ratedTvsIds,
-                  classNames,
-                  userTvs,
-                  internalTvs,
-                }}
-                userLists={userLists}
-              />
-            </div>
-          )}
+        {session && session.status === "authenticated" && tv && (
+          <div className="absolute -right-2 top-0 md:top-2">
+            <AccountInteraction
+              item={tv}
+              type="tv"
+              listsPageProps={{
+                classNames,
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { ApiResultMovies, Image, MovieDetails, Video } from "@/models/movies";
-import { optionsGET } from "./auth";
+import { optionsGET } from "./collections";
 import { Watcher } from "@/models/watchers";
 import { MoviesFilters } from "@/models/filters";
 import { defaultMoviesFilters } from "../helpers/filters";
@@ -110,8 +110,7 @@ export async function getMovieDetail(id: string): Promise<MovieDetails> {
       ...optionsGET,
       url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/${id}`,
       params: {
-        append_to_response:
-          "account_states,credits,recommendations,similar,videos",
+        append_to_response: "credits,recommendations,similar,videos",
         language: "fr-FR",
       },
     });
@@ -195,26 +194,6 @@ export async function getSimilarsMovie(
   }
 }
 
-export async function getRecommendationsMovie(
-  id: string,
-  page: number,
-): Promise<ApiResultMovies> {
-  try {
-    const result = await axios.request({
-      ...optionsGET,
-      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/${id}/recommendations`,
-      params: {
-        language: "fr-FR",
-        page,
-      },
-    });
-    return result.data;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
-
 export async function getVideosMovie(id: string): Promise<{
   id: number;
   results: Video[];
@@ -248,149 +227,6 @@ export async function getSearchMovies(
         region: "fr",
         page,
         query,
-      },
-    });
-    return result.data;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
-
-/* --------------------USER INTERACTIONS-------------------- */
-
-export async function getUserFavoriteMovies(
-  accountIdV4: string,
-): Promise<ApiResultMovies> {
-  try {
-    const result = await axios.request({
-      ...optionsGET,
-      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/account/${accountIdV4}/movie/favorites?page=1&language=fr-FR`,
-    });
-    let data = result.data;
-
-    if (data.total_pages > 1) {
-      const promises = [];
-      for (let i = 2; i <= data.total_pages; i++) {
-        promises.push(
-          axios.request({
-            ...optionsGET,
-            url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/account/${accountIdV4}/movie/favorites?page=${i}&language=fr-FR`,
-          }),
-        );
-      }
-      const responses = await Promise.all(promises);
-      const datas = responses.map((response) => response.data);
-
-      data.results = data.results.concat(...datas.map((data) => data.results));
-    }
-
-    return data;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
-
-export async function getUserRatedMovies(
-  accountIdV4: string,
-): Promise<ApiResultMovies> {
-  try {
-    const result = await axios.request({
-      ...optionsGET,
-      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/account/${accountIdV4}/movie/rated?page=1&language=fr-FR`,
-    });
-    let data = result.data;
-
-    if (data.total_pages > 1) {
-      const promises = [];
-      for (let i = 2; i <= data.total_pages; i++) {
-        promises.push(
-          axios.request({
-            ...optionsGET,
-            url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/account/${accountIdV4}/movie/rated?page=${i}&language=fr-FR`,
-          }),
-        );
-      }
-      const responses = await Promise.all(promises);
-      const datas = responses.map((response) => response.data);
-
-      data.results = data.results.concat(...datas.map((data) => data.results));
-    }
-
-    return data;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
-
-export async function getUserWatchListMovies(
-  accountIdV4: string,
-): Promise<ApiResultMovies> {
-  try {
-    const result = await axios.request({
-      ...optionsGET,
-      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/account/${accountIdV4}/movie/watchlist?page=1&language=fr-FR`,
-    });
-    let data = result.data;
-
-    if (data.total_pages > 1) {
-      const promises = [];
-      for (let i = 2; i <= data.total_pages; i++) {
-        promises.push(
-          axios.request({
-            ...optionsGET,
-            url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V4}/account/${accountIdV4}/movie/watchlist?page=${i}&language=fr-FR`,
-          }),
-        );
-      }
-      const responses = await Promise.all(promises);
-      const datas = responses.map((response) => response.data);
-
-      data.results = data.results.concat(...datas.map((data) => data.results));
-    }
-
-    return data;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
-
-export async function addRateMovie(
-  movieId: number,
-  rate: number,
-): Promise<{ success: boolean; status_code: number; status_message: string }> {
-  try {
-    const result = await axios.request({
-      ...optionsGET,
-      method: "POST",
-      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/${movieId}/rating`,
-      headers: {
-        ...optionsGET.headers,
-        "content-type": "application/json;charset=utf-8",
-      },
-      data: { value: rate },
-    });
-    return result.data;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
-
-export async function deleteRateMovie(
-  movieId: number,
-): Promise<{ success: boolean; status_code: number; status_message: string }> {
-  try {
-    const result = await axios.request({
-      ...optionsGET,
-      method: "DELETE",
-      url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/movie/${movieId}/rating`,
-      headers: {
-        ...optionsGET.headers,
-        "content-type": "application/json;charset=utf-8",
       },
     });
     return result.data;

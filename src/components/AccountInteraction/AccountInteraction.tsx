@@ -4,23 +4,16 @@ import { FC, Key, useState } from "react";
 
 import AddToListModal from "@/components/Modals/AddToListModal";
 import RatingModal from "@/components/Modals/RatingModal";
-import { toggleFavorite, toggleWatchlist } from "@/libs/api/user";
-import { toggleUserDatas } from "@/libs/helpers/userDatas";
-import { User } from "@/models/user";
-import { List } from "@/models/lists";
-import {
-  Genre,
-  InternalMovie,
-  InternalMovieUser,
-  Movie,
-} from "@/models/movies";
+import { Movie } from "@/models/movies";
 import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
-import DropdownCard from "@/components/AccountInteraction/DropdownCard";
-import IconsInteraction from "./IconsInteraction";
 import { Tooltip } from "@nextui-org/react";
 import { FaStar } from "react-icons/fa";
 import axios from "axios";
 import toast from "react-hot-toast";
+
+import { Genre, InternalMovie, InternalMovieUser } from "@/models/movies";
+import DropdownCard from "@/components/AccountInteraction/DropdownCard";
+import IconsInteraction from "./IconsInteraction";
 import { getUserMovies } from "@/libs/sanity/api/movie";
 import { getUserTvs } from "@/libs/sanity/api/tv";
 import { useSession } from "next-auth/react";
@@ -39,9 +32,6 @@ type Props = {
     name?: string;
   };
   type: "tv" | "movie" | "episode";
-  user: User;
-  fetchUserDatas: () => Promise<void>;
-  userLists: List[];
   episodeDetailsProps?: {
     episodeNumber: number;
     id: number;
@@ -51,14 +41,6 @@ type Props = {
     userRatingApi: number;
   };
   listsPageProps?: {
-    favoriteMoviesIds: number[];
-    favoriteTvsIds: number[];
-    watchlistMoviesIds: number[];
-    watchlistTvsIds: number[];
-    ratedMovies: Movie[];
-    ratedTvs: Tv[];
-    ratedMoviesIds: number[];
-    ratedTvsIds: number[];
     classNames?: {
       container: string;
       title: string;
@@ -73,10 +55,6 @@ type Props = {
     userTvs?: InternalTvAndUser[];
   };
   mediaDetailsPageProps?: {
-    isFavorite: boolean;
-    isInWatchlist: boolean;
-    isRated: boolean;
-    userRatingApi: number;
     userMovies?: InternalMovieUser[];
     userMoviesId?: string;
     internalMovies?: InternalMovie[];
@@ -89,18 +67,10 @@ const AccountInteraction: FC<Props> = (props) => {
   const {
     item,
     type,
-    user,
-    fetchUserDatas,
-    userLists,
 
-    episodeDetailsProps,
     listsPageProps,
     mediaDetailsPageProps,
   } = props;
-  const [modalAddToListIsOpen, setModalAddToListIsOpen] =
-    useState<boolean>(false);
-  const [modalRateIsOpen, setModalRateIsOpen] = useState<boolean>(false);
-  const [modalTitle, setModalTitle] = useState<string>("");
   const [modalAddEpisodesStatus, setModalAddEpisodesStatus] =
     useState<boolean>(false);
   const [selectedItemId, setSelectedItemId] = useState<number>(0);
@@ -130,9 +100,8 @@ const AccountInteraction: FC<Props> = (props) => {
   const handleClick = async (media: Key) => {
     const category = media.toString().split("-")[0];
     const id = media.toString().split("-")[1];
-    setSelectedItemId(parseInt(id));
 
-    if (user && status === "authenticated") {
+    if (session && status === "authenticated") {
       if (
         (category === "to_watch" || category === "watched") &&
         type === "movie"
@@ -192,12 +161,6 @@ const AccountInteraction: FC<Props> = (props) => {
         setModalAddEpisodesStatus(true);
       }
 
-      if (category === "note") {
-        const name = media.toString().split("-")[2];
-        setModalTitle(`Mettre une note à ${name}`);
-        setModalRateIsOpen(true);
-      }
-
       if (category === "delete" && type === "tv") {
         const responseUserTvAndStatus = await axios.post(
           `/api/user-tvs/${userTvId}`,
@@ -222,46 +185,6 @@ const AccountInteraction: FC<Props> = (props) => {
             setMoviesAccount(result.movies);
           }
         }
-
-        if (category === "addToList") {
-          const name = media.toString().split("-")[2];
-          setModalTitle(`Ajouter ${name} à une liste`);
-          setModalAddToListIsOpen(true);
-        }
-
-        if (
-          category === "favorite" &&
-          listsPageProps.favoriteMoviesIds &&
-          listsPageProps.favoriteTvsIds
-        ) {
-          await toggleUserDatas(
-            category,
-            type,
-            id,
-            user,
-            toggleFavorite,
-            fetchUserDatas,
-            listsPageProps.favoriteMoviesIds,
-            listsPageProps.favoriteTvsIds,
-          );
-        }
-
-        if (
-          category === "watchlist" &&
-          listsPageProps.watchlistMoviesIds &&
-          listsPageProps.watchlistTvsIds
-        ) {
-          await toggleUserDatas(
-            category,
-            type,
-            id,
-            user,
-            toggleWatchlist,
-            fetchUserDatas,
-            listsPageProps.watchlistMoviesIds,
-            listsPageProps.watchlistTvsIds,
-          );
-        }
       }
       if (mediaDetailsPageProps) {
         if (category === "delete" && type === "movie") {
@@ -278,66 +201,12 @@ const AccountInteraction: FC<Props> = (props) => {
             setMoviesAccount(result.movies);
           }
         }
-
-        if (category === "addToList") {
-          const name = media.toString().split("-")[2];
-          setModalTitle(`Ajouter ${name} à une liste`);
-          setModalAddToListIsOpen(true);
-        }
-
-        if (category === "favorite") {
-          await toggleUserDatas(
-            category,
-            type,
-            id,
-            user,
-            toggleFavorite,
-            fetchUserDatas,
-            undefined,
-            undefined,
-            mediaDetailsPageProps.isFavorite,
-          );
-        }
-
-        if (category === "watchlist") {
-          await toggleUserDatas(
-            category,
-            type,
-            id,
-            user,
-            toggleWatchlist,
-            fetchUserDatas,
-            undefined,
-            undefined,
-            undefined,
-            mediaDetailsPageProps.isInWatchlist,
-          );
-        }
       }
     }
   };
 
   return type !== "episode" ? (
     <>
-      <AddToListModal
-        modalIsOpen={modalAddToListIsOpen}
-        setModalIsOpen={setModalAddToListIsOpen}
-        itemId={selectedItemId}
-        itemType={type}
-        title={modalTitle}
-        userLists={userLists}
-      />
-      <RatingModal
-        modalIsOpen={modalRateIsOpen}
-        setModalIsOpen={setModalRateIsOpen}
-        ratedMovies={listsPageProps?.ratedMovies}
-        ratedTvs={listsPageProps?.ratedTvs}
-        fetchUserDatas={fetchUserDatas}
-        itemId={selectedItemId}
-        itemType={type}
-        title={modalTitle}
-        userRatingApi={mediaDetailsPageProps?.userRatingApi}
-      />
       {_tvId && modalAddEpisodesStatus && (
         <AddEpisodeStatusModal
           modalIsOpen={modalAddEpisodesStatus}
@@ -351,12 +220,6 @@ const AccountInteraction: FC<Props> = (props) => {
         <DropdownCard
           item={item}
           type={type}
-          favoriteMoviesIds={listsPageProps.favoriteMoviesIds}
-          favoriteTvsIds={listsPageProps.favoriteTvsIds}
-          watchlistMoviesIds={listsPageProps.watchlistMoviesIds}
-          watchlistTvsIds={listsPageProps.watchlistTvsIds}
-          ratedMoviesIds={listsPageProps.ratedMoviesIds}
-          ratedTvsIds={listsPageProps.ratedTvsIds}
           classNames={listsPageProps?.classNames}
           userMovies={moviesAccount}
           userTvs={tvsAccount}
@@ -368,48 +231,12 @@ const AccountInteraction: FC<Props> = (props) => {
           item={item}
           type={type}
           handleClick={handleClick}
-          isFavorite={mediaDetailsPageProps.isFavorite}
-          isRated={mediaDetailsPageProps.isRated}
-          isInWatchlist={mediaDetailsPageProps.isInWatchlist}
           userMovies={moviesAccount}
           userTvs={tvsAccount}
         />
       )}
     </>
-  ) : (
-    <>
-      <RatingModal
-        episodeNumber={episodeDetailsProps?.episodeNumber}
-        modalIsOpen={modalRateIsOpen}
-        setModalIsOpen={setModalRateIsOpen}
-        fetchUserDatas={fetchUserDatas}
-        itemId={episodeDetailsProps?.tvId || 0}
-        itemType={type}
-        seasonNumber={episodeDetailsProps?.seasonNumber}
-        title={modalTitle}
-        userRatingApi={episodeDetailsProps?.userRatingApi}
-      />
-      <Tooltip
-        content={
-          episodeDetailsProps?.isRated
-            ? `Votre note : ${episodeDetailsProps?.userRatingApi / 2}`
-            : "Mettre une note"
-        }
-        placement="bottom"
-      >
-        <button
-          value={`note-${item.id}-${item.title}`}
-          onClick={(e) => handleClick(e.currentTarget.value)}
-          className="rounded-full bg-primary p-3"
-        >
-          <FaStar
-            size={16}
-            className={`${episodeDetailsProps?.isRated ? "text-yellow-400" : ""}`}
-          />
-        </button>
-      </Tooltip>
-    </>
-  );
+  ) : null;
 };
 
 export default AccountInteraction;

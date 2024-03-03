@@ -9,7 +9,6 @@ import TopContent from "../TopContent";
 import SeasonsAndEpisodesWrapper from "./SeasonsAndEpisodesWrapper";
 import PeopleCard from "@/components/People/PeopleCard";
 import SimilarsBanner from "../Banners/SimilarsBanner";
-import RecommendationsBanner from "../Banners/RecommendationsBanner";
 
 type Props = {
   episodeDetails: EpisodeDetails;
@@ -92,24 +91,6 @@ const EpisodeWrapper: FC<Props> = (props) => {
               </div>
             ))}
           </div>
-        </section>
-      )}
-      {tvDetails?.recommendations?.results?.length > 0 ? (
-        <RecommendationsBanner
-          recommendationsTvs={tvDetails.recommendations.results}
-          totalPages={tvDetails.recommendations.total_pages}
-          totalResults={tvDetails.recommendations.total_results}
-        />
-      ) : (
-        <section className="p-4 md:px-[2.5%] lg:px-[5%] 2xl:px-[10%]">
-          <h1 className="pl-5 text-xl font-bold tracking-wide">
-            Recommandations
-          </h1>
-          <p className="mb-4 py-4 pl-5 text-base md:text-lg">
-            Nous n&apos;avons pas suffisamment de données pour vous suggérer des
-            films. Vous pouvez nous y aider en notant les films que vous avez
-            vus.
-          </p>
         </section>
       )}
       {tvDetails?.similar?.results?.length > 0 && (

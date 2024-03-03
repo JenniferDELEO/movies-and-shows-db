@@ -1,13 +1,12 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { signUp } from "next-auth-sanity/client";
 import { signIn, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { UserContext } from "@/context/userContext";
 
 const defaultFormData = {
   email: "",
@@ -28,17 +27,12 @@ const Auth = () => {
 
   const { data: session } = useSession();
   const router = useRouter();
-  const { user } = useContext(UserContext);
 
   useEffect(() => {
     if (session && session.user) {
-      if (!user.tmdb_username) {
-        router.push("/redirection-to-tmdb");
-      } else {
-        router.push("/profile");
-      }
+      router.push("/profile");
     }
-  }, [router, session, user.tmdb_username]);
+  }, [router, session]);
 
   const loginHandler = async () => {
     try {

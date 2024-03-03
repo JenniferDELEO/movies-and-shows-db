@@ -1,5 +1,5 @@
 import axios from "axios";
-import { optionsGET } from "./auth";
+import { optionsGET } from "./collections";
 
 export async function getSearchResults(
   query: string,
