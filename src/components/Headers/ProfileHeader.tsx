@@ -9,19 +9,16 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@nextui-org/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { FaListUl, FaStar, FaHeart } from "react-icons/fa";
 import { MdLocalMovies } from "react-icons/md";
 import { PiTelevisionSimpleFill } from "react-icons/pi";
 
-import { InternalUserContext } from "@/context/internalUserContext";
-
 const ProfileHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const {
-    internalUser: { user_name, user_image },
-  } = useContext(InternalUserContext);
+  const session = useSession();
 
   return (
     <Navbar
@@ -52,7 +49,11 @@ const ProfileHeader = () => {
               <picture>
                 <img
                   alt="profile"
-                  src={user_image ? user_image : "/images/defaultProfile.png"}
+                  src={
+                    session?.data?.user?.image
+                      ? session.data.user.image
+                      : "/images/defaultProfile.png"
+                  }
                   width="100%"
                   height="100%"
                   className="rounded-full"
@@ -60,7 +61,9 @@ const ProfileHeader = () => {
               </picture>
             </div>
             <div className="ml-4 flex flex-col items-start justify-start">
-              <p className="text-sm text-primary lg:text-lg">{user_name}</p>
+              <p className="text-sm text-primary lg:text-lg">
+                {session?.data?.user?.name}
+              </p>
               <p className="pt-2 text-xs text-gray-600 md:text-sm">
                 Mon profil
               </p>

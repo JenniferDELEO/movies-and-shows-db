@@ -27,12 +27,6 @@ type Props = {
     name?: string;
     character?: string;
   };
-  favoriteMoviesIds: number[];
-  favoriteTvShowsIds: number[];
-  watchlistMoviesIds: number[];
-  watchlistTvShowsIds: number[];
-  ratedMoviesIds: number[];
-  ratedTvShowsIds: number[];
   classNames?: {
     container: string;
     title: string;
@@ -46,18 +40,7 @@ type Props = {
 };
 
 const DropdownCard: FC<Props> = (props) => {
-  const {
-    item,
-    favoriteMoviesIds,
-    favoriteTvShowsIds,
-    watchlistMoviesIds,
-    watchlistTvShowsIds,
-    ratedMoviesIds,
-    ratedTvShowsIds,
-    classNames,
-    userMovies,
-    handleClick,
-  } = props;
+  const { item, classNames, userMovies, handleClick } = props;
 
   const internalUserMoviesIds = userMovies?.map((movie) => movie.movie.tmdb_id);
   const watchedMovies = userMovies?.filter(
@@ -75,12 +58,12 @@ const DropdownCard: FC<Props> = (props) => {
       key: `favorite-${item.id}`,
       startContent: (
         <FaHeart
-          className={`${
+        /* className={`${
             (item?.release_date && favoriteMoviesIds?.includes(item.id)) ||
             (item?.first_air_date && favoriteTvShowsIds?.includes(item.id))
               ? "text-red-600"
               : ""
-          }`}
+          }`} */
         />
       ),
       content: "Favoris",
@@ -89,12 +72,12 @@ const DropdownCard: FC<Props> = (props) => {
       key: `watchlist-${item.id}`,
       startContent: (
         <FaBookmark
-          className={`${
+        /* className={`${
             (item?.release_date && watchlistMoviesIds?.includes(item.id)) ||
             (item?.first_air_date && watchlistTvShowsIds?.includes(item.id))
               ? "text-orange-600"
               : ""
-          }`}
+          }`} */
         />
       ),
       content: "Liste de suivi",
@@ -103,12 +86,12 @@ const DropdownCard: FC<Props> = (props) => {
       key: `note-${item.id}-${item.title || item.name}`,
       startContent: (
         <FaStar
-          className={`${
+        /* className={`${
             (item?.release_date && ratedMoviesIds?.includes(item.id)) ||
             (item?.first_air_date && ratedTvShowsIds?.includes(item.id))
               ? "text-yellow-400"
               : ""
-          }`}
+          }`} */
         />
       ),
       content: "Votre note",

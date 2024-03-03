@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import {
   Navbar,
   NavbarContent,
@@ -24,31 +24,15 @@ import toast from "react-hot-toast";
 
 import SearchBar from "@/components/Search/SearchBar";
 import { signOut, useSession } from "next-auth/react";
-import { InternalUserContext } from "@/context/internalUserContext";
 
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  const { status } = useSession();
-
-  const {
-    internalUser: { user_name },
-    setInternalUser,
-  } = useContext(InternalUserContext);
+  const { status, data: session } = useSession();
 
   const handleLogOut = () => {
-    localStorage.removeItem("user_id");
-    localStorage.removeItem("user_name");
-    localStorage.removeItem("user_email");
-    localStorage.removeItem("user_image");
-    setInternalUser({
-      user_id: null,
-      user_name: null,
-      user_email: null,
-      user_image: null,
-    });
     signOut({ callbackUrl: "/" });
     toast.success("Vous êtes déconnecté");
     router.push("/");
@@ -213,7 +197,7 @@ const Header = () => {
                     >
                       <IoPersonSharp />
                       <span className="ml-2 hidden text-sm md:block lg:text-lg">
-                        {user_name}
+                        {session.user.name}
                       </span>
                     </Button>
                   </DropdownTrigger>
@@ -227,7 +211,7 @@ const Header = () => {
                   <DropdownSection showDivider>
                     <DropdownItem href="/profile" textValue="Mon profil">
                       <div className="flex flex-col">
-                        <span className="font-bold">{user_name}</span>
+                        <span className="font-bold">{session.user.name}</span>
                         <span className="pt-2">Mon profil</span>
                       </div>
                     </DropdownItem>

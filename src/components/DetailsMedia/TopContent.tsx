@@ -25,7 +25,6 @@ type Props = {
   episodeNumber?: number;
   isCollection?: boolean;
   seasonNumber?: number;
-  tvShowId?: number;
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
@@ -44,7 +43,6 @@ const TopContent: FC<Props> = (props) => {
     episodeNumber,
     isCollection,
     seasonNumber,
-    tvShowId,
     userMovies,
     userMoviesId,
     internalMovies,
@@ -136,7 +134,6 @@ const TopContent: FC<Props> = (props) => {
             seasonNumber={seasonNumber}
             isCollection={isCollection}
             type={type}
-            tvShowId={tvShowId}
             userMovies={userMovies}
             userMoviesId={userMoviesId}
             internalMovies={internalMovies}
@@ -288,7 +285,6 @@ const TopContent: FC<Props> = (props) => {
                 isCollection={isCollection}
                 seasonNumber={seasonNumber}
                 type={type}
-                tvShowId={tvShowId}
                 userMovies={userMovies}
                 userMoviesId={userMoviesId}
                 internalMovies={internalMovies}

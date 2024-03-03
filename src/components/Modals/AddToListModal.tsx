@@ -7,8 +7,6 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 import ModalComponent from "@/components/Modals/ModalComponent";
-import { addItemsToList, checkItemStatus } from "@/libs/api/lists";
-import { List } from "@/models/lists";
 
 type Props = {
   modalIsOpen: boolean;
@@ -16,7 +14,6 @@ type Props = {
   itemId: number;
   itemType: "movie" | "tvshow";
   title: string;
-  userLists: List[];
 };
 
 const AddToListModal: FC<Props> = ({
@@ -25,36 +22,18 @@ const AddToListModal: FC<Props> = ({
   itemId,
   itemType,
   title,
-  userLists,
 }) => {
   const [selectedList, setSelectedList] = useState<string>("1");
   const [itemStatus, setItemStatus] = useState<boolean>(false);
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (selectedList !== "1") {
-      fetchItemStatus();
-    }
-    if (selectedList === "1") {
-      setItemStatus(false);
-    }
-  }, [selectedList]);
-
   const handleSelectionChange = (e: any) => {
     setSelectedList(e.target.value);
   };
 
-  const fetchItemStatus = async () => {
-    const res = await checkItemStatus(Number(selectedList), itemId, itemType);
-    if (!res?.success) setItemStatus(false);
-    else {
-      setItemStatus(true);
-    }
-  };
-
   const onValidate = async () => {
-    if (itemStatus) {
+    /*  if (itemStatus) {
       toast.error("Cet élément est déjà présent dans la liste sélectionnée");
     }
     if (selectedList === "1") {
@@ -81,7 +60,7 @@ const AddToListModal: FC<Props> = ({
       setModalIsOpen(false);
       setItemStatus(false);
       setSelectedList("1");
-    }
+    } */
   };
 
   const onClose = () => {
@@ -105,11 +84,14 @@ const AddToListModal: FC<Props> = ({
           onChange={handleSelectionChange}
           label="Liste sélectionnée"
         >
-          {userLists.map((list) => (
+          <SelectItem key="1" value="1">
+            Ma liste
+          </SelectItem>
+          {/*  {userLists.map((list) => (
             <SelectItem key={list.id} value={list.id}>
               {list.name}
             </SelectItem>
-          ))}
+          ))} */}
         </Select>
         {itemStatus ? (
           <p className="p-2 text-xs text-red-800">

@@ -12,7 +12,6 @@ import {
 import { TvShow } from "@/models/tvShows";
 import { People } from "@/models/people";
 import PeopleCard from "../People/PeopleCard";
-import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
 
 type Props = {
   filterType: string;
@@ -39,19 +38,6 @@ const SearchResultCards: FC<Props> = (props) => {
     internalMovies,
   } = props;
 
-  const {
-    fetchUserDatas,
-    favoriteMoviesIds,
-    watchlistMoviesIds,
-    favoriteTvShowsIds,
-    watchlistTvShowsIds,
-    ratedMovies,
-    ratedTvShows,
-    ratedMoviesIds,
-    ratedTvShowsIds,
-    userLists,
-  } = TmdbFetcher();
-
   return (
     <>
       {filterType === "movie" && searchResultsMovies && genresMovies ? (
@@ -62,16 +48,6 @@ const SearchResultCards: FC<Props> = (props) => {
               movie={movie}
               filterType={filterType}
               genres={genresMovies}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
-              userLists={userLists}
               userMovies={userMovies}
               userMoviesId={userMoviesId}
               internalMovies={internalMovies}
@@ -86,16 +62,6 @@ const SearchResultCards: FC<Props> = (props) => {
               tvShow={tvShow}
               filterType={filterType}
               genres={genresTvShows}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
-              userLists={userLists}
             />
           ))}
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import dayjs from "dayjs";
-import { FC, useContext } from "react";
+import { FC } from "react";
 import { useRouter } from "next/navigation";
 import "dayjs/locale/fr";
 import updateLocale from "dayjs/plugin/updateLocale";
@@ -14,10 +14,8 @@ import {
   InternalMovieUser,
   Movie,
 } from "@/models/movies";
-import { UserContext } from "@/context/userContext";
-import { InternalUserContext } from "@/context/internalUserContext";
 import AccountInteraction from "../AccountInteraction/AccountInteraction";
-import { List } from "@/models/lists";
+import { useSession } from "next-auth/react";
 
 dayjs.locale("fr");
 
@@ -52,16 +50,6 @@ type Props = {
     image: string;
     dropdownContainer: string;
   };
-  fetchUserDatas: () => Promise<void>;
-  favoriteMoviesIds: number[];
-  favoriteTvShowsIds: number[];
-  watchlistMoviesIds: number[];
-  watchlistTvShowsIds: number[];
-  ratedMovies: Movie[];
-  ratedTvShows: TvShow[];
-  ratedMoviesIds: number[];
-  ratedTvShowsIds: number[];
-  userLists: List[];
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
@@ -73,23 +61,12 @@ const Card: FC<Props> = ({
   movie,
   tvShow,
   classNames,
-  fetchUserDatas,
-  favoriteMoviesIds,
-  favoriteTvShowsIds,
-  watchlistMoviesIds,
-  watchlistTvShowsIds,
-  ratedMovies,
-  ratedTvShows,
-  ratedMoviesIds,
-  ratedTvShowsIds,
-  userLists,
   userMovies,
   userMoviesId,
   internalMovies,
 }) => {
   const router = useRouter();
-  const { user } = useContext(UserContext);
-  const { internalUser } = useContext(InternalUserContext);
+  const session = useSession();
 
   const overviewRest =
     movie?.overview?.split(" ")?.filter(Boolean) ||
@@ -175,10 +152,8 @@ const Card: FC<Props> = ({
           {overviewShow}
           {overviewRest?.length ? "..." : ""}
         </p>
-        {user &&
-          user.tmdb_username &&
-          internalUser &&
-          internalUser.user_id &&
+        {session &&
+          session.status === "authenticated" &&
           userMovies &&
           userMoviesId &&
           internalMovies &&
@@ -187,54 +162,28 @@ const Card: FC<Props> = ({
               <AccountInteraction
                 item={movie}
                 type="movie"
-                user={user}
-                fetchUserDatas={fetchUserDatas}
                 listsPageProps={{
-                  favoriteMoviesIds,
-                  favoriteTvShowsIds,
-                  watchlistMoviesIds,
-                  watchlistTvShowsIds,
-                  ratedMovies,
-                  ratedTvShows,
-                  ratedMoviesIds,
-                  ratedTvShowsIds,
                   classNames,
                   internalMovies: internalMovies,
                   genresMovies: genres,
                   userMovies: userMovies,
                   userMoviesId: userMoviesId,
                 }}
-                userLists={userLists}
               />
             </div>
           )}
-        {user &&
-          user.tmdb_username &&
-          internalUser &&
-          internalUser.user_id &&
-          tvShow && (
-            <div className="absolute -right-2 top-0 md:top-2">
-              <AccountInteraction
-                item={tvShow}
-                type="tvshow"
-                user={user}
-                fetchUserDatas={fetchUserDatas}
-                listsPageProps={{
-                  favoriteMoviesIds,
-                  favoriteTvShowsIds,
-                  watchlistMoviesIds,
-                  watchlistTvShowsIds,
-                  ratedMovies,
-                  ratedTvShows,
-                  ratedMoviesIds,
-                  ratedTvShowsIds,
-                  classNames,
-                  genresMovies: genres,
-                }}
-                userLists={userLists}
-              />
-            </div>
-          )}
+        {session && session.status === "authenticated" && tvShow && (
+          <div className="absolute -right-2 top-0 md:top-2">
+            <AccountInteraction
+              item={tvShow}
+              type="tvshow"
+              listsPageProps={{
+                classNames,
+                genresMovies: genres,
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

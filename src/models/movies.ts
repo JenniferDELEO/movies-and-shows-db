@@ -2,22 +2,6 @@ import { CreditsMovies } from "./people";
 
 /* ----------------------- TMDB Models ----------------------- */
 
-export type AccountRating = {
-  created_at: string;
-  value: number;
-};
-
-export type AccountStates = {
-  id: number;
-  favorite: boolean;
-  rated:
-    | boolean
-    | {
-        value: number;
-      };
-  watchlist: boolean;
-};
-
 export type ApiResultMovies = {
   page: number;
   results: Movie[];
@@ -62,11 +46,9 @@ export type Movie = {
   video: boolean;
   vote_average: number;
   vote_count: number;
-  account_rating: AccountRating;
 };
 
 export interface MovieDetails extends Movie {
-  account_states: AccountStates;
   belongs_to_collection: Collection;
   budget: number;
   credits: CreditsMovies;
