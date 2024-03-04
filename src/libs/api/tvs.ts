@@ -115,7 +115,7 @@ export async function getTvDetail(id: string): Promise<TvDetails> {
       ...optionsGET,
       url: `${process.env.NEXT_PUBLIC_TMDB_API_URL_V3}/tv/${id}`,
       params: {
-        append_to_response: "aggregate_credits,recommendations,similar,videos",
+        append_to_response: "aggregate_credits,similar,videos",
         language: "fr-FR",
       },
     });

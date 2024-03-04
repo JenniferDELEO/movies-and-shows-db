@@ -46,7 +46,7 @@ type Props = {
   };
   movieDetailsProps?: {
     movies: Movie[];
-    title: "Films similaires" | "Films recommandés";
+    title: "Films similaires";
     totalPages: number;
     totalResults: number;
     userMovies: InternalMovieUser[];
@@ -54,7 +54,7 @@ type Props = {
     internalMovies: InternalMovie[];
   };
   tvsDetailsProps?: {
-    title: "Séries TV similaires" | "Séries TV recommandées";
+    title: "Séries TV similaires";
     totalPages: number;
     totalResults: number;
     tvs: Tv[];
@@ -230,11 +230,7 @@ const BannerWrapper: FC<Props> = ({
                 <Tooltip content="Voir plus" placement="top">
                   <button
                     className="rounded-full bg-white p-2 text-base font-normal text-primary"
-                    onClick={() =>
-                      router.push(
-                        `${pathname}/${movieDetailsProps.title === "Films similaires" ? "similars" : "recommendations"}/1`,
-                      )
-                    }
+                    onClick={() => router.push(`${pathname}/similars/1`)}
                   >
                     <BsThreeDots />
                   </button>
@@ -334,11 +330,7 @@ const BannerWrapper: FC<Props> = ({
                 <Tooltip content="Voir plus" placement="top">
                   <button
                     className="rounded-full bg-white p-2 text-base font-normal text-primary"
-                    onClick={() =>
-                      router.push(
-                        `${pathname}/${tvsDetailsProps.title === "Séries TV similaires" ? "similars" : "recommendations"}/1`,
-                      )
-                    }
+                    onClick={() => router.push(`${pathname}/similars/1`)}
                   >
                     <BsThreeDots />
                   </button>

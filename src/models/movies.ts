@@ -63,12 +63,6 @@ export interface MovieDetails extends Movie {
   imdb_id: string;
   production_companies: ProductionCompany[];
   production_countries: ProductionCountry[];
-  recommendations: {
-    page: number;
-    results: Movie[];
-    total_pages: number;
-    total_results: number;
-  };
   revenue: number;
   runtime: number;
   spoken_languages: SpokenLanguage[];

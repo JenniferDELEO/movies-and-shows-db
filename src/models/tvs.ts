@@ -147,12 +147,6 @@ export interface TvDetails extends Tv {
   number_of_seasons: number;
   production_companies: ProductionCompany[];
   production_countries: ProductionCountry[];
-  recommendations: {
-    page: number;
-    results: Tv[];
-    total_pages: number;
-    total_results: number;
-  };
   seasons: Season[];
   similar: {
     page: number;
