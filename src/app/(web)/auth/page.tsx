@@ -48,11 +48,11 @@ const Auth = () => {
     try {
       const user = await signUp(formData);
       if (user) {
-        toast.success("Success. Please sign in");
+        toast.success("Inscription réussie. Veuillez vous identifier");
+        await signIn();
       }
     } catch (error) {
-      console.log(error);
-      toast.error("Something wen't wrong");
+      toast.error("Erreur lors de l'inscription");
     } finally {
       setFormData(defaultFormData);
     }

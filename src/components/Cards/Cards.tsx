@@ -7,26 +7,30 @@ import {
   InternalMovieUser,
   Movie,
 } from "@/models/movies";
-import { TvShow } from "@/models/tvShows";
+import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
 
 type Props = {
-  filterType: "movie" | "tvshow";
+  filterType: "movie" | "tv";
   genres: Genre[];
   movies?: Movie[];
-  tvShows?: TvShow[];
+  tvs?: Tv[];
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
+  userTvs?: InternalTvAndUser[];
+  internalTvs?: InternalTv[];
 };
 
 const Cards: FC<Props> = ({
   movies,
-  tvShows,
+  tvs,
   filterType,
   genres,
   userMovies,
   userMoviesId,
   internalMovies,
+  userTvs,
+  internalTvs,
 }) => {
   return (
     <div className="w-full">
@@ -45,14 +49,16 @@ const Cards: FC<Props> = ({
           ))}
         </div>
       )}
-      {tvShows && (
+      {tvs && (
         <div className="2xl:grid 2xl:grid-cols-2 2xl:gap-2">
-          {tvShows.map((tvShow) => (
+          {tvs.map((tv) => (
             <Card
-              key={tvShow.id}
-              tvShow={tvShow}
+              key={tv.id}
+              tv={tv}
               filterType={filterType}
               genres={genres}
+              userTvs={userTvs}
+              internalTvs={internalTvs}
             />
           ))}
         </div>

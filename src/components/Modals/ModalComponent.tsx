@@ -14,6 +14,7 @@ type Props = {
   children: ReactNode;
   onValidate: () => Promise<void>;
   onClose: () => void;
+  className?: string;
 };
 
 const ModalComponent: FC<Props> = ({
@@ -22,13 +23,14 @@ const ModalComponent: FC<Props> = ({
   children,
   onValidate,
   onClose,
+  className = "",
 }) => {
   return (
     <>
       <Modal
         isOpen={modalIsOpen}
         hideCloseButton={true}
-        classNames={{ base: "absolute top-0" }}
+        classNames={{ base: `${className} absolute top-0` }}
       >
         <ModalContent>
           <>

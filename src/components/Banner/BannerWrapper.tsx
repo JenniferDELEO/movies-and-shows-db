@@ -7,50 +7,59 @@ import { usePathname, useRouter } from "next/navigation";
 import { Tab, Tabs, Tooltip } from "@nextui-org/react";
 
 import Banner from "@/components/Banner/Banner";
-import {
-  Genre,
-  InternalMovie,
-  InternalMovieUser,
-  Movie,
-} from "@/models/movies";
-import { TvShow } from "@/models/tvShows";
+import { InternalMovie, InternalMovieUser, Movie } from "@/models/movies";
+import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
 
 type Props = {
   homeProps?: {
     popularMovies: Movie[];
-    popularTvShows: TvShow[];
+    popularTvs: Tv[];
     topRatedMovies: Movie[];
-    topRatedTvShows: TvShow[];
+    topRatedTvs: Tv[];
     trendingMoviesToday: Movie[];
     trendingMoviesThisWeek: Movie[];
-    trendingTvShowsToday: TvShow[];
-    trendingTvShowsThisWeek: TvShow[];
+    trendingTvsToday: Tv[];
+    trendingTvsThisWeek: Tv[];
     internalMovies: InternalMovie[];
-    genresMovies: Genre[];
     userMovies: InternalMovieUser[];
     userMoviesId: string;
+    internalTvs: InternalTv[];
+    userTvs: InternalTvAndUser[];
   };
   personDetailProps?: {
     actingMovies: Movie[];
-    actingTvShows: TvShow[];
+    actingTvs: Tv[];
     runningMovies: Movie[];
-    runningTvShows: TvShow[];
+    runningTvs: Tv[];
+    userMovies: InternalMovieUser[];
+    userMoviesId: string;
+    internalMovies: InternalMovie[];
+    internalTvs: InternalTv[];
+    userTvs: InternalTvAndUser[];
   };
   movieCollectionProps?: {
     movies: Movie[];
     title: string;
+    userMovies: InternalMovieUser[];
+    userMoviesId: string;
+    internalMovies: InternalMovie[];
   };
   movieDetailsProps?: {
     movies: Movie[];
-    title: "Films similaires" | "Films recommandés";
+    title: "Films similaires";
     totalPages: number;
     totalResults: number;
+    userMovies: InternalMovieUser[];
+    userMoviesId: string;
+    internalMovies: InternalMovie[];
   };
-  tvshowsDetailsProps?: {
-    title: "Séries TV similaires" | "Séries TV recommandées";
+  tvsDetailsProps?: {
+    title: "Séries TV similaires";
     totalPages: number;
     totalResults: number;
-    tvshows: TvShow[];
+    tvs: Tv[];
+    userTvs: InternalTvAndUser[];
+    internalTvs: InternalTv[];
   };
 };
 
@@ -59,7 +68,7 @@ const BannerWrapper: FC<Props> = ({
   personDetailProps,
   movieCollectionProps,
   movieDetailsProps,
-  tvshowsDetailsProps,
+  tvsDetailsProps,
 }) => {
   const pathname = usePathname();
   const router = useRouter();
@@ -99,7 +108,6 @@ const BannerWrapper: FC<Props> = ({
               classNames={classNames}
               title="Les 20 Films dans les tendances"
               internalMovies={homeProps.internalMovies}
-              genresMovies={homeProps.genresMovies}
               userMovies={homeProps.userMovies}
               userMoviesId={homeProps.userMoviesId}
             />
@@ -117,7 +125,6 @@ const BannerWrapper: FC<Props> = ({
               classNames={classNames}
               title="Les 20 Films dans les tendances"
               internalMovies={homeProps.internalMovies}
-              genresMovies={homeProps.genresMovies}
               userMovies={homeProps.userMovies}
               userMoviesId={homeProps.userMoviesId}
             />
@@ -129,7 +136,6 @@ const BannerWrapper: FC<Props> = ({
           classNames={classNames}
           title="Les 20 Films les plus populaires"
           internalMovies={homeProps.internalMovies}
-          genresMovies={homeProps.genresMovies}
           userMovies={homeProps.userMovies}
           userMoviesId={homeProps.userMoviesId}
         />
@@ -139,7 +145,6 @@ const BannerWrapper: FC<Props> = ({
           classNames={classNames}
           title="Les 20 Films les mieux notés"
           internalMovies={homeProps.internalMovies}
-          genresMovies={homeProps.genresMovies}
           userMovies={homeProps.userMovies}
           userMoviesId={homeProps.userMoviesId}
         />
@@ -156,10 +161,12 @@ const BannerWrapper: FC<Props> = ({
             }
           >
             <Banner
-              items={homeProps.trendingTvShowsToday}
-              type="tvshow"
+              items={homeProps.trendingTvsToday}
+              type="tv"
               classNames={classNames}
               title="Les 20 Séries TV dans les tendances"
+              internalTvs={homeProps.internalTvs}
+              userTvs={homeProps.userTvs}
             />
           </Tab>
           <Tab
@@ -170,24 +177,30 @@ const BannerWrapper: FC<Props> = ({
             }
           >
             <Banner
-              items={homeProps.trendingTvShowsThisWeek}
-              type="movie"
+              items={homeProps.trendingTvsThisWeek}
+              type="tv"
               classNames={classNames}
               title="Les 20 Séries TV dans les tendances"
+              internalTvs={homeProps.internalTvs}
+              userTvs={homeProps.userTvs}
             />
           </Tab>
         </Tabs>
         <Banner
-          items={homeProps.popularTvShows}
-          type="tvshow"
+          items={homeProps.popularTvs}
+          type="tv"
           classNames={classNames}
           title="Les 20 Séries TV les plus populaires"
+          internalTvs={homeProps.internalTvs}
+          userTvs={homeProps.userTvs}
         />
         <Banner
-          items={homeProps.topRatedTvShows}
-          type="tvshow"
+          items={homeProps.topRatedTvs}
+          type="tv"
           classNames={classNames}
           title="Les 20 Séries TV les mieux notées"
+          internalTvs={homeProps.internalTvs}
+          userTvs={homeProps.userTvs}
         />
       </div>
     );
@@ -201,6 +214,9 @@ const BannerWrapper: FC<Props> = ({
         type="movie"
         classNames={classNamesPagesDetails}
         title={movieCollectionProps.title}
+        internalMovies={movieCollectionProps.internalMovies}
+        userMovies={movieCollectionProps.userMovies}
+        userMoviesId={movieCollectionProps.userMoviesId}
       />
     );
   }
@@ -214,11 +230,7 @@ const BannerWrapper: FC<Props> = ({
                 <Tooltip content="Voir plus" placement="top">
                   <button
                     className="rounded-full bg-white p-2 text-base font-normal text-primary"
-                    onClick={() =>
-                      router.push(
-                        `${pathname}/${movieDetailsProps.title === "Films similaires" ? "similars" : "recommendations"}/1`,
-                      )
-                    }
+                    onClick={() => router.push(`${pathname}/similars/1`)}
                   >
                     <BsThreeDots />
                   </button>
@@ -230,6 +242,9 @@ const BannerWrapper: FC<Props> = ({
               type="movie"
               classNames={classNamesPagesDetails}
               title={`${movieDetailsProps.title} (${movieDetailsProps.totalResults})`}
+              internalMovies={movieDetailsProps.internalMovies}
+              userMovies={movieDetailsProps.userMovies}
+              userMoviesId={movieDetailsProps.userMoviesId}
             />
           </div>
         )}
@@ -248,19 +263,24 @@ const BannerWrapper: FC<Props> = ({
               type="movie"
               classNames={classNamesPagesDetails}
               title={`Films (${personDetailProps.actingMovies.length})`}
+              internalMovies={personDetailProps.internalMovies}
+              userMovies={personDetailProps.userMovies}
+              userMoviesId={personDetailProps.userMoviesId}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
         )}
-        {personDetailProps.actingTvShows.length > 0 && (
+        {personDetailProps.actingTvs.length > 0 && (
           <div className="mt-4">
             <Banner
-              items={personDetailProps.actingTvShows.sort((a, b) =>
+              items={personDetailProps.actingTvs.sort((a, b) =>
                 b.first_air_date.localeCompare(a.first_air_date),
               )}
-              type="tvshow"
+              type="tv"
               classNames={classNamesPagesDetails}
-              title={`Séries TV (${personDetailProps.actingTvShows.length})`}
+              title={`Séries TV (${personDetailProps.actingTvs.length})`}
+              internalTvs={personDetailProps.internalTvs}
+              userTvs={personDetailProps.userTvs}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
@@ -274,19 +294,24 @@ const BannerWrapper: FC<Props> = ({
               type="movie"
               classNames={classNamesPagesDetails}
               title={`Films réalisés (${personDetailProps.runningMovies.length})`}
+              internalMovies={personDetailProps.internalMovies}
+              userMovies={personDetailProps.userMovies}
+              userMoviesId={personDetailProps.userMoviesId}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
         )}
-        {personDetailProps.runningTvShows.length > 0 && (
+        {personDetailProps.runningTvs.length > 0 && (
           <div className="mt-4">
             <Banner
-              items={personDetailProps.runningTvShows.sort((a, b) =>
+              items={personDetailProps.runningTvs.sort((a, b) =>
                 b.first_air_date.localeCompare(a.first_air_date),
               )}
-              type="tvshow"
+              type="tv"
               classNames={classNamesPagesDetails}
-              title={`Séries TV réalisées (${personDetailProps.runningTvShows.length})`}
+              title={`Séries TV réalisées (${personDetailProps.runningTvs.length})`}
+              internalTvs={personDetailProps.internalTvs}
+              userTvs={personDetailProps.userTvs}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
@@ -295,21 +320,17 @@ const BannerWrapper: FC<Props> = ({
     );
   }
 
-  if (tvshowsDetailsProps) {
+  if (tvsDetailsProps) {
     return (
       <div className="mx-auto py-4 text-xl font-bold">
-        {tvshowsDetailsProps?.tvshows?.length > 0 && (
+        {tvsDetailsProps?.tvs?.length > 0 && (
           <div className="relative mt-4 size-full">
-            {tvshowsDetailsProps.totalPages > 1 && (
+            {tvsDetailsProps.totalPages > 1 && (
               <div className="absolute right-3 top-0">
                 <Tooltip content="Voir plus" placement="top">
                   <button
                     className="rounded-full bg-white p-2 text-base font-normal text-primary"
-                    onClick={() =>
-                      router.push(
-                        `${pathname}/${tvshowsDetailsProps.title === "Séries TV similaires" ? "similars" : "recommendations"}/1`,
-                      )
-                    }
+                    onClick={() => router.push(`${pathname}/similars/1`)}
                   >
                     <BsThreeDots />
                   </button>
@@ -318,10 +339,12 @@ const BannerWrapper: FC<Props> = ({
             )}
 
             <Banner
-              items={tvshowsDetailsProps.tvshows}
-              type="tvshow"
+              items={tvsDetailsProps.tvs}
+              type="tv"
               classNames={classNamesPagesDetails}
-              title={`${tvshowsDetailsProps.title} (${tvshowsDetailsProps.totalResults})`}
+              title={`${tvsDetailsProps.title} (${tvsDetailsProps.totalResults})`}
+              internalTvs={tvsDetailsProps.internalTvs}
+              userTvs={tvsDetailsProps.userTvs}
             />
           </div>
         )}

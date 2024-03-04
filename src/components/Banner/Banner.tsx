@@ -34,7 +34,8 @@ import {
   settingsMinFourSlides,
   settingsMinFiveSlides,
 } from "@/components/Banner/reactSlickSettings";
-import { Genre, InternalMovie, InternalMovieUser } from "@/models/movies";
+import { InternalMovie, InternalMovieUser } from "@/models/movies";
+import { InternalTv, InternalTvAndUser } from "@/models/tvs";
 import AccountInteraction from "../AccountInteraction/AccountInteraction";
 import { useSession } from "next-auth/react";
 
@@ -51,7 +52,7 @@ type Props = {
     original_name?: string;
     character?: string;
   }[];
-  type: "tvshow" | "movie";
+  type: "tv" | "movie";
   classNames: {
     container: string;
     title: string;
@@ -61,9 +62,10 @@ type Props = {
   };
   title: string;
   internalMovies?: InternalMovie[];
-  genresMovies?: Genre[];
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
+  internalTvs?: InternalTv[];
+  userTvs?: InternalTvAndUser[];
 };
 
 const Banner: FC<Props> = ({
@@ -72,12 +74,13 @@ const Banner: FC<Props> = ({
   classNames,
   title,
   internalMovies,
-  genresMovies,
   userMovies,
   userMoviesId,
+  internalTvs,
+  userTvs,
 }) => {
   const router = useRouter();
-  const session = useSession();
+  const { status } = useSession();
   const settings =
     items.length > 4
       ? settingsMinFiveSlides
@@ -123,16 +126,17 @@ const Banner: FC<Props> = ({
                 />
               </picture>
 
-              {session && session.status === "authenticated" && (
+              {status === "authenticated" && (
                 <AccountInteraction
                   item={item}
                   type={type}
                   listsPageProps={{
                     classNames,
                     internalMovies: internalMovies || [],
-                    genresMovies: genresMovies || [],
                     userMovies: userMovies || [],
                     userMoviesId: userMoviesId || "",
+                    internalTvs: internalTvs || [],
+                    userTvs: userTvs || [],
                   }}
                 />
               )}

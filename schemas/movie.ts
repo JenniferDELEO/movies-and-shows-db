@@ -6,15 +6,16 @@ const movie = {
   type: "document",
   fields: [
     defineField({
-      name: "tmdb_id",
-      title: "TMDB ID",
-      type: "number",
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
       name: "title",
       title: "Title",
       type: "string",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "runtime",
+      title: "Runtime",
+      type: "number",
+      initialValue: 0,
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -40,10 +41,9 @@ const movie = {
       type: "text",
     }),
     defineField({
-      name: "users",
-      title: "Users",
-      type: "array",
-      of: [{ type: "reference", to: [{ type: "user" }] }],
+      name: "tmdb_id",
+      title: "TMDB ID",
+      type: "number",
       validation: (Rule) => Rule.required(),
     }),
   ],

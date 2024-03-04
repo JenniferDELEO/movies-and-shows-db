@@ -1,9 +1,9 @@
 import {
   createUserMovieAndStatus,
   addUserMovieStatus,
-  getAllMovies,
   getUserMovies,
   updateUserMovieStatus,
+  getMovieByTmdbId,
 } from "@/libs/sanity/api/movie";
 import { authOptions } from "@/libs/sanity/auth";
 import { getServerSession } from "next-auth";
@@ -19,14 +19,17 @@ export async function POST(req: Request) {
   }
 
   const userId = session.user.id;
+  const userName = session.user.name!;
+
+  if (!userId && !userName) {
+    return new NextResponse("User not found", { status: 400 });
+  }
 
   try {
-    const allMovies = await getAllMovies();
-    const movieId = allMovies.find(
-      (movie) => movie.tmdb_id === Number(tmdbId),
-    )?._id;
-    if (!movieId) {
-      return new NextResponse("Failed to retrieve movie Id", { status: 400 });
+    const movie = await getMovieByTmdbId(Number(tmdbId));
+    const movieId = movie._id;
+    if (!movie) {
+      return new NextResponse("Failed to retrieve movie", { status: 400 });
     }
 
     const userMovies = await getUserMovies(userId);
@@ -51,7 +54,12 @@ export async function POST(req: Request) {
         });
       }
     } else {
-      data = await createUserMovieAndStatus({ movieId, userId, status });
+      data = await createUserMovieAndStatus({
+        movieId,
+        userId,
+        userName,
+        status,
+      });
     }
 
     return NextResponse.json(data, { status: 200, statusText: "Successful" });

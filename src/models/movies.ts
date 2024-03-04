@@ -63,12 +63,6 @@ export interface MovieDetails extends Movie {
   imdb_id: string;
   production_companies: ProductionCompany[];
   production_countries: ProductionCountry[];
-  recommendations: {
-    page: number;
-    results: Movie[];
-    total_pages: number;
-    total_results: number;
-  };
   revenue: number;
   runtime: number;
   spoken_languages: SpokenLanguage[];
@@ -129,17 +123,13 @@ export type WatchProviderFr = {
 
 export type InternalMovie = {
   _id: string;
-  tmdb_id: number;
+  runtime: number;
   title: string;
   release_date: string;
-  runtime: number;
+  genres: string[];
   poster_path: string;
   overview: string;
-  users: {
-    _key: string;
-    _type: "reference";
-    _ref: string;
-  }[];
+  tmdb_id: number;
 };
 
 export type InternalMovieUser = {
@@ -150,34 +140,24 @@ export type InternalMovieUser = {
   };
 };
 
-export type AddMovieAndUser = {
-  tmdbId: number;
+export type AddMovie = {
   title: string;
+  runtime: number;
   releaseDate: string;
   genres: string[];
   posterPath: string;
   overview: string;
-  userId: string;
+  tmdbId: number;
 };
 
-export type UpdateMovieAndUser = {
-  userId: string;
-  movieId: string;
-};
-
-export type CreateUserStatus = {
+export type CreateMovieStatus = {
   movieId: string;
   userId: string;
+  userName: string;
   status: "watched" | "to_watch";
 };
 
 export type AddMovieStatus = {
-  userMovieId: string;
-  movieId: string;
-  status: "watched" | "to_watch";
-};
-
-export type UpdateMovieStatus = {
   userMovieId: string;
   movieId: string;
   status: "watched" | "to_watch";

@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { Genre } from "@/models/movies";
+import { Genre, InternalMovie, InternalMovieUser } from "@/models/movies";
 import TopContent from "@/components/DetailsMedia/TopContent";
 import { Collection } from "@/models/collections";
 import MoviesInCollection from "./MoviesInCollection";
@@ -8,10 +8,19 @@ import MoviesInCollection from "./MoviesInCollection";
 type Props = {
   collectionDetails: Collection;
   genresMovies: Genre[];
+  userMovies: InternalMovieUser[];
+  userMoviesId: string;
+  internalMovies: InternalMovie[];
 };
 
 const CollectionWrapper: FC<Props> = (props) => {
-  const { collectionDetails, genresMovies } = props;
+  const {
+    collectionDetails,
+    genresMovies,
+    userMovies,
+    userMoviesId,
+    internalMovies,
+  } = props;
 
   const allGenresIds =
     collectionDetails?.parts?.flatMap((part) => part.genre_ids) || [];
@@ -35,7 +44,12 @@ const CollectionWrapper: FC<Props> = (props) => {
         type="movie"
         voteAverageCollection={voteAverage}
       />
-      <MoviesInCollection movies={collectionDetails?.parts} />
+      <MoviesInCollection
+        movies={collectionDetails?.parts}
+        userMovies={userMovies}
+        userMoviesId={userMoviesId}
+        internalMovies={internalMovies}
+      />
     </div>
   );
 };

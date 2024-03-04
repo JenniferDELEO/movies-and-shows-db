@@ -4,15 +4,15 @@ import { Card, CardBody, CardFooter } from "@nextui-org/react";
 import { FC } from "react";
 import { useRouter } from "next/navigation";
 
-import { CastMovies, CastTvShows, People } from "@/models/people";
+import { CastMovies, CastTvs, People } from "@/models/people";
 
 type Props = {
   item?: People;
   itemCastMovie?: CastMovies;
-  itemCastTvShow?: CastTvShows;
+  itemCastTv?: CastTvs;
 };
 
-const PeopleCard: FC<Props> = ({ item, itemCastMovie, itemCastTvShow }) => {
+const PeopleCard: FC<Props> = ({ item, itemCastMovie, itemCastTv }) => {
   const router = useRouter();
   const knownFor = item?.known_for
     ?.map((item) => item?.title || item?.name)
@@ -20,16 +20,16 @@ const PeopleCard: FC<Props> = ({ item, itemCastMovie, itemCastTvShow }) => {
   const slug =
     item?.name.toLowerCase().replace(/[\W_]+/g, "-") ||
     itemCastMovie?.name.toLowerCase().replace(/[\W_]+/g, "-") ||
-    itemCastTvShow?.name.toLowerCase().replace(/[\W_]+/g, "-");
-  const id = item?.id || itemCastMovie?.id || itemCastTvShow?.id;
+    itemCastTv?.name.toLowerCase().replace(/[\W_]+/g, "-");
+  const id = item?.id || itemCastMovie?.id || itemCastTv?.id;
   const profilePath =
     item?.profile_path ||
     itemCastMovie?.profile_path ||
-    itemCastTvShow?.profile_path;
-  const name = item?.name || itemCastMovie?.name || itemCastTvShow?.name;
+    itemCastTv?.profile_path;
+  const name = item?.name || itemCastMovie?.name || itemCastTv?.name;
   const character =
-    itemCastMovie?.character || itemCastTvShow?.roles?.[0]?.character;
-  const episodeCount = itemCastTvShow?.roles?.[0].episode_count;
+    itemCastMovie?.character || itemCastTv?.roles?.[0]?.character;
+  const episodeCount = itemCastTv?.roles?.[0].episode_count;
 
   return (
     <Card
@@ -49,7 +49,7 @@ const PeopleCard: FC<Props> = ({ item, itemCastMovie, itemCastTvShow }) => {
             alt={name}
             className="rounded-xl object-cover"
             style={{
-              maxHeight: itemCastMovie ? 168 : itemCastTvShow ? 145 : 278,
+              maxHeight: itemCastMovie ? 168 : itemCastTv ? 145 : 278,
             }}
           />
         </picture>
@@ -57,7 +57,7 @@ const PeopleCard: FC<Props> = ({ item, itemCastMovie, itemCastTvShow }) => {
       <CardFooter
         className="flex-col items-center justify-start px-4 pb-4"
         style={{
-          height: itemCastTvShow ? 140 : 120,
+          height: itemCastTv ? 140 : 120,
         }}
       >
         <h4 className="text-sm">{name}</h4>

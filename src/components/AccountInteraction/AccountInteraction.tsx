@@ -1,6 +1,13 @@
 "use client";
 
 import { FC, Key, useState } from "react";
+
+import AddToListModal from "@/components/Modals/AddToListModal";
+import RatingModal from "@/components/Modals/RatingModal";
+import { Movie } from "@/models/movies";
+import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
+import { Tooltip } from "@nextui-org/react";
+import { FaStar } from "react-icons/fa";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -8,7 +15,9 @@ import { Genre, InternalMovie, InternalMovieUser } from "@/models/movies";
 import DropdownCard from "@/components/AccountInteraction/DropdownCard";
 import IconsInteraction from "./IconsInteraction";
 import { getUserMovies } from "@/libs/sanity/api/movie";
+import { getUserTvs } from "@/libs/sanity/api/tv";
 import { useSession } from "next-auth/react";
+import AddEpisodeStatusModal from "../Modals/AddEpisodeStatusModal";
 
 type Props = {
   item: {
@@ -18,10 +27,19 @@ type Props = {
     poster_path: string;
     overview: string;
     release_date?: string;
+    first_air_date?: string;
     title?: string;
     name?: string;
   };
-  type: "tvshow" | "movie" | "episode";
+  type: "tv" | "movie" | "episode";
+  episodeDetailsProps?: {
+    episodeNumber: number;
+    id: number;
+    isRated: boolean;
+    seasonNumber: number;
+    tvId: number;
+    userRatingApi: number;
+  };
   listsPageProps?: {
     classNames?: {
       container: string;
@@ -31,14 +49,17 @@ type Props = {
       dropdownContainer: string;
     };
     internalMovies?: InternalMovie[];
-    genresMovies: Genre[];
     userMovies?: InternalMovieUser[];
     userMoviesId?: string;
+    internalTvs?: InternalTv[];
+    userTvs?: InternalTvAndUser[];
   };
   mediaDetailsPageProps?: {
     userMovies?: InternalMovieUser[];
     userMoviesId?: string;
     internalMovies?: InternalMovie[];
+    internalTvs?: InternalTv[];
+    userTvs?: InternalTvAndUser[];
   };
 };
 
@@ -50,20 +71,17 @@ const AccountInteraction: FC<Props> = (props) => {
     listsPageProps,
     mediaDetailsPageProps,
   } = props;
-  const session = useSession();
+  const [modalAddEpisodesStatus, setModalAddEpisodesStatus] =
+    useState<boolean>(false);
+  const [selectedItemId, setSelectedItemId] = useState<number>(0);
   const [moviesAccount, setMoviesAccount] = useState<InternalMovieUser[]>(
     listsPageProps?.userMovies || mediaDetailsPageProps?.userMovies || [],
   );
+  const [tvsAccount, setTvsAccount] = useState<InternalTvAndUser[]>(
+    listsPageProps?.userTvs || mediaDetailsPageProps?.userTvs || [],
+  );
 
-  const movieGenres =
-    item?.genre_ids?.map((genreId) => {
-      const genre = listsPageProps?.genresMovies?.find(
-        (genre) => genre.id === genreId,
-      );
-      return genre?.name;
-    }) ||
-    item?.genres?.map((genre) => genre.name) ||
-    [];
+  const { data: session, status } = useSession();
 
   const _movieId =
     listsPageProps?.internalMovies?.find((movie) => movie.tmdb_id === item.id)
@@ -72,50 +90,86 @@ const AccountInteraction: FC<Props> = (props) => {
       (movie) => movie.tmdb_id === item.id,
     )?._id;
 
+  const tvFromDb =
+    listsPageProps?.internalTvs?.find((tv) => tv.tmdb_id === item.id) ||
+    mediaDetailsPageProps?.internalTvs?.find((tv) => tv.tmdb_id === item.id);
+  const _tvId = tvFromDb?._id;
+
+  const userTvId = tvsAccount?.find((tv) => tv.tv.tmdb_id === item.id)?._id;
+
   const handleClick = async (media: Key) => {
     const category = media.toString().split("-")[0];
     const id = media.toString().split("-")[1];
 
-    if (session && session.status === "authenticated") {
-      if (category === "watched" && type === "movie") {
+    if (session && status === "authenticated") {
+      if (
+        (category === "to_watch" || category === "watched") &&
+        type === "movie"
+      ) {
         const responseAddMovie = await axios.post("/api/movies", {
-          tmdbId: id,
-          title: item.title,
-          releaseDate: item.release_date,
-          genres: movieGenres,
-          posterPath: item.poster_path,
-          overview: item.overview,
+          tmdbId: Number(id),
         });
         if (responseAddMovie.status === 200) {
           const responseAddStatus = await axios.post("/api/user-movies", {
-            tmdbId: id,
-            status: "watched",
+            tmdbId: Number(id),
+            status: category,
           });
           if (responseAddStatus.status === 200)
-            toast.success("Film marqué comme vu avec succès");
-          const result = await getUserMovies(session.data.user.id);
+            toast.success(
+              category === "to_watch"
+                ? "Film marqué comme à voir avec succès"
+                : "Film marqué comme vu avec succès",
+            );
+          const result = await getUserMovies(session.user.id);
           setMoviesAccount(result.movies);
         }
       }
 
-      if (category === "toWatch" && type === "movie") {
-        const responseAddMovie = await axios.post("/api/movies", {
-          tmdbId: id,
-          title: item.title,
-          releaseDate: item.release_date,
-          genres: movieGenres,
-          posterPath: item.poster_path,
-          overview: item.overview,
+      if (category === "add" && type === "tv") {
+        const responseAddTv = await axios.post("/api/tvs", {
+          tmdbId: Number(id),
         });
-        if (responseAddMovie.status === 200) {
-          const responseAddStatus = await axios.post("/api/user-movies", {
-            tmdbId: id,
-            status: "to_watch",
+        if (responseAddTv.status === 200) {
+          const responseAddStatus = await axios.post("/api/user-tvs", {
+            tmdbId: Number(id),
+            status: "active",
+            watchState: "to_watch",
           });
           if (responseAddStatus.status === 200)
-            toast.success("Film marqué comme à voir avec succès");
-          const result = await getUserMovies(session.data.user.id);
-          setMoviesAccount(result.movies);
+            toast.success("Série ajoutée avec succès");
+          const result = await getUserTvs(session.user.id);
+          const tvAdded = result.find((tv) => tv.tv.tmdb_id === Number(id));
+          setTvsAccount(result);
+          const responseAddSeasons = await axios.post("/api/tvs/seasons", {
+            tvTmdbId: Number(id),
+            tvId: tvAdded?.tv._id,
+          });
+          if (responseAddSeasons.status === 200) {
+            const responseAddSeasonStatus = await axios.post(
+              "/api/user-tvs/seasons",
+              {
+                tvId: tvAdded?.tv._id,
+              },
+            );
+            if (responseAddSeasonStatus.status === 200)
+              setModalAddEpisodesStatus(true);
+          }
+        }
+      }
+
+      if (category === "episode") {
+        setModalAddEpisodesStatus(true);
+      }
+
+      if (category === "delete" && type === "tv") {
+        const responseUserTvAndStatus = await axios.post(
+          `/api/user-tvs/${userTvId}`,
+          { userTvId, tvId: _tvId },
+        );
+        if (responseUserTvAndStatus.status === 200) {
+          toast.success("Série supprimée du compte avec succès");
+          const result = await getUserTvs(session.user.id);
+          setTvsAccount(result);
         }
       }
 
@@ -126,18 +180,9 @@ const AccountInteraction: FC<Props> = (props) => {
             { userMovieId: listsPageProps.userMoviesId, movieId: _movieId },
           );
           if (responseUserMovieAndStatus.status === 200) {
-            const responseMovieAndUser = await axios.post(
-              `/api/movies/${_movieId}`,
-              {
-                movieId: _movieId,
-              },
-            );
-
-            if (responseMovieAndUser.status === 200) {
-              toast.success("Film supprimé du compte avec succès");
-              const result = await getUserMovies(session.data.user.id);
-              setMoviesAccount(result.movies);
-            }
+            toast.success("Film supprimé du compte avec succès");
+            const result = await getUserMovies(session.user.id);
+            setMoviesAccount(result.movies);
           }
         }
       }
@@ -151,18 +196,9 @@ const AccountInteraction: FC<Props> = (props) => {
             },
           );
           if (responseUserMovieAndStatus.status === 200) {
-            const responseMovieAndUser = await axios.post(
-              `/api/movies/${_movieId}`,
-              {
-                movieId: _movieId,
-              },
-            );
-
-            if (responseMovieAndUser.status === 200) {
-              toast.success("Film supprimé du compte avec succès");
-              const result = await getUserMovies(session.data.user.id);
-              setMoviesAccount(result.movies);
-            }
+            toast.success("Film supprimé du compte avec succès");
+            const result = await getUserMovies(session.user.id);
+            setMoviesAccount(result.movies);
           }
         }
       }
@@ -171,19 +207,32 @@ const AccountInteraction: FC<Props> = (props) => {
 
   return type !== "episode" ? (
     <>
+      {_tvId && modalAddEpisodesStatus && (
+        <AddEpisodeStatusModal
+          modalIsOpen={modalAddEpisodesStatus}
+          setModalIsOpen={setModalAddEpisodesStatus}
+          tvFromDb={tvFromDb}
+          tvId={_tvId}
+          tvTmdbId={selectedItemId}
+        />
+      )}
       {listsPageProps && (
         <DropdownCard
           item={item}
+          type={type}
           classNames={listsPageProps?.classNames}
           userMovies={moviesAccount}
+          userTvs={tvsAccount}
           handleClick={handleClick}
         />
       )}
       {mediaDetailsPageProps && (
         <IconsInteraction
           item={item}
+          type={type}
           handleClick={handleClick}
           userMovies={moviesAccount}
+          userTvs={tvsAccount}
         />
       )}
     </>

@@ -10,11 +10,11 @@ import {
   InternalMovieUser,
   Movie,
 } from "@/models/movies";
-import { TvShow } from "@/models/tvShows";
+import { Tv } from "@/models/tvs";
 import Card from "../../Cards/Card";
 import Pagination from "../../Pagination/Pagination";
 import { getSimilarsMovie } from "@/libs/api/movies";
-import { getSimilarsTvShow } from "@/libs/api/tvshows";
+import { getSimilarsTv } from "@/libs/api/tvs";
 
 type Props = {
   mediaId: string;
@@ -23,10 +23,10 @@ type Props = {
   similarsMovies?: Movie[];
   totalPagesSimilarsMovies?: number;
   totalResultsSimilarsMovies?: number;
-  genresTvShows?: Genre[];
-  similarsTvShows?: TvShow[];
-  totalPagesSimilarsTvShows?: number;
-  totalResultsSimilarsTvShows?: number;
+  genresTvs?: Genre[];
+  similarsTvs?: Tv[];
+  totalPagesSimilarsTvs?: number;
+  totalResultsSimilarsTvs?: number;
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
@@ -40,10 +40,10 @@ const SimilarsWrapper: FC<Props> = (props) => {
     similarsMovies,
     totalPagesSimilarsMovies,
     totalResultsSimilarsMovies,
-    genresTvShows,
-    similarsTvShows,
-    totalPagesSimilarsTvShows,
-    totalResultsSimilarsTvShows,
+    genresTvs,
+    similarsTvs,
+    totalPagesSimilarsTvs,
+    totalResultsSimilarsTvs,
     userMovies,
     userMoviesId,
     internalMovies,
@@ -51,18 +51,16 @@ const SimilarsWrapper: FC<Props> = (props) => {
   const params = useParams();
 
   const [moviesList, setMoviesList] = useState<Movie[]>(similarsMovies || []);
-  const [tvShowsList, setTvShowsList] = useState<TvShow[]>(
-    similarsTvShows || [],
-  );
+  const [tvsList, setTvsList] = useState<Tv[]>(similarsTvs || []);
   const [totalPages, setTotalPages] = useState<number>(
-    totalPagesSimilarsMovies || totalPagesSimilarsTvShows || 0,
+    totalPagesSimilarsMovies || totalPagesSimilarsTvs || 0,
   );
   const [totalResults, setTotalResults] = useState<number>(
-    totalResultsSimilarsMovies || totalResultsSimilarsTvShows || 0,
+    totalResultsSimilarsMovies || totalResultsSimilarsTvs || 0,
   );
   const [currentPage, setCurrentPage] = useState<number>(Number(params.page));
 
-  const genres = genresMovies || genresTvShows || [];
+  const genres = genresMovies || genresTvs || [];
 
   async function getSimilarsNextPages() {
     if (similarsMovies) {
@@ -74,12 +72,12 @@ const SimilarsWrapper: FC<Props> = (props) => {
       setTotalPages(total_pages);
       setTotalResults(total_results);
     }
-    if (similarsTvShows) {
-      const { results, total_pages, total_results } = await getSimilarsTvShow(
+    if (similarsTvs) {
+      const { results, total_pages, total_results } = await getSimilarsTv(
         mediaId,
         currentPage,
       );
-      setTvShowsList(results);
+      setTvsList(results);
       setTotalPages(total_pages);
       setTotalResults(total_results);
     }
@@ -121,14 +119,9 @@ const SimilarsWrapper: FC<Props> = (props) => {
               internalMovies={internalMovies}
             />
           ))}
-        {similarsTvShows &&
-          tvShowsList.map((tvShow) => (
-            <Card
-              key={tvShow.id}
-              tvShow={tvShow}
-              filterType="tvshow"
-              genres={genres}
-            />
+        {similarsTvs &&
+          tvsList.map((tv) => (
+            <Card key={tv.id} tv={tv} filterType="tv" genres={genres} />
           ))}
       </div>
       <Pagination

@@ -9,17 +9,17 @@ import {
   InternalMovieUser,
   Movie,
 } from "@/models/movies";
-import { TvShow } from "@/models/tvShows";
+import { Tv } from "@/models/tvs";
 import { People } from "@/models/people";
 import PeopleCard from "../People/PeopleCard";
 
 type Props = {
   filterType: string;
   searchResultsMovies?: Movie[];
-  searchResultsTvShows?: TvShow[];
+  searchResultsTvs?: Tv[];
   searchResultsPeople?: People[];
   genresMovies?: Genre[];
-  genresTvShows?: Genre[];
+  genresTvs?: Genre[];
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
@@ -29,10 +29,10 @@ const SearchResultCards: FC<Props> = (props) => {
   const {
     filterType,
     searchResultsMovies,
-    searchResultsTvShows,
+    searchResultsTvs,
     searchResultsPeople,
     genresMovies,
-    genresTvShows,
+    genresTvs,
     userMovies,
     userMoviesId,
     internalMovies,
@@ -54,14 +54,14 @@ const SearchResultCards: FC<Props> = (props) => {
             />
           ))}
         </div>
-      ) : filterType === "tv" && searchResultsTvShows && genresTvShows ? (
+      ) : filterType === "tv" && searchResultsTvs && genresTvs ? (
         <div className="2xl:grid 2xl:grid-cols-2 2xl:gap-4">
-          {searchResultsTvShows.map((tvShow: TvShow) => (
+          {searchResultsTvs.map((tv: Tv) => (
             <Card
-              key={tvShow.id}
-              tvShow={tvShow}
+              key={tv.id}
+              tv={tv}
               filterType={filterType}
-              genres={genresTvShows}
+              genres={genresTvs}
             />
           ))}
         </div>

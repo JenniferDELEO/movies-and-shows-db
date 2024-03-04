@@ -46,6 +46,9 @@ const MovieWrapper: FC<Props> = (props) => {
           similarsMovies={movieDetails?.similar?.results}
           totalPages={movieDetails?.similar?.total_pages}
           totalResults={movieDetails?.similar?.total_results}
+          userMovies={userMovies}
+          userMoviesId={userMoviesId}
+          internalMovies={internalMovies}
         />
       )}
     </div>

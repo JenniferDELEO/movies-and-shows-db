@@ -18,7 +18,8 @@ import { PiTelevisionSimpleFill } from "react-icons/pi";
 
 const ProfileHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const session = useSession();
+
+  const { data: session } = useSession();
 
   return (
     <Navbar
@@ -50,8 +51,8 @@ const ProfileHeader = () => {
                 <img
                   alt="profile"
                   src={
-                    session?.data?.user?.image
-                      ? session.data.user.image
+                    session?.user?.image
+                      ? session.user.image
                       : "/images/defaultProfile.png"
                   }
                   width="100%"
@@ -62,7 +63,7 @@ const ProfileHeader = () => {
             </div>
             <div className="ml-4 flex flex-col items-start justify-start">
               <p className="text-sm text-primary lg:text-lg">
-                {session?.data?.user?.name}
+                {session?.user?.name}
               </p>
               <p className="pt-2 text-xs text-gray-600 md:text-sm">
                 Mon profil
@@ -100,7 +101,7 @@ const ProfileHeader = () => {
           </Link>
         </NavbarItem>
         <NavbarItem className="hidden md:block">
-          <Link href="/profile/tvshows" className="flex flex-row items-center">
+          <Link href="/profile/tvs" className="flex flex-row items-center">
             <PiTelevisionSimpleFill />
             <span className="ml-2 text-sm lg:text-lg">Mes Séries TV</span>
           </Link>
@@ -149,7 +150,7 @@ const ProfileHeader = () => {
         </NavbarMenuItem>
         <NavbarMenuItem className="ml-2 mt-4">
           <Link
-            href="/profile/tvshows"
+            href="/profile/tvs"
             onClick={() => setIsMenuOpen(false)}
             className="flex flex-row items-center"
           >

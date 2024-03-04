@@ -1,11 +1,9 @@
 import {
-  AddMovieAndUser,
+  AddMovie,
   InternalMovie,
   InternalMovieUser,
   AddMovieStatus,
-  UpdateMovieAndUser,
-  UpdateMovieStatus,
-  CreateUserStatus,
+  CreateMovieStatus,
 } from "@/models/movies";
 import sanityClient from "../sanity";
 import * as queries from "../queries/movieQueries";
@@ -22,6 +20,24 @@ export async function getAllMovies() {
   return result;
 }
 
+export async function getMovieById(movieId: string) {
+  const result = await sanityClient.fetch<InternalMovie>(
+    queries.getMovieByIdQuery,
+    { movieId },
+    { cache: "no-cache" },
+  );
+  return result;
+}
+
+export async function getMovieByTmdbId(tmdbId: number) {
+  const result = await sanityClient.fetch<InternalMovie>(
+    queries.getMovieByTmdbIdQuery,
+    { tmdbId },
+    { cache: "no-cache" },
+  );
+  return result;
+}
+
 export async function getUserMovies(userId: string) {
   const result = await sanityClient.fetch<{
     _id: string;
@@ -32,33 +48,27 @@ export async function getUserMovies(userId: string) {
 
 /*-------------------- POST / PATCH --------------------*/
 
-export async function addMovieAndUser({
-  tmdbId,
+export async function addMovie({
   title,
+  runtime,
   releaseDate,
   genres,
   posterPath,
   overview,
-  userId,
-}: AddMovieAndUser) {
+  tmdbId,
+}: AddMovie) {
   const mutation = {
     mutations: [
       {
         create: {
           _type: "movie",
-          tmdb_id: tmdbId,
+          runtime,
           title,
           release_date: releaseDate,
           genres,
           poster_path: posterPath,
           overview,
-          users: [
-            {
-              _key: userId,
-              _type: "reference",
-              _ref: userId,
-            },
-          ],
+          tmdb_id: tmdbId,
         },
       },
     ],
@@ -69,53 +79,22 @@ export async function addMovieAndUser({
     mutation,
     { headers: { Authorization: `Bearer ${process.env.SANITY_STUDIO_TOKEN}` } },
   );
-  return data;
-}
-
-export async function updateMovieAndUser({
-  movieId,
-  userId,
-}: UpdateMovieAndUser) {
-  const mutation = {
-    mutations: [
-      {
-        patch: {
-          id: movieId,
-          insert: {
-            after: "users[-1]",
-            items: [
-              {
-                _key: userId,
-                _type: "reference",
-                _ref: userId,
-              },
-            ],
-          },
-        },
-      },
-    ],
-  };
-
-  const { data } = await axios.post(
-    `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${process.env.NEXT_PUBLIC_SANITY_DATASET}`,
-    mutation,
-    { headers: { Authorization: `Bearer ${process.env.SANITY_STUDIO_TOKEN}` } },
-  );
-
   return data;
 }
 
 export async function createUserMovieAndStatus({
   movieId,
+  userName,
   userId,
   status,
-}: CreateUserStatus) {
+}: CreateMovieStatus) {
   const mutation = {
     mutations: [
       {
         create: {
           _type: "user_movie",
-          title: {
+          user_name: userName,
+          user: {
             _type: "reference",
             _ref: userId,
           },
@@ -187,7 +166,7 @@ export async function updateUserMovieStatus({
   userMovieId,
   movieId,
   status,
-}: UpdateMovieStatus) {
+}: AddMovieStatus) {
   const mutation = {
     mutations: [
       {
@@ -211,27 +190,6 @@ export async function updateUserMovieStatus({
 }
 
 /*-------------------- DELETE --------------------*/
-
-export async function deleteMovieAndUser(movieId: string, userId: string) {
-  const mutation = {
-    mutations: [
-      {
-        patch: {
-          id: movieId,
-          unset: [`users[_key=="${userId}"]`],
-        },
-      },
-    ],
-  };
-
-  const { data } = await axios.post(
-    `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${process.env.NEXT_PUBLIC_SANITY_DATASET}`,
-    mutation,
-    { headers: { Authorization: `Bearer ${process.env.SANITY_STUDIO_TOKEN}` } },
-  );
-
-  return data;
-}
 
 export async function deleteUserMovieAndStatus(
   userMovieId: string,

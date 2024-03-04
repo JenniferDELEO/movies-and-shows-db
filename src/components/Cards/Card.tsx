@@ -7,7 +7,7 @@ import "dayjs/locale/fr";
 import updateLocale from "dayjs/plugin/updateLocale";
 
 import StarRating from "@/components/StarRate/StarRating";
-import { TvShow } from "@/models/tvShows";
+import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
 import {
   Genre,
   InternalMovie,
@@ -42,7 +42,7 @@ type Props = {
   filterType: string;
   genres: Genre[];
   movie?: Movie;
-  tvShow?: TvShow;
+  tv?: Tv;
   classNames?: {
     container: string;
     title: string;
@@ -53,30 +53,34 @@ type Props = {
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
+  userTvs?: InternalTvAndUser[];
+  internalTvs?: InternalTv[];
 };
 
 const Card: FC<Props> = ({
   filterType,
   genres,
   movie,
-  tvShow,
+  tv,
   classNames,
   userMovies,
   userMoviesId,
   internalMovies,
+  userTvs,
+  internalTvs,
 }) => {
   const router = useRouter();
   const session = useSession();
 
   const overviewRest =
     movie?.overview?.split(" ")?.filter(Boolean) ||
-    tvShow?.overview?.split(" ")?.filter(Boolean);
+    tv?.overview?.split(" ")?.filter(Boolean);
   const overviewShow = overviewRest?.splice(0, 30)?.join(" ");
 
-  const title = movie?.title || tvShow?.name || "";
-  const date = movie?.release_date || tvShow?.first_air_date;
-  const voteAverage = movie?.vote_average || tvShow?.vote_average || 0;
-  const voteCount = movie?.vote_count || tvShow?.vote_count || 0;
+  const title = movie?.title || tv?.name || "";
+  const date = movie?.release_date || tv?.first_air_date;
+  const voteAverage = movie?.vote_average || tv?.vote_average || 0;
+  const voteCount = movie?.vote_count || tv?.vote_count || 0;
 
   const styleContainer =
     "mb-4 2xl:mb-0 flex max-h-[278px] mx-auto lg:mx-4 pr-4 bg-gray-900 rounded-md cursor-pointer";
@@ -86,7 +90,7 @@ const Card: FC<Props> = ({
       className={styleContainer}
       onClick={() =>
         router.push(
-          `/${filterType === "movie" ? "movie" : "tvshow"}/${movie?.id || tvShow?.id}-${title?.toLowerCase().replace(/[\W_]+/g, "-")}`,
+          `/${filterType === "movie" ? "movie" : "tv"}/${movie?.id || tv?.id}-${title?.toLowerCase().replace(/[\W_]+/g, "-")}`,
         )
       }
     >
@@ -95,8 +99,8 @@ const Card: FC<Props> = ({
           src={
             movie?.poster_path
               ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${movie.poster_path}`
-              : tvShow?.poster_path
-                ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${tvShow.poster_path}`
+              : tv?.poster_path
+                ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${tv.poster_path}`
                 : "/images/defaultImage.png"
           }
           alt={title ? title : "defaultImage"}
@@ -120,11 +124,11 @@ const Card: FC<Props> = ({
             })}
           </p>
         )}
-        {tvShow && (
+        {tv && (
           <p className="text-xs text-gray-400 md:text-sm">
-            {tvShow?.genre_ids.map((genreId, index) => {
+            {tv?.genre_ids.map((genreId, index) => {
               const genre = genres.find((genre) => genre.id === genreId);
-              if (index === tvShow.genre_ids.length - 1) {
+              if (index === tv.genre_ids.length - 1) {
                 return <span key={genreId}>{genre?.name}</span>;
               }
               return <span key={genreId}>{genre?.name}, </span>;
@@ -165,21 +169,19 @@ const Card: FC<Props> = ({
                 listsPageProps={{
                   classNames,
                   internalMovies: internalMovies,
-                  genresMovies: genres,
                   userMovies: userMovies,
                   userMoviesId: userMoviesId,
                 }}
               />
             </div>
           )}
-        {session && session.status === "authenticated" && tvShow && (
+        {session && session.status === "authenticated" && tv && (
           <div className="absolute -right-2 top-0 md:top-2">
             <AccountInteraction
-              item={tvShow}
-              type="tvshow"
+              item={tv}
+              type="tv"
               listsPageProps={{
                 classNames,
-                genresMovies: genres,
               }}
             />
           </div>

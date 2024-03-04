@@ -30,7 +30,7 @@ const Header = () => {
   const pathname = usePathname();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  const { status, data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const handleLogOut = () => {
     signOut({ callbackUrl: "/" });
@@ -119,9 +119,7 @@ const Header = () => {
             </Dropdown>
             <Dropdown>
               <NavbarItem
-                isActive={
-                  pathname.includes("/tvshows") || pathname.includes("/tvshow")
-                }
+                isActive={pathname.includes("/tvs") || pathname.includes("/tv")}
               >
                 <DropdownTrigger>
                   <Button
@@ -144,11 +142,11 @@ const Header = () => {
                   base: "bg-primary border-primary border-2 rounded-lg shadow-primary outline-none",
                 }}
               >
-                <DropdownItem href="/tvshows/1" textValue="Liste">
+                <DropdownItem href="/tvs/1" textValue="Liste">
                   <span>Liste</span>
                 </DropdownItem>
                 <DropdownItem
-                  href="/tvshows/on-the-air/1"
+                  href="/tvs/on-the-air/1"
                   textValue="En cours de diffusion"
                 >
                   <span>En cours de diffusion</span>
@@ -197,7 +195,7 @@ const Header = () => {
                     >
                       <IoPersonSharp />
                       <span className="ml-2 hidden text-sm md:block lg:text-lg">
-                        {session.user.name}
+                        {session?.user?.name}
                       </span>
                     </Button>
                   </DropdownTrigger>
@@ -211,7 +209,7 @@ const Header = () => {
                   <DropdownSection showDivider>
                     <DropdownItem href="/profile" textValue="Mon profil">
                       <div className="flex flex-col">
-                        <span className="font-bold">{session.user.name}</span>
+                        <span className="font-bold">{session?.user?.name}</span>
                         <span className="pt-2">Mon profil</span>
                       </div>
                     </DropdownItem>
