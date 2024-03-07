@@ -1,4 +1,4 @@
-import { InternalEpisode, UserEpisode } from "./episode";
+import { EpisodeFromUI, InternalEpisode, UserEpisode } from "./episode";
 import { InternalTv } from "./tvs";
 
 export type InternalSeason = {
@@ -17,7 +17,6 @@ export type InternalSeasonAndUser = {
   user_name: string;
   tv: InternalTv;
   season: InternalSeason;
-  all_watched: boolean;
   watched_episodes: UserEpisode[];
 };
 
@@ -42,29 +41,16 @@ export type AddUserSeason = {
   userId: string;
   tvId: string;
   seasonId: string;
-  allWatched: boolean;
-  episodes: {
-    tmdbId: number;
-    seasonNumber: number;
-    episodeNumber: number;
-    watched: boolean;
-  }[];
+  episodes: EpisodeFromUI[];
 };
 
 export type AddEpisodesByUserSeason = {
   userSeasonId: string;
-  allWatched: boolean;
-  episodes: {
-    tmdbId: number;
-    seasonNumber: number;
-    episodeNumber: number;
-    watched: boolean;
-  }[];
+  episodes: EpisodeFromUI[];
 };
 
 export type UpdateEpisodeUserSeasonStatus = {
   userSeasonId: string;
-  allWatched: boolean;
   episodes: {
     tmdbId: number;
     seasonNumber: number;

@@ -40,7 +40,6 @@ const SeasonsAndEpisodesWrapper: FC<Props> = (props) => {
         userHasTv.tv._id,
         session.data.user.id,
       );
-      console.log(result);
     }
   }
 
@@ -49,8 +48,6 @@ const SeasonsAndEpisodesWrapper: FC<Props> = (props) => {
       fetchUserSeasonsByTv();
     }
   }, [userHasTv, seasonDetails]);
-
-  console.log("season details", seasonDetails, "user has tv", userHasTv);
 
   async function fetchSeasonDetails() {
     const response = await getSeasonDetails(tvId, selectedSeason.season_number);

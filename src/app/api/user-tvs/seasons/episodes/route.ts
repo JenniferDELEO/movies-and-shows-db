@@ -1,10 +1,10 @@
 import {
   addEpisodesByUserSeason,
   addUserSeason,
+  createEpisodesByUserSeason,
   getAllSeasonsByTvId,
   getUserSeasonsByTv,
   updateEpisodeUserSeasonStatus,
-  updateEpisodesByUserSeason,
 } from "@/libs/sanity/api/tv-season";
 import { authOptions } from "@/libs/sanity/auth";
 import { EpisodeFromUI } from "@/models/episode";
@@ -16,10 +16,12 @@ export async function POST(req: Request) {
 
   const {
     tvId,
-    episodes,
+    userEpisodesToAdd,
+    userEpisodesToUpdate,
   }: {
     tvId: string;
-    episodes: EpisodeFromUI[];
+    userEpisodesToAdd: EpisodeFromUI[];
+    userEpisodesToUpdate: EpisodeFromUI[];
   } = await req.json();
 
   if (!session) {
@@ -43,91 +45,55 @@ export async function POST(req: Request) {
           (season) =>
             season.season.season_number === allSeasonsByTv[i].season_number,
         );
-        let episodesToAdd = episodes
-          .filter(
-            (episode) =>
-              episode.episode.season_number === allSeasonsByTv[i].season_number,
-          )
-          .map((ep) => ({
-            tmdbId: ep.episode.id,
-            seasonNumber: ep.episode.season_number,
-            episodeNumber: ep.episode.episode_number,
-            watched: ep.watched,
-          }));
-        const allWatched =
-          episodesToAdd.filter((episode) => episode.watched)?.length ===
-          episodesToAdd.length;
         if (seasonExists) {
-          const numberOfEpisodesUser =
-            seasonExists?.watched_episodes?.length || 0;
-          const numberOfEpisodesSeason = allSeasonsByTv[i].episodes.length;
+          const episodesToAdd = userEpisodesToAdd.filter(
+            (ep) =>
+              ep.episode.season_number === allSeasonsByTv[i].season_number,
+          );
 
-          if (numberOfEpisodesUser === numberOfEpisodesSeason) {
-            if (allWatched) {
-              try {
-                await updateEpisodeUserSeasonStatus({
+          const episodesToUpdate = userEpisodesToUpdate.filter(
+            (ep) =>
+              ep.episode.season_number === allSeasonsByTv[i].season_number,
+          );
+
+          try {
+            if (episodesToUpdate && episodesToUpdate.length > 0) {
+              await updateEpisodeUserSeasonStatus({
+                userSeasonId: seasonExists._id,
+                episodes: episodesToUpdate,
+              });
+            }
+            if (episodesToAdd && episodesToAdd.length > 0) {
+              if (
+                seasonExists.watched_episodes &&
+                seasonExists.watched_episodes.length > 0
+              ) {
+                await addEpisodesByUserSeason({
                   userSeasonId: seasonExists._id,
-                  allWatched,
                   episodes: episodesToAdd,
                 });
-              } catch (error: any) {
-                console.log(error.response.data);
-                return new NextResponse("Unable to update season status", {
-                  status: 400,
-                  statusText: `Unable to update season status: ${error}`,
+              } else {
+                await createEpisodesByUserSeason({
+                  userSeasonId: seasonExists._id,
+                  episodes: episodesToAdd,
                 });
               }
             }
-            if (seasonExists.season.season_number === allSeasonsByTv.length) {
-              return new NextResponse(
-                "Season and episodes of the user already exist",
-                {
-                  status: 200,
-                },
-              );
-            } else {
-              continue;
-            }
-          } else if (numberOfEpisodesUser > 0) {
-            try {
-              episodesToAdd = episodesToAdd.filter(
-                (ep) =>
-                  !seasonExists?.watched_episodes?.find(
-                    (e) => e.episode_number === ep.episodeNumber,
-                  ),
-              );
-              await updateEpisodesByUserSeason({
-                userSeasonId: seasonExists._id,
-                allWatched,
-                episodes: episodesToAdd,
+            if (!episodesToAdd && !episodesToUpdate) {
+              return new NextResponse("All episodes already added or updated", {
+                status: 200,
+                statusText: "No episodes to add or update",
               });
-            } catch (error: any) {
-              console.log(error.response.data);
-              return new NextResponse(
-                "Unable to update season with new episodes to the user",
-                {
-                  status: 400,
-                  statusText: `Unable to update season with new episodes to the user : ${error}`,
-                },
-              );
             }
-          } else {
-            try {
-              await addEpisodesByUserSeason({
-                userSeasonId: seasonExists._id,
-                allWatched,
-                episodes: episodesToAdd,
-              });
-            } catch (error: any) {
-              console.log(error.response.data);
-              return new NextResponse(
-                "Unable to add episodes to the user's season",
-                {
-                  status: 400,
-                  statusText: `Unable to add episodes to the user's season : ${error}`,
-                },
-              );
-            }
+          } catch (error: any) {
+            console.log(error.response.data);
+            return new NextResponse(
+              "Unable to update season with new episodes to the user",
+              {
+                status: 400,
+                statusText: `Unable to update season with new episodes to the user : ${error}`,
+              },
+            );
           }
         } else {
           try {
@@ -136,8 +102,7 @@ export async function POST(req: Request) {
               userId,
               tvId,
               seasonId: allSeasonsByTv[i]._id,
-              allWatched,
-              episodes: episodesToAdd,
+              episodes: userEpisodesToAdd,
             });
           } catch (error: any) {
             console.log(error.response.data);

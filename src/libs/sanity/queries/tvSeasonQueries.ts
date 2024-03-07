@@ -5,7 +5,6 @@ export const getUserSeasonsByTvQuery = groq`*[_type == "user_season" && tv._ref 
     user_name,
     tv->,
     season->,
-    all_watched,
     watched_episodes[]
 }`;
 

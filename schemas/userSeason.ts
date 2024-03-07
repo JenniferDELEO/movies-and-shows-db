@@ -33,12 +33,6 @@ const userSeason = {
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "all_watched",
-      title: "All Watched",
-      type: "boolean",
-      initialValue: false,
-    }),
-    defineField({
       name: "watched_episodes",
       title: "Watched Episodes",
       type: "array",

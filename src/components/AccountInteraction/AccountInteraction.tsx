@@ -2,12 +2,7 @@
 
 import { FC, Key, useState } from "react";
 
-import AddToListModal from "@/components/Modals/AddToListModal";
-import RatingModal from "@/components/Modals/RatingModal";
-import { Movie } from "@/models/movies";
-import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
-import { Tooltip } from "@nextui-org/react";
-import { FaStar } from "react-icons/fa";
+import { InternalTv, InternalTvAndUser } from "@/models/tvs";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -73,7 +68,6 @@ const AccountInteraction: FC<Props> = (props) => {
   } = props;
   const [modalAddEpisodesStatus, setModalAddEpisodesStatus] =
     useState<boolean>(false);
-  const [selectedItemId, setSelectedItemId] = useState<number>(0);
   const [moviesAccount, setMoviesAccount] = useState<InternalMovieUser[]>(
     listsPageProps?.userMovies || mediaDetailsPageProps?.userMovies || [],
   );
@@ -213,7 +207,7 @@ const AccountInteraction: FC<Props> = (props) => {
           setModalIsOpen={setModalAddEpisodesStatus}
           tvFromDb={tvFromDb}
           tvId={_tvId}
-          tvTmdbId={selectedItemId}
+          tvTmdbId={item.id}
         />
       )}
       {listsPageProps && (

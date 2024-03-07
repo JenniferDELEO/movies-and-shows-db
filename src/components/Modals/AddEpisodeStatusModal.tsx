@@ -10,6 +10,12 @@ import { Episode, InternalTv, SeasonDetails } from "@/models/tvs";
 import { getSeasonDetails } from "@/libs/api/tvs";
 import Loading from "../Loading/Loading";
 import axios from "axios";
+import {
+  getAllSeasonsByTvId,
+  getUserSeasonsByTv,
+} from "@/libs/sanity/api/tv-season";
+import { useSession } from "next-auth/react";
+import { InternalSeason, InternalSeasonAndUser } from "@/models/seasons";
 
 type Props = {
   modalIsOpen: boolean;
@@ -33,6 +39,20 @@ const AddEpisodeStatusModal: FC<Props> = ({
   const [markAllEpisodes, setMarkAllEpisodes] = useState<boolean>(false);
   const [listOfEpisodes, setListOfEpisodes] = useState<Episode[]>([]);
   const [seasonsDetails, setSeasonsDetails] = useState<SeasonDetails[]>([]);
+  const [userSeasons, setUserSeasons] = useState<InternalSeasonAndUser[]>([]);
+  const [dbSeasons, setDbSeasons] = useState<InternalSeason[]>([]);
+  const [allEpisodes, setAllEpisodes] = useState<Episode[]>([]);
+
+  const session = useSession();
+
+  const fetchSeasonsByTv = async () => {
+    if (session?.data?.user) {
+      const userSeasons = await getUserSeasonsByTv(tvId, session.data.user.id);
+      setUserSeasons(userSeasons);
+      const dbSeasons = await getAllSeasonsByTvId(tvId);
+      setDbSeasons(dbSeasons);
+    }
+  };
 
   const fetchSeasonsDetailsFromTmdb = async () => {
     let seasons: SeasonDetails[] = [];
@@ -45,35 +65,60 @@ const AddEpisodeStatusModal: FC<Props> = ({
       (season) => season.season_number === 1,
     )?.episodes;
     setListOfEpisodes(episodes || []);
+    setAllEpisodes(seasons.flatMap((season) => season.episodes));
   };
 
   useEffect(() => {
     fetchSeasonsDetailsFromTmdb();
+    fetchSeasonsByTv();
   }, [tvId]);
 
   const handleSeasonSelectionChange = (e: any) => {
     setSelectedSeason(e.target.value);
-    setListOfEpisodes(
-      seasonsDetails.find((season) => season.name === e.target.value)
-        ?.episodes || [],
-    );
-    setSelectedEpisode(`${e.target.value} - Episode 1`);
+    const episodesList = seasonsDetails.find(
+      (season) => `Saison ${season.season_number}` === e.target.value,
+    )?.episodes;
+    setListOfEpisodes(episodesList || []);
+    if (episodesList) {
+      setSelectedEpisode(
+        `${e.target.value} - Episode ${episodesList[0].episode_number}`,
+      );
+    } else {
+      setSelectedEpisode("Saison 1 - Episode 1");
+    }
   };
 
   const handleEpisodeSelectionChange = (e: any) => {
     setSelectedEpisode(e.target.value);
   };
 
+  const userEpisodes = userSeasons.flatMap(
+    (userSeason) => userSeason.watched_episodes,
+  );
+
+  const dbEpisodes = dbSeasons.flatMap((dbSeason) => dbSeason.episodes);
+
+  const episodesToAdd = allEpisodes.filter(
+    (episode) =>
+      !dbEpisodes.find(
+        (dbEpisode) =>
+          episode.episode_number === dbEpisode.episode_number &&
+          episode.season_number === dbEpisode.season_number,
+      ),
+  );
+
   const onValidate = async () => {
-    const episodes = seasonsDetails.flatMap((season) => season.episodes);
-    const responseAddEpisodes = await axios.post("/api/tvs/seasons", {
-      tvTmdbId,
-      tvId,
-    });
+    let responseAddEpisodes = { status: 200 };
+    if (episodesToAdd.length > 0) {
+      responseAddEpisodes = await axios.post("/api/tvs/seasons", {
+        tvTmdbId,
+        tvId,
+      });
+    }
     if (responseAddEpisodes.status === 200) {
       let statusEpisodes;
       if (markAllEpisodes) {
-        statusEpisodes = episodes.map((episode) => ({
+        statusEpisodes = allEpisodes.map((episode) => ({
           episode: episode,
           watched: true,
         }));
@@ -82,7 +127,7 @@ const AddEpisodeStatusModal: FC<Props> = ({
         const lastEpisodeNumber = lastEpisode[lastEpisode.length - 1];
         const lastSeason = selectedSeason.split(" ");
         const lastSeasonNumber = lastSeason[lastSeason.length - 1];
-        statusEpisodes = episodes.map((episode) => {
+        statusEpisodes = allEpisodes.map((episode) => {
           if (episode.season_number < Number(lastSeasonNumber)) {
             return {
               episode: episode,
@@ -104,12 +149,26 @@ const AddEpisodeStatusModal: FC<Props> = ({
           }
         });
       }
+      const userEpisodesToAdd = statusEpisodes.filter(
+        (episode) =>
+          !userEpisodes.find(
+            (userEpisode) => episode.episode.id === Number(userEpisode._key),
+          ),
+      );
+      const userEpisodesToUpdate = statusEpisodes.filter((episode) =>
+        userEpisodes.find(
+          (userEpisode) =>
+            episode.episode.id === Number(userEpisode._key) &&
+            episode.watched !== userEpisode.watched,
+        ),
+      );
       const responseAddEpisodesStatus = await axios.post(
         "/api/user-tvs/seasons/episodes",
         {
           tvTmdbId,
           tvId,
-          episodes: statusEpisodes,
+          userEpisodesToAdd,
+          userEpisodesToUpdate,
         },
       );
       if (responseAddEpisodesStatus.status === 200) {
@@ -117,6 +176,8 @@ const AddEpisodeStatusModal: FC<Props> = ({
       } else {
         toast.error("Erreur lors du marquage des épisodes");
       }
+    } else {
+      toast.error("Erreur lors de l'ajout des épisodes");
     }
     setModalIsOpen(false);
     setSeasonsDetails([]);
@@ -158,7 +219,10 @@ const AddEpisodeStatusModal: FC<Props> = ({
             className="mb-4"
           >
             {seasonsDetails.map((season) => (
-              <SelectItem key={season.name} value={season.name}>
+              <SelectItem
+                key={`Saison ${season.season_number}`}
+                value={`Saison ${season.season_number}`}
+              >
                 {season.name}
               </SelectItem>
             ))}

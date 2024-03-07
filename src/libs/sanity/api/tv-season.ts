@@ -8,7 +8,6 @@ import {
   AddUserSeason,
   InternalSeason,
   InternalSeasonAndUser,
-  UpdateEpisodeUserSeasonStatus,
 } from "@/models/seasons";
 
 /*-------------------- GET --------------------*/
@@ -28,7 +27,6 @@ export async function getUserSeasonsByTv(tvId: string, userId: string) {
     { tvId, userId },
     { cache: "no-cache" },
   );
-  console.log("result", result);
   return result;
 }
 
@@ -145,7 +143,6 @@ export async function addUserSeason({
   userId,
   tvId,
   seasonId,
-  allWatched,
   episodes,
 }: AddUserSeason) {
   const mutation = {
@@ -166,11 +163,10 @@ export async function addUserSeason({
             _type: "reference",
             _ref: seasonId,
           },
-          all_watched: allWatched,
           watched_episodes: episodes.map((ep) => ({
-            _key: ep.tmdbId.toString(),
-            season_number: ep.seasonNumber,
-            episode_number: ep.episodeNumber,
+            _key: ep.episode.id.toString(),
+            season_number: ep.episode.season_number,
+            episode_number: ep.episode.episode_number,
             watched: ep.watched,
           })),
         },
@@ -186,9 +182,8 @@ export async function addUserSeason({
   return data;
 }
 
-export async function addEpisodesByUserSeason({
+export async function createEpisodesByUserSeason({
   userSeasonId,
-  allWatched,
   episodes,
 }: AddEpisodesByUserSeason) {
   const mutation = {
@@ -197,11 +192,10 @@ export async function addEpisodesByUserSeason({
         patch: {
           id: userSeasonId,
           set: {
-            all_watched: allWatched,
             watched_episodes: episodes.map((ep) => ({
-              _key: ep.tmdbId.toString(),
-              season_number: ep.seasonNumber,
-              episode_number: ep.episodeNumber,
+              _key: ep.episode.id.toString(),
+              season_number: ep.episode.season_number,
+              episode_number: ep.episode.episode_number,
               watched: ep.watched,
             })),
           },
@@ -218,9 +212,8 @@ export async function addEpisodesByUserSeason({
   return data;
 }
 
-export async function updateEpisodesByUserSeason({
+export async function addEpisodesByUserSeason({
   userSeasonId,
-  allWatched,
   episodes,
 }: AddEpisodesByUserSeason) {
   const mutation = {
@@ -228,15 +221,12 @@ export async function updateEpisodesByUserSeason({
       {
         patch: {
           id: userSeasonId,
-          set: {
-            all_watched: allWatched,
-          },
           insert: {
             after: "watched_episodes[-1]",
             items: episodes.map((ep) => ({
-              _key: ep.tmdbId.toString(),
-              season_number: ep.seasonNumber,
-              episode_number: ep.episodeNumber,
+              _key: ep.episode.id.toString(),
+              season_number: ep.episode.season_number,
+              episode_number: ep.episode.episode_number,
               watched: ep.watched,
             })),
           },
@@ -255,26 +245,18 @@ export async function updateEpisodesByUserSeason({
 
 export async function updateEpisodeUserSeasonStatus({
   userSeasonId,
-  allWatched,
   episodes,
-}: UpdateEpisodeUserSeasonStatus) {
+}: AddEpisodesByUserSeason) {
   const mutation = {
-    mutations: [
-      {
-        patch: {
-          id: userSeasonId,
-          set: {
-            all_watched: allWatched,
-            watched_episodes: episodes.map((ep) => ({
-              _key: ep.tmdbId.toString(),
-              season_number: ep.seasonNumber,
-              episode_number: ep.episodeNumber,
-              watched: ep.watched,
-            })),
-          },
+    mutations: episodes.map((ep) => ({
+      patch: {
+        id: userSeasonId,
+        set: {
+          [`watched_episodes[_key == "${ep.episode.id.toString()}"].watched`]:
+            ep.watched,
         },
       },
-    ],
+    })),
   };
 
   const { data } = await axios.post(
