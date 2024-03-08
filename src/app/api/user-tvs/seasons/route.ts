@@ -1,9 +1,9 @@
 import {
   addEpisodesByUserSeason,
   addUserSeason,
+  createEpisodesByUserSeason,
   getAllSeasonsByTvId,
   getUserSeasonsByTv,
-  updateEpisodesByUserSeason,
 } from "@/libs/sanity/api/tv-season";
 import { authOptions } from "@/libs/sanity/auth";
 import { getServerSession } from "next-auth";
@@ -35,12 +35,16 @@ export async function POST(req: Request) {
           (season) =>
             season.season.season_number === allSeasonsByTv[i].season_number,
         );
-        let episodesToAdd = allSeasonsByTv[i].episodes.map((ep) => ({
-          tmdbId: ep.tmdb_id,
-          seasonNumber: ep.season_number,
-          episodeNumber: ep.episode_number,
-          watched: false,
-        }));
+        let episodesToAdd = allSeasonsByTv[i].episodes.map((ep) => {
+          return {
+            episode: {
+              id: ep.tmdb_id,
+              season_number: ep.season_number,
+              episode_number: ep.episode_number,
+            },
+            watched: false,
+          };
+        });
         if (seasonExists) {
           const numberOfEpisodesUser =
             seasonExists?.watched_episodes?.length || 0;
@@ -62,10 +66,10 @@ export async function POST(req: Request) {
               episodesToAdd = episodesToAdd.filter(
                 (ep) =>
                   !seasonExists?.watched_episodes?.find(
-                    (e) => e.episode_number === ep.episodeNumber,
+                    (e) => e.episode_number === ep.episode.episode_number,
                   ),
               );
-              await updateEpisodesByUserSeason({
+              await addEpisodesByUserSeason({
                 userSeasonId: seasonExists._id,
                 episodes: episodesToAdd,
               });
@@ -81,7 +85,7 @@ export async function POST(req: Request) {
             }
           } else {
             try {
-              await addEpisodesByUserSeason({
+              await createEpisodesByUserSeason({
                 userSeasonId: seasonExists._id,
                 episodes: episodesToAdd,
               });
