@@ -7,28 +7,21 @@ import { TiDelete } from "react-icons/ti";
 import toast from "react-hot-toast";
 
 import ModalComponent from "@/components/Modals/ModalComponent";
-import { addRateMovie, deleteRateMovie } from "@/libs/api/movies";
-import {
-  addRateTvShow,
-  addRateTvShowEpisode,
-  deleteRateTvShow,
-  deleteRateTvShowEpisode,
-} from "@/libs/api/tvshows";
 import StarRating from "@/components/StarRate/StarRating";
 import { Movie } from "@/models/movies";
-import { TvShow } from "@/models/tvShows";
+import { Tv } from "@/models/tvs";
 
 type Props = {
   modalIsOpen: boolean;
   setModalIsOpen: Dispatch<SetStateAction<boolean>>;
   fetchUserDatas: () => Promise<void>;
   itemId: number;
-  itemType: "movie" | "tvshow" | "episode";
+  itemType: "movie" | "tv" | "episode";
   title: string;
 
   episodeNumber?: number;
   ratedMovies?: Movie[];
-  ratedTvShows?: TvShow[];
+  ratedTvs?: Tv[];
   seasonNumber?: number;
   userRatingApi?: number;
 };
@@ -38,7 +31,7 @@ const RatingModal: FC<Props> = ({
   modalIsOpen,
   setModalIsOpen,
   ratedMovies,
-  ratedTvShows,
+  ratedTvs,
   fetchUserDatas,
   itemId,
   itemType,
@@ -48,26 +41,8 @@ const RatingModal: FC<Props> = ({
 }) => {
   const [userRate, setUserRate] = useState<number>(0);
 
-  useEffect(() => {
-    if (itemType === "movie") {
-      if (ratedMovies && ratedMovies.length > 0) {
-        const userRating = ratedMovies.find((movie) => movie.id === itemId);
-        if (userRating) setUserRate(userRating.account_rating.value / 2);
-      } else if (userRatingApi) setUserRate(userRatingApi / 2);
-    }
-    if (itemType === "tvshow") {
-      if (ratedTvShows && ratedTvShows.length > 0) {
-        const userRating = ratedTvShows.find((tv) => tv.id === itemId);
-        if (userRating) setUserRate(userRating.account_rating.value / 2);
-      } else if (userRatingApi) setUserRate(userRatingApi / 2);
-    }
-    if (itemType === "episode") {
-      if (userRatingApi) setUserRate(userRatingApi / 2);
-    }
-  }, [itemType, itemId, ratedMovies, ratedTvShows]);
-
   const onValidate = async () => {
-    if (itemType === "movie" && userRate > 0) {
+    /*  if (itemType === "movie" && userRate > 0) {
       const response = await addRateMovie(itemId, userRate * 2);
       if (response.success) {
         await fetchUserDatas();
@@ -75,8 +50,8 @@ const RatingModal: FC<Props> = ({
         setUserRate(0);
         toast.success("Note ajoutée avec succès !");
       } else toast.error("Une erreur est survenue");
-    } else if (itemType === "tvshow" && userRate > 0) {
-      const response = await addRateTvShow(itemId, userRate * 2);
+    } else if (itemType === "tv" && userRate > 0) {
+      const response = await addRateTv(itemId, userRate * 2);
       if (response.success) {
         await fetchUserDatas();
         setModalIsOpen(false);
@@ -89,7 +64,7 @@ const RatingModal: FC<Props> = ({
       seasonNumber &&
       episodeNumber
     ) {
-      const response = await addRateTvShowEpisode(
+      const response = await addRateTvEpisode(
         itemId,
         seasonNumber,
         episodeNumber,
@@ -104,11 +79,11 @@ const RatingModal: FC<Props> = ({
     } else {
       setUserRate(0);
       setModalIsOpen(false);
-    }
+    } */
   };
 
   const onDeleteRating = async () => {
-    if (itemType === "movie") {
+    /* if (itemType === "movie") {
       const response = await deleteRateMovie(itemId);
       if (response.success) {
         await fetchUserDatas();
@@ -116,8 +91,8 @@ const RatingModal: FC<Props> = ({
         toast.success("Note supprimée avec succès !");
       } else toast.error("Une erreur est survenue");
     }
-    if (itemType === "tvshow") {
-      const response = await deleteRateTvShow(itemId);
+    if (itemType === "tv") {
+      const response = await deleteRateTv(itemId);
       if (response.success) {
         await fetchUserDatas();
         setUserRate(0);
@@ -125,7 +100,7 @@ const RatingModal: FC<Props> = ({
       } else toast.error("Une erreur est survenue");
     }
     if (itemType === "episode" && seasonNumber && episodeNumber) {
-      const response = await deleteRateTvShowEpisode(
+      const response = await deleteRateTvEpisode(
         itemId,
         seasonNumber,
         episodeNumber,
@@ -135,7 +110,7 @@ const RatingModal: FC<Props> = ({
         setUserRate(0);
         toast.success("Note supprimée avec succès !");
       } else toast.error("Une erreur est survenue");
-    }
+    } */
   };
 
   const onClose = () => {

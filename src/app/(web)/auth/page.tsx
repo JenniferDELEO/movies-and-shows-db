@@ -1,13 +1,12 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { signUp } from "next-auth-sanity/client";
 import { signIn, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { UserContext } from "@/context/userContext";
 
 const defaultFormData = {
   email: "",
@@ -28,17 +27,12 @@ const Auth = () => {
 
   const { data: session } = useSession();
   const router = useRouter();
-  const { user } = useContext(UserContext);
 
   useEffect(() => {
-    if (session && session.user && !user.tmdb_username) {
-      localStorage.setItem("user_id", session.user.id);
-      localStorage.setItem("user_name", session.user?.name || "");
-      localStorage.setItem("user_email", session.user?.email || "");
-      localStorage.setItem("user_image", session.user?.image || "");
-      router.push("/redirection-to-tmdb");
+    if (session && session.user) {
+      router.push("/profile");
     }
-  }, [router, session, user.tmdb_username]);
+  }, [router, session]);
 
   const loginHandler = async () => {
     try {
@@ -54,11 +48,11 @@ const Auth = () => {
     try {
       const user = await signUp(formData);
       if (user) {
-        toast.success("Success. Please sign in");
+        toast.success("Inscription réussie. Veuillez vous identifier");
+        await signIn();
       }
     } catch (error) {
-      console.log(error);
-      toast.error("Something wen't wrong");
+      toast.error("Erreur lors de l'inscription");
     } finally {
       setFormData(defaultFormData);
     }

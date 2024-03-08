@@ -34,16 +34,10 @@ import {
   settingsMinFourSlides,
   settingsMinFiveSlides,
 } from "@/components/Banner/reactSlickSettings";
-import { User } from "@/models/user";
-import { List } from "@/models/lists";
-import {
-  Genre,
-  InternalMovie,
-  InternalMovieUser,
-  Movie,
-} from "@/models/movies";
-import { TvShow } from "@/models/tvShows";
+import { InternalMovie, InternalMovieUser } from "@/models/movies";
+import { InternalTv, InternalTvAndUser } from "@/models/tvs";
 import AccountInteraction from "../AccountInteraction/AccountInteraction";
+import { useSession } from "next-auth/react";
 
 type Props = {
   items: {
@@ -58,17 +52,7 @@ type Props = {
     original_name?: string;
     character?: string;
   }[];
-  type: "tvshow" | "movie";
-  user: User;
-  fetchUserDatas: () => Promise<void>;
-  favoriteMoviesIds: number[];
-  favoriteTvShowsIds: number[];
-  watchlistMoviesIds: number[];
-  watchlistTvShowsIds: number[];
-  ratedMovies: Movie[];
-  ratedTvShows: TvShow[];
-  ratedMoviesIds: number[];
-  ratedTvShowsIds: number[];
+  type: "tv" | "movie";
   classNames: {
     container: string;
     title: string;
@@ -77,35 +61,26 @@ type Props = {
     dropdownContainer: string;
   };
   title: string;
-  userLists: List[];
   internalMovies?: InternalMovie[];
-  genresMovies?: Genre[];
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
+  internalTvs?: InternalTv[];
+  userTvs?: InternalTvAndUser[];
 };
 
 const Banner: FC<Props> = ({
   items,
   type,
-  user,
-  fetchUserDatas,
-  favoriteMoviesIds,
-  favoriteTvShowsIds,
-  watchlistMoviesIds,
-  watchlistTvShowsIds,
-  ratedMoviesIds,
-  ratedTvShowsIds,
   classNames,
   title,
-  userLists,
-  ratedMovies,
-  ratedTvShows,
   internalMovies,
-  genresMovies,
   userMovies,
   userMoviesId,
+  internalTvs,
+  userTvs,
 }) => {
   const router = useRouter();
+  const { status } = useSession();
   const settings =
     items.length > 4
       ? settingsMinFiveSlides
@@ -151,28 +126,18 @@ const Banner: FC<Props> = ({
                 />
               </picture>
 
-              {user && user.tmdb_username && (
+              {status === "authenticated" && (
                 <AccountInteraction
                   item={item}
                   type={type}
-                  user={user}
-                  fetchUserDatas={fetchUserDatas}
                   listsPageProps={{
-                    favoriteMoviesIds,
-                    favoriteTvShowsIds,
-                    watchlistMoviesIds,
-                    watchlistTvShowsIds,
-                    ratedMovies,
-                    ratedTvShows,
-                    ratedMoviesIds,
-                    ratedTvShowsIds,
                     classNames,
                     internalMovies: internalMovies || [],
-                    genresMovies: genresMovies || [],
                     userMovies: userMovies || [],
                     userMoviesId: userMoviesId || "",
+                    internalTvs: internalTvs || [],
+                    userTvs: userTvs || [],
                   }}
-                  userLists={userLists}
                 />
               )}
             </div>

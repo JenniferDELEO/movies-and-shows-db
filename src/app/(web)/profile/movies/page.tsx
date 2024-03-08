@@ -1,16 +1,11 @@
 "use client";
 
-/* import type { Metadata } from "next"; */
 import { useSession } from "next-auth/react";
 
 import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
 import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
 import { useEffect, useState } from "react";
 import { InternalMovie, InternalMovieUser } from "@/models/movies";
-
-/* export const metadata: Metadata = {
-  title: "Mes films - Films & Séries TV DB",
-}; */
 
 const ProfileMovies = () => {
   const { data: session } = useSession();

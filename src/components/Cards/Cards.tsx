@@ -7,41 +7,31 @@ import {
   InternalMovieUser,
   Movie,
 } from "@/models/movies";
-import { TvShow } from "@/models/tvShows";
-import { TmdbFetcher } from "@/libs/helpers/TmdbFetcher";
+import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
 
 type Props = {
-  filterType: "movie" | "tvshow";
+  filterType: "movie" | "tv";
   genres: Genre[];
   movies?: Movie[];
-  tvShows?: TvShow[];
+  tvs?: Tv[];
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
+  userTvs?: InternalTvAndUser[];
+  internalTvs?: InternalTv[];
 };
 
 const Cards: FC<Props> = ({
   movies,
-  tvShows,
+  tvs,
   filterType,
   genres,
   userMovies,
   userMoviesId,
   internalMovies,
+  userTvs,
+  internalTvs,
 }) => {
-  const {
-    fetchUserDatas,
-    favoriteMoviesIds,
-    watchlistMoviesIds,
-    favoriteTvShowsIds,
-    watchlistTvShowsIds,
-    ratedMovies,
-    ratedTvShows,
-    ratedMoviesIds,
-    ratedTvShowsIds,
-    userLists,
-  } = TmdbFetcher();
-
   return (
     <div className="w-full">
       {movies && userMovies && userMoviesId && internalMovies && (
@@ -52,16 +42,6 @@ const Cards: FC<Props> = ({
               movie={movie}
               filterType={filterType}
               genres={genres}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
-              userLists={userLists}
               userMovies={userMovies}
               userMoviesId={userMoviesId}
               internalMovies={internalMovies}
@@ -69,24 +49,16 @@ const Cards: FC<Props> = ({
           ))}
         </div>
       )}
-      {tvShows && (
+      {tvs && (
         <div className="2xl:grid 2xl:grid-cols-2 2xl:gap-2">
-          {tvShows.map((tvShow) => (
+          {tvs.map((tv) => (
             <Card
-              key={tvShow.id}
-              tvShow={tvShow}
+              key={tv.id}
+              tv={tv}
               filterType={filterType}
               genres={genres}
-              fetchUserDatas={fetchUserDatas}
-              favoriteMoviesIds={favoriteMoviesIds}
-              watchlistMoviesIds={watchlistMoviesIds}
-              favoriteTvShowsIds={favoriteTvShowsIds}
-              watchlistTvShowsIds={watchlistTvShowsIds}
-              ratedMovies={ratedMovies}
-              ratedTvShows={ratedTvShows}
-              ratedMoviesIds={ratedMoviesIds}
-              ratedTvShowsIds={ratedTvShowsIds}
-              userLists={userLists}
+              userTvs={userTvs}
+              internalTvs={internalTvs}
             />
           ))}
         </div>

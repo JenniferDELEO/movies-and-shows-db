@@ -4,22 +4,16 @@ import { FC } from "react";
 import { Tabs, Tab, Card, CardBody, Chip } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 
-import {
-  CastMovies,
-  CastTvShows,
-  CrewMovies,
-  CrewTvShows,
-} from "@/models/people";
+import { CastMovies, CastTvs, CrewMovies, CrewTvs } from "@/models/people";
 
 type Props = {
   itemCastMovie?: CastMovies[];
   itemCrewMovie?: CrewMovies[];
-  itemCastTvShow?: CastTvShows[];
-  itemCrewTvShow?: CrewTvShows[];
+  itemCastTv?: CastTvs[];
+  itemCrewTv?: CrewTvs[];
 };
 const CreditsWrapper: FC<Props> = (props) => {
-  const { itemCastMovie, itemCrewMovie, itemCastTvShow, itemCrewTvShow } =
-    props;
+  const { itemCastMovie, itemCrewMovie, itemCastTv, itemCrewTv } = props;
   const router = useRouter();
 
   return (
@@ -31,7 +25,7 @@ const CreditsWrapper: FC<Props> = (props) => {
             <div className="my-2 flex items-center space-x-4">
               <span className="text-sm">Distribution</span>
               <Chip className="bg-white text-sm text-primary">
-                {itemCastMovie?.length || itemCastTvShow?.length || 0}
+                {itemCastMovie?.length || itemCastTv?.length || 0}
               </Chip>
             </div>
           }
@@ -82,7 +76,7 @@ const CreditsWrapper: FC<Props> = (props) => {
             </div>
           ) : (
             <div className="mx-auto my-4 grid grid-cols-2 gap-2 md:grid-cols-4 xl:grid-cols-5 xl:gap-4">
-              {itemCastTvShow?.map((person) => (
+              {itemCastTv?.map((person) => (
                 <Card
                   key={person.id}
                   isPressable
@@ -132,7 +126,7 @@ const CreditsWrapper: FC<Props> = (props) => {
             <div className="my-2 flex items-center space-x-4">
               <span className="text-sm">Equipe technique</span>
               <Chip className="bg-white text-sm text-primary">
-                {itemCrewMovie?.length || itemCrewTvShow?.length || 0}
+                {itemCrewMovie?.length || itemCrewTv?.length || 0}
               </Chip>
             </div>
           }
@@ -183,7 +177,7 @@ const CreditsWrapper: FC<Props> = (props) => {
             </div>
           ) : (
             <div className="mx-auto my-4 grid grid-cols-2 gap-2 md:grid-cols-4 xl:grid-cols-5 xl:gap-4">
-              {itemCrewTvShow?.map((person) => (
+              {itemCrewTv?.map((person) => (
                 <Card
                   key={person.id}
                   isPressable

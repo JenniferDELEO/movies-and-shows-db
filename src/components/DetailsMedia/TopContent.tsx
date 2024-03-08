@@ -10,31 +10,39 @@ import {
   MovieDetails,
 } from "@/models/movies";
 import Infos from "@/components/DetailsMedia/Infos";
-import { Episode, EpisodeDetails, TvShowDetails } from "@/models/tvShows";
+import {
+  Episode,
+  EpisodeDetails,
+  InternalTv,
+  InternalTvAndUser,
+  TvDetails,
+} from "@/models/tvs";
 import { Collection } from "@/models/collections";
 
 type Props = {
   movieDetails?: MovieDetails;
-  tvShowDetails?: TvShowDetails;
+  tvDetails?: TvDetails;
   episodeDetails?: EpisodeDetails;
   collectionDetails?: Collection;
   genresCollection?: Genre[];
   voteAverageCollection?: number;
-  type: "episode" | "movie" | "tvshow";
+  type: "episode" | "movie" | "tv";
   episodePrecedent?: Episode | undefined;
   episodeNumber?: number;
   isCollection?: boolean;
   seasonNumber?: number;
-  tvShowId?: number;
+  tvId?: number;
   userMovies?: InternalMovieUser[];
   userMoviesId?: string;
   internalMovies?: InternalMovie[];
+  internalTvs?: InternalTv[];
+  userTvs?: InternalTvAndUser[];
 };
 
 const TopContent: FC<Props> = (props) => {
   const {
     movieDetails,
-    tvShowDetails,
+    tvDetails,
     episodeDetails,
     collectionDetails,
     genresCollection,
@@ -44,23 +52,25 @@ const TopContent: FC<Props> = (props) => {
     episodeNumber,
     isCollection,
     seasonNumber,
-    tvShowId,
+    tvId,
     userMovies,
     userMoviesId,
     internalMovies,
+    internalTvs,
+    userTvs,
   } = props;
 
   const backgroundImage =
     movieDetails?.backdrop_path ||
     episodeDetails?.still_path ||
-    tvShowDetails?.backdrop_path ||
+    tvDetails?.backdrop_path ||
     collectionDetails?.backdrop_path;
   const posterPath =
     movieDetails?.poster_path ||
-    tvShowDetails?.poster_path ||
+    tvDetails?.poster_path ||
     collectionDetails?.poster_path;
   const watchProvidersFr =
-    movieDetails?.watch_providers_fr || tvShowDetails?.watch_providers_fr;
+    movieDetails?.watch_providers_fr || tvDetails?.watch_providers_fr;
 
   return (
     <section className="size-full">
@@ -74,7 +84,7 @@ const TopContent: FC<Props> = (props) => {
             width: "100vw",
             position: "absolute",
             top:
-              movieDetails?.backdrop_path || tvShowDetails?.backdrop_path
+              movieDetails?.backdrop_path || tvDetails?.backdrop_path
                 ? 150
                 : 250,
             left: 0,
@@ -94,7 +104,7 @@ const TopContent: FC<Props> = (props) => {
             >
               <picture>
                 <img
-                  alt={`poster-${movieDetails?.title || tvShowDetails?.name || collectionDetails?.name}`}
+                  alt={`poster-${movieDetails?.title || tvDetails?.name || collectionDetails?.name}`}
                   src={
                     posterPath
                       ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w185${posterPath}`
@@ -126,7 +136,7 @@ const TopContent: FC<Props> = (props) => {
         >
           <Infos
             movieDetails={movieDetails}
-            tvShowDetails={tvShowDetails}
+            tvDetails={tvDetails}
             episodeDetails={episodeDetails}
             collectionDetails={collectionDetails}
             genresCollection={genresCollection}
@@ -136,10 +146,12 @@ const TopContent: FC<Props> = (props) => {
             seasonNumber={seasonNumber}
             isCollection={isCollection}
             type={type}
-            tvShowId={tvShowId}
+            tvId={tvId}
             userMovies={userMovies}
             userMoviesId={userMoviesId}
             internalMovies={internalMovies}
+            userTvs={userTvs}
+            internalTvs={internalTvs}
           />
         </div>
       </div>
@@ -180,7 +192,7 @@ const TopContent: FC<Props> = (props) => {
                   >
                     <picture>
                       <img
-                        alt={`poster-${movieDetails?.title || tvShowDetails?.name || collectionDetails?.name}`}
+                        alt={`poster-${movieDetails?.title || tvDetails?.name || collectionDetails?.name}`}
                         src={
                           posterPath
                             ? `${process.env.NEXT_PUBLIC_TMDB_API_IMAGE_URL}/w500${posterPath}`
@@ -278,7 +290,7 @@ const TopContent: FC<Props> = (props) => {
               </>
               <Infos
                 movieDetails={movieDetails}
-                tvShowDetails={tvShowDetails}
+                tvDetails={tvDetails}
                 episodeDetails={episodeDetails}
                 collectionDetails={collectionDetails}
                 genresCollection={genresCollection}
@@ -288,10 +300,12 @@ const TopContent: FC<Props> = (props) => {
                 isCollection={isCollection}
                 seasonNumber={seasonNumber}
                 type={type}
-                tvShowId={tvShowId}
+                tvId={tvId}
                 userMovies={userMovies}
                 userMoviesId={userMoviesId}
                 internalMovies={internalMovies}
+                userTvs={userTvs}
+                internalTvs={internalTvs}
               />
             </div>
           </div>

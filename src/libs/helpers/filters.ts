@@ -24,7 +24,7 @@ export const defaultMoviesFilters = {
   without_genres: null,
 };
 
-export const defaultTvShowsFilters = {
+export const defaultTvsFilters = {
   "air_date.gte": null,
   "air_date.lte": null,
   certification_country: "FR",

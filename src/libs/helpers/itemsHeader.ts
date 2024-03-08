@@ -1,6 +1,5 @@
 export const getItems = (
   baseUrl: string,
-  type: string,
   numberOfBackdrops: number,
   numberOfLogos: number,
   numberOfPosters: number,
@@ -21,11 +20,6 @@ export const getItems = (
       link: `${baseUrl}/similars/1`,
       name: "Similaires",
       key: "similars",
-    },
-    {
-      link: `${baseUrl}/recommendations/1`,
-      name: "Recommandations",
-      key: "recommendations",
     },
   ];
   const secondTab = [

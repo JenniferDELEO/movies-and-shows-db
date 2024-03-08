@@ -24,7 +24,7 @@ export type MoviesFilters = {
   without_genres: string | null;
 };
 
-export type TvShowsFilters = {
+export type TvsFilters = {
   "air_date.gte": string | null;
   "air_date.lte": string | null;
   certification_country: string | null;

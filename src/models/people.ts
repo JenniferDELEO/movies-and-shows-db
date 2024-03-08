@@ -1,5 +1,5 @@
 import { Image, Movie } from "./movies";
-import { TvShow } from "./tvShows";
+import { Tv } from "./tvs";
 
 export type CreditsMovies = {
   id: number;
@@ -7,10 +7,10 @@ export type CreditsMovies = {
   crew: CrewMovies[];
 };
 
-export type CreditsTvShows = {
+export type CreditsTvs = {
   id: number;
-  cast: CastTvShows[];
-  crew: CrewTvShows[];
+  cast: CastTvs[];
+  crew: CrewTvs[];
 };
 
 export type KnownFor = {
@@ -58,8 +58,8 @@ export interface Person extends People {
   };
   place_of_birth: string | null;
   tv_credits: {
-    cast: TvShow[];
-    crew: TvShow[];
+    cast: Tv[];
+    crew: Tv[];
   };
 }
 
@@ -98,24 +98,24 @@ export type CastMovies = {
   profile_path: string | null;
 };
 
-export type RoleCastTvShow = {
+export type RoleCastTv = {
   credit_id: string;
   character: string;
   episode_count: number;
 };
 
-export type JobsCrewTvShow = {
+export type JobsCrewTv = {
   credit_id: string;
   job: string;
   episode_count: number;
 };
 
-export type CrewTvShows = {
+export type CrewTvs = {
   adult: boolean;
   department: string;
   gender: number;
   id: number;
-  jobs: JobsCrewTvShow[];
+  jobs: JobsCrewTv[];
   known_for_department: string;
   name: string;
   original_name: string;
@@ -123,7 +123,7 @@ export type CrewTvShows = {
   profile_path: string | null;
 };
 
-export type CastTvShows = {
+export type CastTvs = {
   adult: boolean;
   gender: number;
   id: number;
@@ -133,6 +133,6 @@ export type CastTvShows = {
   original_name: string;
   popularity: number;
   profile_path: string | null;
-  roles: RoleCastTvShow[];
+  roles: RoleCastTv[];
   total_episode_count: number;
 };
