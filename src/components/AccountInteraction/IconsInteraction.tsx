@@ -4,7 +4,7 @@ import { InternalMovieUser } from "@/models/movies";
 import { InternalTvAndUser } from "@/models/tvs";
 import { Tooltip } from "@nextui-org/react";
 import { FC, Key } from "react";
-import { FaListUl, FaBookmark, FaBan } from "react-icons/fa";
+import { FaListUl, FaBan } from "react-icons/fa";
 import { FaHeart, FaStar } from "react-icons/fa6";
 import {
   MdOutlineCheckBox,
@@ -50,14 +50,6 @@ const IconsInteraction: FC<Props> = (props) => {
         <FaHeart /* className={`${isFavorite ? "text-red-600" : ""}`} */ />
       ),
       content: "Favoris",
-    },
-    {
-      key: `watchlist-${item.id}`,
-      startContent: (
-        <FaBookmark /* className={`${isInWatchlist ? "text-orange-600" : ""}`} */
-        />
-      ),
-      content: "Liste de suivi",
     },
     {
       key: `note-${item.id}-${item.title || item.name}`,

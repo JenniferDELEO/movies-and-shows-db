@@ -4,6 +4,7 @@ import { FC, useState } from "react";
 import dayjs from "dayjs";
 import { Button } from "@nextui-org/react";
 import { FaPlay } from "react-icons/fa";
+import updateLocale from "dayjs/plugin/updateLocale";
 
 import {
   Genre,
@@ -15,7 +16,6 @@ import StarRating from "@/components/StarRate/StarRating";
 import YoutubeEmbed from "@/components/YoutubeEmbed/YoutubeEmbed";
 import { languages } from "@/libs/helpers/languages";
 import AccountInteraction from "@/components/AccountInteraction/AccountInteraction";
-import { getTvDetail } from "@/libs/api/tvs";
 import {
   Episode,
   EpisodeDetails,
@@ -24,6 +24,27 @@ import {
   TvDetails,
 } from "@/models/tvs";
 import { Collection } from "@/models/collections";
+
+dayjs.locale("fr");
+
+dayjs.extend(updateLocale);
+
+dayjs.updateLocale("fr", {
+  months: [
+    "Janvier",
+    "Février",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juillet",
+    "Août",
+    "Septembre",
+    "Octobre",
+    "Novembre",
+    "Décembre",
+  ],
+});
 
 type Props = {
   movieDetails?: MovieDetails;

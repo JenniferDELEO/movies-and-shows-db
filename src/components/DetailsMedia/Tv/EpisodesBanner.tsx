@@ -8,17 +8,19 @@ import {
   MdOutlineCheckBoxOutlineBlank,
 } from "react-icons/md";
 
-import { SeasonDetails } from "@/models/tvs";
+import { InternalTvAndUser, SeasonDetails } from "@/models/tvs";
 import { usePathname, useRouter } from "next/navigation";
 import { InternalSeasonAndUser } from "@/models/seasons";
+import { UserEpisode } from "@/models/episode";
 
 type Props = {
   seasonDetails: SeasonDetails;
+  userHasTv: InternalTvAndUser | undefined;
   userSeasons: InternalSeasonAndUser[];
 };
 
 const EpisodesBanner: FC<Props> = (props) => {
-  const { seasonDetails, userSeasons } = props;
+  const { seasonDetails, userHasTv, userSeasons } = props;
 
   const router = useRouter();
   const pathname = usePathname();
@@ -29,6 +31,12 @@ const EpisodesBanner: FC<Props> = (props) => {
 
   const pathUrlArray = pathname.split("/").slice(0, 3).join("/");
   const pathUrl = pathUrlArray === "" ? "/" : pathUrlArray;
+
+  async function handleMarkedEpisodes(userEpisode: UserEpisode) {
+    /* if (userEpisode.watched) {
+
+    } */
+  }
 
   return (
     <>
@@ -79,20 +87,27 @@ const EpisodesBanner: FC<Props> = (props) => {
                         }}
                         sizes="100vw"
                       />
-                      <div className="absolute right-2 top-2">
-                        {episodeIsWatched ? (
-                          <MdOutlineCheckBox size={20} />
-                        ) : (
-                          <MdOutlineCheckBoxOutlineBlank size={20} />
-                        )}
-                      </div>
-                      {!episodeIsWatched && (
-                        <div
-                          className="absolute left-0 top-0 size-full backdrop-blur-sm"
-                          style={{
-                            borderRadius: 5,
-                          }}
-                        />
+                      {userEpisode && (
+                        <>
+                          <div
+                            className="absolute right-2 top-2 z-10"
+                            onClick={() => handleMarkedEpisodes(userEpisode)}
+                          >
+                            {userHasTv && episodeIsWatched ? (
+                              <MdOutlineCheckBox size={30} />
+                            ) : (
+                              <MdOutlineCheckBoxOutlineBlank size={30} />
+                            )}
+                          </div>
+                          {userHasTv && !episodeIsWatched && (
+                            <div
+                              className="absolute left-0 top-0 size-full backdrop-blur-sm"
+                              style={{
+                                borderRadius: 5,
+                              }}
+                            />
+                          )}
+                        </>
                       )}
                     </picture>
                   </CardBody>

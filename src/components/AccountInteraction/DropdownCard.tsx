@@ -2,7 +2,7 @@
 
 import { FC, Key } from "react";
 import { HiDotsCircleHorizontal } from "react-icons/hi";
-import { FaListUl, FaBookmark } from "react-icons/fa";
+import { FaListUl } from "react-icons/fa";
 import { FaHeart, FaStar } from "react-icons/fa6";
 import {
   MdOutlineCheckBox,
@@ -71,20 +71,6 @@ const DropdownCard: FC<Props> = (props) => {
         />
       ),
       content: "Favoris",
-    },
-    {
-      key: `watchlist-${item.id}`,
-      startContent: (
-        <FaBookmark
-        /* className={`${
-            (item?.release_date && watchlistMoviesIds?.includes(item.id)) ||
-            (item?.first_air_date && watchlistTvsIds?.includes(item.id))
-              ? "text-orange-600"
-              : ""
-          }`} */
-        />
-      ),
-      content: "Liste de suivi",
     },
     {
       key: `note-${item.id}-${item.title || item.name}`,

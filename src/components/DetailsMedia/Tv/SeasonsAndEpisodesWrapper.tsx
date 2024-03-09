@@ -83,6 +83,7 @@ const SeasonsAndEpisodesWrapper: FC<Props> = (props) => {
         >
           <EpisodesBanner
             seasonDetails={seasonDetails}
+            userHasTv={userHasTv}
             userSeasons={userSeasons}
           />
           <div className="mx-auto mb-0 mt-16 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
