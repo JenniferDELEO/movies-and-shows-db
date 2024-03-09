@@ -9,6 +9,7 @@ import EpisodesBanner from "@/components/DetailsMedia/Tv/EpisodesBanner";
 import { getSeasonDetails } from "@/libs/api/tvs";
 import { useSession } from "next-auth/react";
 import { getUserSeasonsByTv } from "@/libs/sanity/api/tv-season";
+import { InternalSeasonAndUser } from "@/models/seasons";
 
 type Props = {
   seasons: Season[];
@@ -29,6 +30,7 @@ const SeasonsAndEpisodesWrapper: FC<Props> = (props) => {
   const [seasonDetails, setSeasonDetails] = useState<SeasonDetails | null>(
     null,
   );
+  const [userSeasons, setUserSeasons] = useState<InternalSeasonAndUser[]>([]);
 
   const userHasTv = userTvs.find(
     (userTv) => userTv.tv.tmdb_id === seasonDetails?.episodes[0].show_id,
@@ -40,6 +42,7 @@ const SeasonsAndEpisodesWrapper: FC<Props> = (props) => {
         userHasTv.tv._id,
         session.data.user.id,
       );
+      setUserSeasons(result);
     }
   }
 
@@ -78,7 +81,10 @@ const SeasonsAndEpisodesWrapper: FC<Props> = (props) => {
           className="p-4 md:px-[2.5%] lg:px-[5%] 2xl:px-[10%]"
           id="episode-section"
         >
-          <EpisodesBanner seasonDetails={seasonDetails} userTvs={userTvs} />
+          <EpisodesBanner
+            seasonDetails={seasonDetails}
+            userSeasons={userSeasons}
+          />
           <div className="mx-auto mb-0 mt-16 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
         </section>
       )
