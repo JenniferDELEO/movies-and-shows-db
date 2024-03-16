@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { ReactNode } from "react";
-import { StoreProvider } from "./StoreProvider";
+import StoreProvider from "./StoreProvider";
 
 import Toast from "@/components/Toast/Toast";
 import Header from "@/components/Headers/Header";
@@ -27,16 +27,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="dark">
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
-          crossOrigin="anonymous"
-        />
-      </head>
-      <body className={`${poppins.className} size-full min-h-full text-white`}>
-        <StoreProvider>
+    <StoreProvider>
+      <html lang="en" className="dark">
+        <head>
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+            crossOrigin="anonymous"
+          />
+        </head>
+        <body
+          className={`${poppins.className} size-full min-h-full text-white`}
+        >
           <NextAuthProvider>
             <Providers>
               <Toast />
@@ -49,8 +51,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               <Analytics />
             </Providers>
           </NextAuthProvider>
-        </StoreProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </StoreProvider>
   );
 }

@@ -20,6 +20,8 @@ import { getDiscoverMovies } from "@/libs/api/movies";
 import Pagination from "@/components/Pagination/Pagination";
 import { defaultMoviesFilters } from "@/libs/helpers/filters";
 import { MoviesFilters } from "@/models/filters";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchAllMovies } from "@/redux/features/movies/movieSlice";
 
 type Props = {
   genresMovies: Genre[];
@@ -48,6 +50,7 @@ const MoviesWrapper: FC<Props> = (props) => {
     defaultFilters,
   } = props;
   const pathname = usePathname();
+  const dispatch = useAppDispatch();
   const [moviesList, setMoviesList] = useState<Movie[]>(movies);
   const [filters, setFilters] = useState<MoviesFilters>(
     defaultFilters || defaultMoviesFilters,
@@ -60,6 +63,8 @@ const MoviesWrapper: FC<Props> = (props) => {
   );
   const [isFiltering, setIsFiltering] = useState<boolean>(false);
   const [isResetting, setIsResetting] = useState<boolean>(false);
+
+  const reduxMovies = useAppSelector((state) => state.movies);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -74,6 +79,10 @@ const MoviesWrapper: FC<Props> = (props) => {
     });
     setMoviesList(result.results);
   }
+
+  useEffect(() => {
+    dispatch(fetchAllMovies());
+  }, []);
 
   useEffect(() => {
     if (currentPage > 1) {
