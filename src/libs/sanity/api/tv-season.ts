@@ -8,6 +8,7 @@ import {
   AddUserSeason,
   InternalSeason,
   InternalSeasonAndUser,
+  UpdateEpisodeStatus,
 } from "@/models/seasons";
 
 /*-------------------- GET --------------------*/
@@ -254,6 +255,29 @@ export async function updateEpisodeUserSeasonStatus({
         set: {
           [`watched_episodes[_key == "${ep.episode.id.toString()}"].watched`]:
             ep.watched,
+        },
+      },
+    })),
+  };
+
+  const { data } = await axios.post(
+    `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${process.env.NEXT_PUBLIC_SANITY_DATASET}`,
+    mutation,
+    { headers: { Authorization: `Bearer ${process.env.SANITY_STUDIO_TOKEN}` } },
+  );
+  return data;
+}
+
+export async function updateEpisodeStatus({
+  userSeasonId,
+  episodes,
+}: UpdateEpisodeStatus) {
+  const mutation = {
+    mutations: episodes.map((ep) => ({
+      patch: {
+        id: userSeasonId,
+        set: {
+          [`watched_episodes[_key == "${ep._key}"].watched`]: ep.watched,
         },
       },
     })),

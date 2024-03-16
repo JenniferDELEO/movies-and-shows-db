@@ -12,6 +12,7 @@ import { InternalTvAndUser, SeasonDetails } from "@/models/tvs";
 import { usePathname, useRouter } from "next/navigation";
 import { InternalSeasonAndUser } from "@/models/seasons";
 import { UserEpisode } from "@/models/episode";
+import axios from "axios";
 
 type Props = {
   seasonDetails: SeasonDetails;
@@ -25,6 +26,10 @@ const EpisodesBanner: FC<Props> = (props) => {
   const router = useRouter();
   const pathname = usePathname();
 
+  const userSeason = userSeasons.find(
+    (season) => season.season.season_number === seasonDetails.season_number,
+  );
+
   const userEpisodes = userSeasons.filter(
     (userSeason) => userSeason.season.tmdb_id === seasonDetails.id,
   )[0]?.watched_episodes;
@@ -33,9 +38,71 @@ const EpisodesBanner: FC<Props> = (props) => {
   const pathUrl = pathUrlArray === "" ? "/" : pathUrlArray;
 
   async function handleMarkedEpisodes(userEpisode: UserEpisode) {
-    /* if (userEpisode.watched) {
+    if (userHasTv && !userEpisode.watched) {
+      const precedentEpisodesNotWatched = userSeasons
+        .map((season) => {
+          let episodes: UserEpisode[][] = [];
+          if (season.season.season_number < userEpisode.season_number) {
+            episodes.push(season.watched_episodes.filter((ep) => !ep.watched));
+          } else if (
+            season.season.season_number === userEpisode.season_number
+          ) {
+            episodes.push(
+              season.watched_episodes.filter(
+                (episode) =>
+                  episode.episode_number < userEpisode.episode_number &&
+                  !episode.watched,
+              ),
+            );
+          } else if (season.season.season_number > userEpisode.season_number) {
+            return;
+          }
+          return episodes.flat();
+        })
+        .filter((episodes) => episodes !== undefined)
+        .flat();
+      console.log("episodes", precedentEpisodesNotWatched);
+    } else if (userHasTv && userEpisode.watched) {
+      const nextEpisodesWatched = userSeasons
+        .map((season) => {
+          let episodes: UserEpisode[][] = [];
+          if (season.season.season_number > userEpisode.season_number) {
+            episodes.push(season.watched_episodes.filter((ep) => ep.watched));
+          } else if (
+            season.season.season_number === userEpisode.season_number
+          ) {
+            episodes.push(
+              season.watched_episodes.filter(
+                (episode) =>
+                  episode.episode_number > userEpisode.episode_number &&
+                  episode.watched,
+              ),
+            );
+          } else if (season.season.season_number < userEpisode.season_number) {
+            return;
+          }
+          return episodes.flat();
+        })
+        .filter((episodes) => episodes !== undefined)
+        .flat();
+      console.log("episodes", nextEpisodesWatched);
+    }
+  }
 
-    } */
+  async function handleMarkedEpisode(userEpisode: UserEpisode) {
+    if (userHasTv && userSeason) {
+      const userEpisodesToUpdate = {
+        ...userEpisode,
+        watched: !userEpisode.watched,
+      };
+      const responseAddEpisodesStatus = await axios.put(
+        "/api/user-tvs/seasons/episodes",
+        {
+          userSeasonId: userSeason._id,
+          userEpisodesToUpdate: [userEpisodesToUpdate],
+        },
+      );
+    }
   }
 
   return (
@@ -54,15 +121,7 @@ const EpisodesBanner: FC<Props> = (props) => {
 
             return (
               <div key={episode.id} className="mx-2 my-4">
-                <Card
-                  isPressable
-                  className="mx-2 my-4 flex cursor-pointer flex-col items-center justify-center bg-transparent"
-                  onPress={() =>
-                    router.push(
-                      `${pathUrl}/episode/s${episode.season_number > 9 ? episode.season_number : `0${episode.season_number}`}e${episode.episode_number > 9 ? episode.episode_number : `0${episode.episode_number}`}`,
-                    )
-                  }
-                >
+                <Card className="mx-2 my-4 flex cursor-pointer flex-col items-center justify-center bg-transparent">
                   <CardBody
                     className="flex flex-col items-center justify-center"
                     style={{
@@ -86,19 +145,24 @@ const EpisodesBanner: FC<Props> = (props) => {
                           borderRadius: 5,
                         }}
                         sizes="100vw"
+                        onClick={() =>
+                          router.push(
+                            `${pathUrl}/episode/s${episode.season_number > 9 ? episode.season_number : `0${episode.season_number}`}e${episode.episode_number > 9 ? episode.episode_number : `0${episode.episode_number}`}`,
+                          )
+                        }
                       />
                       {userEpisode && (
                         <>
-                          <div
+                          <button
                             className="absolute right-2 top-2 z-10"
-                            onClick={() => handleMarkedEpisodes(userEpisode)}
+                            onClick={() => handleMarkedEpisode(userEpisode)}
                           >
                             {userHasTv && episodeIsWatched ? (
                               <MdOutlineCheckBox size={30} />
                             ) : (
                               <MdOutlineCheckBoxOutlineBlank size={30} />
                             )}
-                          </div>
+                          </button>
                           {userHasTv && !episodeIsWatched && (
                             <div
                               className="absolute left-0 top-0 size-full backdrop-blur-sm"

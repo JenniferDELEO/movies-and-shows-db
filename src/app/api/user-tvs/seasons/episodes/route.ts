@@ -4,10 +4,11 @@ import {
   createEpisodesByUserSeason,
   getAllSeasonsByTvId,
   getUserSeasonsByTv,
+  updateEpisodeStatus,
   updateEpisodeUserSeasonStatus,
 } from "@/libs/sanity/api/tv-season";
 import { authOptions } from "@/libs/sanity/auth";
-import { EpisodeFromUI } from "@/models/episode";
+import { EpisodeFromUI, UserEpisode } from "@/models/episode";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -115,6 +116,45 @@ export async function POST(req: Request) {
       }
     }
     return NextResponse.json({
+      status: 200,
+      statusText: "Successful",
+    });
+  } catch (error) {
+    return new NextResponse("Unable to fetch", {
+      status: 400,
+      statusText: `Unable to fetch : ${error}`,
+    });
+  }
+}
+
+export async function PUT(req: Request) {
+  const session = await getServerSession(authOptions);
+
+  const {
+    userSeasonId,
+    userEpisodesToUpdate,
+  }: {
+    userSeasonId: string;
+    userEpisodesToUpdate: UserEpisode[];
+  } = await req.json();
+
+  if (!session) {
+    return new NextResponse("Authentication required", { status: 500 });
+  }
+
+  const userId = session.user.id;
+  const userName = session.user.name!;
+
+  if (!userId && !userName) {
+    return new NextResponse("User not found", { status: 404 });
+  }
+
+  try {
+    const data = await updateEpisodeStatus({
+      userSeasonId,
+      episodes: userEpisodesToUpdate,
+    });
+    return NextResponse.json(data, {
       status: 200,
       statusText: "Successful",
     });

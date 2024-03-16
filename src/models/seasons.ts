@@ -63,12 +63,7 @@ export type AddEpisodesByUserSeason = {
   }[];
 };
 
-export type UpdateEpisodeUserSeasonStatus = {
+export type UpdateEpisodeStatus = {
   userSeasonId: string;
-  episodes: {
-    tmdbId: number;
-    seasonNumber: number;
-    episodeNumber: number;
-    watched: boolean;
-  }[];
+  episodes: UserEpisode[];
 };
