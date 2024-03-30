@@ -14,6 +14,8 @@ import Pagination from "@/components/Pagination/Pagination";
 import { getDiscoverTvs } from "@/libs/api/tvs";
 import { defaultTvsFilters } from "@/libs/helpers/filters";
 import { TvsFilters } from "@/models/filters";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchAllTvs } from "@/redux/features/tvs/tvSlice";
 
 type Props = {
   tvs: Tv[];
@@ -40,6 +42,7 @@ const TvsWrapper: FC<Props> = (props) => {
     defaultFilters,
   } = props;
   const pathname = usePathname();
+  const dispatch = useAppDispatch();
   const [tvsList, setTvsList] = useState<Tv[]>(tvs);
   const [filters, setFilters] = useState<TvsFilters>(
     defaultFilters || defaultTvsFilters,
@@ -52,6 +55,8 @@ const TvsWrapper: FC<Props> = (props) => {
   );
   const [isFiltering, setIsFiltering] = useState<boolean>(false);
   const [isResetting, setIsResetting] = useState<boolean>(false);
+
+  const reduxTvs = useAppSelector((state) => state.tvs);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -66,6 +71,10 @@ const TvsWrapper: FC<Props> = (props) => {
     });
     setTvsList(result.results);
   }
+
+  useEffect(() => {
+    dispatch(fetchAllTvs());
+  }, []);
 
   useEffect(() => {
     if (currentPage > 1) {

@@ -4,6 +4,8 @@ import { InternalMovieUser } from "@/models/movies";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/sanity/auth";
 import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
+import { Suspense } from "react";
+import LoadingSpinner from "@/app/(web)/loading";
 
 type Props = {
   params: { id: string };
@@ -27,13 +29,15 @@ const Movie = async ({ params }: Props) => {
 
   return (
     <div className="size-full">
-      <MovieWrapper
-        movieDetails={movieDetails}
-        movieUrl={params.id}
-        userMovies={userMovies}
-        userMoviesId={userMoviesId}
-        internalMovies={internalMovies}
-      />
+      <Suspense fallback={<LoadingSpinner />}>
+        <MovieWrapper
+          movieDetails={movieDetails}
+          movieUrl={params.id}
+          userMovies={userMovies}
+          userMoviesId={userMoviesId}
+          internalMovies={internalMovies}
+        />
+      </Suspense>
     </div>
   );
 };

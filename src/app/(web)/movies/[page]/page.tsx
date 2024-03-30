@@ -10,6 +10,8 @@ import { InternalMovieUser } from "@/models/movies";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/sanity/auth";
 import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
+import { Suspense } from "react";
+import LoadingSpinner from "../../loading";
 
 export const metadata: Metadata = {
   title: "Films - Films & Séries TV DB",
@@ -38,16 +40,18 @@ const Movies = async () => {
   const title = `Liste des films (${totalResultsMovies})`;
 
   return (
-    <MoviesWrapper
-      genresMovies={genresMovies}
-      movies={movies}
-      providersMovies={providersMovies}
-      title={title}
-      totalPagesMovies={totalPagesMovies}
-      userMovies={userMovies}
-      userMoviesId={userMoviesId}
-      internalMovies={internalMovies}
-    />
+    <Suspense fallback={<LoadingSpinner />}>
+      <MoviesWrapper
+        genresMovies={genresMovies}
+        movies={movies}
+        providersMovies={providersMovies}
+        title={title}
+        totalPagesMovies={totalPagesMovies}
+        userMovies={userMovies}
+        userMoviesId={userMoviesId}
+        internalMovies={internalMovies}
+      />
+    </Suspense>
   );
 };
 

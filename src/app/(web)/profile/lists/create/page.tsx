@@ -1,5 +1,7 @@
+import LoadingSpinner from "@/app/(web)/loading";
 import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Création de liste personnalisée - Films & Séries TV DB",
@@ -8,7 +10,9 @@ export const metadata: Metadata = {
 const ProfilListCreation = () => {
   return (
     <div>
-      <WorkInProgress />
+      <Suspense fallback={<LoadingSpinner />}>
+        <WorkInProgress />
+      </Suspense>
     </div>
   );
 };

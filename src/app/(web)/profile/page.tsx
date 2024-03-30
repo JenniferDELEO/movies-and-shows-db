@@ -2,11 +2,15 @@
 "use client";
 
 import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
+import { Suspense } from "react";
+import LoadingSpinner from "../loading";
 
 const Profile = () => {
   return (
     <div>
-      <WorkInProgress />
+      <Suspense fallback={<LoadingSpinner />}>
+        <WorkInProgress />
+      </Suspense>
     </div>
   );
 };

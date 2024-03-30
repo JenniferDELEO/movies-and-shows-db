@@ -13,6 +13,8 @@ import { authOptions } from "@/libs/sanity/auth";
 import { InternalMovieUser } from "@/models/movies";
 import { InternalTvAndUser } from "@/models/tvs";
 import { getServerSession } from "next-auth";
+import { Suspense } from "react";
+import LoadingSpinner from "./loading";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -43,27 +45,29 @@ export default async function Home() {
 
   return (
     <div className="size-full">
-      <SearchBar
-        styleBase="w-full md:w-[90%] ml-2 md:mx-auto mb-20"
-        styleContainer="flex flex-row items-center justify-start md:justify-center"
-      />
-      <BannerWrapper
-        homeProps={{
-          popularMovies,
-          popularTvs,
-          topRatedMovies,
-          topRatedTvs,
-          trendingMoviesToday,
-          trendingMoviesThisWeek,
-          trendingTvsToday,
-          trendingTvsThisWeek,
-          internalMovies,
-          userMovies,
-          userMoviesId,
-          internalTvs,
-          userTvs,
-        }}
-      />
+      <Suspense fallback={<LoadingSpinner />}>
+        <SearchBar
+          styleBase="w-full md:w-[90%] ml-2 md:mx-auto mb-20"
+          styleContainer="flex flex-row items-center justify-start md:justify-center"
+        />
+        <BannerWrapper
+          homeProps={{
+            popularMovies,
+            popularTvs,
+            topRatedMovies,
+            topRatedTvs,
+            trendingMoviesToday,
+            trendingMoviesThisWeek,
+            trendingTvsToday,
+            trendingTvsThisWeek,
+            internalMovies,
+            userMovies,
+            userMoviesId,
+            internalTvs,
+            userTvs,
+          }}
+        />
+      </Suspense>
     </div>
   );
 }

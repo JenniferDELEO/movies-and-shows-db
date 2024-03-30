@@ -5,7 +5,8 @@ import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
 import { getAllTvs, getUserTvs } from "@/libs/sanity/api/tv";
 import { InternalTv, InternalTvAndUser } from "@/models/tvs";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import LoadingSpinner from "../../loading";
 
 const ProfileTvs = () => {
   const { data: session } = useSession();
@@ -37,7 +38,9 @@ const ProfileTvs = () => {
 
   return (
     <div>
-      <WorkInProgress />
+      <Suspense fallback={<LoadingSpinner />}>
+        <WorkInProgress />
+      </Suspense>
     </div>
   );
 };

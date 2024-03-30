@@ -1,5 +1,7 @@
 import { getCreditsMovie } from "@/libs/api/movies";
 import CreditsWrapper from "@/components/DetailsMedia/Wrappers/CreditsWrapper";
+import { Suspense } from "react";
+import LoadingSpinner from "@/app/(web)/loading";
 
 type Props = {
   params: { id: string };
@@ -14,7 +16,9 @@ const Cast = async ({ params }: Props) => {
 
   return (
     <div className="mx-auto size-full pt-[64px] md:w-[95%] lg:w-[90%]">
-      <CreditsWrapper itemCastMovie={moviesCast} itemCrewMovie={moviesCrew} />
+      <Suspense fallback={<LoadingSpinner />}>
+        <CreditsWrapper itemCastMovie={moviesCast} itemCrewMovie={moviesCrew} />
+      </Suspense>
     </div>
   );
 };

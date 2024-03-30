@@ -4,8 +4,9 @@ import { useSession } from "next-auth/react";
 
 import WorkInProgress from "@/components/WorkInProgress/WorkInProgress";
 import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { InternalMovie, InternalMovieUser } from "@/models/movies";
+import LoadingSpinner from "../../loading";
 
 const ProfileMovies = () => {
   const { data: session } = useSession();
@@ -37,7 +38,9 @@ const ProfileMovies = () => {
 
   return (
     <div>
-      <WorkInProgress />
+      <Suspense fallback={<LoadingSpinner />}>
+        <WorkInProgress />
+      </Suspense>
     </div>
   );
 };

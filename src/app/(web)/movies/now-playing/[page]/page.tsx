@@ -13,6 +13,8 @@ import { InternalMovieUser } from "@/models/movies";
 import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/sanity/auth";
+import { Suspense } from "react";
+import LoadingSpinner from "@/app/(web)/loading";
 
 dayjs.extend(weekdayPlugin);
 
@@ -54,17 +56,19 @@ const NowPlayingMovies = async () => {
   const title = `Films au cinéma (${totalResultsMovies})`;
 
   return (
-    <MoviesWrapper
-      genresMovies={genresMovies}
-      movies={movies}
-      defaultFilters={nowPlayingFilters}
-      providersMovies={providersMovies}
-      title={title}
-      totalPagesMovies={totalPagesMovies}
-      userMovies={userMovies}
-      userMoviesId={userMoviesId}
-      internalMovies={internalMovies}
-    />
+    <Suspense fallback={<LoadingSpinner />}>
+      <MoviesWrapper
+        genresMovies={genresMovies}
+        movies={movies}
+        defaultFilters={nowPlayingFilters}
+        providersMovies={providersMovies}
+        title={title}
+        totalPagesMovies={totalPagesMovies}
+        userMovies={userMovies}
+        userMoviesId={userMoviesId}
+        internalMovies={internalMovies}
+      />
+    </Suspense>
   );
 };
 

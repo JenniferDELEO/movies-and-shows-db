@@ -1,5 +1,7 @@
+import LoadingSpinner from "@/app/(web)/loading";
 import ImagesWrapper from "@/components/DetailsMedia/Wrappers/ImagesWrapper";
 import { getImagesMovie } from "@/libs/api/movies";
+import { Suspense } from "react";
 
 type Props = {
   params: { id: string };
@@ -18,13 +20,15 @@ const Backdrops = async ({ params }: Props) => {
 
   return (
     <div className="mx-auto size-full md:w-[95%] lg:w-[90%]">
-      <ImagesWrapper
-        images={images?.backdrops}
-        imageWidth={324}
-        imageHeight={182}
-        classNames={classNames}
-        title={`Tous les fonds d'écran (${images?.backdrops.length})`}
-      />
+      <Suspense fallback={<LoadingSpinner />}>
+        <ImagesWrapper
+          images={images?.backdrops}
+          imageWidth={324}
+          imageHeight={182}
+          classNames={classNames}
+          title={`Tous les fonds d'écran (${images?.backdrops.length})`}
+        />
+      </Suspense>
     </div>
   );
 };

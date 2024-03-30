@@ -9,6 +9,8 @@ import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
 import { getAllTvs, getUserTvs } from "@/libs/sanity/api/tv";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/sanity/auth";
+import { Suspense } from "react";
+import LoadingSpinner from "../../loading";
 
 type Props = {
   params: { id: string[] };
@@ -51,20 +53,22 @@ const Person = async ({ params }: Props) => {
 
   return (
     <div className="mx-auto w-full md:w-[95%] lg:w-[90%]">
-      <Infos data={peopleDetail} />
-      <BannerWrapper
-        personDetailProps={{
-          actingMovies,
-          runningMovies,
-          actingTvs,
-          runningTvs,
-          userMovies,
-          userMoviesId,
-          internalMovies,
-          userTvs,
-          internalTvs,
-        }}
-      />
+      <Suspense fallback={<LoadingSpinner />}>
+        <Infos data={peopleDetail} />
+        <BannerWrapper
+          personDetailProps={{
+            actingMovies,
+            runningMovies,
+            actingTvs,
+            runningTvs,
+            userMovies,
+            userMoviesId,
+            internalMovies,
+            userTvs,
+            internalTvs,
+          }}
+        />
+      </Suspense>
     </div>
   );
 };

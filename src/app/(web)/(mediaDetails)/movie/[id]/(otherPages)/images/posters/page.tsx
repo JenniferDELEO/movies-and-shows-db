@@ -1,5 +1,7 @@
+import LoadingSpinner from "@/app/(web)/loading";
 import ImagesWrapper from "@/components/DetailsMedia/Wrappers/ImagesWrapper";
 import { getImagesMovie } from "@/libs/api/movies";
+import { Suspense } from "react";
 
 type Props = {
   params: { id: string };
@@ -18,13 +20,15 @@ const Posters = async ({ params }: Props) => {
 
   return (
     <div className="mx-auto size-full md:w-[95%] lg:w-[90%]">
-      <ImagesWrapper
-        images={images?.posters}
-        imageWidth={228}
-        imageHeight={345}
-        classNames={classNames}
-        title={`Toutes les affiches (${images?.posters.length})`}
-      />
+      <Suspense fallback={<LoadingSpinner />}>
+        <ImagesWrapper
+          images={images?.posters}
+          imageWidth={228}
+          imageHeight={345}
+          classNames={classNames}
+          title={`Toutes les affiches (${images?.posters.length})`}
+        />
+      </Suspense>
     </div>
   );
 };

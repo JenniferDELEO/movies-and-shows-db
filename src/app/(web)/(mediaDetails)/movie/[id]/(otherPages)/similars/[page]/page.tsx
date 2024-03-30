@@ -4,6 +4,8 @@ import { InternalMovieUser } from "@/models/movies";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/sanity/auth";
 import { getAllMovies, getUserMovies } from "@/libs/sanity/api/movie";
+import { Suspense } from "react";
+import LoadingSpinner from "@/app/(web)/loading";
 
 type Props = {
   params: { id: string };
@@ -31,7 +33,7 @@ const Similars = async ({ params }: Props) => {
   const internalMovies = await getAllMovies();
 
   return (
-    <div>
+    <Suspense fallback={<LoadingSpinner />}>
       <SimilarsWrapper
         genresMovies={genresMovies}
         mediaId={id}
@@ -42,7 +44,7 @@ const Similars = async ({ params }: Props) => {
         userMoviesId={userMoviesId}
         internalMovies={internalMovies}
       />
-    </div>
+    </Suspense>
   );
 };
 

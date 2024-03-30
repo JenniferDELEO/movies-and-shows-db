@@ -103,17 +103,20 @@ const Header = () => {
                   base: "bg-primary border-primary border-2 rounded-lg shadow-primary outline-none",
                 }}
               >
-                <DropdownItem href="/movies/1" textValue="Liste">
-                  <span>Liste</span>
+                <DropdownItem textValue="Liste">
+                  <Link href="/movies/1" className="block w-full">
+                    Liste
+                  </Link>
                 </DropdownItem>
-                <DropdownItem
-                  href="/movies/now-playing/1"
-                  textValue="Actuellement au cinéma"
-                >
-                  <span>Actuellement au cinéma</span>
+                <DropdownItem textValue="Actuellement au cinéma">
+                  <Link href="/movies/now-playing/1" className="block w-full">
+                    Actuellement au cinéma
+                  </Link>
                 </DropdownItem>
-                <DropdownItem href="/movies/upcoming/1" textValue="À venir">
-                  <span>À venir</span>
+                <DropdownItem textValue="À venir">
+                  <Link href="/movies/upcoming/1" className="block w-full">
+                    À venir
+                  </Link>
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -142,14 +145,15 @@ const Header = () => {
                   base: "bg-primary border-primary border-2 rounded-lg shadow-primary outline-none",
                 }}
               >
-                <DropdownItem href="/tvs/1" textValue="Liste">
-                  <span>Liste</span>
+                <DropdownItem textValue="Liste">
+                  <Link href="/tvs/1" className="block w-full">
+                    Liste
+                  </Link>
                 </DropdownItem>
-                <DropdownItem
-                  href="/tvs/on-the-air/1"
-                  textValue="En cours de diffusion"
-                >
-                  <span>En cours de diffusion</span>
+                <DropdownItem textValue="En cours de diffusion">
+                  <Link href="/tvs/on-the-air/1" className="block w-full">
+                    En cours de diffusion
+                  </Link>
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -207,11 +211,11 @@ const Header = () => {
                   }}
                 >
                   <DropdownSection showDivider>
-                    <DropdownItem href="/profile" textValue="Mon profil">
-                      <div className="flex flex-col">
+                    <DropdownItem textValue="Mon profil">
+                      <Link href="/profile" className="flex flex-col">
                         <span className="font-bold">{session?.user?.name}</span>
                         <span className="pt-2">Mon profil</span>
-                      </div>
+                      </Link>
                     </DropdownItem>
                   </DropdownSection>
                   <DropdownSection>

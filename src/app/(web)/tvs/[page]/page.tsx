@@ -6,6 +6,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/sanity/auth";
 import { InternalTvAndUser } from "@/models/tvs";
 import { getAllTvs, getUserTvs } from "@/libs/sanity/api/tv";
+import { Suspense } from "react";
+import LoadingSpinner from "../../loading";
 
 export const metadata: Metadata = {
   title: "Séries TV - Films & Séries TV DB",
@@ -32,15 +34,17 @@ const Tvs = async () => {
   const title = `Liste des Séries TV (${totalResultsTvs})`;
 
   return (
-    <TvsWrapper
-      tvs={tvs}
-      genresTvs={genresTvs}
-      providersTvs={providersTvs}
-      title={title}
-      totalPagesTvs={totalPagesTvs}
-      userTvs={userTvs}
-      internalTvs={internalTvs}
-    />
+    <Suspense fallback={<LoadingSpinner />}>
+      <TvsWrapper
+        tvs={tvs}
+        genresTvs={genresTvs}
+        providersTvs={providersTvs}
+        title={title}
+        totalPagesTvs={totalPagesTvs}
+        userTvs={userTvs}
+        internalTvs={internalTvs}
+      />
+    </Suspense>
   );
 };
 
