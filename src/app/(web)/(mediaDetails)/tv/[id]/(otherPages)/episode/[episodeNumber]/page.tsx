@@ -1,38 +1,23 @@
 import EpisodeWrapper from "@/components/DetailsMedia/Tv/EpisodeWrapper";
-import {
-  getEpisodeDetails,
-  getSeasonDetails,
-  getTvDetail,
-} from "@/libs/api/tvs";
-import { getUserTvs } from "@/libs/sanity/api/tv";
-import { authOptions } from "@/libs/sanity/auth";
-import { InternalTvAndUser } from "@/models/tvs";
-import { getServerSession } from "next-auth";
+import { getEpisodeDetails, getSeasonDetails, getTvDetail } from "@/libs/api/tvs";
 
 type Props = {
   params: { id: string; episodeNumber: string };
 };
 
 const Episode = async ({ params }: Props) => {
-  const session = await getServerSession(authOptions);
   const tvId = Number(params.id.split("-")[0]);
   const seasonNumber = Number(
-    params.episodeNumber.replace(/\D+/g, "").slice(0, 2),
+    params.episodeNumber.replace(/\D+/g, "").slice(0, 2)
   );
   const episodeNumber = Number(
-    params.episodeNumber.replace(/\D+/g, "").slice(2),
+    params.episodeNumber.replace(/\D+/g, "").slice(2)
   );
-
-  let userTvs: InternalTvAndUser[] = [];
-
-  if (session) {
-    userTvs = await getUserTvs(session.user.id);
-  }
 
   const episodeDetails = await getEpisodeDetails(
     tvId,
     seasonNumber,
-    episodeNumber,
+    episodeNumber
   );
   const seasonDetails = await getSeasonDetails(tvId, seasonNumber);
   const seasonPrecedentDetails =
@@ -51,7 +36,6 @@ const Episode = async ({ params }: Props) => {
         seasonNumber={seasonNumber}
         tvDetails={tvDetails}
         tvId={tvId}
-        userTvs={userTvs}
       />
     </div>
   );

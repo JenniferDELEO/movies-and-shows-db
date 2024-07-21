@@ -1,43 +1,25 @@
 "use client";
 
 import dayjs from "dayjs";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { Card, CardBody, CardFooter } from "@nextui-org/react";
 
-import { InternalTvAndUser, SeasonDetails } from "@/models/tvs";
+import { SeasonDetails } from "@/models/tvs";
 import { usePathname, useRouter } from "next/navigation";
 import { UserEpisode } from "@/models/episode";
 
 type Props = {
   seasonDetails: SeasonDetails;
-  userTvs: InternalTvAndUser[];
 };
 
 const EpisodesBanner: FC<Props> = (props) => {
-  const { seasonDetails, userTvs } = props;
+  const { seasonDetails } = props;
   const [userEpisodes, setUserEpisodes] = useState<UserEpisode[]>([]);
 
   const router = useRouter();
   const pathname = usePathname();
 
-  const userHasTv = userTvs.find(
-    (userTv) => userTv.tv.tmdb_id === seasonDetails.episodes[0].show_id,
-  );
-
   const [blur, setBlur] = useState(false);
-  /* async function fetchUserEpisodesWatched() {
-    if (userHasTv && session && session?.data?.user) {
-      
-    }
-  } */
-
-  /* useEffect(() => {
-    fetchUserEpisodesWatched();
-  }, []); */
-
-  useEffect(() => {
-    if (userHasTv) setBlur(true);
-  }, [userHasTv]);
 
   const pathUrlArray = pathname.split("/").slice(0, 3).join("/");
   const pathUrl = pathUrlArray === "" ? "/" : pathUrlArray;
@@ -56,7 +38,7 @@ const EpisodesBanner: FC<Props> = (props) => {
                 className="mx-2 my-4 flex cursor-pointer flex-col items-center justify-center bg-transparent"
                 onPress={() =>
                   router.push(
-                    `${pathUrl}/episode/s${episode.season_number > 9 ? episode.season_number : `0${episode.season_number}`}e${episode.episode_number > 9 ? episode.episode_number : `0${episode.episode_number}`}`,
+                    `${pathUrl}/episode/s${episode.season_number > 9 ? episode.season_number : `0${episode.season_number}`}e${episode.episode_number > 9 ? episode.episode_number : `0${episode.episode_number}`}`
                   )
                 }
               >
@@ -64,7 +46,7 @@ const EpisodesBanner: FC<Props> = (props) => {
                   className="flex flex-col items-center justify-center"
                   style={{
                     width: 300,
-                    height: 208,
+                    height: 208
                   }}
                 >
                   <picture className="relative">
@@ -81,7 +63,7 @@ const EpisodesBanner: FC<Props> = (props) => {
                         width: "100%",
                         height: "100%",
                         borderRadius: 5,
-                        backdropFilter: blur ? "blur(15px)" : "none",
+                        backdropFilter: blur ? "blur(15px)" : "none"
                       }}
                       sizes="100vw"
                     />
@@ -89,7 +71,7 @@ const EpisodesBanner: FC<Props> = (props) => {
                       <div
                         className="absolute left-0 top-0 size-full backdrop-blur-sm"
                         style={{
-                          borderRadius: 5,
+                          borderRadius: 5
                         }}
                       ></div>
                     )}

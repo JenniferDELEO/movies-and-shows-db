@@ -3,15 +3,10 @@
 import { FC, Key, useState } from "react";
 
 import { InternalTv, InternalTvAndUser } from "@/models/tvs";
-import axios from "axios";
-import toast from "react-hot-toast";
 
 import { Genre, InternalMovie, InternalMovieUser } from "@/models/movies";
 import DropdownCard from "@/components/AccountInteraction/DropdownCard";
 import IconsInteraction from "./IconsInteraction";
-import { getUserMovies } from "@/libs/sanity/api/movie";
-import { getUserTvs } from "@/libs/sanity/api/tv";
-import { useSession } from "next-auth/react";
 import AddEpisodeStatusModal from "../Modals/AddEpisodeStatusModal";
 
 type Props = {
@@ -64,24 +59,22 @@ const AccountInteraction: FC<Props> = (props) => {
     type,
 
     listsPageProps,
-    mediaDetailsPageProps,
+    mediaDetailsPageProps
   } = props;
   const [modalAddEpisodesStatus, setModalAddEpisodesStatus] =
     useState<boolean>(false);
   const [moviesAccount, setMoviesAccount] = useState<InternalMovieUser[]>(
-    listsPageProps?.userMovies || mediaDetailsPageProps?.userMovies || [],
+    listsPageProps?.userMovies || mediaDetailsPageProps?.userMovies || []
   );
   const [tvsAccount, setTvsAccount] = useState<InternalTvAndUser[]>(
-    listsPageProps?.userTvs || mediaDetailsPageProps?.userTvs || [],
+    listsPageProps?.userTvs || mediaDetailsPageProps?.userTvs || []
   );
-
-  const { data: session, status } = useSession();
 
   const _movieId =
     listsPageProps?.internalMovies?.find((movie) => movie.tmdb_id === item.id)
       ?._id ||
     mediaDetailsPageProps?.internalMovies?.find(
-      (movie) => movie.tmdb_id === item.id,
+      (movie) => movie.tmdb_id === item.id
     )?._id;
 
   const tvFromDb =
@@ -95,7 +88,7 @@ const AccountInteraction: FC<Props> = (props) => {
     const category = media.toString().split("-")[0];
     const id = media.toString().split("-")[1];
 
-    if (session && status === "authenticated") {
+    /*if (session && status === "authenticated") {
       if (
         (category === "to_watch" || category === "watched") &&
         type === "movie"
@@ -196,7 +189,7 @@ const AccountInteraction: FC<Props> = (props) => {
           }
         }
       }
-    }
+    }*/
   };
 
   return type !== "episode" ? (

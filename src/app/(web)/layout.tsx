@@ -9,7 +9,6 @@ import { Providers } from "./providers";
 import "./globals.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import NextAuthProvider from "@/components/AuthProvider/AuthProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -35,7 +34,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
       <body className={`${poppins.className} size-full min-h-full text-white`}>
-        <NextAuthProvider>
           <Providers>
             <Toast />
             <main className="size-full min-h-[100vh] bg-[url('https://images.unsplash.com/photo-1642095902135-f48745dd3df5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTA2fHxtb3ZpZSUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D')] bg-cover bg-fixed bg-no-repeat">
@@ -46,7 +44,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             </main>
             <Analytics />
           </Providers>
-        </NextAuthProvider>
       </body>
     </html>
   );

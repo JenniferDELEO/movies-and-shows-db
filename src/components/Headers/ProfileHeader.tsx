@@ -7,19 +7,16 @@ import {
   NavbarItem,
   NavbarMenu,
   NavbarMenuItem,
-  NavbarMenuToggle,
+  NavbarMenuToggle
 } from "@nextui-org/react";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
-import { FaListUl, FaStar, FaHeart } from "react-icons/fa";
+import { FaHeart, FaListUl, FaStar } from "react-icons/fa";
 import { MdLocalMovies } from "react-icons/md";
 import { PiTelevisionSimpleFill } from "react-icons/pi";
 
 const ProfileHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const { data: session } = useSession();
 
   return (
     <Navbar
@@ -28,7 +25,7 @@ const ProfileHeader = () => {
       classNames={{
         base: "fixed top-[64px] bg-white/90 justify-center z-30",
         wrapper: "max-w-[1250px] mx-auto justify-center",
-        item: ["text-sm text-primary lg:text-xl mr-2 hover:underline"],
+        item: ["text-sm text-primary lg:text-xl mr-2 hover:underline"]
       }}
     >
       <NavbarContent>
@@ -43,7 +40,7 @@ const ProfileHeader = () => {
                 width: "48px",
                 minWidth: "48px",
                 height: "48px",
-                minHeight: "48px",
+                minHeight: "48px"
               }}
               className="overflow-hidden rounded-full bg-white"
             >
@@ -51,9 +48,7 @@ const ProfileHeader = () => {
                 <img
                   alt="profile"
                   src={
-                    session?.user?.image
-                      ? session.user.image
-                      : "/images/defaultProfile.png"
+                    "/images/defaultProfile.png"
                   }
                   width="100%"
                   height="100%"
@@ -62,9 +57,9 @@ const ProfileHeader = () => {
               </picture>
             </div>
             <div className="ml-4 flex flex-col items-start justify-start">
-              <p className="text-sm text-primary lg:text-lg">
+              {/*<p className="text-sm text-primary lg:text-lg">
                 {session?.user?.name}
-              </p>
+              </p>*/}
               <p className="pt-2 text-xs text-gray-600 md:text-sm">
                 Mon profil
               </p>

@@ -6,7 +6,7 @@ import { Button } from "@nextui-org/react";
 
 import Filters from "@/components/Filters/Filters";
 import Cards from "@/components/Cards/Cards";
-import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
+import { Tv } from "@/models/tvs";
 import OrderingSelect from "@/components/Filters/OrderingSelect";
 import { Watcher } from "@/models/watchers";
 import FiltersModal from "@/components/Modals/FiltersModal";
@@ -21,8 +21,6 @@ type Props = {
   providersTvs: Watcher[];
   title: string;
   totalPagesTvs: number;
-  userTvs: InternalTvAndUser[];
-  internalTvs: InternalTv[];
 
   defaultFilters?: TvsFilters;
 };
@@ -34,21 +32,19 @@ const TvsWrapper: FC<Props> = (props) => {
     providersTvs,
     title,
     totalPagesTvs,
-    userTvs,
-    internalTvs,
 
-    defaultFilters,
+    defaultFilters
   } = props;
   const pathname = usePathname();
   const [tvsList, setTvsList] = useState<Tv[]>(tvs);
   const [filters, setFilters] = useState<TvsFilters>(
-    defaultFilters || defaultTvsFilters,
+    defaultFilters || defaultTvsFilters
   );
   const [openFilters, setOpenFilters] = useState<boolean>(false);
   const [totalPages, setTotalPages] = useState<number>(totalPagesTvs);
   const [filterType, setFilterType] = useState("popularity.desc");
   const [currentPage, setCurrentPage] = useState(
-    pathname.split("/")[2] ? parseInt(pathname.split("/")[2]) : 1,
+    pathname.split("/")[2] ? parseInt(pathname.split("/")[2]) : 1
   );
   const [isFiltering, setIsFiltering] = useState<boolean>(false);
   const [isResetting, setIsResetting] = useState<boolean>(false);
@@ -62,7 +58,7 @@ const TvsWrapper: FC<Props> = (props) => {
   async function getTvsNextPages() {
     const result = await getDiscoverTvs({
       ...filters,
-      page: currentPage,
+      page: currentPage
     });
     setTvsList(result.results);
   }
@@ -79,14 +75,14 @@ const TvsWrapper: FC<Props> = (props) => {
     const result = await getDiscoverTvs({
       ...filters,
       sort_by: e.target.value,
-      page: currentPage,
+      page: currentPage
     });
     setTvsList(result.results);
   };
 
   const handleFiltersSelection = async () => {
     const result = await getDiscoverTvs({
-      ...filters,
+      ...filters
     });
     setTvsList(result.results);
     setTotalPages(result.total_pages);
@@ -96,7 +92,7 @@ const TvsWrapper: FC<Props> = (props) => {
   const handleResetFilters = async () => {
     setFilters(defaultTvsFilters);
     const result = await getDiscoverTvs({
-      ...defaultTvsFilters,
+      ...defaultTvsFilters
     });
     setTvsList(result.results);
     setTotalPages(result.total_pages);
@@ -106,16 +102,16 @@ const TvsWrapper: FC<Props> = (props) => {
   const hideResetButton = () => {
     if (
       filters["first_air_date.gte"] !==
-        defaultTvsFilters["first_air_date.gte"] ||
+      defaultTvsFilters["first_air_date.gte"] ||
       filters["first_air_date.lte"] !==
-        defaultTvsFilters["first_air_date.lte"] ||
+      defaultTvsFilters["first_air_date.lte"] ||
       filters.show_me !== defaultTvsFilters.show_me ||
       filters["vote_average.gte"] !== defaultTvsFilters["vote_average.gte"] ||
       filters["vote_average.lte"] !== defaultTvsFilters["vote_average.lte"] ||
       filters["vote_count.gte"] !== defaultTvsFilters["vote_count.gte"] ||
       filters.with_genres !== defaultTvsFilters.with_genres ||
       filters.with_original_language !==
-        defaultTvsFilters.with_original_language ||
+      defaultTvsFilters.with_original_language ||
       filters["with_runtime.gte"] !== defaultTvsFilters["with_runtime.gte"] ||
       filters["with_runtime.lte"] !== defaultTvsFilters["with_runtime.lte"] ||
       filters.with_watch_providers !== defaultTvsFilters.with_watch_providers ||
@@ -164,8 +160,6 @@ const TvsWrapper: FC<Props> = (props) => {
                 tvs={tvsList}
                 filterType="tv"
                 genres={genresTvs}
-                userTvs={userTvs}
-                internalTvs={internalTvs}
               />
               <Pagination
                 total={totalPages}

@@ -6,6 +6,12 @@ import Slider from "react-slick";
 import dayjs from "dayjs";
 import "dayjs/locale/fr";
 import updateLocale from "dayjs/plugin/updateLocale";
+import {
+  settingsMinFiveSlides,
+  settingsMinFourSlides,
+  settingsMinThreeSlides,
+  settingsMinTwoSlides
+} from "@/components/Banner/reactSlickSettings";
 
 dayjs.locale("fr");
 
@@ -24,20 +30,9 @@ dayjs.updateLocale("fr", {
     "Sep",
     "Oct",
     "Nov",
-    "Dec",
-  ],
+    "Dec"
+  ]
 });
-
-import {
-  settingsMinTwoSlides,
-  settingsMinThreeSlides,
-  settingsMinFourSlides,
-  settingsMinFiveSlides,
-} from "@/components/Banner/reactSlickSettings";
-import { InternalMovie, InternalMovieUser } from "@/models/movies";
-import { InternalTv, InternalTvAndUser } from "@/models/tvs";
-import AccountInteraction from "../AccountInteraction/AccountInteraction";
-import { useSession } from "next-auth/react";
 
 type Props = {
   items: {
@@ -61,26 +56,15 @@ type Props = {
     dropdownContainer: string;
   };
   title: string;
-  internalMovies?: InternalMovie[];
-  userMovies?: InternalMovieUser[];
-  userMoviesId?: string;
-  internalTvs?: InternalTv[];
-  userTvs?: InternalTvAndUser[];
 };
 
 const Banner: FC<Props> = ({
-  items,
-  type,
-  classNames,
-  title,
-  internalMovies,
-  userMovies,
-  userMoviesId,
-  internalTvs,
-  userTvs,
-}) => {
+                             items,
+                             type,
+                             classNames,
+                             title
+                           }) => {
   const router = useRouter();
-  const { status } = useSession();
   const settings =
     items.length > 4
       ? settingsMinFiveSlides
@@ -96,7 +80,8 @@ const Banner: FC<Props> = ({
       <Slider {...settings}>
         {items.map((item) => (
           <div key={item.id} className={classNames.items}>
-            <div className="relative m-auto h-[250px] min-h-[250px] w-[145px] min-w-[145px] overflow-hidden rounded-sm sm:h-[300px] sm:w-[200px] 2xl:h-[400px] 2xl:w-[250px]">
+            <div
+              className="relative m-auto h-[250px] min-h-[250px] w-[145px] min-w-[145px] overflow-hidden rounded-sm sm:h-[300px] sm:w-[200px] 2xl:h-[400px] 2xl:w-[250px]">
               <picture>
                 <img
                   src={
@@ -116,30 +101,15 @@ const Banner: FC<Props> = ({
                     minWidth: "100%",
                     minHeight: "100%",
                     borderWidth: 0,
-                    outline: 0,
+                    outline: 0
                   }}
                   onClick={() =>
                     router.push(
-                      `/${type}/${item.id}-${(item?.title || item?.name)?.toLowerCase().replace(/[\W_]+/g, "-")}`,
+                      `/${type}/${item.id}-${(item?.title || item?.name)?.toLowerCase().replace(/[\W_]+/g, "-")}`
                     )
                   }
                 />
               </picture>
-
-              {status === "authenticated" && (
-                <AccountInteraction
-                  item={item}
-                  type={type}
-                  listsPageProps={{
-                    classNames,
-                    internalMovies: internalMovies || [],
-                    userMovies: userMovies || [],
-                    userMoviesId: userMoviesId || "",
-                    internalTvs: internalTvs || [],
-                    userTvs: userTvs || [],
-                  }}
-                />
-              )}
             </div>
             <div className="flex flex-col items-center justify-center pb-4 text-sm md:text-base">
               <p className="mt-4 text-wrap text-center font-bold">

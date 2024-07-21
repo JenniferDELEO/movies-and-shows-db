@@ -4,12 +4,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
-import {
-  Genre,
-  InternalMovie,
-  InternalMovieUser,
-  Movie,
-} from "@/models/movies";
+import { Genre, Movie } from "@/models/movies";
 import { Tv } from "@/models/tvs";
 import Card from "../../Cards/Card";
 import Pagination from "../../Pagination/Pagination";
@@ -27,9 +22,6 @@ type Props = {
   similarsTvs?: Tv[];
   totalPagesSimilarsTvs?: number;
   totalResultsSimilarsTvs?: number;
-  userMovies?: InternalMovieUser[];
-  userMoviesId?: string;
-  internalMovies?: InternalMovie[];
 };
 
 const SimilarsWrapper: FC<Props> = (props) => {
@@ -43,20 +35,17 @@ const SimilarsWrapper: FC<Props> = (props) => {
     genresTvs,
     similarsTvs,
     totalPagesSimilarsTvs,
-    totalResultsSimilarsTvs,
-    userMovies,
-    userMoviesId,
-    internalMovies,
+    totalResultsSimilarsTvs
   } = props;
   const params = useParams();
 
   const [moviesList, setMoviesList] = useState<Movie[]>(similarsMovies || []);
   const [tvsList, setTvsList] = useState<Tv[]>(similarsTvs || []);
   const [totalPages, setTotalPages] = useState<number>(
-    totalPagesSimilarsMovies || totalPagesSimilarsTvs || 0,
+    totalPagesSimilarsMovies || totalPagesSimilarsTvs || 0
   );
   const [totalResults, setTotalResults] = useState<number>(
-    totalResultsSimilarsMovies || totalResultsSimilarsTvs || 0,
+    totalResultsSimilarsMovies || totalResultsSimilarsTvs || 0
   );
   const [currentPage, setCurrentPage] = useState<number>(Number(params.page));
 
@@ -66,7 +55,7 @@ const SimilarsWrapper: FC<Props> = (props) => {
     if (similarsMovies) {
       const { results, total_pages, total_results } = await getSimilarsMovie(
         mediaId,
-        currentPage,
+        currentPage
       );
       setMoviesList(results);
       setTotalPages(total_pages);
@@ -75,7 +64,7 @@ const SimilarsWrapper: FC<Props> = (props) => {
     if (similarsTvs) {
       const { results, total_pages, total_results } = await getSimilarsTv(
         mediaId,
-        currentPage,
+        currentPage
       );
       setTvsList(results);
       setTotalPages(total_pages);
@@ -105,18 +94,12 @@ const SimilarsWrapper: FC<Props> = (props) => {
       </h1>
       <div className="mx-auto md:w-[90%] 2xl:grid 2xl:grid-cols-2 2xl:gap-4">
         {similarsMovies &&
-          userMovies &&
-          userMoviesId &&
-          internalMovies &&
           moviesList.map((movie) => (
             <Card
               key={movie.id}
               movie={movie}
               filterType="movie"
               genres={genres}
-              userMovies={userMovies}
-              userMoviesId={userMoviesId}
-              internalMovies={internalMovies}
             />
           ))}
         {similarsTvs &&

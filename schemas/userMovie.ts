@@ -27,10 +27,16 @@ const userMovie = {
           type: "object",
           fields: [
             {
-              name: "movie",
-              title: "Movie",
-              type: "reference",
-              to: [{ type: "movie" }],
+              name: "movie_title",
+              title: "Movie Title",
+              type: "string",
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: "tmdb_id",
+              title: "TMDB ID",
+              type: "number",
+              validation: (Rule) => Rule.required(),
             },
             {
               name: "account_states",

@@ -1,18 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { ChangeEvent, FC, useEffect, useState, useRef } from "react";
+import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import { Button } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
 
 import Filters from "@/components/Filters/Filters";
 import Cards from "@/components/Cards/Cards";
-import {
-  Genre,
-  InternalMovie,
-  InternalMovieUser,
-  Movie,
-} from "@/models/movies";
+import { Genre, Movie } from "@/models/movies";
 import OrderingSelect from "@/components/Filters/OrderingSelect";
 import { Watcher } from "@/models/watchers";
 import FiltersModal from "@/components/Modals/FiltersModal";
@@ -27,9 +22,6 @@ type Props = {
   providersMovies: Watcher[];
   title: string;
   totalPagesMovies: number;
-  userMovies: InternalMovieUser[];
-  userMoviesId: string;
-  internalMovies: InternalMovie[];
 
   defaultFilters?: MoviesFilters;
 };
@@ -41,22 +33,19 @@ const MoviesWrapper: FC<Props> = (props) => {
     providersMovies,
     title,
     totalPagesMovies,
-    userMovies,
-    userMoviesId,
-    internalMovies,
 
-    defaultFilters,
+    defaultFilters
   } = props;
   const pathname = usePathname();
   const [moviesList, setMoviesList] = useState<Movie[]>(movies);
   const [filters, setFilters] = useState<MoviesFilters>(
-    defaultFilters || defaultMoviesFilters,
+    defaultFilters || defaultMoviesFilters
   );
   const [openFilters, setOpenFilters] = useState<boolean>(false);
   const [totalPages, setTotalPages] = useState<number>(totalPagesMovies);
   const [filterType, setFilterType] = useState("popularity.desc");
   const [currentPage, setCurrentPage] = useState(
-    pathname.split("/")[2] ? parseInt(pathname.split("/")[2]) : 1,
+    pathname.split("/")[2] ? parseInt(pathname.split("/")[2]) : 1
   );
   const [isFiltering, setIsFiltering] = useState<boolean>(false);
   const [isResetting, setIsResetting] = useState<boolean>(false);
@@ -70,7 +59,7 @@ const MoviesWrapper: FC<Props> = (props) => {
   async function getMoviesNextPages() {
     const result = await getDiscoverMovies({
       ...filters,
-      page: currentPage,
+      page: currentPage
     });
     setMoviesList(result.results);
   }
@@ -87,14 +76,14 @@ const MoviesWrapper: FC<Props> = (props) => {
     const result = await getDiscoverMovies({
       ...filters,
       sort_by: e.target.value,
-      page: currentPage,
+      page: currentPage
     });
     setMoviesList(result.results);
   };
 
   const handleFiltersSelection = async () => {
     const result = await getDiscoverMovies({
-      ...filters,
+      ...filters
     });
     setMoviesList(result.results);
     setTotalPages(result.total_pages);
@@ -104,7 +93,7 @@ const MoviesWrapper: FC<Props> = (props) => {
   const handleResetFilters = async () => {
     setFilters(defaultMoviesFilters);
     const result = await getDiscoverMovies({
-      ...defaultMoviesFilters,
+      ...defaultMoviesFilters
     });
     setMoviesList(result.results);
     setTotalPages(result.total_pages);
@@ -114,24 +103,24 @@ const MoviesWrapper: FC<Props> = (props) => {
   const hideResetButton = () => {
     if (
       filters["primary_release_date.gte"] !==
-        defaultMoviesFilters["primary_release_date.gte"] ||
+      defaultMoviesFilters["primary_release_date.gte"] ||
       filters["primary_release_date.lte"] !==
-        defaultMoviesFilters["primary_release_date.lte"] ||
+      defaultMoviesFilters["primary_release_date.lte"] ||
       filters.show_me !== defaultMoviesFilters.show_me ||
       filters["vote_average.gte"] !==
-        defaultMoviesFilters["vote_average.gte"] ||
+      defaultMoviesFilters["vote_average.gte"] ||
       filters["vote_average.lte"] !==
-        defaultMoviesFilters["vote_average.lte"] ||
+      defaultMoviesFilters["vote_average.lte"] ||
       filters["vote_count.gte"] !== defaultMoviesFilters["vote_count.gte"] ||
       filters.with_genres !== defaultMoviesFilters.with_genres ||
       filters.with_original_language !==
-        defaultMoviesFilters.with_original_language ||
+      defaultMoviesFilters.with_original_language ||
       filters["with_runtime.gte"] !==
-        defaultMoviesFilters["with_runtime.gte"] ||
+      defaultMoviesFilters["with_runtime.gte"] ||
       filters["with_runtime.lte"] !==
-        defaultMoviesFilters["with_runtime.lte"] ||
+      defaultMoviesFilters["with_runtime.lte"] ||
       filters.with_watch_providers !==
-        defaultMoviesFilters.with_watch_providers ||
+      defaultMoviesFilters.with_watch_providers ||
       filters.without_genres !== defaultMoviesFilters.without_genres
     ) {
       return false;
@@ -177,9 +166,6 @@ const MoviesWrapper: FC<Props> = (props) => {
                 movies={moviesList}
                 filterType="movie"
                 genres={genresMovies}
-                internalMovies={internalMovies}
-                userMovies={userMovies}
-                userMoviesId={userMoviesId}
               />
               <Pagination
                 total={totalPages}
@@ -218,9 +204,6 @@ const MoviesWrapper: FC<Props> = (props) => {
             movies={moviesList}
             filterType="movie"
             genres={genresMovies}
-            internalMovies={internalMovies}
-            userMovies={userMovies}
-            userMoviesId={userMoviesId}
           />
           <Pagination
             total={totalPages}

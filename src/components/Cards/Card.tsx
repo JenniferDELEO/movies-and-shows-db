@@ -7,15 +7,8 @@ import "dayjs/locale/fr";
 import updateLocale from "dayjs/plugin/updateLocale";
 
 import StarRating from "@/components/StarRate/StarRating";
-import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
-import {
-  Genre,
-  InternalMovie,
-  InternalMovieUser,
-  Movie,
-} from "@/models/movies";
-import AccountInteraction from "../AccountInteraction/AccountInteraction";
-import { useSession } from "next-auth/react";
+import { Tv } from "@/models/tvs";
+import { Genre, Movie } from "@/models/movies";
 
 dayjs.locale("fr");
 
@@ -34,8 +27,8 @@ dayjs.updateLocale("fr", {
     "Sep",
     "Oct",
     "Nov",
-    "Dec",
-  ],
+    "Dec"
+  ]
 });
 
 type Props = {
@@ -50,27 +43,17 @@ type Props = {
     image: string;
     dropdownContainer: string;
   };
-  userMovies?: InternalMovieUser[];
-  userMoviesId?: string;
-  internalMovies?: InternalMovie[];
-  userTvs?: InternalTvAndUser[];
-  internalTvs?: InternalTv[];
 };
 
-const Card: FC<Props> = ({
-  filterType,
-  genres,
-  movie,
-  tv,
-  classNames,
-  userMovies,
-  userMoviesId,
-  internalMovies,
-  userTvs,
-  internalTvs,
-}) => {
+const Card: FC<Props> = (
+  {
+    filterType,
+    genres,
+    movie,
+    tv,
+    classNames
+  }) => {
   const router = useRouter();
-  const session = useSession();
 
   const overviewRest =
     movie?.overview?.split(" ")?.filter(Boolean) ||
@@ -90,7 +73,7 @@ const Card: FC<Props> = ({
       className={styleContainer}
       onClick={() =>
         router.push(
-          `/${filterType === "movie" ? "movie" : "tv"}/${movie?.id || tv?.id}-${title?.toLowerCase().replace(/[\W_]+/g, "-")}`,
+          `/${filterType === "movie" ? "movie" : "tv"}/${movie?.id || tv?.id}-${title?.toLowerCase().replace(/[\W_]+/g, "-")}`
         )
       }
     >
@@ -156,36 +139,6 @@ const Card: FC<Props> = ({
           {overviewShow}
           {overviewRest?.length ? "..." : ""}
         </p>
-        {session &&
-          session.status === "authenticated" &&
-          userMovies &&
-          userMoviesId &&
-          internalMovies &&
-          movie && (
-            <div className="absolute -right-2 top-0 md:top-2">
-              <AccountInteraction
-                item={movie}
-                type="movie"
-                listsPageProps={{
-                  classNames,
-                  internalMovies: internalMovies,
-                  userMovies: userMovies,
-                  userMoviesId: userMoviesId,
-                }}
-              />
-            </div>
-          )}
-        {session && session.status === "authenticated" && tv && (
-          <div className="absolute -right-2 top-0 md:top-2">
-            <AccountInteraction
-              item={tv}
-              type="tv"
-              listsPageProps={{
-                classNames,
-              }}
-            />
-          </div>
-        )}
       </div>
     </div>
   );
