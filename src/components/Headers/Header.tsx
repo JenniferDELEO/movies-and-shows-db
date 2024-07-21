@@ -1,18 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownSection,
+  DropdownTrigger,
   Navbar,
   NavbarContent,
-  NavbarItem,
-  Dropdown,
-  DropdownTrigger,
-  Button,
-  DropdownMenu,
-  DropdownItem,
-  DropdownSection,
+  NavbarItem
 } from "@nextui-org/react";
 import { FaChevronDown, FaSearch } from "react-icons/fa";
 import { RxCross1 } from "react-icons/rx";
@@ -20,23 +20,35 @@ import { MdLocalMovies, MdPeople } from "react-icons/md";
 import { PiTelevisionSimpleFill } from "react-icons/pi";
 import { IoPersonSharp } from "react-icons/io5";
 import { TiHome } from "react-icons/ti";
-import toast from "react-hot-toast";
 
 import SearchBar from "@/components/Search/SearchBar";
-import { signOut, useSession } from "next-auth/react";
+import { createClient } from "../../../utils/supabase/client";
+import { User } from "@supabase/auth-js";
 
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [userSession, setUserSession] = useState<User | null>(null)
 
-  const { data: session, status } = useSession();
+  async function getUserSession() {
+    const supabase = await createClient()
+    const {data: {user}} = await supabase.auth.getUser()
+    setUserSession(user)
+  }
 
-  const handleLogOut = () => {
-    signOut({ callbackUrl: "/" });
-    toast.success("Vous êtes déconnecté");
-    router.push("/");
-  };
+  async function signOut() {
+    const supabase = await createClient()
+    const { error } = await supabase.auth.signOut()
+    console.log('error', error);
+    window.location.reload()
+  }
+
+  useEffect(() => {
+    getUserSession()
+  }, [])
+
+  console.log(userSession);
 
   return (
     <Navbar
@@ -173,10 +185,10 @@ const Header = () => {
                 </Link>
               </Button>
             </NavbarItem>
-            {status !== "authenticated" ? (
+            {userSession === null ? (
               <NavbarItem className="ml-2 cursor-pointer">
                 <div
-                  onClick={() => router.replace("/auth")}
+                  onClick={() => router.replace("/login")}
                   className="text-sm lg:text-lg"
                 >
                   Se connecter
@@ -195,7 +207,7 @@ const Header = () => {
                     >
                       <IoPersonSharp />
                       <span className="ml-2 hidden text-sm md:block lg:text-lg">
-                        {session?.user?.name}
+                        {userSession.email}
                       </span>
                     </Button>
                   </DropdownTrigger>
@@ -209,7 +221,7 @@ const Header = () => {
                   <DropdownSection showDivider>
                     <DropdownItem href="/profile" textValue="Mon profil">
                       <div className="flex flex-col">
-                        <span className="font-bold">{session?.user?.name}</span>
+                        <span className="font-bold">{userSession.email}</span>
                         <span className="pt-2">Mon profil</span>
                       </div>
                     </DropdownItem>
@@ -219,7 +231,7 @@ const Header = () => {
                       <span className="pt-2">Paramètres</span>
                     </DropdownItem> */}
                     <DropdownItem
-                      onPress={handleLogOut}
+                      onPress={signOut}
                       textValue="Déconnexion"
                     >
                       <span className="pt-2 text-gray-400">Déconnexion</span>

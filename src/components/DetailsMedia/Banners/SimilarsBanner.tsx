@@ -1,19 +1,14 @@
 import { FC } from "react";
 
-import { InternalMovie, InternalMovieUser, Movie } from "@/models/movies";
+import { Movie } from "@/models/movies";
 import BannerWrapper from "@/components/Banner/BannerWrapper";
-import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
+import { Tv } from "@/models/tvs";
 
 type Props = {
   totalPages: number;
   totalResults: number;
   similarsMovies?: Movie[];
   similarsTvs?: Tv[];
-  userMovies?: InternalMovieUser[];
-  userMoviesId?: string;
-  internalMovies?: InternalMovie[];
-  userTvs?: InternalTvAndUser[];
-  internalTvs?: InternalTv[];
 };
 
 const SimilarsBanner: FC<Props> = (props) => {
@@ -21,12 +16,7 @@ const SimilarsBanner: FC<Props> = (props) => {
     totalPages,
     totalResults,
     similarsMovies,
-    similarsTvs,
-    userMovies,
-    userMoviesId,
-    internalMovies,
-    userTvs,
-    internalTvs,
+    similarsTvs
   } = props;
   return (
     <div>
@@ -37,10 +27,7 @@ const SimilarsBanner: FC<Props> = (props) => {
               movies: similarsMovies,
               title: "Films similaires",
               totalPages,
-              totalResults,
-              userMovies: userMovies || [],
-              userMoviesId: userMoviesId || "",
-              internalMovies: internalMovies || [],
+              totalResults
             }}
           />
           <div className="mx-auto mb-0 mt-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
@@ -52,9 +39,7 @@ const SimilarsBanner: FC<Props> = (props) => {
               tvs: similarsTvs,
               title: "Séries TV similaires",
               totalPages,
-              totalResults,
-              userTvs: userTvs || [],
-              internalTvs: internalTvs || [],
+              totalResults
             }}
           />
           <div className="mx-auto mb-0 mt-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />

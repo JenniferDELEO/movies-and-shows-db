@@ -3,12 +3,7 @@
 
 import { FC } from "react";
 import Card from "../Cards/Card";
-import {
-  Genre,
-  InternalMovie,
-  InternalMovieUser,
-  Movie,
-} from "@/models/movies";
+import { Genre, Movie } from "@/models/movies";
 import { Tv } from "@/models/tvs";
 import { People } from "@/models/people";
 import PeopleCard from "../People/PeopleCard";
@@ -20,9 +15,6 @@ type Props = {
   searchResultsPeople?: People[];
   genresMovies?: Genre[];
   genresTvs?: Genre[];
-  userMovies?: InternalMovieUser[];
-  userMoviesId?: string;
-  internalMovies?: InternalMovie[];
 };
 
 const SearchResultCards: FC<Props> = (props) => {
@@ -32,10 +24,7 @@ const SearchResultCards: FC<Props> = (props) => {
     searchResultsTvs,
     searchResultsPeople,
     genresMovies,
-    genresTvs,
-    userMovies,
-    userMoviesId,
-    internalMovies,
+    genresTvs
   } = props;
 
   return (
@@ -48,9 +37,6 @@ const SearchResultCards: FC<Props> = (props) => {
               movie={movie}
               filterType={filterType}
               genres={genresMovies}
-              userMovies={userMovies}
-              userMoviesId={userMoviesId}
-              internalMovies={internalMovies}
             />
           ))}
         </div>

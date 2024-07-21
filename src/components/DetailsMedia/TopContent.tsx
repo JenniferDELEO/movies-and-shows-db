@@ -3,20 +3,9 @@
 import { FC } from "react";
 import { Tooltip } from "@nextui-org/react";
 
-import {
-  Genre,
-  InternalMovie,
-  InternalMovieUser,
-  MovieDetails,
-} from "@/models/movies";
+import { Genre, MovieDetails } from "@/models/movies";
 import Infos from "@/components/DetailsMedia/Infos";
-import {
-  Episode,
-  EpisodeDetails,
-  InternalTv,
-  InternalTvAndUser,
-  TvDetails,
-} from "@/models/tvs";
+import { Episode, EpisodeDetails, TvDetails } from "@/models/tvs";
 import { Collection } from "@/models/collections";
 
 type Props = {
@@ -32,11 +21,6 @@ type Props = {
   isCollection?: boolean;
   seasonNumber?: number;
   tvId?: number;
-  userMovies?: InternalMovieUser[];
-  userMoviesId?: string;
-  internalMovies?: InternalMovie[];
-  internalTvs?: InternalTv[];
-  userTvs?: InternalTvAndUser[];
 };
 
 const TopContent: FC<Props> = (props) => {
@@ -52,12 +36,7 @@ const TopContent: FC<Props> = (props) => {
     episodeNumber,
     isCollection,
     seasonNumber,
-    tvId,
-    userMovies,
-    userMoviesId,
-    internalMovies,
-    internalTvs,
-    userTvs,
+    tvId
   } = props;
 
   const backgroundImage =
@@ -88,7 +67,7 @@ const TopContent: FC<Props> = (props) => {
                 ? 150
                 : 250,
             left: 0,
-            height: "calc(100vw/2.222222)",
+            height: "calc(100vw/2.222222)"
           }}
           className="relative md:hidden"
         >
@@ -98,7 +77,7 @@ const TopContent: FC<Props> = (props) => {
                 width: "calc(((100vw/2.222222) - 40px)/1.5)",
                 minWidth: "calc(((100vw/2.222222) - 40px)/1.5)",
                 height: "calc((100vw/2.222222) - 40px)",
-                minHeight: "calc((100vw/2.222222) - 40px)",
+                minHeight: "calc((100vw/2.222222) - 40px)"
               }}
               className="absolute left-5 top-5 z-10 overflow-hidden rounded-sm"
             >
@@ -119,7 +98,7 @@ const TopContent: FC<Props> = (props) => {
                     minWidth: "100%",
                     minHeight: "100%",
                     borderWidth: 0,
-                    outline: 0,
+                    outline: 0
                   }}
                   sizes="100vw"
                 />
@@ -131,7 +110,7 @@ const TopContent: FC<Props> = (props) => {
       <div className="md:hidden">
         <div
           style={{
-            marginTop: backgroundImage ? "calc((100vw/2.222222) + 100px)" : 0,
+            marginTop: backgroundImage ? "calc((100vw/2.222222) + 100px)" : 0
           }}
         >
           <Infos
@@ -147,11 +126,6 @@ const TopContent: FC<Props> = (props) => {
             isCollection={isCollection}
             type={type}
             tvId={tvId}
-            userMovies={userMovies}
-            userMoviesId={userMoviesId}
-            internalMovies={internalMovies}
-            userTvs={userTvs}
-            internalTvs={internalTvs}
           />
         </div>
       </div>
@@ -166,7 +140,7 @@ const TopContent: FC<Props> = (props) => {
             backgroundRepeat: "no-repeat",
             width: "100vw",
             height: "calc(100vw/1.35)",
-            maxHeight: 650,
+            maxHeight: 650
           }}
         >
           <div
@@ -175,10 +149,11 @@ const TopContent: FC<Props> = (props) => {
                 "linear-gradient(to right, rgba(31.5, 10.5, 10.5, 1) calc((50vw - 170px) - 340px), rgba(31.5, 10.5, 10.5, 0.84) 50%, rgba(31.5, 10.5, 10.5, 0.84) 100%)",
               width: "100%",
               height: "calc(100vw/1.35)",
-              maxHeight: 650,
+              maxHeight: 650
             }}
           >
-            <div className="mx-auto flex size-full flex-row items-start justify-between md:w-[95%] lg:w-[90%] 2xl:w-[70%]">
+            <div
+              className="mx-auto flex size-full flex-row items-start justify-between md:w-[95%] lg:w-[90%] 2xl:w-[70%]">
               <>
                 {posterPath && type !== "episode" && (
                   <div
@@ -186,7 +161,7 @@ const TopContent: FC<Props> = (props) => {
                       width: "300px",
                       minWidth: "300px",
                       height: "450px",
-                      minHeight: "450px",
+                      minHeight: "450px"
                     }}
                     className="relative my-auto overflow-hidden rounded-sm"
                   >
@@ -207,7 +182,7 @@ const TopContent: FC<Props> = (props) => {
                           minWidth: "100%",
                           minHeight: "100%",
                           borderWidth: 0,
-                          outline: 0,
+                          outline: 0
                         }}
                         sizes="100vw"
                       />
@@ -240,7 +215,7 @@ const TopContent: FC<Props> = (props) => {
                                       minHeight: "100%",
                                       borderWidth: 0,
                                       outline: 0,
-                                      borderRadius: 5,
+                                      borderRadius: 5
                                     }}
                                     sizes="100vw"
                                   />
@@ -259,7 +234,7 @@ const TopContent: FC<Props> = (props) => {
                       width: "300px",
                       minWidth: "300px",
                       height: "168px",
-                      minHeight: "168px",
+                      minHeight: "168px"
                     }}
                     className="relative my-auto overflow-hidden rounded-sm"
                   >
@@ -280,7 +255,7 @@ const TopContent: FC<Props> = (props) => {
                           minWidth: "100%",
                           minHeight: "100%",
                           borderWidth: 0,
-                          outline: 0,
+                          outline: 0
                         }}
                         sizes="100vw"
                       />
@@ -301,11 +276,6 @@ const TopContent: FC<Props> = (props) => {
                 seasonNumber={seasonNumber}
                 type={type}
                 tvId={tvId}
-                userMovies={userMovies}
-                userMoviesId={userMoviesId}
-                internalMovies={internalMovies}
-                userTvs={userTvs}
-                internalTvs={internalTvs}
               />
             </div>
           </div>

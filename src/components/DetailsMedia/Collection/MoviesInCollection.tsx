@@ -1,17 +1,14 @@
 import { FC } from "react";
 
-import { InternalMovie, InternalMovieUser, Movie } from "@/models/movies";
+import { Movie } from "@/models/movies";
 import BannerWrapper from "@/components/Banner/BannerWrapper";
 
 type Props = {
   movies: Movie[];
-  userMovies: InternalMovieUser[];
-  userMoviesId: string;
-  internalMovies: InternalMovie[];
 };
 
 const MoviesInCollection: FC<Props> = (props) => {
-  const { movies, userMovies, userMoviesId, internalMovies } = props;
+  const { movies } = props;
   return (
     <div>
       {movies.length > 0 ? (
@@ -19,10 +16,7 @@ const MoviesInCollection: FC<Props> = (props) => {
           <BannerWrapper
             movieCollectionProps={{
               movies,
-              title: `Films de la collection (${movies.length})`,
-              userMovies,
-              userMoviesId,
-              internalMovies,
+              title: `Films de la collection (${movies.length})`
             }}
           />
           <div className="mx-auto mb-0 h-[2px] w-full bg-gray-400 lg:w-[90%]" />

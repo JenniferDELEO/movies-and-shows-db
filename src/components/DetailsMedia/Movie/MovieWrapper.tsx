@@ -1,10 +1,6 @@
 import { FC } from "react";
 
-import {
-  InternalMovie,
-  InternalMovieUser,
-  MovieDetails,
-} from "@/models/movies";
+import { MovieDetails } from "@/models/movies";
 import TopContent from "@/components/DetailsMedia/TopContent";
 import CrewBanner from "@/components/DetailsMedia/Banners/CrewBanner";
 import CollectionCard from "@/components/DetailsMedia/Movie/CollectionCard";
@@ -13,13 +9,10 @@ import SimilarsBanner from "@/components/DetailsMedia/Banners/SimilarsBanner";
 type Props = {
   movieDetails: MovieDetails;
   movieUrl: string;
-  userMovies: InternalMovieUser[];
-  userMoviesId: string;
-  internalMovies: InternalMovie[];
 };
 
 const MovieWrapper: FC<Props> = (props) => {
-  const { movieDetails, movieUrl, userMovies, userMoviesId, internalMovies } =
+  const { movieDetails, movieUrl } =
     props;
 
   return (
@@ -27,9 +20,6 @@ const MovieWrapper: FC<Props> = (props) => {
       <TopContent
         movieDetails={movieDetails}
         type="movie"
-        userMovies={userMovies}
-        userMoviesId={userMoviesId}
-        internalMovies={internalMovies}
       />
       <CrewBanner
         castMovie={movieDetails?.credits?.cast}
@@ -46,9 +36,6 @@ const MovieWrapper: FC<Props> = (props) => {
           similarsMovies={movieDetails?.similar?.results}
           totalPages={movieDetails?.similar?.total_pages}
           totalResults={movieDetails?.similar?.total_results}
-          userMovies={userMovies}
-          userMoviesId={userMoviesId}
-          internalMovies={internalMovies}
         />
       )}
     </div>
