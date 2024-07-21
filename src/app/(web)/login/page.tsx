@@ -63,7 +63,7 @@ export default async function Login(
           </button>
           <div>
             <p className="text-center">
-              Vous n'avez pas de compte ?{" "}
+              Vous n&apos;avez pas de compte ?{" "}
               <button className="underline" formAction={signup}>
                 Créer un compte
               </button>
