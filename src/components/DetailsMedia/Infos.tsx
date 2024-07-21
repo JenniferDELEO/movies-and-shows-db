@@ -5,24 +5,11 @@ import dayjs from "dayjs";
 import { Button } from "@nextui-org/react";
 import { FaPlay } from "react-icons/fa";
 
-import {
-  Genre,
-  InternalMovie,
-  InternalMovieUser,
-  MovieDetails,
-} from "@/models/movies";
+import { Genre, MovieDetails } from "@/models/movies";
 import StarRating from "@/components/StarRate/StarRating";
 import YoutubeEmbed from "@/components/YoutubeEmbed/YoutubeEmbed";
 import { languages } from "@/libs/helpers/languages";
-import AccountInteraction from "@/components/AccountInteraction/AccountInteraction";
-import { getTvDetail } from "@/libs/api/tvs";
-import {
-  Episode,
-  EpisodeDetails,
-  InternalTv,
-  InternalTvAndUser,
-  TvDetails,
-} from "@/models/tvs";
+import { Episode, EpisodeDetails, TvDetails } from "@/models/tvs";
 import { Collection } from "@/models/collections";
 
 type Props = {
@@ -38,11 +25,6 @@ type Props = {
   isCollection?: boolean;
   seasonNumber?: number;
   tvId?: number;
-  userMovies?: InternalMovieUser[];
-  userMoviesId?: string;
-  internalMovies?: InternalMovie[];
-  internalTvs?: InternalTv[];
-  userTvs?: InternalTvAndUser[];
 };
 
 const Infos: FC<Props> = (props) => {
@@ -58,12 +40,7 @@ const Infos: FC<Props> = (props) => {
     episodePrecedent,
     isCollection,
     seasonNumber,
-    tvId,
-    userMovies,
-    userMoviesId,
-    internalMovies,
-    userTvs,
-    internalTvs,
+    tvId
   } = props;
   const [openTrailer, setOpenTrailer] = useState(false);
 
@@ -81,8 +58,8 @@ const Infos: FC<Props> = (props) => {
     movieDetails?.credits?.crew?.filter((crew) => crew.job === "Director") ||
     (type === "tv" && tvDetails?.aggregate_credits?.crew)
       ? tvDetails?.aggregate_credits?.crew
-          ?.filter((crew) => crew.department === "Directing")
-          .slice(0, 3)
+        ?.filter((crew) => crew.department === "Directing")
+        .slice(0, 3)
       : episodeDetails?.crew
         ? episodeDetails.crew?.filter((crew) => crew.department === "Directing")
         : [];
@@ -92,7 +69,7 @@ const Infos: FC<Props> = (props) => {
 
   const originalLanguageName =
     languages.find(
-      (language) => language.code === movieDetails?.original_language,
+      (language) => language.code === movieDetails?.original_language
     )?.name ||
     languages.find((language) => language.code === tvDetails?.original_language)
       ?.name;
@@ -145,7 +122,7 @@ const Infos: FC<Props> = (props) => {
                         minHeight: "100%",
                         borderWidth: 0,
                         outline: 0,
-                        borderRadius: 5,
+                        borderRadius: 5
                       }}
                       sizes="100vw"
                     />
@@ -155,7 +132,7 @@ const Infos: FC<Props> = (props) => {
             </div>
           </div>
         )}
-        {type !== "episode" && !isCollection && (
+        {/*{type !== "episode" && !isCollection && session && (
           <div className="flex flex-row items-center justify-evenly">
             <AccountInteraction
               item={{
@@ -169,16 +146,9 @@ const Infos: FC<Props> = (props) => {
                 release_date: releaseDate || "",
               }}
               type={type}
-              mediaDetailsPageProps={{
-                userMovies,
-                userMoviesId,
-                internalMovies,
-                userTvs,
-                internalTvs,
-              }}
             />
           </div>
-        )}
+        )}*/}
       </div>
 
       {openTrailer && trailer && (
@@ -374,7 +344,7 @@ const Infos: FC<Props> = (props) => {
                     : `0${tvDetails.next_episode_to_air.episode_number}`}{" "}
                   - {tvDetails.next_episode_to_air.name} - Le{" "}
                   {dayjs(tvDetails.next_episode_to_air.air_date).format(
-                    "DD MMMM YYYY",
+                    "DD MMMM YYYY"
                   )}
                 </p>
               </div>
@@ -426,19 +396,19 @@ const Infos: FC<Props> = (props) => {
               </p>
             )}
           </div>
-          {type === "episode" &&
+          {/*{type === "episode" &&
             episodeDetails &&
             episodeNumber &&
             seasonNumber &&
-            tvId && (
+            tvId && session && (
               <div className="ml-6">
                 <AccountInteraction item={episodeDetails} type={type} />
               </div>
-            )}
+            )}*/}
         </div>
         <div className="flex flex-row items-center justify-evenly md:mx-10">
           <>
-            {type !== "episode" && !isCollection && (
+            {/*{type !== "episode" && !isCollection && session && (
               <div className="hidden md:mr-10 md:block">
                 <AccountInteraction
                   item={{
@@ -452,16 +422,9 @@ const Infos: FC<Props> = (props) => {
                     release_date: releaseDate || "",
                   }}
                   type={type}
-                  mediaDetailsPageProps={{
-                    userMovies,
-                    userMoviesId,
-                    internalMovies,
-                    userTvs,
-                    internalTvs,
-                  }}
                 />
               </div>
-            )}
+            )}*/}
             {trailer && (
               <Button variant="light" onClick={() => setOpenTrailer(true)}>
                 <FaPlay size={12} className="text-white" />
@@ -639,7 +602,7 @@ const Infos: FC<Props> = (props) => {
                 : `0${tvDetails.next_episode_to_air.episode_number}`}{" "}
               - {tvDetails.next_episode_to_air.name} - Le{" "}
               {dayjs(tvDetails.next_episode_to_air.air_date).format(
-                "DD MMMM YYYY",
+                "DD MMMM YYYY"
               )}
             </p>
           </div>

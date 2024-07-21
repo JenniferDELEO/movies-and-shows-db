@@ -7,8 +7,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { Tab, Tabs, Tooltip } from "@nextui-org/react";
 
 import Banner from "@/components/Banner/Banner";
-import { InternalMovie, InternalMovieUser, Movie } from "@/models/movies";
-import { InternalTv, InternalTvAndUser, Tv } from "@/models/tvs";
+import { Movie } from "@/models/movies";
+import { Tv } from "@/models/tvs";
 
 type Props = {
   homeProps?: {
@@ -20,56 +20,38 @@ type Props = {
     trendingMoviesThisWeek: Movie[];
     trendingTvsToday: Tv[];
     trendingTvsThisWeek: Tv[];
-    internalMovies: InternalMovie[];
-    userMovies: InternalMovieUser[];
-    userMoviesId: string;
-    internalTvs: InternalTv[];
-    userTvs: InternalTvAndUser[];
   };
   personDetailProps?: {
     actingMovies: Movie[];
     actingTvs: Tv[];
     runningMovies: Movie[];
     runningTvs: Tv[];
-    userMovies: InternalMovieUser[];
-    userMoviesId: string;
-    internalMovies: InternalMovie[];
-    internalTvs: InternalTv[];
-    userTvs: InternalTvAndUser[];
   };
   movieCollectionProps?: {
     movies: Movie[];
     title: string;
-    userMovies: InternalMovieUser[];
-    userMoviesId: string;
-    internalMovies: InternalMovie[];
   };
   movieDetailsProps?: {
     movies: Movie[];
     title: "Films similaires";
     totalPages: number;
     totalResults: number;
-    userMovies: InternalMovieUser[];
-    userMoviesId: string;
-    internalMovies: InternalMovie[];
   };
   tvsDetailsProps?: {
     title: "Séries TV similaires";
     totalPages: number;
     totalResults: number;
     tvs: Tv[];
-    userTvs: InternalTvAndUser[];
-    internalTvs: InternalTv[];
   };
 };
 
 const BannerWrapper: FC<Props> = ({
-  homeProps,
-  personDetailProps,
-  movieCollectionProps,
-  movieDetailsProps,
-  tvsDetailsProps,
-}) => {
+                                    homeProps,
+                                    personDetailProps,
+                                    movieCollectionProps,
+                                    movieDetailsProps,
+                                    tvsDetailsProps
+                                  }) => {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -79,12 +61,12 @@ const BannerWrapper: FC<Props> = ({
     items: "mx-auto pt-10 sm:px-1 md:pl-4",
     image:
       "w-[185px] h-[278px] 2xl:w-[288px] min-h-auto 2xl:h-[400px] rounded-md mx-auto",
-    dropdownContainer: "absolute right-2 top-2 z-10 ",
+    dropdownContainer: "absolute right-2 top-2 z-10 "
   };
 
   const classNamesPagesDetails = {
     ...classNames,
-    container: "mx-auto w-full",
+    container: "mx-auto w-full"
   };
 
   if (homeProps) {
@@ -107,9 +89,6 @@ const BannerWrapper: FC<Props> = ({
               type="movie"
               classNames={classNames}
               title="Les 20 Films dans les tendances"
-              internalMovies={homeProps.internalMovies}
-              userMovies={homeProps.userMovies}
-              userMoviesId={homeProps.userMoviesId}
             />
           </Tab>
           <Tab
@@ -124,9 +103,6 @@ const BannerWrapper: FC<Props> = ({
               type="movie"
               classNames={classNames}
               title="Les 20 Films dans les tendances"
-              internalMovies={homeProps.internalMovies}
-              userMovies={homeProps.userMovies}
-              userMoviesId={homeProps.userMoviesId}
             />
           </Tab>
         </Tabs>
@@ -135,18 +111,12 @@ const BannerWrapper: FC<Props> = ({
           type="movie"
           classNames={classNames}
           title="Les 20 Films les plus populaires"
-          internalMovies={homeProps.internalMovies}
-          userMovies={homeProps.userMovies}
-          userMoviesId={homeProps.userMoviesId}
         />
         <Banner
           items={homeProps.topRatedMovies}
           type="movie"
           classNames={classNames}
           title="Les 20 Films les mieux notés"
-          internalMovies={homeProps.internalMovies}
-          userMovies={homeProps.userMovies}
-          userMoviesId={homeProps.userMoviesId}
         />
         <Tabs
           aria-label="Onglets Séries TV"
@@ -165,8 +135,6 @@ const BannerWrapper: FC<Props> = ({
               type="tv"
               classNames={classNames}
               title="Les 20 Séries TV dans les tendances"
-              internalTvs={homeProps.internalTvs}
-              userTvs={homeProps.userTvs}
             />
           </Tab>
           <Tab
@@ -181,8 +149,6 @@ const BannerWrapper: FC<Props> = ({
               type="tv"
               classNames={classNames}
               title="Les 20 Séries TV dans les tendances"
-              internalTvs={homeProps.internalTvs}
-              userTvs={homeProps.userTvs}
             />
           </Tab>
         </Tabs>
@@ -191,16 +157,12 @@ const BannerWrapper: FC<Props> = ({
           type="tv"
           classNames={classNames}
           title="Les 20 Séries TV les plus populaires"
-          internalTvs={homeProps.internalTvs}
-          userTvs={homeProps.userTvs}
         />
         <Banner
           items={homeProps.topRatedTvs}
           type="tv"
           classNames={classNames}
           title="Les 20 Séries TV les mieux notées"
-          internalTvs={homeProps.internalTvs}
-          userTvs={homeProps.userTvs}
         />
       </div>
     );
@@ -209,14 +171,11 @@ const BannerWrapper: FC<Props> = ({
     return (
       <Banner
         items={movieCollectionProps.movies.sort((a, b) =>
-          b.release_date.localeCompare(a.release_date),
+          b.release_date.localeCompare(a.release_date)
         )}
         type="movie"
         classNames={classNamesPagesDetails}
         title={movieCollectionProps.title}
-        internalMovies={movieCollectionProps.internalMovies}
-        userMovies={movieCollectionProps.userMovies}
-        userMoviesId={movieCollectionProps.userMoviesId}
       />
     );
   }
@@ -242,9 +201,6 @@ const BannerWrapper: FC<Props> = ({
               type="movie"
               classNames={classNamesPagesDetails}
               title={`${movieDetailsProps.title} (${movieDetailsProps.totalResults})`}
-              internalMovies={movieDetailsProps.internalMovies}
-              userMovies={movieDetailsProps.userMovies}
-              userMoviesId={movieDetailsProps.userMoviesId}
             />
           </div>
         )}
@@ -258,14 +214,11 @@ const BannerWrapper: FC<Props> = ({
           <div className="mt-4">
             <Banner
               items={personDetailProps.actingMovies.sort((a, b) =>
-                b.release_date.localeCompare(a.release_date),
+                b.release_date.localeCompare(a.release_date)
               )}
               type="movie"
               classNames={classNamesPagesDetails}
               title={`Films (${personDetailProps.actingMovies.length})`}
-              internalMovies={personDetailProps.internalMovies}
-              userMovies={personDetailProps.userMovies}
-              userMoviesId={personDetailProps.userMoviesId}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
@@ -274,13 +227,11 @@ const BannerWrapper: FC<Props> = ({
           <div className="mt-4">
             <Banner
               items={personDetailProps.actingTvs.sort((a, b) =>
-                b.first_air_date.localeCompare(a.first_air_date),
+                b.first_air_date.localeCompare(a.first_air_date)
               )}
               type="tv"
               classNames={classNamesPagesDetails}
               title={`Séries TV (${personDetailProps.actingTvs.length})`}
-              internalTvs={personDetailProps.internalTvs}
-              userTvs={personDetailProps.userTvs}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
@@ -289,14 +240,11 @@ const BannerWrapper: FC<Props> = ({
           <div className="mt-4">
             <Banner
               items={personDetailProps.runningMovies.sort((a, b) =>
-                b.release_date.localeCompare(a.release_date),
+                b.release_date.localeCompare(a.release_date)
               )}
               type="movie"
               classNames={classNamesPagesDetails}
               title={`Films réalisés (${personDetailProps.runningMovies.length})`}
-              internalMovies={personDetailProps.internalMovies}
-              userMovies={personDetailProps.userMovies}
-              userMoviesId={personDetailProps.userMoviesId}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
@@ -305,13 +253,11 @@ const BannerWrapper: FC<Props> = ({
           <div className="mt-4">
             <Banner
               items={personDetailProps.runningTvs.sort((a, b) =>
-                b.first_air_date.localeCompare(a.first_air_date),
+                b.first_air_date.localeCompare(a.first_air_date)
               )}
               type="tv"
               classNames={classNamesPagesDetails}
               title={`Séries TV réalisées (${personDetailProps.runningTvs.length})`}
-              internalTvs={personDetailProps.internalTvs}
-              userTvs={personDetailProps.userTvs}
             />
             <div className="mx-auto my-10 h-[2px] w-full bg-gray-400 lg:w-[90%]" />
           </div>
@@ -343,8 +289,6 @@ const BannerWrapper: FC<Props> = ({
               type="tv"
               classNames={classNamesPagesDetails}
               title={`${tvsDetailsProps.title} (${tvsDetailsProps.totalResults})`}
-              internalTvs={tvsDetailsProps.internalTvs}
-              userTvs={tvsDetailsProps.userTvs}
             />
           </div>
         )}
